@@ -1,0 +1,34 @@
+name: Deploy NOAA
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+jobs:
+  deploy:
+  
+    permissions:
+      id-token: write
+      contents: read
+
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: 'noaa-cpfp-point/'
+          sparse-checkout-cone-mode: false
+
+      - name: ConfigureAWS Credentials 
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::597746869805:role/ghgc-dashboard-role
+          role-session-name: ${{ github.repository_owner}}
+          aws-region: us-west-2
+      
+      - name: Upload to S3
+        run: |
+          aws s3 cp "./noaa-cpfp-point" s3://ghgc-dashboard-develop/custom-interfaces/noaa-cpfp-point/ 
