@@ -1,0 +1,96 @@
+/* styles.css */
+#map {
+    width: 100%;
+    height: 100%;
+    transition: height 1s ease-out;
+    /* Transition for height change */
+    /* height: 50vh; */
+}
+
+#chart {
+    width: 100%;
+    max-height: 50vh;
+    transition: height 1s ease-out;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', sans-serif;
+    color: #3E4651;
+}
+
+#zoom-instructions {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: none;
+    font-size: 12px;
+}
+
+/* Full-screen map container */
+#map-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: height 1s ease-out;
+    /* Transition for height change */
+}
+
+/* Half-height chart container */
+#chart-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: none;
+    width: 100%;
+    height: 50%;
+    /* Initial height, can be adjusted */
+    background-color: white;
+    /* Add your preferred background color */
+    transition: height 1s ease-out;
+    /* Transition for height change */
+    overflow: hidden;
+    /* Hide content that overflows the container */
+}
+
+/* Tool title card styles */
+#title {
+    position: absolute;
+    display: none;
+    font-size: 14px;
+    top: 10px;
+    left: 10px;
+    /* width: 40%; */
+    padding: 10px 24px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 1000;
+    /* Ensure it's above other elements */
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.marker {
+    background-image: url('marker-sdf.png');
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    /* box-shadow: 1px 1px white; */
+}
+
+#logo {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 1000;
+}
