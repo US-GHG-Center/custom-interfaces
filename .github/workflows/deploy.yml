@@ -12,7 +12,10 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: 'emit-ch4plume-v1/'
+          sparse-checkout-cone-mode: false
 
       - uses: actions/setup-node@v3
         with:
@@ -37,18 +40,28 @@ jobs:
 
   deploy:
     needs: build
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/dev'
 
     permissions:
-      pages: write
       id-token: write
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      contents: read
 
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to GitHub Pages 🚀
-        id: deployment
-        uses: actions/deploy-pages@v1
+      
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: 'emit-ch4plume-v1/'
+          sparse-checkout-cone-mode: false
+
+      - name: ConfigureAWS Credentials 
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::597746869805:role/ghgc-dashboard-role
+          role-session-name: ${{ github.repository_owner}}
+          aws-region: us-west-2
+      
+      - name: Upload to S3
+        run: |
+          aws s3 cp "./dist" s3://ghgc-dashboard-develop/custom-interfaces/emit-ch4plume-v1/ 
