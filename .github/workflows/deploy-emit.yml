@@ -23,7 +23,6 @@ jobs:
       - name: Update Data 📊
         working-directory: ./emit-ch4plume-v1
         run: |
-          ls
           node update_data.js
       
       - name: Build for production 🔧
