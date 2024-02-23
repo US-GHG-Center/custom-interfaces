@@ -38,8 +38,13 @@ jobs:
           npm run production
           cp index.html dist
           cp -r data dist
-          ls
           pwd
+          ls
+      
+      - name: test
+        run: |
+          pwd
+          ls
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
