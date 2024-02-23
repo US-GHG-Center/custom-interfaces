@@ -23,10 +23,7 @@ jobs:
       - name: Update Data 📊
         working-directory: ./emit-ch4plume-v1
         run: |
-          pwd
-          ls
           mkdir ./data
-          ls
           node update_data.js
       
       - name: Build for production 🔧
@@ -38,18 +35,11 @@ jobs:
           npm run production
           cp index.html dist
           cp -r data dist
-          pwd
-          ls
-      
-      - name: test
-        run: |
-          pwd
-          ls
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ./dist
+          path: ./emit-ch4plume-v1/dist
 
   deploy-dev:
     needs: build
