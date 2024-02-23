@@ -36,10 +36,13 @@ jobs:
           cp index.html dist
           cp -r data dist
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: Cache dist folder
+        uses: actions/cache@v2
         with:
-          path: ./emit-ch4plume-v1/dist
+          path: |
+            ./emit-ch4plume-v1/dist
+          key: ${{ runner.os }}-build-${{ hashFiles('./emit-ch4plume-v1/package-lock.json') }}
+  
 
   deploy-dev:
     needs: build
@@ -85,6 +88,15 @@ jobs:
         with:
           sparse-checkout: 'emit-ch4plume-v1/'
           sparse-checkout-cone-mode: false
+      
+      - name: Restore dist folder from cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ./emit-ch4plume-v1/dist
+          key: ${{ runner.os }}-build-${{ hashFiles('./emit-ch4plume-v1/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
 
       - name: ConfigureAWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4
