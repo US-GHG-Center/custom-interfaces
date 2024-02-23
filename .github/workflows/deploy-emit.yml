@@ -21,7 +21,9 @@ jobs:
         with:
           node-version: 'v20.9.0'
       - name: Update Data 📊
+        working-directory: ./emit-ch4plume-v1
         run: |
+          ls
           node emit-ch4plume-v1/update_data.js
       
       - name: Build for production 🔧

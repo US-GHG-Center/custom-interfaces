@@ -40,7 +40,7 @@ const methane_stac_data = await (
   ).json();
 // Write the data to a file
 fs.writeFileSync(
-  "emit-ch4plume-v1/data/combined_plume_metadata.json",
+  "./emit-ch4plume-v1/data/combined_plume_metadata.json",
   JSON.stringify(methane_stac_data, null, 2)
   );
 
@@ -50,7 +50,7 @@ fs.writeFileSync(
 
  // Write the data to a file
  fs.writeFileSync(
- "emit-ch4plume-v1/data/methane_stac.geojson",
+ "./emit-ch4plume-v1/data/methane_stac.geojson",
  JSON.stringify(methane_stac_geojson, null, 2)
  );
 
