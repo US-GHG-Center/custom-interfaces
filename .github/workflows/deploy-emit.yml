@@ -24,7 +24,7 @@ jobs:
         working-directory: ./emit-ch4plume-v1
         run: |
           ls
-          node emit-ch4plume-v1/update_data.js
+          node update_data.js
       
       - name: Build for production 🔧
         run: |
