@@ -2,9 +2,9 @@ name: Build and Deploy EMIT
 on:
   workflow_dispatch:
   # push:
-  #   branches: [ "main" ]
+  #   branches: [ main, dev, production ]
   # pull_request:
-  #   branches: [ "main" ]
+  #   branches: [ main, dev, production ]
 jobs:
   build:
     runs-on: ubuntu-latest
