@@ -39,6 +39,7 @@ jobs:
           cp -r data dist
 
       - name: Upload artifact
+        working-directory: ./emit-ch4plume-v1
         uses: actions/upload-pages-artifact@v1
         with:
           path: ./dist
