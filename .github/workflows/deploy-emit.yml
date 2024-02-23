@@ -38,9 +38,9 @@ jobs:
         with:
           path: ./dist
 
-  deploy:
+  deploy-dev:
     needs: build
-    # if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/dev'
 
     permissions:
       id-token: write
@@ -65,3 +65,59 @@ jobs:
       - name: Upload to S3
         run: |
           aws s3 cp "./dist" s3://ghgc-dashboard-develop/custom-interfaces/emit-ch4plume-v1/ --recursive
+
+  deploy-staging:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+
+    permissions:
+      id-token: write
+      contents: read
+
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: 'emit-ch4plume-v1/'
+          sparse-checkout-cone-mode: false
+
+      - name: ConfigureAWS Credentials 
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::944032361616:role/ghgc-dashboard-role
+          role-session-name: ${{ github.repository_owner}}
+          aws-region: us-west-2
+      
+      - name: Upload to S3
+        run: |
+          aws s3 cp "./dist" s3://ghgc-dashboard-staging/custom-interfaces/emit-ch4plume-v1/ --recursive
+
+  deploy-production:
+    needs: build
+    if: github.ref == 'refs/heads/production'
+
+    permissions:
+      id-token: write
+      contents: read
+
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: 'emit-ch4plume-v1/'
+          sparse-checkout-cone-mode: false
+
+      - name: ConfigureAWS Credentials 
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::761622921697:role/ghgc-dashboard-role
+          role-session-name: ${{ github.repository_owner}}
+          aws-region: us-west-2
+      
+      - name: Upload to S3
+        run: |
+          aws s3 cp "./dist" s3://ghgc-dashboard-production/custom-interfaces/emit-ch4plume-v1/ --recursive
