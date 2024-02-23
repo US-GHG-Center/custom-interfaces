@@ -95,6 +95,8 @@ jobs:
       
       - name: Upload to S3
         run: |
+          pwd
+          ls
           aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-dashboard-staging/custom-interfaces/emit-ch4plume-v1/ --recursive
 
   deploy-production:
