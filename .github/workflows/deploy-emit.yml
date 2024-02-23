@@ -1,10 +1,17 @@
 name: Build and Deploy EMIT
+
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [ "main" ]
-  # pull_request:
-  #   branches: [ "main" ]
+  push:
+    branches:
+      - main
+      - dev
+      - production
+
+env:
+  MAP_STYLE: ${{ secrets.MAP_STYLE }}
+  MAP_ACCESS_TOKEN: ${{ secrets.MAP_ACCESS_TOKEN }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,101 +24,59 @@ jobs:
           sparse-checkout: 'emit-ch4plume-v1/'
           sparse-checkout-cone-mode: false
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 'v20.9.0'
-      - name: Update Data 📊
-        working-directory: ./emit-ch4plume-v1
-        run: |
-          mkdir ./data
-          node update_data.js
-      
-      - name: Build for production 🔧
-        working-directory: ./emit-ch4plume-v1
-        run: |
-          echo MAP_STYLE="${{ vars.MAP_STYLE }}" > .env
-          echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
-          npm i
-          npm run production
-          cp index.html dist
-          cp -r data dist
-
       - name: Cache dist folder
         uses: actions/cache@v2
         with:
           path: |
             ./emit-ch4plume-v1/dist
           key: ${{ runner.os }}-build-${{ hashFiles('./emit-ch4plume-v1/package-lock.json') }}
-  
 
-  deploy-dev:
-    needs: build
-    if: github.ref == 'refs/heads/dev'
-
-    permissions:
-      id-token: write
-      contents: read
-
-    runs-on: ubuntu-latest
-    steps:
-      
-      - name: Restore dist folder from cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ./emit-ch4plume-v1/dist
-          key: ${{ runner.os }}-build-${{ hashFiles('./emit-ch4plume-v1/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-      
-      - name: Upload to S3
+      - name: Update Data 📊
+        working-directory: ./emit-ch4plume-v1
         run: |
-          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-dashboard-develop/custom-interfaces/emit-ch4plume-v1/ --recursive
+          mkdir ./data
+          node update_data.js
 
-  deploy-staging:
+      - name: Build for production 🔧
+        working-directory: ./emit-ch4plume-v1
+        run: |
+          echo MAP_STYLE="${MAP_STYLE}" > .env
+          echo MAP_ACCESS_TOKEN="${MAP_ACCESS_TOKEN}" >> .env
+          npm ci
+          npm run production
+          cp index.html dist
+          cp -r data dist
+
+  deploy:
     needs: build
-    if: github.ref == 'refs/heads/main'
-
-    permissions:
-      id-token: write
-      contents: read
-
     runs-on: ubuntu-latest
-    steps:
-      
-      - name: Restore dist folder from cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ./emit-ch4plume-v1/dist
-          key: ${{ runner.os }}-build-${{ hashFiles('./emit-ch4plume-v1/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
+    strategy:
+      matrix:
+        include:
+          - env_name: develop
+            branch: dev
+            aws_account_id: ${{ secrets.AWS_DEV_ACCOUNT_ID }}
+          - env_name: staging
+            branch: main
+            aws_account_id: ${{ secrets.AWS_STAGING_ACCOUNT_ID }}
+          - env_name: production
+            branch: production
+            aws_account_id: ${{ secrets.AWS_PRODUCTION_ACCOUNT_ID }}
 
-      - name: ConfigureAWS Credentials 
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: 'emit-ch4plume-v1/'
+          sparse-checkout-cone-mode: false
+
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::944032361616:role/ghgc-dashboard-role
-          role-session-name: ${{ github.repository_owner}}
+          role-to-assume: "arn:aws:iam::${{ matrix.aws_account_id }}:role/ghgc-dashboard-role"
+          role-session-name: ${{ github.repository_owner }}
           aws-region: us-west-2
-      
-      - name: Upload to S3
-        run: |
-          pwd
-          ls
-          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-dashboard-staging/custom-interfaces/emit-ch4plume-v1/ --recursive
 
-  deploy-production:
-    needs: build
-    if: github.ref == 'refs/heads/production'
-
-    permissions:
-      id-token: write
-      contents: read
-
-    runs-on: ubuntu-latest
-    steps:
-      
       - name: Restore dist folder from cache
         uses: actions/cache@v2
         with:
@@ -120,7 +85,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ hashFiles('./emit-ch4plume-v1/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-
-      
+
       - name: Upload to S3
         run: |
-          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-dashboard-production/custom-interfaces/emit-ch4plume-v1/ --recursive
+          aws s3 cp "./emit-ch4plume-v1/dist" "s3://ghgc-dashboard-${{ matrix.env_name }}/custom-interfaces/emit-ch4plume-v1/" --recursive
