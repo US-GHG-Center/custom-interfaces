@@ -22,7 +22,7 @@ jobs:
           node-version: 'v20.9.0'
       - name: Update Data 📊
         run: |
-          node update_data.js
+          node emit-ch4plume-v1/update_data.js
       
       - name: Build for production 🔧
         run: |
