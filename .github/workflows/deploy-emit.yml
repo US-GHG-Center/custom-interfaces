@@ -55,18 +55,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
+      - name: Restore dist folder from cache
+        uses: actions/cache@v2
         with:
-          sparse-checkout: 'emit-ch4plume-v1/'
-          sparse-checkout-cone-mode: false
-
-      - name: ConfigureAWS Credentials 
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::597746869805:role/ghgc-dashboard-role
-          role-session-name: ${{ github.repository_owner}}
-          aws-region: us-west-2
+          path: |
+            ./emit-ch4plume-v1/dist
+          key: ${{ runner.os }}-build-${{ hashFiles('./emit-ch4plume-v1/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
       
       - name: Upload to S3
         run: |
@@ -116,18 +112,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
+      - name: Restore dist folder from cache
+        uses: actions/cache@v2
         with:
-          sparse-checkout: 'emit-ch4plume-v1/'
-          sparse-checkout-cone-mode: false
-
-      - name: ConfigureAWS Credentials 
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::761622921697:role/ghgc-dashboard-role
-          role-session-name: ${{ github.repository_owner}}
-          aws-region: us-west-2
+          path: |
+            ./emit-ch4plume-v1/dist
+          key: ${{ runner.os }}-build-${{ hashFiles('./emit-ch4plume-v1/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
       
       - name: Upload to S3
         run: |
