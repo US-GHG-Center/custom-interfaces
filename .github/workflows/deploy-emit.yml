@@ -55,13 +55,13 @@ jobs:
         include:
           - env_name: develop
             branch: dev
-            aws_account_id: ${{ secrets.AWS_DEV_ACCOUNT_ID }}
+            aws_account_id: 597746869805
           - env_name: staging
             branch: main
-            aws_account_id: ${{ secrets.AWS_STAGING_ACCOUNT_ID }}
+            aws_account_id: 944032361616
           - env_name: production
             branch: production
-            aws_account_id: ${{ secrets.AWS_PRODUCTION_ACCOUNT_ID }}
+            aws_account_id: 761622921697
 
     steps:
       - name: Checkout 🛎️
