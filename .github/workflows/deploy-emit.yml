@@ -1,4 +1,4 @@
-name: Build and Deploy EMIT
+name: Build and Deploy EMIT v2
 on:
   workflow_dispatch:
   # push:
@@ -35,14 +35,12 @@ jobs:
           npm run production
           cp index.html dist
           cp -r data dist
-
-      - name: Cache dist folder
-        uses: actions/cache@v2
+      
+      - name: Upload dist folder
+        uses: actions/upload-artifact@v4
         with:
-          path: |
-            ./emit-ch4plume-v1/dist
-          key: ${{ runner.os }}-build-${{ hashFiles('./emit-ch4plume-v1/package-lock.json') }}
-  
+          name: dist_folder
+          path: ./emit-ch4plume-v1/dist
 
   deploy-dev:
     needs: build
@@ -55,14 +53,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       
-      - name: Restore dist folder from cache
-        uses: actions/cache@v2
+      - name: Download dist folder
+        uses: actions/download-artifact@v4
         with:
-          path: |
-            ./emit-ch4plume-v1/dist
-          key: ${{ runner.os }}-build-${{ hashFiles('./emit-ch4plume-v1/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
+          name: dist_folder
+          path: ./emit-ch4plume-v1/dist
+      
+      - name: Display structure of downloaded files
+        run: ls ./emit-ch4plume-v1/dist
 
       - name: ConfigureAWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4
@@ -86,14 +84,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       
-      - name: Restore dist folder from cache
-        uses: actions/cache@v2
+      - name: Download dist folder
+        uses: actions/download-artifact@v4
         with:
-          path: |
-            ./emit-ch4plume-v1/dist
-          key: ${{ runner.os }}-build-${{ hashFiles('./emit-ch4plume-v1/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
+          name: dist_folder
+          path: ./emit-ch4plume-v1/dist
 
       - name: ConfigureAWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4
@@ -119,14 +114,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       
-      - name: Restore dist folder from cache
-        uses: actions/cache@v2
+      - name: Download dist folder
+        uses: actions/download-artifact@v4
         with:
-          path: |
-            ./emit-ch4plume-v1/dist
-          key: ${{ runner.os }}-build-${{ hashFiles('./emit-ch4plume-v1/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
+          name: dist_folder
+          path: ./emit-ch4plume-v1/dist
 
       - name: ConfigureAWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4
