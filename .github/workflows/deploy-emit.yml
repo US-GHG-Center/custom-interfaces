@@ -1,4 +1,4 @@
-name: Build and Deploy EMIT v2
+name: Build and Deploy EMIT
 on:
   workflow_dispatch:
   # push:
