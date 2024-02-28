@@ -33,7 +33,7 @@ jobs:
       
       - name: Upload to S3
         run: |
-          aws s3 cp "./noaa-cpfp-point" s3://ghgc-dashboard-develop/custom-interfaces/noaa-cpfp-point/ --recursive
+          aws s3 cp "./noaa-cpfp-point" s3://ghgc-custom-interfaces-develop/noaa-cpfp-point/ --recursive
 
   deploy-staging:
     if: github.ref == 'refs/heads/main'
@@ -60,7 +60,7 @@ jobs:
       
       - name: Upload to S3
         run: |
-          aws s3 cp "./noaa-cpfp-point" s3://ghgc-dashboard-staging/custom-interfaces/noaa-cpfp-point/ --recursive
+          aws s3 cp "./noaa-cpfp-point" s3://ghgc-custom-interfaces-staging/noaa-cpfp-point/ --recursive
   
   deploy-production:
     if: github.ref == 'refs/heads/production'
@@ -87,4 +87,4 @@ jobs:
       
       - name: Upload to S3
         run: |
-          aws s3 cp "./noaa-cpfp-point" s3://ghgc-dashboard-production/custom-interfaces/noaa-cpfp-point/ --recursive
+          aws s3 cp "./noaa-cpfp-point" s3://ghgc-custom-interfaces-production/noaa-cpfp-point/ --recursive
