@@ -60,7 +60,7 @@ jobs:
       
       - name: Upload to S3
         run: |
-          aws s3 cp "./noaa-cpfp-point" s3://ghgc-custom-interfaces-staging/noaa-cpfp-point/noaa --recursive
+          aws s3 cp "./noaa-cpfp-point" s3://ghgc-custom-interfaces-staging/ --recursive
   
   deploy-production:
     if: github.ref == 'refs/heads/production'
