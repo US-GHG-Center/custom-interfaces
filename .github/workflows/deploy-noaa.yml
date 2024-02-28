@@ -2,10 +2,10 @@ name: Deploy NOAA
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [ main, dev, production ]
-  # pull_request:
-  #   branches: [ main, dev, production ]
+  push:
+    branches: [ main, dev, production ]
+  pull_request:
+    branches: [ main, dev, production ]
 
 jobs:
   deploy-dev:
