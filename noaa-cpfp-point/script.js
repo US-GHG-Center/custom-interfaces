@@ -1,6 +1,6 @@
 let ghgBlue = "#082A63";
 
-let PUBLIC_URL = "https://staging.earth.gov/noaa-cpfp-point"
+let PUBLIC_URL = process.env.PUBLIC_URL;
 
 const plugin = {
   id: "corsair",
