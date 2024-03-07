@@ -1,5 +1,7 @@
 let ghgBlue = "#082A63";
 
+let PUBLIC_URL = "https://staging.earth.gov/noaa-cpfp-point"
+
 const plugin = {
   id: "corsair",
   defaults: {
@@ -117,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderStation(station) {
     openChart();
-    const selectedFile = `${selectedType}/${selectedGhg}/${selectedGhg}_${station.site_code.toLowerCase()}_${
+    const selectedFile = `${PUBLIC_URL}/${selectedType}/${selectedGhg}/${selectedGhg}_${station.site_code.toLowerCase()}_${
       station.dataset_project
     }_${baseFileName}.txt`;
     // Fetch data and render chart
