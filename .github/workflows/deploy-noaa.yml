@@ -44,7 +44,6 @@ jobs:
           echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
           npm i
           npm run production
-          cp -r data dist
       
       - name: Upload dist folder
         uses: actions/upload-artifact@v4
