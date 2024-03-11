@@ -41,7 +41,7 @@ jobs:
         working-directory: ./noaa-cpfp-point
         run: |
           echo PUBLIC_URL="${{ vars.PUBLIC_URL }}" >> .env
-          echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
+          echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
           npm i
           npm run production
         env:
