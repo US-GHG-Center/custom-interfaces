@@ -102,11 +102,6 @@ jobs:
 
       - name: Checkout 🛎️
         uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            noaa-cpfp/flask
-            noaa-cpfp-point/surface-pfp
-          sparse-checkout-cone-mode: false
       
       - name: Download dist folder
         uses: actions/download-artifact@v4
