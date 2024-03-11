@@ -37,15 +37,6 @@ jobs:
         with:
           sparse-checkout: 'noaa-cpfp-point/'
           sparse-checkout-cone-mode: false
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 'v20.9.0'
-      - name: Update Data 📊
-        working-directory: ./noaa-cpfp-point
-        run: |
-          mkdir ./data
-          node update_data.js
       
       - name: Build for production 🔧
         working-directory: ./noaa-cpfp-point
