@@ -27,7 +27,6 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    concurrency: ci-${{ github.ref }}
     needs: define-environment
     environment: ${{ needs.define-environment.outputs.env_name }}
 
@@ -99,7 +98,7 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      
+
       - name: Download dist folder
         uses: actions/download-artifact@v4
         with:
