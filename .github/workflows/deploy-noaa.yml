@@ -68,6 +68,14 @@ jobs:
           name: dist_folder
           path: ./noaa-cpfp-point/dist
 
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            noaa-cpfp/flask
+            noaa-cpfp-point/surface-pfp
+          sparse-checkout-cone-mode: false
+
       - name: ConfigureAWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -78,6 +86,8 @@ jobs:
       - name: Upload to S3
         run: |
           aws s3 cp "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-develop/noaa-cpfp-point/ --recursive
+          aws sync "./noaa-cpfp-poin/flask" s3://ghgc-custom-interfaces-develop/noaa-cpfp-point/
+          aws sync "./noaa-cpfp-point/surface-pfp" s3://ghgc-custom-interfaces-develop/noaa-cpfp-point/
 
   deploy-staging:
     needs: build
