@@ -40,7 +40,7 @@ jobs:
       - name: Build for production 🔧
         working-directory: ./noaa-cpfp-point
         run: |
-          echo PUBLIC_URL="${{ vars.PUBLIC_URL}}"
+          echo PUBLIC_URL="${{ vars.PUBLIC_URL}}" >> .env
           echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
           npm i
           npm run production
