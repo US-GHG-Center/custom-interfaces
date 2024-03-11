@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderStation(station) {
     openChart();
-    const selectedFile = `${PUBLIC_URL}/${selectedType}/${selectedGhg}/${selectedGhg}_${station.site_code.toLowerCase()}_${
+    const selectedFile = `https://staging.earth.gov/${selectedType}/${selectedGhg}/${selectedGhg}_${station.site_code.toLowerCase()}_${
       station.dataset_project
     }_${baseFileName}.txt`;
     // Fetch data and render chart
