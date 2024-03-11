@@ -58,9 +58,6 @@ jobs:
         with:
           name: dist_folder
           path: ./emit-ch4plume-v1/dist
-      
-      - name: Display structure of downloaded files
-        run: ls ./emit-ch4plume-v1/dist
 
       - name: ConfigureAWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4

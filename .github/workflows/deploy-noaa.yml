@@ -8,9 +8,63 @@ on:
     branches: [ main, dev, production ]
 
 jobs:
+  define-environment:
+    name: Set environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set the environment based on the branch
+        id: define_environment
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "env_name=staging" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+            echo "env_name=development" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
+            echo "env_name=production" >> $GITHUB_OUTPUT
+          fi
+      - name: Print the environment
+        run: echo "The environment is ${{ steps.define_environment.outputs.env_name }}"
+
+  build:
+    runs-on: ubuntu-latest
+    concurrency: ci-${{ github.ref }}
+    needs: define-environment
+    environment: ${{ needs.define-environment.outputs.env_name }}
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: 'noaa-cpfp-point/'
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 'v20.9.0'
+      - name: Update Data 📊
+        working-directory: ./noaa-cpfp-point
+        run: |
+          mkdir ./data
+          node update_data.js
+      
+      - name: Build for production 🔧
+        working-directory: ./noaa-cpfp-point
+        run: |
+          echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
+          npm i
+          npm run production
+          cp -r data dist
+      
+      - name: Upload dist folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist_folder
+          path: ./noaa-cpfp-point/dist
+
   deploy-dev:
+    needs: build
     if: github.ref == 'refs/heads/dev'
-  
+
     permissions:
       id-token: write
       contents: read
@@ -18,11 +72,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
+      - name: Download dist folder
+        uses: actions/download-artifact@v4
         with:
-          sparse-checkout: 'noaa-cpfp-point/'
-          sparse-checkout-cone-mode: false
+          name: dist_folder
+          path: ./noaa-cpfp-point/dist
 
       - name: ConfigureAWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4
@@ -33,11 +87,12 @@ jobs:
       
       - name: Upload to S3
         run: |
-          aws s3 cp "./noaa-cpfp-point" s3://ghgc-custom-interfaces-develop/noaa-cpfp-point/ --recursive
+          aws s3 cp "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-develop/noaa-cpfp-point/ --recursive
 
   deploy-staging:
+    needs: build
     if: github.ref == 'refs/heads/main'
-  
+
     permissions:
       id-token: write
       contents: read
@@ -45,11 +100,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
+      - name: Download dist folder
+        uses: actions/download-artifact@v4
         with:
-          sparse-checkout: 'noaa-cpfp-point/'
-          sparse-checkout-cone-mode: false
+          name: dist_folder
+          path: ./noaa-cpfp-point/dist
 
       - name: ConfigureAWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4
@@ -60,11 +115,14 @@ jobs:
       
       - name: Upload to S3
         run: |
-          aws s3 cp "./noaa-cpfp-point" s3://ghgc-custom-interfaces-staging/noaa-cpfp-point/ --recursive
-  
+          pwd
+          ls
+          aws s3 cp "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-staging/noaa-cpfp-point/ --recursive
+
   deploy-production:
+    needs: build
     if: github.ref == 'refs/heads/production'
-  
+
     permissions:
       id-token: write
       contents: read
@@ -72,11 +130,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
+      - name: Download dist folder
+        uses: actions/download-artifact@v4
         with:
-          sparse-checkout: 'noaa-cpfp-point/'
-          sparse-checkout-cone-mode: false
+          name: dist_folder
+          path: ./noaa-cpfp-point/dist
 
       - name: ConfigureAWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4
@@ -87,4 +145,4 @@ jobs:
       
       - name: Upload to S3
         run: |
-          aws s3 cp "./noaa-cpfp-point" s3://ghgc-custom-interfaces-production/noaa-cpfp-point/ --recursive
+          aws s3 cp "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-production/noaa-cpfp-point/ --recursive
