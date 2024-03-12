@@ -14,6 +14,8 @@ const icon_clicker = new Array(2)
 const marker_props = new Object()
 
 var counter_clicks_icon = 0
+
+
 const map = new mapboxgl.Map({
   container: "map",
   style: MAP_STYLE, // You can choose any Mapbox style
@@ -425,4 +427,8 @@ async function main() {
   });
 }
 
-main();
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  main();
+});
