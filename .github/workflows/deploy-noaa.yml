@@ -11,6 +11,8 @@ jobs:
   define-environment:
     name: Set environment
     runs-on: ubuntu-latest
+    outputs:
+      env_name: ${{ steps.define_environment.outputs.env_name }}
     steps:
       - name: Set the environment based on the branch
         id: define_environment
