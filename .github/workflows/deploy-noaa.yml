@@ -40,12 +40,12 @@ jobs:
       - name: Build for production 🔧
         working-directory: ./noaa-cpfp-point
         run: |
-          echo PUBLIC_URL="${{ vars.PUBLIC_URL }}" >> .env
+          echo PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}" >> .env
           echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
           npm i
           npm run production
         env:
-          PUBLIC_URL: ${{ vars.PUBLIC_URL }}
+          PUBLIC_URL: ${{ vars.PUBLIC_URL_NOAA }}
       
       - name: Upload dist folder
         uses: actions/upload-artifact@v4
