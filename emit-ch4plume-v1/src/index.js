@@ -7,7 +7,7 @@ const IDS_ON_MAP = new Set();
 const RASTER_IDS_ON_MAP = new Set();
 const MAP_STYLE = process.env.MAP_STYLE;
 const MAP_ACCESS_TOKEN = process.env.MAP_ACCESS_TOKEN;
-const PUBLIC_URL = process.env.PUBLIC_URL
+const PUBLIC_URL = process.env.PUBLIC_URL;
 import "./style.css";
 mapboxgl.accessToken = MAP_ACCESS_TOKEN;
 const icon_clicker = new Array(2)

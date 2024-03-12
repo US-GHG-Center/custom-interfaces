@@ -52,6 +52,7 @@ jobs:
           echo PUBLIC_URL="${{ vars.PUBLIC_URL_EMIT }}" >> .env
           echo MAP_STYLE="${{ vars.MAP_STYLE }}" > .env
           echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
+          cat .env
           npm i
           npm run production
           cp -r data dist
