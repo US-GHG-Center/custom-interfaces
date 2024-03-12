@@ -90,7 +90,7 @@ jobs:
       
       - name: Upload to S3
         run: |
-          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-develop/emit-ch4plume-v1/ --recursive
+          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-develop/ghgcenter/custom-interfaces/emit-ch4plume-v1/ --recursive
 
   deploy-staging:
     needs: build
@@ -120,7 +120,7 @@ jobs:
         run: |
           pwd
           ls
-          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-staging/emit-ch4plume-v1/ --recursive
+          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-staging/ghgcenter/custom-interfaces/emit-ch4plume-v1/ --recursive
 
   deploy-production:
     needs: build
@@ -148,4 +148,4 @@ jobs:
       
       - name: Upload to S3
         run: |
-          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-production/emit-ch4plume-v1/ --recursive
+          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-production/ghgcenter/custom-interfaces/emit-ch4plume-v1/ --recursive
