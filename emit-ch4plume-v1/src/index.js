@@ -7,6 +7,7 @@ const IDS_ON_MAP = new Set();
 const RASTER_IDS_ON_MAP = new Set();
 const MAP_STYLE = process.env.MAP_STYLE;
 const MAP_ACCESS_TOKEN = process.env.MAP_ACCESS_TOKEN;
+const PUBLIC_URL = process.env.PUBLIC_URL
 import "./style.css";
 mapboxgl.accessToken = MAP_ACCESS_TOKEN;
 const icon_clicker = new Array(2)
@@ -205,10 +206,10 @@ function addRaster(item_ids, feature, polygon_id) {
 
 async function main() {
   const methan_metadata = await (
-    await fetch("./data/combined_plume_metadata.json")
+    await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
   ).json();
   const methane_stac_metadata = await (
-    await fetch("./data/methane_stac.geojson")
+    await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
   ).json();
 
   map.on("load", () => {
