@@ -83,8 +83,8 @@ jobs:
       - name: Upload to S3
         run: |
           aws s3 cp "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-develop/noaa-cpfp-point/ --recursive
-          aws s3 sync "./noaa-cpfp-point/flask" s3://ghgc-custom-interfaces-develop/noaa-cpfp-point/
-          aws s3 sync "./noaa-cpfp-point/surface-pfp" s3://ghgc-custom-interfaces-develop/noaa-cpfp-point/
+          aws s3 sync "./noaa-cpfp-point/flask" s3://ghgc-custom-interfaces-develop/noaa-cpfp-point/flask/
+          aws s3 sync "./noaa-cpfp-point/surface-pfp" s3://ghgc-custom-interfaces-develop/noaa-cpfp-point/surface-pfp/
 
   deploy-staging:
     needs: build
@@ -116,8 +116,8 @@ jobs:
       - name: Upload to S3
         run: |
           aws s3 cp "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-staging/noaa-cpfp-point/ --recursive
-          aws s3 sync "./noaa-cpfp-point/flask" s3://ghgc-custom-interfaces-staging/noaa-cpfp-point/
-          aws s3 sync "./noaa-cpfp-point/surface-pfp" s3://ghgc-custom-interfaces-staging/noaa-cpfp-point/
+          aws s3 sync "./noaa-cpfp-point/flask" s3://ghgc-custom-interfaces-staging/noaa-cpfp-point/flask/
+          aws s3 sync "./noaa-cpfp-point/surface-pfp" s3://ghgc-custom-interfaces-staging/noaa-cpfp-point/surface-pfp/
 
   deploy-production:
     needs: build
@@ -149,5 +149,5 @@ jobs:
       - name: Upload to S3
         run: |
           aws s3 cp "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-production/noaa-cpfp-point/ --recursive
-          aws s3 sync "./noaa-cpfp-point/flask" s3://ghgc-custom-interfaces-production/noaa-cpfp-point/
-          aws s3 sync "./noaa-cpfp-point/surface-pfp" s3://ghgc-custom-interfaces-production/noaa-cpfp-point/
+          aws s3 sync "./noaa-cpfp-point/flask" s3://ghgc-custom-interfaces-production/noaa-cpfp-point/flask/
+          aws s3 sync "./noaa-cpfp-point/surface-pfp" s3://ghgc-custom-interfaces-production/noaa-cpfp-point/surface-pfp/
