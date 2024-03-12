@@ -45,7 +45,7 @@ jobs:
           npm i
           npm run production
         env:
-          PUBLIC_URL: ${{ vars.PUBLIC_URL_NOAA }}
+          PUBLIC_URL_NOAA: ${{ vars.PUBLIC_URL_NOAA }}
       
       - name: Upload dist folder
         uses: actions/upload-artifact@v4
