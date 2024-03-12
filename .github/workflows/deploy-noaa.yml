@@ -35,7 +35,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           sparse-checkout: 'noaa-cpfp-point/'
-          sparse-checkout-cone-mode: false
+          sparse-checkout-cone-mode: true
       
       - name: Build for production 🔧
         working-directory: ./noaa-cpfp-point
