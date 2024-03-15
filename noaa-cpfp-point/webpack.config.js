@@ -2,7 +2,7 @@ const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 module.exports = {
-    entry: './src/index.js',
+    entry: ['./script.js'],
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'), // Output directory
@@ -10,14 +10,13 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.css$/, // Use regex to match .css files
-                use: ['style-loader', 'css-loader'], // Loaders to process CSS
+              test: /\.css$/, // Use regex to match .css files
+              use: ['style-loader', 'css-loader'], // Loaders to process CSS
             },
             {
-                test: /\.(png|jpe?g|gif)$/i,
-                type: "asset/resource"
-
-              },
+              test: /\.(png|jpe?g|gif)$/i,
+              type: "asset/resource"
+            },
         ],
     },
   plugins: [

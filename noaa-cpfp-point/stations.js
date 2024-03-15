@@ -5814,3 +5814,5 @@ const stations_data = {
     ],
   },
 };
+
+export default stations_data;

@@ -1,3 +1,10 @@
+import './style.css'
+import stations_data from './stations.js'
+import noaaLogo from './noaa-logo.png';
+
+
+let publicUrl = process.env.PUBLIC_URL;
+
 let ghgBlue = "#082A63";
 
 const plugin = {
@@ -44,6 +51,9 @@ const plugin = {
 
 // script.js
 document.addEventListener("DOMContentLoaded", () => {
+  // set noaa logo
+  document.getElementById("logo").src = noaaLogo;
+
   let chart = null;
   const baseFileName = "1_ccgg_event";
 
@@ -54,8 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const chartContainerB = document.getElementById("chart-container");
 
   // Replace 'MAPBOX_ACCESS_TOKEN' with your actual Mapbox access token
-  mapboxgl.accessToken =
-    "pk.eyJ1Ijoic2xlc2FhZCIsImEiOiJjbDd0anduOWUweml6NDFyMHI2MzN1ZHdmIn0.L8NDN4-Z41VeGCOHUMtjlg";
+  mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN;
 
   // Parse query parameters from the URL
   const queryParams = new URLSearchParams(window.location.search);
@@ -66,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const selectedType = type || "flask";
 
   const titleContainer = document.getElementById("title");
-  titleContainer.innerHTML = `<strong> NOAA: Global Monitoring Laboratory: ${
+  titleContainer.innerHTML = `<strong> NOAA: ESRL Global Monitoring Laboratory: ${
     selectedGhg === "ch4" ? "Methane" : "Carbon dioxide"
   } ${selectedType === "flask" ? "(Flask)" : "(Surface PFP)"} </strong>`;
   titleContainer.style.display = "block";
@@ -117,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderStation(station) {
     openChart();
-    const selectedFile = `${selectedType}/${selectedGhg}/${selectedGhg}_${station.site_code.toLowerCase()}_${
+    const selectedFile = `${publicUrl ? publicUrl : ""}/${selectedType}/${selectedGhg}/${selectedGhg}_${station.site_code.toLowerCase()}_${
       station.dataset_project
     }_${baseFileName}.txt`;
     // Fetch data and render chart
