@@ -122,7 +122,7 @@ jobs:
       - name: Upload to S3
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NOAA }} | sed 's|^https://staging.earth.gov/||')
-          echo PUBLIC_URL
+          echo $PUBLIC_URL
           aws s3 cp "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-staging/ghgcenter/custom-interfaces/noaa-cpfp-point/ --recursive
           aws s3 sync "./noaa-cpfp-point/flask" s3://ghgc-custom-interfaces-staging/ghgcenter/custom-interfaces/noaa-cpfp-point/flask/
           aws s3 sync "./noaa-cpfp-point/surface-pfp" s3://ghgc-custom-interfaces-staging/ghgcenter/custom-interfaces/noaa-cpfp-point/surface-pfp/
@@ -161,7 +161,7 @@ jobs:
       - name: Upload to S3
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NOAA }} | sed 's|^https://staging.earth.gov/||')
-          echo PUBLIC_URL
+          echo $PUBLIC_URL
           aws s3 cp "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-production/ghgcenter/custom-interfaces/noaa-cpfp-point/ --recursive
           aws s3 sync "./noaa-cpfp-point/flask" s3://ghgc-custom-interfaces-production/ghgcenter/custom-interfaces/noaa-cpfp-point/flask/
           aws s3 sync "./noaa-cpfp-point/surface-pfp" s3://ghgc-custom-interfaces-production/ghgcenter/custom-interfaces/noaa-cpfp-point/surface-pfp/
