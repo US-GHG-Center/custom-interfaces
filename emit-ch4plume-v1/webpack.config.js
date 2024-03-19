@@ -1,7 +1,9 @@
 const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 const path = require('path');
 module.exports = {
+
     entry: './src/index.js',
     output: {
         filename: 'bundle.js',
@@ -28,7 +30,12 @@ module.exports = {
       template: './index.html',
 
       // Pass the full url with the key!
-      publicUrl: process.env.PUBLIC_URL,
-    })
+      publicUrl: process.env.PUBLIC_URL || '.',
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: "data", to: "data" }   
+         ],
+    }),
   ],
 };

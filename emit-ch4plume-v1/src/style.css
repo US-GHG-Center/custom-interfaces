@@ -54,6 +54,7 @@ body {
   padding: "12px";
   height: fit-content;
   cursor: move;
+  z-index: 999;
 }
 
 #close {
