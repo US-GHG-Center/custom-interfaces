@@ -43,7 +43,6 @@ jobs:
       - name: Update Data 📊
         working-directory: ./emit-ch4plume-v1
         run: |
-          mkdir ./data
           node update_data.js
       
       - name: Build for production 🔧
@@ -52,11 +51,9 @@ jobs:
           echo PUBLIC_URL="${{ vars.PUBLIC_URL_EMIT }}" >> .env
           echo MAP_STYLE="${{ vars.MAP_STYLE }}" >> .env
           echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
-          npm i
-          npm run production
-          cp -r data dist
-        env:
-          PUBLIC_URL: ${{ vars.PUBLIC_URL_EMIT }}
+          echo PUBLIC_URL="${{ vars.PUBLIC_URL_EMIT }}" >> .env
+          echo STAGE="production" >> .env
+          npm run deploy
 
       - name: Upload dist folder
         uses: actions/upload-artifact@v4
@@ -118,8 +115,6 @@ jobs:
       
       - name: Upload to S3
         run: |
-          pwd
-          ls
           aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-staging/ghgcenter/custom-interfaces/emit-ch4plume-v1/ --recursive
 
   deploy-production:

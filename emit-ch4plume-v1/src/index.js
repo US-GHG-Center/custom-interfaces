@@ -10,13 +10,16 @@ const VMIN = 0;
 const VMAX = 1500;
 const IDS_ON_MAP = new Set();
 const RASTER_IDS_ON_MAP = new Set();
+const MARKERS_ON_MAP = new Set();
+const POLYGON_ADDED = new Set();
 const MAP_STYLE = process.env.MAP_STYLE;
-const PUBLIC_URL = process.env.PUBLIC_URL;
+const PUBLIC_URL = process.env.PUBLIC_URL || ".";
+const ZOOM_THRESHOLD = 8;
 mapboxgl.accessToken = process.env.MAP_ACCESS_TOKEN;
 
-const marker_click_tracker = new Array(2)
+const markerClickTracker = new Array(2)
 
-const marker_props = new Object()
+const markerProps = new Object()
 
 var counter_clicks_marker = 0
 
@@ -46,7 +49,7 @@ class HomeButtonControl {
             "visibility": "hidden"
         });
         // For each element in counter_clicker set the unvisible to visible
-        marker_click_tracker.forEach((element) => {
+        markerClickTracker.forEach((element) => {
             element.style.visibility = "visible";
         });
 
@@ -132,7 +135,6 @@ map.addControl(new mapboxgl.NavigationControl());
 map.addControl(new mapboxgl.ScaleControl());
 map.addControl(new LayerButtonControl());
 
-
 function removeLayers(sourceId, layersIds) {
   layersIds.forEach(layerId => {
     map.removeLayer(layerId)
@@ -179,7 +181,7 @@ function addPolygon(polygonSourceId, polygonLayerId, polygonFeature) {
     }
 }
 
-function addRaster(itemIds, feature, polygonId) {
+function addRaster(itemIds, feature, polygonId, fromZoom) {
     var props = feature.properties;
     const collection = "emit-ch4plume-v1";
     const assets = "ch4-plume-emissions";
@@ -234,9 +236,9 @@ function addRaster(itemIds, feature, polygonId) {
 
         IDS_ON_MAP.add(feature.id);
     }
-
-
-    map.flyTo({
+    // If not coming from map zoom fly to position
+    if (!fromZoom) {
+      map.flyTo({
         center: [
             props["Longitude of max concentration"],
             props["Latitude of max concentration"],
@@ -245,41 +247,51 @@ function addRaster(itemIds, feature, polygonId) {
         // essential: true, // This ensures a smooth animation
     });
 
+    }
+
+
     displayPropertiesWithD3(props);
     dragElement(document.getElementById("display_props"))
 
 }
 
+
+const methanMetadata = await (
+  await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
+).json();
+const methaneStacMetadata = await (
+  await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
+).json();
+
+const features = methanMetadata.features;
+
+const polygons = features
+  .filter((f) => f.geometry.type === "Polygon")
+  .map((f, i) => ({
+      id: i,
+      feature: f
+  }));
+const points = features
+  .filter((f) => f.geometry.type === "Point")
+  .map((f, i) => ({
+      id: i,
+      feature: f
+  }))
+  .sort((prev, next) => {
+      const prev_date = new Date(prev.feature.properties["UTC Time Observed"]).getTime();
+      const next_date = new Date(next.feature.properties["UTC Time Observed"]).getTime();
+      return prev_date - next_date
+
+  });
+
+
+
 async function main() {
-    const methan_metadata = await (
-        await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
-    ).json();
-    const methane_stac_metadata = await (
-        await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
-    ).json();
 
     map.on("load", () => {
         createColorbar(VMIN, VMAX);
 
-        var features = methan_metadata.features;
-        var polygons = features
-            .filter((f) => f.geometry.type === "Polygon")
-            .map((f, i) => ({
-                id: i,
-                feature: f
-            }));
-        const points = features
-            .filter((f) => f.geometry.type === "Point")
-            .map((f, i) => ({
-                id: i,
-                feature: f
-            }))
-            .sort((prev, next) => {
-                const prev_date = new Date(prev.feature.properties["UTC Time Observed"]).getTime();
-                const next_date = new Date(next.feature.properties["UTC Time Observed"]).getTime();
-                return prev_date - next_date
 
-            });
 
         // Filter and set IDs for points
         features
@@ -289,26 +301,27 @@ async function main() {
                 return f;
             });
 
-        const itemIds = methane_stac_metadata.features.map((feature) => feature);
+        const itemIds = methaneStacMetadata.features.map((feature) => feature);
 
 
         points.forEach(function(point) {
-            let coords = point.feature.geometry.coordinates
+            const coords = point.feature.geometry.coordinates
             const markerEl = document.createElement("div");
             markerEl.className = "marker";
+            markerEl.id = `marker-${point.id}`;
             const marker = new mapboxgl.Marker(markerEl)
                 .setLngLat([coords[0], coords[1]])
                 .addTo(map);
+            
+            MARKERS_ON_MAP.add(point);
 
-
-            let local_props = point.feature.properties
-
+            const localProps = point.feature.properties
 
             const tooltipContent = `
-        <strong> Max Methane Enh: <span style="color: red">${local_props["Max Plume Concentration (ppm m)"]} (ppm m)</span></strong><br>
+        <strong> Max Methane Enh: <span style="color: red">${localProps["Max Plume Concentration (ppm m)"]} (ppm m)</span></strong><br>
         Latitude (max conc): ${coords[1].toFixed(3)}<br>
         Longitude (max conc): ${coords[0].toFixed(3)}<br>
-        Time Observed: ${local_props["UTC Time Observed"]}
+        Time Observed: ${localProps["UTC Time Observed"]}
         `;
 
 
@@ -328,18 +341,18 @@ async function main() {
                 popup.remove();
             });
 
-            marker_props["point-layer-" + point.id] = marker;
+            markerProps["point-layer-" + point.id] = marker;
 
             map.on('mouseenter', polygonLayerId, () => {
               popup.addTo(map);
             });
       
-              map.on('mouseleave', polygonLayerId, () => {
+            map.on('mouseleave', polygonLayerId, () => {
                 popup.remove();
             });
     
-          map.on('click', polygonLayerId, () => {
-            addPolygon(
+            map.on('click', polygonLayerId, () => {
+              addPolygon(
               polygonSourceId,
               polygonLayerId,
               polygon.feature
@@ -347,7 +360,6 @@ async function main() {
             );
 
             if (map.getSource("raster-source-" + point.feature.id)) {
-              console.log("There are");
               removeLayers(
                 "raster-source-" + point.feature.id,
                 ["raster-layer-" + point.feature.id]
@@ -360,66 +372,55 @@ async function main() {
               addRaster(
                 itemIds,
                 point.feature,
-                polygonLayerId
+                polygonLayerId,
+                true
               );
 
             }
 
         });
 
-            
+        marker.getElement().addEventListener("click", (e) => {
 
+        counter_clicks_marker += 1
 
-
-            marker.getElement().addEventListener("click", (e) => {
-
-
-
-
-
-
-
-            counter_clicks_marker += 1
-
-            if (counter_clicks_marker % 2 == 0) {
-                marker_click_tracker[0] = e.target
-                marker_click_tracker[0].style.visibility = "hidden"
-                if (marker_click_tracker[1]) {
-                    marker_click_tracker[1].style.visibility = "visible"
-                }
-
-            } else {
-                marker_click_tracker[1] = e.target
-                marker_click_tracker[1].style.visibility = "hidden"
-                if (marker_click_tracker[0]) {
-                    marker_click_tracker[0].style.visibility = "visible"
-                }
+        if (counter_clicks_marker % 2 == 0) {
+            markerClickTracker[0] = e.target
+            markerClickTracker[0].style.visibility = "hidden"
+            if (markerClickTracker[1]) {
+                markerClickTracker[1].style.visibility = "visible"
             }
 
-            addPolygon(
-              polygonSourceId,
-              polygonLayerId,
-              polygon.feature
-            )
+        } else {
+            markerClickTracker[1] = e.target
+            markerClickTracker[1].style.visibility = "hidden"
+            if (markerClickTracker[0]) {
+                markerClickTracker[0].style.visibility = "visible"
+            }
+        }
+
+        addPolygon(
+          polygonSourceId,
+          polygonLayerId,
+          polygon.feature
+        )
 
 
-                addRaster(
-                    itemIds,
-                    point.feature,
-                    polygonLayerId
-                );
+        addRaster(
+            itemIds,
+            point.feature,
+            polygonLayerId
+        );
 
-
-
-            });
+        });
 
         })
 
         $(function() {
             //
 
-            var firstPoint = points[0].feature.properties["UTC Time Observed"];
-            var lastPoint = points[points.length - 1].feature.properties["UTC Time Observed"];
+            const firstPoint = points[0].feature.properties["UTC Time Observed"];
+            const lastPoint = points[points.length - 1].feature.properties["UTC Time Observed"];
 
             var minStartDate = new Date(firstPoint)
             minStartDate.setUTCHours(0, 0, 0, 0)
@@ -452,11 +453,13 @@ async function main() {
                         );
 
                         if (point_date >= startDate && point_date <= stopDate) {
-                            marker_props[layerID].addTo(map)
+                            markerProps[layerID].addTo(map)
+                            MARKERS_ON_MAP.add(point);
 
 
                         } else {
-                            marker_props[layerID].remove()
+                            markerProps[layerID].remove()
+                            MARKERS_ON_MAP.delete(point);
 
                         }
 
@@ -497,7 +500,54 @@ async function main() {
     });
 }
 
+map.on('zoomend', () => {
+  const currentZoom = map.getZoom();
 
 
+  if (currentZoom > ZOOM_THRESHOLD) {
+    const bounds = map.getBounds();
+  
+    MARKERS_ON_MAP.forEach(marker => {
+    const coords = marker.feature.geometry.coordinates;
+    const lngLat = new mapboxgl.LngLat(coords[0], coords[1]);
+    // Check if the point is within the bounds
+    const isWithinBounds = bounds.contains(lngLat);
+
+    if (isWithinBounds ) {
+      $(`#marker-${marker.id}`).css({"visibility": "hidden"});
+      const polygon = polygons[marker.id];
+      addPolygon(
+        `polygon-source-${polygon.id}`,
+        `polygon-layer-${polygon.id}`,
+        polygon.feature
+
+      );
+      POLYGON_ADDED.add(polygon);
+    } 
+  
+  });  
+  
+
+  }
+
+  else {
+    POLYGON_ADDED.forEach(polygonAdded => {
+      const polygonLayerId = `polygon-layer-${polygonAdded.id}`
+      removeLayers(
+        `polygon-source-${polygonAdded.id}`,
+        [
+          polygonLayerId,
+          `outline-${polygonLayerId}`
+        ]
+
+      );
+      POLYGON_ADDED.delete(polygonAdded);
+      $(`#marker-${polygonAdded.id}`).css({"visibility": "visible"});
+
+    })
+  }
+
+}
+)
 
 main();
