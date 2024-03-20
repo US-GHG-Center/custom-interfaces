@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "source .env; webpack --mode=${STAGE} --env PUBLIC_URL=${PUBLIC_URL}"
+    "deploy": ". .env; webpack --mode=${STAGE} --env PUBLIC_URL=${PUBLIC_URL}"
   },
   "author": "",
   "license": "ISC",
