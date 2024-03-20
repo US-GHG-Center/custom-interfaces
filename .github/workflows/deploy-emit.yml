@@ -47,6 +47,7 @@ jobs:
       
       - name: Build for production 🔧
         working-directory: ./emit-ch4plume-v1
+        shell: bash
         run: |
           echo PUBLIC_URL="${{ vars.PUBLIC_URL_EMIT }}" >> .env
           echo MAP_STYLE="${{ vars.MAP_STYLE }}" >> .env
