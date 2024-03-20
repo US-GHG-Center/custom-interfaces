@@ -62,8 +62,11 @@ jobs:
           path: ./emit-ch4plume-v1/dist
 
   deploy-dev:
-    needs: build
+    needs:
+      - build
+      - define-environment
     if: github.ref == 'refs/heads/dev'
+    environment: ${{ needs.define-environment.outputs.env_name }}
 
     permissions:
       id-token: write
@@ -87,11 +90,18 @@ jobs:
       
       - name: Upload to S3
         run: |
-          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-develop/ghgcenter/custom-interfaces/emit-ch4plume-v1/ --recursive
+          export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
+          echo $PUBLIC_URL
+          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-develop/${PUBLIC_URL}/ --recursive
+        env:
+          PUBLIC_URL: ${{ vars.PUBLIC_URL_EMIT }}
 
   deploy-staging:
-    needs: build
+    needs:
+      - build
+      - define-environment
     if: github.ref == 'refs/heads/main'
+    environment: ${{ needs.define-environment.outputs.env_name }}
 
     permissions:
       id-token: write
@@ -115,11 +125,17 @@ jobs:
       
       - name: Upload to S3
         run: |
-          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-staging/ghgcenter/custom-interfaces/emit-ch4plume-v1/ --recursive
+          export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
+          echo $PUBLIC_URL
+          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ --recursive
+
 
   deploy-production:
-    needs: build
+    needs:
+      - build
+      - define-environment
     if: github.ref == 'refs/heads/production'
+    environment: ${{ needs.define-environment.outputs.env_name }}
 
     permissions:
       id-token: write
@@ -143,4 +159,6 @@ jobs:
       
       - name: Upload to S3
         run: |
-          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-production/ghgcenter/custom-interfaces/emit-ch4plume-v1/ --recursive
+          export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
+          echo $PUBLIC_URL
+          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/ --recursive
