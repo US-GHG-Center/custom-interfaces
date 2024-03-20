@@ -344,10 +344,12 @@ async function main() {
             markerProps["point-layer-" + point.id] = marker;
 
             map.on('mouseenter', polygonLayerId, () => {
+              map.getCanvas().style.cursor = 'pointer';
               popup.addTo(map);
             });
       
             map.on('mouseleave', polygonLayerId, () => {
+              map.getCanvas().style.cursor = '';
                 popup.remove();
             });
     
