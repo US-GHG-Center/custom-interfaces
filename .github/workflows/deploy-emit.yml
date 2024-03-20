@@ -53,6 +53,7 @@ jobs:
           echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
           echo PUBLIC_URL="${{ vars.PUBLIC_URL_EMIT }}" >> .env
           echo STAGE="production" >> .env
+          npm install
           npm run deploy
 
       - name: Upload dist folder

@@ -24,6 +24,8 @@ const markerProps = new Object()
 var counter_clicks_marker = 0
 
 var layerToggled = true;
+var polygons;
+
 
 
 const map = new mapboxgl.Map({
@@ -256,39 +258,43 @@ function addRaster(itemIds, feature, polygonId, fromZoom) {
 }
 
 
-const methanMetadata = await (
-  await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
-).json();
-const methaneStacMetadata = await (
-  await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
-).json();
 
-const features = methanMetadata.features;
 
-const polygons = features
-  .filter((f) => f.geometry.type === "Polygon")
-  .map((f, i) => ({
-      id: i,
-      feature: f
-  }));
-const points = features
-  .filter((f) => f.geometry.type === "Point")
-  .map((f, i) => ({
-      id: i,
-      feature: f
-  }))
-  .sort((prev, next) => {
-      const prev_date = new Date(prev.feature.properties["UTC Time Observed"]).getTime();
-      const next_date = new Date(next.feature.properties["UTC Time Observed"]).getTime();
-      return prev_date - next_date
 
-  });
 
 
 
 async function main() {
 
-    map.on("load", () => {
+
+
+    map.on("load", async () => {
+        const methanMetadata = await (
+            await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
+          ).json();
+          const methaneStacMetadata = await (
+            await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
+          ).json();
+        const features = methanMetadata.features;
+
+        polygons = features
+          .filter((f) => f.geometry.type === "Polygon")
+          .map((f, i) => ({
+              id: i,
+              feature: f
+          }));
+        const points = features
+          .filter((f) => f.geometry.type === "Point")
+          .map((f, i) => ({
+              id: i,
+              feature: f
+          }))
+          .sort((prev, next) => {
+              const prev_date = new Date(prev.feature.properties["UTC Time Observed"]).getTime();
+              const next_date = new Date(next.feature.properties["UTC Time Observed"]).getTime();
+              return prev_date - next_date
+        
+          });
         createColorbar(VMIN, VMAX);
 
 
