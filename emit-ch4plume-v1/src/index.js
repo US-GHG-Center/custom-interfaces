@@ -269,6 +269,7 @@ async function main() {
 
 
     map.on("load", async () => {
+
         const methanMetadata = await (
             await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
           ).json();
@@ -276,6 +277,9 @@ async function main() {
             await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
           ).json();
         const features = methanMetadata.features;
+
+        $("#lds-roller-id").css({'display': 'none'});
+
 
         polygons = features
           .filter((f) => f.geometry.type === "Polygon")
