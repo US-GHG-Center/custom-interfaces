@@ -94,3 +94,19 @@ body {
     top: 10px;
     z-index: 1000;
 }
+
+#data-source {
+    display: flex;
+    padding-top: 6px;
+    justify-content: center;
+    font-size: 14px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+a {
+    text-decoration: none;
+    /* color: inherit; */
+    color: "#082A63" !important;
+}
