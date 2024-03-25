@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const dataSourceBaseUrl = "https://gml.noaa.gov/dv/data/index.php"
     const dataSourceQueryParams = `?type=${TYPES[selectedType].long.replace(" ", "%2B")}&frequency=Discrete&site=${station.site_code}&amp;parameter_name=${GHG[selectedGhg].long.replace(" ", "%2B")}`
     const dataSource = dataSourceBaseUrl + dataSourceQueryParams;
-    document.getElementById("data-source").innerHTML = `<a href="${dataSource}"> Original data source ↗ </a>`
+    document.getElementById("data-source").innerHTML = `<a href="${dataSource}"> Access data at NOAA ↗ </a>`
 
     // Fetch data and render chart
     fetch(selectedFile)
