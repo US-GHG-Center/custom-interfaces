@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 
 base_dir = sys.argv[1]
 files = os.listdir(base_dir)
@@ -26,4 +27,5 @@ for file in files:
         else:
             print(file)
 
-print(stations)
+file = open("tmp.json", "a")
+json.dump(stations, file)
