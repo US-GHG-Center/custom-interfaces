@@ -71,8 +71,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const stationCode = queryParams.get("station_code");
   const ghg = queryParams.get("ghg");
   const type = queryParams.get("type");
+  const medium = queryParams.get("medium");
   const selectedGhg = ghg || "ch4";
   const selectedType = type || "flask";
+  const selectedMedium = medium || "surface";
 
   const titleContainer = document.getElementById("title");
   titleContainer.innerHTML = `<strong> NOAA: ESRL Global Monitoring Laboratory: ${
@@ -89,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     projection: 'equirectangular'
   });
 
-  const stations = stations_data[selectedType][selectedGhg];
+  const stations = stations_data[selectedGhg][selectedType][selectedMedium];
 
   if (stationCode) {
     // Find the station based on the query parameter
@@ -126,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderStation(station) {
     openChart();
-    const selectedFile = `${publicUrl ? publicUrl : ""}/${selectedType}/${selectedGhg}/${selectedGhg}_${station.site_code.toLowerCase()}_${
+    const selectedFile = `${publicUrl ? publicUrl : ""}/${selectedGhg}/${selectedType}/${selectedMedium}/${selectedGhg}_${station.site_code.toLowerCase()}_${
       station.dataset_project
     }_${baseFileName}.txt`;
     // Fetch data and render chart
