@@ -128,15 +128,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderStation(station) {
     openChart();
-    const selectedFile = `${publicUrl ? publicUrl : ""}/${selectedGhg}/${selectedType}/${selectedMedium}/${selectedGhg}_${station.site_code.toLowerCase()}_${
-      station.dataset_project
-    }_${baseFileName}.txt`;
+    const selectedFile = `${publicUrl ? publicUrl : ""}/${selectedGhg}/${selectedType}/${selectedMedium}/${station.dataset_name}.txt`;
     // Fetch data and render chart
     fetch(selectedFile)
       .then((response) => response.text())
       .then(async (data) => {
         // Parse data (you may need to adjust this based on your CSV format)
-        const parsedData = await parseData(data);
+        let parsedData;
+        if (selectedType === "insitu" && selectedMedium === "surface") {
+          parsedData = await parseDataInsituSurface(data)
+        } else {
+          parsedData = await parseData(data);
+        }
         // Render chart
         renderChart(chartContainer, {name: station.site_name, code: station.site_code}, parsedData);
       })
@@ -212,6 +215,34 @@ document.addEventListener("DOMContentLoaded", () => {
       .map((line) => line.replace("\n", "").split(" "));
     const filtered = lines
       .filter((line) => line[21] == "...")
+      .filter((line) => line[10] !== "-999.99")
+      .filter((line) => line[10] !== "0");
+    let return_value = filtered.map((line) => {
+      return {
+        date: line[7],
+        value: line[10],
+      };
+    });
+    return return_value;
+    // return [{ date: "2023-01-01", value: 10 }, { date: "2023-01-02", value: 20 }, { date: "2023-01-03", value: 15 }]
+  }
+
+  // Function to parse CSV data (customize based on your CSV format)
+  async function parseDataInsituSurface(data) {
+    // Parse your CSV data here and return it as an array of objects
+    data = data.split("\n");
+    let header_lines = data[0]
+      .split(":")
+      .slice(-1)[0]
+      .trim()
+      .replace("\n#\n#", "");
+    header_lines = parseInt(header_lines);
+    data = data.slice(header_lines - 1);
+    const lines = data
+      .slice(1)
+      .map((line) => line.replace("\n", "").split(" "));
+    const filtered = lines
+      .filter((line) => line[18] == "...")
       .filter((line) => line[10] !== "-999.99")
       .filter((line) => line[10] !== "0");
     let return_value = filtered.map((line) => {
