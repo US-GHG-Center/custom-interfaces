@@ -2,6 +2,57 @@ import './style.css'
 import stations_data from './stations.js'
 import noaaLogo from './noaa-logo.png';
 
+const FLASK = "flask";
+const PFP = "pfp";
+const INSITU = "insitu";
+const CH4 = "ch4";
+const CO2 = "co2";
+const SURFACE = "surface";
+const TOWER = "tower";
+const AIRCRAFT = "aircraft";
+
+const MEDIUM = {
+  [SURFACE]: {
+    short: SURFACE,
+    long: "Surface"
+  },
+  [TOWER]: {
+    short: TOWER,
+    long: "Tower"
+  },
+  [AIRCRAFT]: {
+    short: AIRCRAFT,
+    long: "Aircraft"
+  }
+}
+
+const TYPES = {
+  [FLASK]: {
+    short: FLASK,
+    long: "Flask"
+  },
+  [PFP]: {
+    short: PFP,
+    long: "PFP"
+  },
+  [INSITU]: {
+    short: INSITU,
+    long: "Insitu"
+  }
+}
+
+const GHG = {
+  [CH4]: {
+    short: "CH₄",
+    long: "Methane",
+    unit: "ppb"
+  },
+  [CO2]: {
+    short: "CO₂",
+    long: "Carbon Dioxide",
+    unit: "ppm"
+  }
+}
 
 let publicUrl = process.env.PUBLIC_URL;
 
@@ -72,14 +123,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const ghg = queryParams.get("ghg");
   const type = queryParams.get("type");
   const medium = queryParams.get("medium");
-  const selectedGhg = ghg || "ch4";
-  const selectedType = type || "flask";
-  const selectedMedium = medium || "surface";
+  const selectedGhg = ghg || CH4;
+  const selectedType = type || FLASK;
+  const selectedMedium = medium || SURFACE;
 
   const titleContainer = document.getElementById("title");
   titleContainer.innerHTML = `<strong> NOAA: ESRL Global Monitoring Laboratory: ${
-    selectedGhg === "ch4" ? "Methane" : "Carbon dioxide"
-  } ${selectedType === "flask" ? "(Flask)" : "(Surface PFP)"} </strong>`;
+    GHG[selectedGhg].long
+  } (${MEDIUM[selectedMedium].long}-${TYPES[selectedType].long}) </strong>`;
   titleContainer.style.display = "block";
   titleContainer.style.color = ghgBlue;
 
@@ -129,6 +180,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderStation(station) {
     openChart();
     const selectedFile = `${publicUrl ? publicUrl : ""}/${selectedGhg}/${selectedType}/${selectedMedium}/${station.dataset_name}.txt`;
+
+    // Update the data source
+    const dataSourceBaseUrl = "https://gml.noaa.gov/dv/data/index.php"
+    const dataSourceQueryParams = `?type=${TYPES[selectedType].long.replace(" ", "%2B")}&frequency=Discrete&site=${station.site_code}&amp;parameter_name=${GHG[selectedGhg].long.replace(" ", "%2B")}`
+    const dataSource = dataSourceBaseUrl + dataSourceQueryParams;
+    document.getElementById("data-source").innerHTML = `<a href="${dataSource}"> Access data at NOAA ↗ </a>`
+
     // Fetch data and render chart
     fetch(selectedFile)
       .then((response) => response.text())
@@ -279,14 +337,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!!chart) {
       chart.destroy();
     }
-
-    // Define a red color for the hovered point
-    const redColor = "rgb(255, 0, 0)";
-
-    // Limit the number of x-axis labels to a maximum of 10
-    const maxLabelsToShow = 10;
-    const stepSize = Math.ceil(data.length / maxLabelsToShow);
-
     // Create a Chart.js chart here using 'data'
     // Example:
     chart = new Chart(chartContainer, {
@@ -296,9 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
         labels: data.map((item) => item.date), // Show label every stepSize data points
         datasets: [
           {
-            label: `Observed ${
-              selectedGhg === "ch4" ? "CH₄" : "CO₂"
-            } Concentration`,
+            label: `Observed ${GHG[selectedGhg].short} Concentration`,
             data: data.map((item) => item.value),
             borderColor: "#440154",
             borderWidth: 2,
@@ -343,9 +391,7 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           y: {
             title: {
-              text: `${
-                selectedGhg === "ch4" ? "Methane (CH₄)" : "Carbon Dioxide (CO₂)"
-              } Concentration (${selectedGhg === "ch4" ? "ppb" : "ppm"})`,
+              text: `${ GHG[selectedGhg].long } (${GHG[selectedGhg].short}) Concentration (${GHG[selectedGhg].unit})`,
               display: true,
             },
           },
@@ -388,7 +434,7 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           legend: {
             display: true,
-            position: "bottom", // You can change the position to 'bottom', 'left', or 'right'
+            position: "top", // You can change the position to 'bottom', 'left', or 'right'
           },
           tooltip: {
             callbacks: {
