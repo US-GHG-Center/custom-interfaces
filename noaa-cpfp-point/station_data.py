@@ -7,6 +7,8 @@ files = os.listdir(base_dir)
 stations = []
 initial_line = 30
 final_line = 50
+excluded_sites = ["LAC", "INX", "BWD", "NEB", "NWB", "TMD", "SPF", "KLM", "MKO", "MLO", "HFM"]
+
 for file in files:
     if not file.endswith(".txt"):
         continue
@@ -23,6 +25,9 @@ for file in files:
             for datum in relevant_data:
                 key, value = datum.strip(" ").strip("#").strip("\n").split(" : ")
                 station[key.strip(" ")] = value
+            if (station["dataset_project"] == "surface-pfp" and station["site_code"] in excluded_sites):
+                # Exclude the following PFP sites Due to interpretation complexity or shortness of record.
+                continue
             stations.append(station)
         else:
             print(file)
