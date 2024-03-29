@@ -180,13 +180,17 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderStation(station) {
     openChart();
     const selectedFile = `${publicUrl ? publicUrl : ""}/${selectedGhg}/${selectedType}/${selectedMedium}/${station.dataset_name}.txt`;
-
-    // Update the data source
     const dataSourceBaseUrl = "https://gml.noaa.gov/dv/data/index.php"
     const dataSourceQueryParams = `?type=${TYPES[selectedType].long.replace(" ", "%2B")}&frequency=Discrete&site=${station.site_code}&amp;parameter_name=${GHG[selectedGhg].long.replace(" ", "%2B")}`
     const dataSource = dataSourceBaseUrl + dataSourceQueryParams;
     document.getElementById("data-source").innerHTML = `<a href="${dataSource}"> Access data at NOAA ↗ </a>`
-
+    if (selectedType === "insitu") document.getElementById("select-frequency").innerHTML = `
+                                                            Data frequency
+                                                            <select style="margin-left: 5px;">
+                                                              <option value='daily'>Daily</option>
+                                                              <option value='monthly'>Monthly</option>
+                                                            <select>
+                                                            `;
     // Fetch data and render chart
     fetch(selectedFile)
       .then((response) => response.text())

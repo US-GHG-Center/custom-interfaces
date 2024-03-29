@@ -105,6 +105,16 @@ body {
     right: 10px;
 }
 
+#select-frequency {
+    display: flex;
+    padding-top: 6px;
+    justify-content: center;
+    font-size: 14px;
+    position: absolute;
+    top: 50px;
+    right: 10px;
+}
+
 a {
     text-decoration: none;
     /* color: inherit; */

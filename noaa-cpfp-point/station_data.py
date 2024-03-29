@@ -32,5 +32,5 @@ for file in files:
         else:
             print(file)
 
-file = open("tmp.json", "a")
-json.dump(stations, file)
+with open("tmp.json", "w") as file:
+    json.dump(stations, file)

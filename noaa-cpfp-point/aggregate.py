@@ -36,11 +36,11 @@ def aggregate(filepath):
             table_body = data[1:]
             dataframe = pd.DataFrame(table_body, columns=table_head)
             # Filter data
-            mask = (dataframe["qcflag"] != "...") & (dataframe["value"] != "0") & (dataframe["qcflag"] != "-999")
+            mask = (dataframe["qcflag"] != "...") & (dataframe["value"] != "0") & (dataframe["value"] != "-999")
             filtered_df = dataframe[mask].reset_index(drop=True)
             # Aggregate data (hourly into daily)
             filtered_df['value'] = filtered_df['value'].astype(float)
-            aggregated_df = filtered_df.groupby(['year', 'month', 'day'])['value'].sum().reset_index()
+            aggregated_df = filtered_df.groupby(['year', 'month', 'day'])['value'].agg(lambda x: x.mode().iloc[0]).reset_index()
             # necessary columns, processed df
             aggregated_df['datetime'] = pd.to_datetime(aggregated_df[['year', 'month', 'day']])
             aggregated_df['datetime'] = aggregated_df['datetime'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
@@ -52,7 +52,7 @@ def aggregate(filepath):
                 json_list.append(json_obj)
             # save the json file for reference
             out_path = f"{filepath.split("/")[-1]}.json"
-            with open(out_path, "a") as file:
+            with open(out_path, "w") as file:
                 json.dump(json_list, file)
             return out_path
     except FileNotFoundError:
