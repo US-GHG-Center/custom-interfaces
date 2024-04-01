@@ -35,12 +35,12 @@ def aggregate(filepath):
             table_head = data[0]
             table_body = data[1:]
             dataframe = pd.DataFrame(table_body, columns=table_head)
+            dataframe['value'] = dataframe['value'].astype(float)
             # Filter data
-            mask = (dataframe["qcflag"] != "...") & (dataframe["value"] != "0") & (dataframe["value"] != "-999")
+            mask = (dataframe["qcflag"] == "...") & (dataframe["value"] != 0) & (dataframe["value"] != -999)
             filtered_df = dataframe[mask].reset_index(drop=True)
             # Aggregate data (hourly into daily)
-            filtered_df['value'] = filtered_df['value'].astype(float)
-            aggregated_df = filtered_df.groupby(['year', 'month', 'day'])['value'].agg(lambda x: x.mode().iloc[0]).reset_index()
+            aggregated_df = filtered_df.groupby(['year', 'month', 'day'])['value'].mean().reset_index()
             # necessary columns, processed df
             aggregated_df['datetime'] = pd.to_datetime(aggregated_df[['year', 'month', 'day']])
             aggregated_df['datetime'] = aggregated_df['datetime'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
