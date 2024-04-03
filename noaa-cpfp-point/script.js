@@ -110,13 +110,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add in data access url link to the selected station
     document.getElementById("data-source").innerHTML = `<a href="${dataAccessUrl}"> Access data at NOAA ↗ </a>`
     // for Insitu, give an option to select monthly and daily frequency datasets.
-    if (selectedType === "insitu") document.getElementById("select-frequency").innerHTML = `
-                                                            Data frequency
-                                                            <select style="margin-left: 5px;">
-                                                              <option value='daily'>Daily</option>
-                                                              <option value='monthly'>Monthly</option>
-                                                            <select>
-                                                            `;
+    let frequencySelector = document.getElementById("select-frequency");
+    if (selectedType === "insitu") {
+      frequencySelector.innerHTML = `
+                                    Data frequency
+                                    <select style="margin-left: 5px;">
+                                      <option value='daily'>Daily</option>
+                                      <option value='monthly'>Monthly</option>
+                                    <select>
+                                    `;
+      let selectOption = frequencySelector.querySelector("select");
+      selectOption.addEventListener("change", (event) => {
+        let frequency = event.target.value;
+        renderStation(station, frequency)
+      });
+    }
+
     // Fetch data and render chart
     try {
       let data = await getStationData(stationDataUrl);
