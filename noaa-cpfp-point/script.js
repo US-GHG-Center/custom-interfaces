@@ -1,115 +1,20 @@
-import stations_data from './stations.js'
-
-const FLASK = "flask";
-const PFP = "pfp";
-const INSITU = "insitu";
-const CH4 = "ch4";
-const CO2 = "co2";
-const SURFACE = "surface";
-const TOWER = "tower";
-const AIRCRAFT = "aircraft";
-
-const MEDIUM = {
-  [SURFACE]: {
-    short: SURFACE,
-    long: "Surface"
-  },
-  [TOWER]: {
-    short: TOWER,
-    long: "Tower"
-  },
-  [AIRCRAFT]: {
-    short: AIRCRAFT,
-    long: "Aircraft"
-  }
-}
-
-const TYPES = {
-  [FLASK]: {
-    short: FLASK,
-    long: "Flask"
-  },
-  [PFP]: {
-    short: PFP,
-    long: "PFP"
-  },
-  [INSITU]: {
-    short: INSITU,
-    long: "Insitu"
-  }
-}
-
-const GHG = {
-  [CH4]: {
-    short: "CH₄",
-    long: "Methane",
-    unit: "ppb"
-  },
-  [CO2]: {
-    short: "CO₂",
-    long: "Carbon Dioxide",
-    unit: "ppm"
-  }
-}
-
-let publicUrl = process.env.PUBLIC_URL;
-
-let ghgBlue = "#082A63";
-
-const plugin = {
-  id: "corsair",
-  defaults: {
-    width: 1,
-    color: "#DEDEDE",
-    dash: [1000, 1000],
-  },
-  afterInit: (chart, args, opts) => {
-    chart.corsair = {
-      x: 0,
-      y: 0,
-    };
-  },
-  afterEvent: (chart, args) => {
-    const { inChartArea } = args;
-    const { type, x, y } = args.event;
-
-    chart.corsair = { x, y, draw: inChartArea };
-    chart.draw();
-  },
-  beforeDatasetsDraw: (chart, args, opts) => {
-    const { ctx } = chart;
-    const { top, bottom, left, right } = chart.chartArea;
-    const { x, y, draw } = chart.corsair;
-    if (!draw) return;
-
-    ctx.save();
-
-    ctx.beginPath();
-    ctx.lineWidth = opts.width;
-    ctx.strokeStyle = opts.color;
-    ctx.setLineDash(opts.dash);
-    ctx.moveTo(x, bottom);
-    ctx.lineTo(x, top);
-    // ctx.moveTo(left, y)
-    // ctx.lineTo(right, y)
-    ctx.stroke();
-
-    ctx.restore();
-  },
-};
+import { MEDIUM, TYPES, GHG, CH4, FLASK, SURFACE, ghgBlue} from './src/enumeration.js';
+import { getStationsMeta, constructStationDataSourceUrl, getStationData, constructDataAccessSourceUrl } from "./src/utils";
+import { openChart, renderChart } from './src/chart/index.js';
 
 // script.js
 document.addEventListener("DOMContentLoaded", () => {
-  let chart = null;
-
-  const chartContainer = document.getElementById("chart");
-
-  const mapC = document.getElementById("map");
-  const mapContainer = document.getElementById("map-container");
-  const chartContainerB = document.getElementById("chart-container");
-
   // Replace 'MAPBOX_ACCESS_TOKEN' with your actual Mapbox access token
   mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN;
+
+  // initialize map
+  const map = new mapboxgl.Map({
+    container: "map",
+    style: "mapbox://styles/mapbox/satellite-v9",
+    center: [-98.585522, 1.8333333], // Centered on the US
+    zoom: 2,
+    projection: 'equirectangular'
+  });
 
   // Parse query parameters from the URL
   const queryParams = new URLSearchParams(window.location.search);
@@ -121,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const selectedType = type || FLASK;
   const selectedMedium = medium || SURFACE;
 
+  // Add title of the NOAA according to the query params
   const titleContainer = document.getElementById("title");
   titleContainer.innerHTML = `<strong> NOAA: ESRL Global Monitoring Laboratory: ${
     GHG[selectedGhg].long
@@ -128,80 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
   titleContainer.style.display = "block";
   titleContainer.style.color = ghgBlue;
 
-  const map = new mapboxgl.Map({
-    container: "map",
-    style: "mapbox://styles/mapbox/satellite-v9",
-    center: [-98.585522, 1.8333333], // Centered on the US
-    zoom: 2,
-    projection: 'equirectangular'
-  });
-
-  const stations = stations_data[selectedGhg][selectedType][selectedMedium];
-
-  if (stationCode) {
-    // Find the station based on the query parameter
-    const selectedStation = stations.find(
-      (station) => station.site_code === stationCode
-    );
-    // If a station with the specified code is found, zoom in and display the chart
-    if (selectedStation) {
-      const { site_latitude: lat, site_longitude: lon } = selectedStation;
-      const stationLocation = {
-        center: [lon, lat],
-        zoom: 10,
-      };
-      map.flyTo({ ...stationLocation, duration: 1200, essential: true }); // Adjust the zoom level as needed
-      renderStation(selectedStation);
-    }
-  }
-
-  // Function to toggle map height and show/hide chart
-  function openChart() {
-    // Show chart and make map half-height
-    mapContainer.style.height = "50%";
-    chartContainerB.style.height = "50%";
-    chartContainerB.style.display = "block";
-  }
-
-  const resizeObserver = new ResizeObserver(() => {
-    setTimeout(function () {
-      map.resize();
-    }, 0);
-  });
-
-  resizeObserver.observe(mapC);
-
-  function renderStation(station) {
-    openChart();
-    const selectedFile = `${publicUrl ? publicUrl : ""}/data/raw/${selectedGhg}/${selectedType}/${selectedMedium}/${station.dataset_name}.txt`;
-    const dataSourceBaseUrl = "https://gml.noaa.gov/dv/data/index.php"
-    const dataSourceQueryParams = `?type=${TYPES[selectedType].long.replace(" ", "%2B")}&frequency=Discrete&site=${station.site_code}&amp;parameter_name=${GHG[selectedGhg].long.replace(" ", "%2B")}`
-    const dataSource = dataSourceBaseUrl + dataSourceQueryParams;
-    document.getElementById("data-source").innerHTML = `<a href="${dataSource}"> Access data at NOAA ↗ </a>`
-    if (selectedType === "insitu") document.getElementById("select-frequency").innerHTML = `
-                                                            Data frequency
-                                                            <select style="margin-left: 5px;">
-                                                              <option value='daily'>Daily</option>
-                                                              <option value='monthly'>Monthly</option>
-                                                            <select>
-                                                            `;
-    // Fetch data and render chart
-    fetch(selectedFile)
-      .then((response) => response.text())
-      .then(async (data) => {
-        // Parse data (you may need to adjust this based on your CSV format)
-        let parsedData;
-        if (selectedType === "insitu" && selectedMedium === "surface") {
-          parsedData = await parseDataInsituSurface(data)
-        } else {
-          parsedData = await parseData(data);
-        }
-        // Render chart
-        renderChart(chartContainer, {name: station.site_name, code: station.site_code}, parsedData);
-      })
-      .catch((error) => console.error(error));
-  }
-
+  // Fetch and plot Stations
+  const stations = getStationsMeta(selectedGhg, selectedType, selectedMedium);
   // Loop through stations and add markers
   stations.forEach((station) => {
     const markerEl = document.createElement("div");
@@ -238,27 +72,74 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       // console.log("error in", station.site_code);
     }
-
-    // Add an event listener to the dropdown to update the chart when the selection changes
-    // dropdown.addEventListener('change', () => {
-    //     const selectedCSVFile = dropdown.value;
-    //     fetch(selectedCSVFile)
-    //         .then(response => response.text())
-    //         .then(data => {
-    //             // Parse CSV data (you may need to adjust this based on your CSV format)
-    //             const parsedData = parseData(data);
-
-    //             // Render the chart inside the popup content
-    //             renderChart(`chart-${station.name}`, station.name, parsedData);
-    //         })
-    //         .catch(error => console.error(error));
-    // });
   });
 
+  // If specific station chart directly queried using URL
+  if (stationCode) {
+    // Find the station based on the query parameter
+    const selectedStation = stations.find(
+      (station) => station.site_code === stationCode
+    );
+    // If a station with the specified code is found, zoom in and display the chart
+    if (selectedStation) {
+      const { site_latitude: lat, site_longitude: lon } = selectedStation;
+      const stationLocation = {
+        center: [lon, lat],
+        zoom: 10,
+      };
+      map.flyTo({ ...stationLocation, duration: 1200, essential: true }); // Adjust the zoom level as needed
+      renderStation(selectedStation);
+    }
+  }
+
+  // MAP resize observer
+  const mapC = document.getElementById("map");
+  const resizeObserver = new ResizeObserver(() => {
+    setTimeout(function () {
+      map.resize();
+    }, 0);
+  });
+  resizeObserver.observe(mapC);
+
+  // On station click: render station
+  async function renderStation(station) {
+    openChart();
+    const stationDataUrl = constructStationDataSourceUrl(selectedGhg, selectedType, selectedMedium, station.dataset_name);
+    const dataAccessUrl = constructDataAccessSourceUrl(selectedGhg, selectedType, station.site_code);
+
+    // Add in data access url link to the selected station
+    document.getElementById("data-source").innerHTML = `<a href="${dataAccessUrl}"> Access data at NOAA ↗ </a>`
+    // for Insitu, give an option to select monthly and daily frequency datasets.
+    if (selectedType === "insitu") document.getElementById("select-frequency").innerHTML = `
+                                                            Data frequency
+                                                            <select style="margin-left: 5px;">
+                                                              <option value='daily'>Daily</option>
+                                                              <option value='monthly'>Monthly</option>
+                                                            <select>
+                                                            `;
+    // Fetch data and render chart
+    try {
+      let data = await getStationData(stationDataUrl);
+      let response = await data.text();
+      // Parse data (you may need to adjust this based on your CSV format)
+      let parsedData;
+      if (selectedType === "insitu" && selectedMedium === "surface") {
+        parsedData = await parseDataInsituSurface(response)
+      } else {
+        parsedData = await parseData(response);
+      }
+      // Render chart
+      renderChart({name: station.site_name, code: station.site_code}, parsedData, selectedGhg);
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  // Data preprocessors
   // Function to parse CSV data (customize based on your CSV format)
-  async function parseData(data) {
-    // Parse your CSV data here and return it as an array of objects
-    data = data.split("\n");
+  async function parseData(csvdata) {
+    // Parse your CSV data here and return it as ank array of objects
+    let data = csvdata.split("\n");
     let header_lines = data[0]
       .split(":")
       .slice(-1)[0]
@@ -284,9 +165,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Function to parse CSV data (customize based on your CSV format)
-  async function parseDataInsituSurface(data) {
+  async function parseDataInsituSurface(csvdata) {
     // Parse your CSV data here and return it as an array of objects
-    data = data.split("\n");
+    let data = csvdata.split("\n");
     let header_lines = data[0]
       .split(":")
       .slice(-1)[0]
@@ -309,170 +190,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     return return_value;
     // return [{ date: "2023-01-01", value: 10 }, { date: "2023-01-02", value: 20 }, { date: "2023-01-03", value: 15 }]
-  }
-
-  // Function to create a dropdown menu with CSV file options
-  function createDropdown(csvFiles) {
-    const dropdown = document.createElement("select");
-    csvFiles.forEach((csvFile) => {
-      const option = document.createElement("option");
-      option.value = csvFile;
-      option.textContent = csvFile;
-      dropdown.appendChild(option);
-    });
-    return dropdown;
-  }
-
-  // Function to render the time series chart
-  function renderChart(chartContainer, station, data) {
-    // const chartContainer = document.getElementById(containerId);
-
-    const zoomInstructions = document.getElementById("zoom-instructions");
-    if (zoomInstructions) {
-      zoomInstructions.style.display = "block"; // Show instructions when not zoomed
-    }
-
-    if (!!chart) {
-      chart.destroy();
-    }
-    // Create a Chart.js chart here using 'data'
-    // Example:
-    chart = new Chart(chartContainer, {
-      type: "line",
-      data: {
-        // labels: data.map((item, index) => (index % stepSize === 0) ? item.date : ''), // Show label every stepSize data points
-        labels: data.map((item) => item.date), // Show label every stepSize data points
-        datasets: [
-          {
-            label: `Observed ${GHG[selectedGhg].short} Concentration`,
-            data: data.map((item) => item.value),
-            borderColor: "#440154",
-            borderWidth: 2,
-            spanGaps: true,
-            // fill: false,
-            // pointRadius: 0, // Remove the points
-            showLine: false,
-            hoverBorderWidth: 3,
-            pointHoverBackgroundColor: "#440154", // Set hover background color to red
-            pointHoverBorderColor: "#FFFFFF", // Set hover border color to red
-          },
-        ],
-      },
-      options: {
-        interaction: {
-          intersect: false,
-          mode: "nearest",
-          axis: "x",
-        },
-        hover: {
-          mode: "nearest",
-          intersect: false,
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: "Observation Date/Time",
-            },
-            grid: {
-              display: false,
-              drawOnChartArea: false,
-            },
-            type: "time",
-            ticks: {
-              autoSkip: true, // Enable automatic skip
-              maxTicksLimit: 8, // Maximum number of ticks to display
-              // callback: function(value) {
-              //   return "fadhsdsf"
-              // }
-            },
-          },
-          y: {
-            title: {
-              text: `${ GHG[selectedGhg].long } (${GHG[selectedGhg].short}) Concentration (${GHG[selectedGhg].unit})`,
-              display: true,
-            },
-          },
-        },
-        plugins: {
-          corsair: {
-            // color: 'black',
-          },
-          zoom: {
-            zoom: {
-              wheel: {
-                enabled: true,
-              },
-              pinch: {
-                enabled: true,
-              },
-              drag: {
-                enabled: true,
-              },
-              mode: "x",
-              onZoom: (zoom) => {
-                // Handle zoom event here
-                // isChartZoomed = zoom.scales.x > 1; // Check if x-scale zoomed
-                updateZoomInstructions(); // Call a function to update instructions
-              },
-            },
-          },
-          title: {
-            display: true,
-            text: `${station.name} (${station.code})`, // Add your chart title here
-            padding: {
-              top: 10,
-              bottom: 20,
-            },
-            font: {
-              size: 24,
-              family: "Inter",
-            },
-            color: ghgBlue,
-          },
-          legend: {
-            display: true,
-            position: "top", // You can change the position to 'bottom', 'left', or 'right'
-          },
-          tooltip: {
-            callbacks: {
-              label: function (context) {
-                let label = context.dataset.label || "";
-                let splitText = label.split(":");
-                return `${context.parsed.y} : ${
-                  splitText[splitText.length - 1]
-                }`;
-              },
-            },
-            mode: "nearest",
-            intersect: false,
-            backgroundColor: "#FFFFFF",
-            titleColor: "#000",
-            bodyColor: "#000",
-            titleFontSize: 16,
-            titleFontColor: "#0066ff",
-            bodyFontColor: "#000",
-            bodyFontSize: 14,
-            displayColors: true,
-            cornerRadius: 5,
-            borderColor: "#DEDEDE",
-            borderWidth: 1,
-            padding: 8,
-            caretSize: 0,
-            boxPadding: 3,
-            // multiKeyBackground: ghgBlue
-          },
-        },
-      },
-      plugins: [plugin],
-    });
-
-    // Function to update zoom instructions
-    function updateZoomInstructions() {
-      const zoomInstructions = document.getElementById("zoom-instructions");
-      if (zoomInstructions) {
-        zoomInstructions.style.display = "none"; // Show instructions when not zoomed
-      }
-    }
   }
 });
