@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderStation(station) {
     openChart();
-    const selectedFile = `${publicUrl ? publicUrl : ""}/${selectedGhg}/${selectedType}/${selectedMedium}/${station.dataset_name}.txt`;
+    const selectedFile = `${publicUrl ? publicUrl : ""}/data/raw/${selectedGhg}/${selectedType}/${selectedMedium}/${station.dataset_name}.txt`;
     const dataSourceBaseUrl = "https://gml.noaa.gov/dv/data/index.php"
     const dataSourceQueryParams = `?type=${TYPES[selectedType].long.replace(" ", "%2B")}&frequency=Discrete&site=${station.site_code}&amp;parameter_name=${GHG[selectedGhg].long.replace(" ", "%2B")}`
     const dataSource = dataSourceBaseUrl + dataSourceQueryParams;

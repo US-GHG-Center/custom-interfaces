@@ -34,8 +34,7 @@ module.exports = {
       patterns: [
         { from: "./style.css", to: "./" },
         { from: "./public", to: "./public" },
-        { from: "./co2", to: "./co2" },
-        { from: "./ch4", to: "./ch4" },
+        { from: "./data", to: "./data" },
       ],
     })
   ],
