@@ -1,6 +1,4 @@
-import './style.css'
 import stations_data from './stations.js'
-import noaaLogo from './noaa-logo.png';
 
 const FLASK = "flask";
 const PFP = "pfp";
@@ -102,11 +100,7 @@ const plugin = {
 
 // script.js
 document.addEventListener("DOMContentLoaded", () => {
-  // set noaa logo
-  document.getElementById("logo").src = noaaLogo;
-
   let chart = null;
-  const baseFileName = "1_ccgg_event";
 
   const chartContainer = document.getElementById("chart");
 
