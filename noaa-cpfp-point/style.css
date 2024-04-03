@@ -79,7 +79,7 @@ body {
 }
 
 .marker {
-    background-image: url('marker-sdf.png');
+    background-image: url('./public/marker-sdf.png');
     background-size: cover;
     width: 30px;
     height: 30px;

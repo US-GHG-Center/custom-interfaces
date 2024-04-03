@@ -33,8 +33,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         { from: "./style.css", to: "./" },
-        { from: "./noaa-logo.png", to: "./" },
-        { from: "./marker-sdf.png", to: "./" },
+        { from: "./public", to: "./public" },
         { from: "./co2", to: "./co2" },
         { from: "./ch4", to: "./ch4" },
       ],
