@@ -6,10 +6,10 @@ import json
 
 def extract_station_meta(base_dir):
     """
-    Extracts metadata for stations from .txt files in the specified directory.
+    Extracts metadata for stations from all .txt files in the base directory.
 
     Parameters:
-        base_dir (str): The base directory containing the station data files.
+        base_dir (str): The base directory containing the station data .txt files.
 
     Returns:
         list: A list of dictionaries containing metadata for each station.
