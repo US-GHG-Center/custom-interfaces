@@ -102,9 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
   resizeObserver.observe(mapC);
 
   // On station click: render station
-  async function renderStation(station) {
+  async function renderStation(station, frequency="monthly") {
     openChart();
-    const stationDataUrl = constructStationDataSourceUrl(selectedGhg, selectedType, selectedMedium, station.dataset_name);
+    const stationDataUrl = constructStationDataSourceUrl(selectedGhg, selectedType, selectedMedium, station.dataset_name, frequency);
     const dataAccessUrl = constructDataAccessSourceUrl(selectedGhg, selectedType, station.site_code);
 
     // Add in data access url link to the selected station
@@ -115,11 +115,12 @@ document.addEventListener("DOMContentLoaded", () => {
       frequencySelector.innerHTML = `
                                     Data frequency
                                     <select style="margin-left: 5px;">
-                                      <option value='daily'>Daily</option>
                                       <option value='monthly'>Monthly</option>
+                                      <option value='daily'>Daily</option>
                                     <select>
                                     `;
       let selectOption = frequencySelector.querySelector("select");
+      selectOption.value = frequency;
       selectOption.addEventListener("change", (event) => {
         let frequency = event.target.value;
         renderStation(station, frequency)
@@ -129,12 +130,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fetch data and render chart
     try {
       let data = await getStationData(stationDataUrl);
-      let response = await data.text();
-      // Parse data (you may need to adjust this based on your CSV format)
       let parsedData;
-      if (selectedType === "insitu" && selectedMedium === "surface") {
-        parsedData = await parseDataInsituSurface(response)
+      if (selectedType === "insitu") {
+        parsedData = await data.json();
       } else {
+        let response = await data.text();
+        // Parse data (you may need to adjust this based on your CSV format)
         parsedData = await parseData(response);
       }
       // Render chart
@@ -161,34 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .map((line) => line.replace("\n", "").split(" "));
     const filtered = lines
       .filter((line) => line[21] == "...")
-      .filter((line) => line[10] !== "-999.99")
-      .filter((line) => line[10] !== "0");
-    let return_value = filtered.map((line) => {
-      return {
-        date: line[7],
-        value: line[10],
-      };
-    });
-    return return_value;
-    // return [{ date: "2023-01-01", value: 10 }, { date: "2023-01-02", value: 20 }, { date: "2023-01-03", value: 15 }]
-  }
-
-  // Function to parse CSV data (customize based on your CSV format)
-  async function parseDataInsituSurface(csvdata) {
-    // Parse your CSV data here and return it as an array of objects
-    let data = csvdata.split("\n");
-    let header_lines = data[0]
-      .split(":")
-      .slice(-1)[0]
-      .trim()
-      .replace("\n#\n#", "");
-    header_lines = parseInt(header_lines);
-    data = data.slice(header_lines - 1);
-    const lines = data
-      .slice(1)
-      .map((line) => line.replace("\n", "").split(" "));
-    const filtered = lines
-      .filter((line) => line[18] == "...")
       .filter((line) => line[10] !== "-999.99")
       .filter((line) => line[10] !== "0");
     let return_value = filtered.map((line) => {

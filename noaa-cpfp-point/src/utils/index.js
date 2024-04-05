@@ -16,6 +16,13 @@ let publicUrl = process.env.PUBLIC_URL;
 export function getStationsMeta(ghg="ch4", type="flask", medium="surface") {
     try {
         let stations = stations_data[ghg][type][medium];
+        if (type == "insitu") {
+            /**
+             * For a single station and a medium, there are daily, hourly and monthly
+             * We can't plot them all. So, filter out unique one, based of station_name (site_code)
+            **/
+           stations = getUniqueStations(stations);
+        }
         return stations;
     } catch (err) {
         return new Error("station data not available.");
@@ -32,8 +39,12 @@ export function getStationsMeta(ghg="ch4", type="flask", medium="surface") {
  * publicUrl is the base URL of the server hosting the data files.
  * @returns {string} - The constructed URL for fetching the station data.
  */
-export function constructStationDataSourceUrl(ghg="ch4", type="flask", medium="surface", datasetName) {
-    const selectedFile = `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/${type}/${medium}/${datasetName}.txt`;
+export function constructStationDataSourceUrl(ghg="ch4", type="flask", medium="surface", datasetName, frequency) {
+    let selectedFile = `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/${type}/${medium}/${datasetName}.txt`;
+    if (type=="insitu") {
+        let insituFilename = getInsituFilename(datasetName, frequency);
+        selectedFile = `${publicUrl ? publicUrl : ""}/data/processed/${ghg}/${type}/${medium}/${insituFilename}.json`;
+    }
     return selectedFile;
 }
 
@@ -69,5 +80,39 @@ export async function getStationData(url) {
     } catch (err) {
         console.log("Invalid file path");
         return new Error("Invalid file path");
+    }
+}
+
+// helper
+
+function getUniqueStations(stations) {
+    // Map to store unique stations based on their site_code
+    const uniqueSitesMap = new Map();
+    stations.forEach(station => {
+        // Check if the site_code already exists in the Map
+        if (!uniqueSitesMap.has(station.site_code)) {
+            // If not, add the current object to the Map
+            uniqueSitesMap.set(station.site_code, station);
+        }
+    });
+    const uniqueSites = Array.from(uniqueSitesMap.values());
+    return uniqueSites;
+}
+
+function getInsituFilename(filename, frequency) {
+    let splitted_filename = filename.split("_");
+    switch(frequency) {
+        case "daily":
+            splitted_filename[splitted_filename.length-1] = "DailyData";
+            return splitted_filename.join("_");
+        case "monthly":
+            splitted_filename[splitted_filename.length-1] = "MonthlyData";
+            return splitted_filename.join("_");
+        case "hourly":
+            splitted_filename[splitted_filename.length-1] = "HourlyData";
+            return splitted_filename.join("_");
+        default:
+            splitted_filename[splitted_filename.length-1] = "DailyData";
+            return splitted_filename.join("_");
     }
 }
