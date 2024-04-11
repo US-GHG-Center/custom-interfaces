@@ -102,30 +102,13 @@ document.addEventListener("DOMContentLoaded", () => {
   resizeObserver.observe(mapC);
 
   // On station click: render station
-  async function renderStation(station, frequency="monthly") {
+  async function renderStation(station) {
     openChart();
-    const stationDataUrls = constructStationDataSourceUrls(selectedGhg, selectedType, selectedMedium, station.dataset_name, frequency);
+    const stationDataUrls = constructStationDataSourceUrls(selectedGhg, selectedType, selectedMedium, station.dataset_name);
     const dataAccessUrl = constructDataAccessSourceUrl(selectedGhg, selectedType, station.site_code);
 
     // Add in data access url link to the selected station
     document.getElementById("data-source").innerHTML = `<a href="${dataAccessUrl}"> Access data at NOAA ↗ </a>`
-    // for Insitu, give an option to select monthly and daily frequency datasets.
-    let frequencySelector = document.getElementById("select-frequency");
-    if (selectedType === "insitu") {
-      frequencySelector.innerHTML = `
-                                    Data frequency
-                                    <select style="margin-left: 5px;">
-                                      <option value='monthly'>Monthly</option>
-                                      <option value='daily'>Daily</option>
-                                    <select>
-                                    `;
-      let selectOption = frequencySelector.querySelector("select");
-      selectOption.value = frequency;
-      selectOption.addEventListener("change", (event) => {
-        let frequency = event.target.value;
-        renderStation(station, frequency)
-      });
-    }
 
     // Fetch data and render chart
     try {
@@ -142,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       // Render chart
       let stationMeta = {name: station.site_name, code: station.site_code}
-      renderChart(stationMeta, parsedDatas, selectedGhg);
+      renderChart(stationMeta, parsedDatas, selectedGhg, type);
     } catch (err) {
       console.error(err)
     }

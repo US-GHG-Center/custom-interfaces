@@ -1,5 +1,6 @@
 import stations_data from "../../stations";
-import { TYPES, GHG} from '../enumeration.js';
+import { TYPES, GHG} from "../enumeration.js";
+import { instrumentsMapGraphs } from "./instrumentsMapGraphs";
 
 let publicUrl = process.env.PUBLIC_URL;
 
@@ -39,16 +40,11 @@ export function getStationsMeta(ghg="ch4", type="flask", medium="surface") {
  * publicUrl is the base URL of the server hosting the data files.
  * @returns {Array[string]} - The constructed URLs for fetching the station datas.
  */
-export function constructStationDataSourceUrls(ghg="ch4", type="flask", medium="surface", datasetName, frequency) {
+export function constructStationDataSourceUrls(ghg="ch4", type="flask", medium="surface", datasetName) {
     let selectedFiles = [];
     if (type=="insitu") {
-        let insituFilename = getInsituFilename(datasetName, "daily");
-        let selectedFile = `${publicUrl ? publicUrl : ""}/data/processed/${ghg}/${type}/${medium}/${insituFilename}.json`;
-        selectedFiles.push(selectedFile)
-
-        insituFilename = getInsituFilename(datasetName, "monthly");
-        selectedFile = `${publicUrl ? publicUrl : ""}/data/processed/${ghg}/${type}/${medium}/${insituFilename}.json`;
-        selectedFiles.push(selectedFile)
+        let graphsdatasrc = instrumentsMapGraphs(ghg, type, medium, datasetName);
+        selectedFiles = graphsdatasrc["insitu"].map((graph => graph.dataSource));
     } else {
         let selectedFile = `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/${type}/${medium}/${datasetName}.txt`;
         selectedFiles.push(selectedFile);
@@ -106,22 +102,4 @@ function getUniqueStations(stations) {
     });
     const uniqueSites = Array.from(uniqueSitesMap.values());
     return uniqueSites;
-}
-
-function getInsituFilename(filename, frequency) {
-    let splitted_filename = filename.split("_");
-    switch(frequency) {
-        case "daily":
-            splitted_filename[splitted_filename.length-1] = "DailyData";
-            return splitted_filename.join("_");
-        case "monthly":
-            splitted_filename[splitted_filename.length-1] = "MonthlyData";
-            return splitted_filename.join("_");
-        case "hourly":
-            splitted_filename[splitted_filename.length-1] = "HourlyData";
-            return splitted_filename.join("_");
-        default:
-            splitted_filename[splitted_filename.length-1] = "DailyData";
-            return splitted_filename.join("_");
-    }
 }

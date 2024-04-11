@@ -4,7 +4,7 @@ import { getDatasets } from './helper/index.js';
 let chart = null;
 
 // Function to render the time series chart
-export function renderChart(station, datas, selectedGhg) {
+export function renderChart(station, datas, selectedGhg, type) {
     const chartContainer = document.getElementById("chart");
     const zoomInstructions = document.getElementById("zoom-instructions");
     
@@ -18,7 +18,7 @@ export function renderChart(station, datas, selectedGhg) {
     // Create a Chart.js chart here using 'data'
     // Example:
 
-    let datasets = getDatasets(datas, selectedGhg)
+    let datasets = getDatasets(datas, selectedGhg, type)
 
     chart = new Chart(chartContainer, {
         type: "line",
