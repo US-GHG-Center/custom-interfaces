@@ -37,15 +37,23 @@ export function getStationsMeta(ghg="ch4", type="flask", medium="surface") {
  * @param {string} [medium="surface"] - The medium from which the data is collected. Default is "surface".
  * @param {string} datasetName - The name of the dataset. ref. to the station meta data
  * publicUrl is the base URL of the server hosting the data files.
- * @returns {string} - The constructed URL for fetching the station data.
+ * @returns {Array[string]} - The constructed URLs for fetching the station datas.
  */
-export function constructStationDataSourceUrl(ghg="ch4", type="flask", medium="surface", datasetName, frequency) {
-    let selectedFile = `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/${type}/${medium}/${datasetName}.txt`;
+export function constructStationDataSourceUrls(ghg="ch4", type="flask", medium="surface", datasetName, frequency) {
+    let selectedFiles = [];
     if (type=="insitu") {
-        let insituFilename = getInsituFilename(datasetName, frequency);
+        let insituFilename = getInsituFilename(datasetName, "daily");
+        let selectedFile = `${publicUrl ? publicUrl : ""}/data/processed/${ghg}/${type}/${medium}/${insituFilename}.json`;
+        selectedFiles.push(selectedFile)
+
+        insituFilename = getInsituFilename(datasetName, "monthly");
         selectedFile = `${publicUrl ? publicUrl : ""}/data/processed/${ghg}/${type}/${medium}/${insituFilename}.json`;
+        selectedFiles.push(selectedFile)
+    } else {
+        let selectedFile = `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/${type}/${medium}/${datasetName}.txt`;
+        selectedFiles.push(selectedFile);
     }
-    return selectedFile;
+    return selectedFiles;
 }
 
 /**
@@ -65,18 +73,19 @@ export function constructDataAccessSourceUrl(ghg="ch4", type="flask", siteCode) 
 }
 
 /**
- * Asynchronously fetches station data from the specified URL.
+ * Asynchronously fetches station data from the specified URLs.
  * 
  * @param {string} url - The URL from which to fetch the station data.
  * @returns {Promise<Response>} - A Promise that resolves with the fetched data,
  *                                 or rejects with an error if the URL is invalid.
  * @throws {Error} - If the URL is invalid.
  */
-export async function getStationData(url) {
-    // fetch data from the hosted path and then returns it. 
+export async function getStationDatas(urls) {
+    // fetch datas from the hosted paths and then returns it.
     try {
-        let data = await fetch(url);
-        return data;
+        let promises = urls.map(url => fetch(url));
+        let datas = await Promise.all(promises);
+        return datas;
     } catch (err) {
         console.log("Invalid file path");
         return new Error("Invalid file path");

@@ -1,5 +1,5 @@
 import { MEDIUM, TYPES, GHG, CH4, FLASK, SURFACE, ghgBlue} from './src/enumeration.js';
-import { getStationsMeta, constructStationDataSourceUrl, getStationData, constructDataAccessSourceUrl } from "./src/utils";
+import { getStationsMeta, constructStationDataSourceUrls, getStationDatas, constructDataAccessSourceUrl } from "./src/utils";
 import { openChart, renderChart } from './src/chart/index.js';
 
 // script.js
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // On station click: render station
   async function renderStation(station, frequency="monthly") {
     openChart();
-    const stationDataUrl = constructStationDataSourceUrl(selectedGhg, selectedType, selectedMedium, station.dataset_name, frequency);
+    const stationDataUrls = constructStationDataSourceUrls(selectedGhg, selectedType, selectedMedium, station.dataset_name, frequency);
     const dataAccessUrl = constructDataAccessSourceUrl(selectedGhg, selectedType, station.site_code);
 
     // Add in data access url link to the selected station
@@ -129,17 +129,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fetch data and render chart
     try {
-      let data = await getStationData(stationDataUrl);
-      let parsedData;
+      let datas = await getStationDatas(stationDataUrls);
+      let parsedDatas;
       if (selectedType === "insitu") {
-        parsedData = await data.json();
+        let jsonConversionPromises = datas.map(data => data.json());
+        parsedDatas = await Promise.all(jsonConversionPromises);
       } else {
-        let response = await data.text();
+        let textConversionPromises = datas.map(data => data.text());
+        let responses = await Promise.all(textConversionPromises);
         // Parse data (you may need to adjust this based on your CSV format)
-        parsedData = await parseData(response);
+        parsedDatas = responses.map(response => parseData(response));
       }
       // Render chart
-      renderChart({name: station.site_name, code: station.site_code}, parsedData, selectedGhg);
+      let stationMeta = {name: station.site_name, code: station.site_code}
+      renderChart(stationMeta, parsedDatas, selectedGhg);
     } catch (err) {
       console.error(err)
     }
@@ -147,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Data preprocessors
   // Function to parse CSV data (customize based on your CSV format)
-  async function parseData(csvdata) {
+  function parseData(csvdata) {
     // Parse your CSV data here and return it as ank array of objects
     let data = csvdata.split("\n");
     let header_lines = data[0]

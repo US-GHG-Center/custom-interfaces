@@ -4,7 +4,7 @@ import { getDatasets } from './helper/index.js';
 let chart = null;
 
 // Function to render the time series chart
-export function renderChart(station, data, selectedGhg) {
+export function renderChart(station, datas, selectedGhg) {
     const chartContainer = document.getElementById("chart");
     const zoomInstructions = document.getElementById("zoom-instructions");
     
@@ -17,12 +17,18 @@ export function renderChart(station, data, selectedGhg) {
     }
     // Create a Chart.js chart here using 'data'
     // Example:
+
+    let datasets = getDatasets(datas, selectedGhg)
+
     chart = new Chart(chartContainer, {
         type: "line",
+        // data: {
+        // // labels: data.map((item, index) => (index % stepSize === 0) ? item.date : ''), // Show label every stepSize data points
+        // labels: datas[0].map((item) => item.date), // Show label every stepSize data points
+        // datasets: getDatasets(datas, selectedGhg),
+        // },
         data: {
-        // labels: data.map((item, index) => (index % stepSize === 0) ? item.date : ''), // Show label every stepSize data points
-        labels: data.map((item) => item.date), // Show label every stepSize data points
-        datasets: getDatasets(data, selectedGhg),
+            datasets: datasets,
         },
         options: getOptions(station, selectedGhg),
         plugins: [plugin],

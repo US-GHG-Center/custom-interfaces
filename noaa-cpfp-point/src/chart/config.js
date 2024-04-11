@@ -71,7 +71,7 @@ export const getOptions = (station, selectedGhg)=> ({
             display: false,
             drawOnChartArea: false,
             },
-            // type: "time", //TODO: Find alternative for connected graph!
+        type: "time",
         ticks: {
             autoSkip: true, // Enable automatic skip
             maxTicksLimit: 8, // Maximum number of ticks to display

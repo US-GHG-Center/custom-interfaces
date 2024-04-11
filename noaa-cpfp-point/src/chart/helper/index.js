@@ -1,31 +1,49 @@
 import { GHG } from '../../enumeration.js';
 
-export const getDatasets = (data, selectedGhg) => {
-    return [
-        {
-        label: `Observed ${GHG[selectedGhg].short} Concentration`,
-        data: data.map((item) => item.value),
+const chartStyles = [
+    {
+        type: "line",
         borderColor: "#440154",
+        pointHoverBackgroundColor: "#440154",
+        pointHoverBorderColor: "#FFFFFF",
         borderWidth: 2,
-        spanGaps: true,
-        // fill: false,
-        // pointRadius: 0, // Remove the points
-        showLine: false,
         hoverBorderWidth: 3,
-        pointHoverBackgroundColor: "#440154", // Set hover background color to red
-        pointHoverBorderColor: "#FFFFFF", // Set hover border color to red
-        },
-        {
-            type: "line",
-            label: `Observed ${GHG[selectedGhg].short} Concentration`,
-            data: data.map((item) => item.value),
-            fill: false,
-            borderColor: "#ff0000",
-            tension: 0.1,
-            borderWidth: 2,
-            hoverBorderWidth: 3,
-            pointHoverBackgroundColor: "#440154", // Set hover background color to red
-            pointHoverBorderColor: "#FFFFFF", // Set hover border color to red
-        },
-    ]
+        spanGaps: true,
+        showLine: false,
+    },
+    {
+        type: "line",
+        borderColor: "#330154",
+        borderColor: "red",
+        pointHoverBackgroundColor: "#330154",
+        pointHoverBorderColor: "#FFFFFF",
+        borderWidth: 2,
+        hoverBorderWidth: 3,
+        spanGaps: true,
+        showLine: true,
+    },
+    {
+        type: "line",
+        borderColor: "#220154",
+        pointHoverBackgroundColor: "#220154",
+        pointHoverBorderColor: "#FFFFFF",
+        borderWidth: 2,
+        hoverBorderWidth: 3,
+        spanGaps: true,
+        showLine: true,
+    }
+]
+
+export const getDatasets = (datas, selectedGhg) => {
+    return datas.map((data, idx) => {
+        let chartStyle = chartStyles[idx];
+        return {
+                label: `Observed ${GHG[selectedGhg].short} Concentration`,
+                data: data.map(elem => ({x: elem.date, y: elem.value})),
+                // data: data,
+                // data: data.map((item) => item.value),
+                ...chartStyle
+            }
+        }
+    );
 }
