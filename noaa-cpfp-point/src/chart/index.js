@@ -18,7 +18,8 @@ export function renderChart(station, datas, selectedGhg, type) {
     // Create a Chart.js chart here using 'data'
     // Example:
 
-    let datasets = getDatasets(datas, selectedGhg, type)
+    let datasets = getDatasets(datas, selectedGhg, type);
+    let options = getOptions(station, selectedGhg);
 
     chart = new Chart(chartContainer, {
         type: "line",
@@ -30,7 +31,7 @@ export function renderChart(station, datas, selectedGhg, type) {
         data: {
             datasets: datasets,
         },
-        options: getOptions(station, selectedGhg),
+        options: options,
         plugins: [plugin],
     });
 }

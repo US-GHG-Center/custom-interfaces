@@ -61,6 +61,7 @@ def daily_aggregate(filepath):
             aggregated_df['datetime'] = pd.to_datetime(aggregated_df[['year', 'month', 'day']])
             aggregated_df['datetime'] = aggregated_df['datetime'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
             processed_df = aggregated_df[['datetime', 'value']]
+            processed_df = processed_df.sort_values(by='datetime')
             # dict formation, needed for frontend [{date: , value: }]
             json_list = []
             for _, row in processed_df.iterrows():
@@ -130,6 +131,7 @@ def monthly_aggregate(filepath):
             aggregated_df['datetime'] = pd.to_datetime(aggregated_df[['year', 'month']].assign(day=1))
             aggregated_df['datetime'] = aggregated_df['datetime'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
             processed_df = aggregated_df[['datetime', 'value']]
+            processed_df = processed_df.sort_values(by='datetime')
             # dict formation, needed for frontend [{date: , value: }]
             json_list = []
             for _, row in processed_df.iterrows():
