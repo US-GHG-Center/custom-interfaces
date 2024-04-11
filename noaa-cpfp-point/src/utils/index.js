@@ -16,13 +16,32 @@ let publicUrl = process.env.PUBLIC_URL;
  */
 export function getStationsMeta(ghg="ch4", type="flask", medium="surface") {
     try {
-        let stations = stations_data[ghg][type][medium];
-        if (type == "insitu") {
+        let stations = [];
+        if (type == "insitu" & medium == "surface-tower") {
+            /**
+             * To show both surface and tower insitu, filter out unique one based of station_name (site_code)
+             * also plant in medium value to do so.
+            **/
+            let surfaceStations = stations_data[ghg][type]["surface"].map(data => ({...data, medium: "surface"}));
+            let towerStations = stations_data[ghg][type]["tower"].map(data => ({...data, medium: "tower"}));
+            stations = getUniqueStations([...surfaceStations, ...towerStations]);
+        } else if (type == "insitu") {
             /**
              * For a single station and a medium, there are daily, hourly and monthly
              * We can't plot them all. So, filter out unique one, based of station_name (site_code)
             **/
-           stations = getUniqueStations(stations);
+            stations = stations_data[ghg][type][medium];
+            stations = getUniqueStations(stations);
+        } else if (type == "flask-pfp" & medium == "surface") {
+            /**
+             * To show both flask and pfp, filter out unique one based of station_name (site_code)
+             * also plant in type value to do so.
+            **/
+            let flaskStations = stations_data[ghg]["flask"][medium].map(data => ({...data, type: "flask"}));;
+            let pfpStations = stations_data[ghg]["pfp"][medium].map(data => ({...data, type: "pfp"}));
+            stations = getUniqueStations([...flaskStations, ...pfpStations]);
+        } else {
+            stations = stations_data[ghg][type][medium];
         }
         return stations;
     } catch (err) {
@@ -42,9 +61,23 @@ export function getStationsMeta(ghg="ch4", type="flask", medium="surface") {
  */
 export function constructStationDataSourceUrls(ghg="ch4", type="flask", medium="surface", datasetName) {
     let selectedFiles = [];
-    if (type=="insitu") {
+    if (type=="insitu" & medium=="surface-tower"){
+        let graphsdatasrc = instrumentsMapGraphs(ghg, type, "surface", datasetName);
+        let selectedFileSurface = graphsdatasrc["insitu"].map((graph => graph.dataSource));
+
+        graphsdatasrc = instrumentsMapGraphs(ghg, type, "tower", datasetName);
+        let selectedFileTower = graphsdatasrc["insitu"].map((graph => graph.dataSource));
+
+        selectedFiles = [...selectedFileSurface, ...selectedFileTower]
+    } else if (type=="insitu") {
         let graphsdatasrc = instrumentsMapGraphs(ghg, type, medium, datasetName);
         selectedFiles = graphsdatasrc["insitu"].map((graph => graph.dataSource));
+    } else if (type=="flask-pfp") {
+        let selectedFile = `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/flask/${medium}/${datasetName}.txt`;
+        selectedFiles.push(selectedFile);
+
+        selectedFile = `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/pfp/${medium}/${datasetName}.txt`;
+        selectedFiles.push(selectedFile);
     } else {
         let selectedFile = `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/${type}/${medium}/${datasetName}.txt`;
         selectedFiles.push(selectedFile);

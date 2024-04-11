@@ -39,7 +39,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // Loop through stations and add markers
   stations.forEach((station) => {
     const markerEl = document.createElement("div");
-    markerEl.className = "marker";
+    // styling the marker
+    if (station.dataset_name.includes("tower")) {
+      markerEl.className = "marker-tower";
+    } else if (station.dataset_name.includes("flask")) {
+      markerEl.className = "marker-gold";
+    } else {
+      markerEl.className = "marker";
+    }
+
+    // adding the marker
     try {
       const marker = new mapboxgl.Marker(markerEl)
         .setLngLat([station.site_longitude, station.site_latitude])
@@ -113,6 +122,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fetch data and render chart
     try {
       let datas = await getStationDatas(stationDataUrls);
+
+      // not all data path might be available. So filter the unavailable ones.
+      datas = datas.map(data => {
+        if (data.status != 404) {
+          return data
+        }
+      }).filter(data => data);
+
       let parsedDatas;
       if (selectedType === "insitu") {
         let jsonConversionPromises = datas.map(data => data.json());

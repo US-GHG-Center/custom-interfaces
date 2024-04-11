@@ -88,6 +88,24 @@ body {
     /* box-shadow: 1px 1px white; */
 }
 
+.marker-gold {
+    background-image: url('./public/marker-gold.png');
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.marker-tower {
+    background-image: url('./public/marker-tower.png');
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
 #logo {
     position: absolute;
     right: 10px;

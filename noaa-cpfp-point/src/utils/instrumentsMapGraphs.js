@@ -12,6 +12,28 @@ export const instrumentsMapGraphs = (ghg="ch4", type="flask", medium="surface", 
             "label": `Observed ${GHG[ghg].short} Concentration (Monthly)`,
             "dataSource": `${publicUrl ? publicUrl : ""}/data/processed/${ghg}/${type}/${medium}/${getInsituFilename(datasetName, "monthly")}.json`
         }
+    ],
+    "flask-pfp": [
+        {
+            "label": `Observed ${GHG[ghg].short} Concentration`,
+            "dataSource": `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/flask/${medium}/${datasetName}.txt`
+        },
+        {
+            "label": `Observed ${GHG[ghg].short} Concentration`,
+            "dataSource": `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/pfp/${medium}/${datasetName}.txt`
+        }
+    ],
+    "pfp": [
+        {
+            "label": `Observed ${GHG[ghg].short} Concentration`,
+            "dataSource": `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/${type}/${medium}/${datasetName}.txt`
+        }
+    ],
+    "flask": [
+        {
+            "label": `Observed ${GHG[ghg].short} Concentration`,
+            "dataSource": `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/${type}/${medium}/${datasetName}.txt`
+        }
     ]
 });
 
