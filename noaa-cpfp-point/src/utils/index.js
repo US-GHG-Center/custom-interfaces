@@ -90,8 +90,8 @@ export function constructStationDataSourceUrlsAndLabels(ghg="ch4", type="flask",
         labels = [...labelFlask, ...labelPFP];
     } else {
         let graphsdatasrc = instrumentsMapGraphs(ghg, type, medium, datasetName);
-        selectedFiles = graphsdatasrc[ghg].map((graph => graph.dataSource));
-        labels = graphsdatasrc[ghg].map((graph => graph.label));
+        selectedFiles = graphsdatasrc[type].map((graph => graph.dataSource));
+        labels = graphsdatasrc[type].map((graph => graph.label));
     }
     let result = { stationDataUrls: selectedFiles, stationDataLabels: labels };
     return result;
