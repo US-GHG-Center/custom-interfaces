@@ -108,7 +108,11 @@ export function constructStationDataSourceUrlsAndLabels(ghg="ch4", type="flask",
 export function constructDataAccessSourceUrl(ghg="ch4", type="flask", siteCode) {
     // get the data source for access
     const dataSourceBaseUrl = "https://gml.noaa.gov/dv/data/index.php"
-    const dataSourceQueryParams = `?type=${TYPES[type].long.replace(" ", "%2B")}&frequency=Discrete&site=${siteCode}&amp;parameter_name=${GHG[ghg].long.replace(" ", "%2B")}`
+    let frequency = "Discrete";
+    if (type == "insitu") {
+        frequency="continuous"
+    }
+    const dataSourceQueryParams = `?type=${TYPES[type].long.replace(" ", "%2B")}&frequency=${frequency}&site=${siteCode}&amp;parameter_name=${GHG[ghg].long.replace(" ", "%2B")}`
     const dataSource = dataSourceBaseUrl + dataSourceQueryParams;
     return dataSource
 }
