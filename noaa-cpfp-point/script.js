@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (selectedStation) {
       const { site_latitude: lat, site_longitude: lon } = selectedStation;
       const stationLocation = {
-        center: [lon, lat],
+        center: [Number(lon), Number(lat)-.1],
         zoom: 10,
       };
       map.flyTo({ ...stationLocation, duration: 1200, essential: true }); // Adjust the zoom level as needed
