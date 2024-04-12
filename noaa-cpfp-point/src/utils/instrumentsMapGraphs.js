@@ -1,4 +1,4 @@
-import {GHG} from '../enumeration.js';
+import { GHG, MEDIUM } from '../enumeration.js';
 let publicUrl = process.env.PUBLIC_URL;
 
 // a dictionary/mapping of instrument type and the graphs to be shown in the chart 
@@ -6,33 +6,39 @@ export const instrumentsMapGraphs = (ghg="ch4", type="flask", medium="surface", 
     "insitu": [
         {
             "label": `Observed ${GHG[ghg].short} Concentration (Daily)`,
-            "dataSource": `${publicUrl ? publicUrl : ""}/data/processed/${ghg}/${type}/${medium}/${getInsituFilename(datasetName, "daily")}.json`
+            "dataSource": `${publicUrl ? publicUrl : ""}/data/processed/${ghg}/${type}/${medium}/${getInsituFilename(datasetName, "daily")}.json`,
+            "id": "Daily"
         },
         {
             "label": `Observed ${GHG[ghg].short} Concentration (Monthly)`,
-            "dataSource": `${publicUrl ? publicUrl : ""}/data/processed/${ghg}/${type}/${medium}/${getInsituFilename(datasetName, "monthly")}.json`
+            "dataSource": `${publicUrl ? publicUrl : ""}/data/processed/${ghg}/${type}/${medium}/${getInsituFilename(datasetName, "monthly")}.json`,
+            "id": "Monthly"
         }
     ],
     "flask-pfp": [
         {
-            "label": `Observed ${GHG[ghg].short} Concentration`,
-            "dataSource": `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/flask/${medium}/${datasetName}.txt`
+            "label": `Observed ${GHG[ghg].short} Concentration (Flask)`,
+            "dataSource": `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/flask/${medium}/${datasetName}.txt`,
+            "id": "Flask"
         },
         {
-            "label": `Observed ${GHG[ghg].short} Concentration`,
-            "dataSource": `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/pfp/${medium}/${datasetName}.txt`
+            "label": `Observed ${GHG[ghg].short} Concentration (PFP)`,
+            "dataSource": `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/pfp/${medium}/${datasetName}.txt`,
+            "id": "PFP"
         }
     ],
     "pfp": [
         {
-            "label": `Observed ${GHG[ghg].short} Concentration`,
-            "dataSource": `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/${type}/${medium}/${datasetName}.txt`
+            "label": `Observed ${GHG[ghg].short} Concentration (PFP)`,
+            "dataSource": `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/${type}/${medium}/${datasetName}.txt`,
+            "id": "PFP"
         }
     ],
     "flask": [
         {
-            "label": `Observed ${GHG[ghg].short} Concentration`,
-            "dataSource": `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/${type}/${medium}/${datasetName}.txt`
+            "label": `Observed ${GHG[ghg].short} Concentration (Flask)`,
+            "dataSource": `${publicUrl ? publicUrl : ""}/data/raw/${ghg}/${type}/${medium}/${datasetName}.txt`,
+            "id": "Flask"
         }
     ]
 });

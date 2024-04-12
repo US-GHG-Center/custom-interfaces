@@ -1,5 +1,5 @@
 import { MEDIUM, TYPES, GHG, CH4, FLASK, SURFACE, ghgBlue} from './src/enumeration.js';
-import { getStationsMeta, constructStationDataSourceUrls, getStationDatas, constructDataAccessSourceUrl } from "./src/utils";
+import { getStationsMeta, constructStationDataSourceUrlsAndLabels, getStationDatas, constructDataAccessSourceUrl } from "./src/utils";
 import { openChart, renderChart } from './src/chart/index.js';
 
 // script.js
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // On station click: render station
   async function renderStation(station) {
     openChart();
-    const stationDataUrls = constructStationDataSourceUrls(selectedGhg, selectedType, selectedMedium, station.dataset_name);
+    const { stationDataUrls, stationDataLabels } = constructStationDataSourceUrlsAndLabels(selectedGhg, selectedType, selectedMedium, station.dataset_name);
     const dataAccessUrl = constructDataAccessSourceUrl(selectedGhg, selectedType, station.site_code);
 
     // Add in data access url link to the selected station
@@ -122,13 +122,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fetch data and render chart
     try {
       let datas = await getStationDatas(stationDataUrls);
-
       // not all data path might be available. So filter the unavailable ones.
-      datas = datas.map(data => {
-        if (data.status != 404) {
-          return data
+      // Also, at the sametime filter out the unnecessary labels from instument-graph map as well (using idx).
+      datas.forEach((data, idx) => {
+        if (data.status == 404) {
+          datas[idx] = null;
+          stationDataLabels[idx] = null;
         }
-      }).filter(data => data);
+      });
+
+      datas = datas.filter(data => data);
+      let graphsDataLabels = stationDataLabels.filter(data => data);
 
       let parsedDatas;
       if (selectedType === "insitu") {
@@ -142,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       // Render chart
       let stationMeta = {name: station.site_name, code: station.site_code}
-      renderChart(stationMeta, parsedDatas, selectedGhg, type);
+      renderChart(stationMeta, parsedDatas, selectedGhg, graphsDataLabels);
     } catch (err) {
       console.error(err)
     }

@@ -45,12 +45,11 @@ const chartStyles = [
     }
 ]
 
-export const getDatasets = (datas, selectedGhg, type) => {
-    let graphsDataSrc = instrumentsMapGraphs(selectedGhg)[type];
+export const getDatasets = (datas, graphsLabel) => {
     return datas.map((data, idx) => {
         let chartStyle = chartStyles[idx];
         return {
-                label: graphsDataSrc[idx].label,
+                label: graphsLabel[idx],
                 data: data.map(elem => ({x: elem.date, y: elem.value})),
                 // data: data,
                 // data: data.map((item) => item.value),
