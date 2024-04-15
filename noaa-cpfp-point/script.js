@@ -182,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function parseData(csvdata) {
     // Parse your CSV data here and return it as ank array of objects
     let data = csvdata.split("\n");
+    let datasetNameStr = data[5];
     let header_lines = data[0]
       .split(":")
       .slice(-1)[0]
@@ -192,10 +193,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const lines = data
       .slice(1)
       .map((line) => line.replace("\n", "").split(" "));
-    const filtered = lines
+    let filtered;
+    if (datasetNameStr === "# dataset_name: co2_nwf_surface-pfp_1_ccgg_event" |
+        datasetNameStr === "# dataset_name: co2_bao_surface-pfp_1_ccgg_event" |
+        datasetNameStr === "# dataset_name: co2_mvy_surface-pfp_1_ccgg_event") {
+      // data column number is different
+      filtered = lines
+      .filter((line) => line[20] == "...")
+      .filter((line) => line[10] !== "-999.99")
+      .filter((line) => line[10] !== "0");
+    } else {
+      filtered = lines
       .filter((line) => line[21] == "...")
       .filter((line) => line[10] !== "-999.99")
       .filter((line) => line[10] !== "0");
+
+    }
     let return_value = filtered.map((line) => {
       return {
         date: line[7],
