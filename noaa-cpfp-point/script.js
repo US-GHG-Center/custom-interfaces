@@ -1,6 +1,8 @@
-import { MEDIUM, TYPES, GHG, CH4, FLASK, SURFACE, ghgBlue} from './src/enumeration.js';
+import { MEDIUM, TYPES, GHG, CH4, FLASK, SURFACE, ghgBlue, INSITU, PFP, FLASK_PFP} from './src/enumeration.js';
 import { getStationsMeta, constructStationDataSourceUrlsAndLabels, getStationDatas, constructDataAccessSourceUrl } from "./src/utils";
 import { openChart, renderChart } from './src/chart/index.js';
+
+let publicUrl = process.env.PUBLIC_URL;
 
 // script.js
 document.addEventListener("DOMContentLoaded", () => {
@@ -33,6 +35,29 @@ document.addEventListener("DOMContentLoaded", () => {
   } (${MEDIUM[selectedMedium].long}-${TYPES[selectedType].long}) </strong>`;
   titleContainer.style.display = "block";
   titleContainer.style.color = ghgBlue;
+
+  // options for selection
+  let collectionMechanismDropdown = document.getElementById("collection-mechanism");
+  if (selectedType == INSITU) {
+    collectionMechanismDropdown.value = "continuous";
+  } else {
+    collectionMechanismDropdown.value = "discrete";
+  }
+  collectionMechanismDropdown.addEventListener("change", (e) => {
+    let clickedVal = e.target.value;
+    if (clickedVal == "discrete" & selectedType == INSITU) { // and previous is continuous
+      let newlocation = `${publicUrl}/?ghg=${selectedGhg}&type=flask-pfp&medium=surface`;
+      window.location.href = newlocation;
+      collectionMechanismDropdown.value = "discrete";
+    } else if (clickedVal == "continuous" & (selectedType == FLASK | selectedType == PFP | selectedType == FLASK_PFP)) { // and previous is discrete
+      let newlocation = `${publicUrl}/?ghg=${selectedGhg}&type=insitu&medium=surface-tower`;
+      window.location.href = newlocation;
+      collectionMechanismDropdown.value = "continuous";
+    } else {
+      // do nothing
+    }
+  });
+
 
   // Fetch and plot Stations
   const stations = getStationsMeta(selectedGhg, selectedType, selectedMedium);

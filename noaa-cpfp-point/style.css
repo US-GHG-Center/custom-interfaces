@@ -138,3 +138,21 @@ a {
     /* color: inherit; */
     color: "#082A63" !important;
 }
+
+#collection-mechanism-selection-container {
+    position: absolute;
+    display: block;
+    font-size: 14px;
+    bottom: 3%;
+    left: 10px;
+    z-index: 1000;
+}
+
+#collection-mechanism {
+    padding: 10px 24px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.9);
+}

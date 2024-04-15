@@ -44,4 +44,7 @@ export function openChart() {
     mapContainer.style.height = "50%";
     chartContainerB.style.height = "50%";
     chartContainerB.style.display = "block";
+
+    let collectionMechanismDropdownContainer = document.getElementById("collection-mechanism-selection-container");
+    collectionMechanismDropdownContainer.style.height = "54%";
   }
