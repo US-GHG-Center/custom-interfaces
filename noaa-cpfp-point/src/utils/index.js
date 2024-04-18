@@ -212,10 +212,14 @@ function getUniqueStations(stations) {
         } else {
             // if the station is already there (not a unique station), we need to let know what else is tied with this station meta
             let temp = uniqueSitesMap.get(station.site_code);
-            temp.other_dataset_project.push(station.dataset_project);
-            let onlyUnique = (value, index, array) => array.indexOf(value) === index;
-            temp.other_dataset_project = temp.other_dataset_project.filter(onlyUnique); // also ignore the same stations with different data frequencies
-            uniqueSitesMap.set(station.site_code, { ...temp });
+            if (temp.dataset_project !== station.dataset_project) {
+                // To ignore the same stations having same measurement type but different data frequencies.
+                // Eg. Insitu-tower-daily and Insitu-tower-monthly are same. So dont count them as different measurement type.
+                temp.other_dataset_project.push(station.dataset_project);
+                let onlyUnique = (value, index, array) => array.indexOf(value) === index;
+                temp.other_dataset_project = temp.other_dataset_project.filter(onlyUnique); //extra ensurity
+                uniqueSitesMap.set(station.site_code, { ...temp });
+            }
         }
     });
     const uniqueSites = Array.from(uniqueSitesMap.values());
