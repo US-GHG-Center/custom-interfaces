@@ -12,6 +12,8 @@ import { instrumentsMapGraphs } from "./instrumentsMapGraphs";
  * values are used. The function then retrieves stations metadata based on the
  * provided parameters.
  * 
+ * Note: Put thing that is priority comparision in the top.
+ *
  * @param {Object} queryParams - An object containing query parameters.
  * @param {string} [queryParams.ghg='co2'] - The greenhouse gas (CO2 or CH4).
  *                                          Possible values: 'co2', 'ch4'.
@@ -35,24 +37,13 @@ import { instrumentsMapGraphs } from "./instrumentsMapGraphs";
 export function getStationsMeta(queryParams) {
     let {ghg, frequency, type, medium} = queryParams;
 
-    // For now if no value in query params, we default to default values. Except for frequency
-    if (!ghg) {
-        ghg = CO2;
-    }
-    if (!type) {
-        type = FLASK;
-    }
-    if (!medium) {
-        medium = SURFACE;
-    }
-    // frequency can be empty.
-
     let insituSurfaceStations = stations_data[ghg]["insitu"]["surface"];
     let insituTowerStations = stations_data[ghg]["insitu"]["tower"];
     let pfpSurfaceStations = stations_data[ghg]["pfp"]["surface"];
     let flaskSurfaceStations = stations_data[ghg]["flask"]["surface"];
 
     try {
+        // frequency can be empty.
         // frequency has the higher precedence/priority among other query params
         if (frequency && frequency === CONTINUOUS) {
             // select insitu tower and surface
@@ -222,6 +213,8 @@ function getUniqueStations(stations) {
             // if the station is already there (not a unique station), we need to let know what else is tied with this station meta
             let temp = uniqueSitesMap.get(station.site_code);
             temp.other_dataset_project.push(station.dataset_project);
+            let onlyUnique = (value, index, array) => array.indexOf(value) === index;
+            temp.other_dataset_project = temp.other_dataset_project.filter(onlyUnique); // also ignore the same stations with different data frequencies
             uniqueSitesMap.set(station.site_code, { ...temp });
         }
     });

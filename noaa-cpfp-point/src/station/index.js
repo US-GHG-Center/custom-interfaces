@@ -23,17 +23,12 @@ import { renderChart } from "../chart";
  * @returns {void} This function does not return a value.
  */
 export const plotStations = (map, queryParams) => {
-    // input: query params
-    // output: null
-    // uses query params to fetch the stations Meta data. Then plots it.
-    // additionally adds event listners to the stations plot
-
     // Fetch and plot Stations
-    const stations = getStationsMeta({...queryParams});
+    const stations = getStationsMeta(queryParams);
     stations.forEach((station) => {
         try {
             // add marker to the map.
-            let marker = addMarker(map, station);
+            let marker = addMarker(map, station, queryParams);
             // also add in the click event listner to the marker
             marker.getElement().addEventListener("click", () => {
                 handleStationClick(station, queryParams);
