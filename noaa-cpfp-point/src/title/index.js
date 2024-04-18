@@ -14,7 +14,7 @@ export const drawTitle = (queryParams) => {
         title += " Non-Continuous Measurements (Flask and PFP)  </strong>"
     } else if (frequency && frequency == ALL) {
         // pass
-        title +=  " Concentration Measurements</strong>";
+        title += " Concentration Measurements</strong>";
     } else {
         title += ` (${MEDIUM[medium].long}-${TYPES[type].long}) </strong>`;
     }
