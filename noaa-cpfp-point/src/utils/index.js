@@ -1,6 +1,5 @@
 import stations_data from "../../stations";
 import { GHG, CO2, CONTINUOUS, NON_CONTINIOUS, TYPES, FLASK, PFP, INSITU, SURFACE, TOWER, ALL} from "../enumeration.js";
-import { instrumentsMapGraphs } from "./instrumentsMapGraphs";
 
 /**
  * Retrieves stations metadata based on the provided query parameters. 
@@ -99,53 +98,6 @@ export function getStationsMeta(queryParams) {
     } catch (err) {
         return new Error("station data not available.");
     }
-}
-
-/**
- * Constructs a URL for fetching station data based on the provided parameters. Similar to a URL for getting a object from s3
- * 
- * @param {string} [ghg="ch4"] - The greenhouse gas (GHG) type. Default is "ch4".
- * @param {string} [type="flask"] - The type of data collection. Default is "flask".
- * @param {string} [medium="surface"] - The medium from which the data is collected. Default is "surface".
- * @param {string} datasetName - The name of the dataset. ref. to the station meta data
- * @returns {Array[string]} - The constructed URLs for fetching the station datas.
- */
-export function constructStationDataSourceUrlsAndLabels(ghg="ch4", type="flask", medium="surface", datasetName) {
-    let selectedFiles = [];
-    let labels = [];
-    if (type=="insitu" & medium=="surface-tower"){
-        let graphsdatasrc = instrumentsMapGraphs(ghg, type, "surface", datasetName);
-        let selectedFileSurface = graphsdatasrc["insitu"].map((graph => graph.dataSource));
-        let labelSurface = graphsdatasrc["insitu"].map(graph => graph.label);
-
-        graphsdatasrc = instrumentsMapGraphs(ghg, type, "tower", datasetName);
-        let selectedFileTower = graphsdatasrc["insitu"].map((graph => graph.dataSource));
-        let labelTower = graphsdatasrc["insitu"].map(graph => graph.label)
-
-        selectedFiles = [...selectedFileSurface, ...selectedFileTower];
-        labels = [...labelSurface, ...labelTower];
-    } else if (type=="insitu") {
-        let graphsdatasrc = instrumentsMapGraphs(ghg, type, medium, datasetName);
-        selectedFiles = graphsdatasrc["insitu"].map((graph => graph.dataSource));
-        labels = graphsdatasrc["insitu"].map((graph => graph.label));
-    } else if (type=="flask-pfp") {
-        let graphsdatasrc = instrumentsMapGraphs(ghg, "flask", medium, datasetName);
-        let selectedFileFlask = graphsdatasrc["flask"].map((graph => graph.dataSource));
-        let labelFlask = graphsdatasrc["flask"].map(graph => graph.label);
-
-        graphsdatasrc = instrumentsMapGraphs(ghg, "pfp", medium, datasetName);
-        let selectedFilePFP = graphsdatasrc["pfp"].map((graph => graph.dataSource));
-        let labelPFP = graphsdatasrc["pfp"].map(graph => graph.label)
-
-        selectedFiles = [...selectedFileFlask, ...selectedFilePFP];
-        labels = [...labelFlask, ...labelPFP];
-    } else {
-        let graphsdatasrc = instrumentsMapGraphs(ghg, type, medium, datasetName);
-        selectedFiles = graphsdatasrc[type].map((graph => graph.dataSource));
-        labels = graphsdatasrc[type].map((graph => graph.label));
-    }
-    let result = { stationDataUrls: selectedFiles, stationDataLabels: labels };
-    return result;
 }
 
 /**

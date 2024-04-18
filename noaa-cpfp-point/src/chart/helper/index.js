@@ -1,6 +1,3 @@
-import { GHG } from '../../enumeration.js';
-import { instrumentsMapGraphs } from '../../utils/instrumentsMapGraphs.js';
-
 const chartStyles = [
     {
         type: "line",
@@ -25,7 +22,7 @@ const chartStyles = [
     },
     {
         type: "line",
-        borderColor: "#green",
+        borderColor: "green",
         pointHoverBackgroundColor: "#220154",
         pointHoverBorderColor: "#FFFFFF",
         borderWidth: 2,
@@ -35,7 +32,7 @@ const chartStyles = [
     },
     {
         type: "line",
-        borderColor: "#blue",
+        borderColor: "blue",
         pointHoverBackgroundColor: "#220154",
         pointHoverBorderColor: "#FFFFFF",
         borderWidth: 2,

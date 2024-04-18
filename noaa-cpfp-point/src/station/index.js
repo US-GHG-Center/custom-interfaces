@@ -1,8 +1,9 @@
 import { addMarker } from "../marker";
 import { openChart } from "../chart";
-import { getStationsMeta, constructStationDataSourceUrlsAndLabels, getStationDatas, constructDataAccessSourceUrl } from "../utils";
+import { getStationsMeta, getStationDatas, constructDataAccessSourceUrl } from "../utils";
 import { parseData } from "./dataPreprocessor";
 import { renderChart } from "../chart";
+import { getDataSourceAndLabels } from "./dataSourceAndLabel";
 
 /**
  * Plots stations on the provided map based on the given query parameters.
@@ -76,10 +77,11 @@ export const plotStations = (map, queryParams) => {
  * @returns {void} This function does not return a value.
  */
 const handleStationClick = async (station, queryParams) => {
-    const { stationCode, ghg, type, medium, frequency } = queryParams;
-    const { dataset_name, site_code, site_name } = station;
+    const { ghg, type } = queryParams;
+    const { site_code, site_name } = station;
     openChart();
-    const { stationDataUrls, stationDataLabels } = constructStationDataSourceUrlsAndLabels(ghg, type, medium, dataset_name);
+
+    let dataSourceAndLabels = getDataSourceAndLabels(station, {...queryParams});
     const dataAccessUrl = constructDataAccessSourceUrl(ghg, type, site_code);
 
     // Add in data access url link to the selected station
@@ -87,18 +89,19 @@ const handleStationClick = async (station, queryParams) => {
 
     // Fetch data and render chart
     try {
-      let datas = await getStationDatas(stationDataUrls);
-      // not all data path might be available. So filter the unavailable ones.
-      // Also, at the sametime filter out the unnecessary labels from instument-graph map as well (using idx).
+      const dataSources = dataSourceAndLabels.map(elem => elem.datasource);
+      let datas = await getStationDatas(dataSources);
       datas.forEach((data, idx) => {
+        // not all data path might be available. So filter the unavailable ones.
+        // Also, at the sametime filter out the unnecessary labels. (using idx).
         if (data.status == 404) {
-          datas[idx] = null;
-          stationDataLabels[idx] = null;
+          dataSourceAndLabels[idx] = null;
         }
       });
 
+      // filtered data and labels
       datas = datas.filter(data => data);
-      let graphsDataLabels = stationDataLabels.filter(data => data);
+      let labels = dataSourceAndLabels.map(elem => elem.label);
 
       let parsedDatas;
       if (type === "insitu") {
@@ -112,7 +115,7 @@ const handleStationClick = async (station, queryParams) => {
       }
       // Render chart
       let stationMeta = {name: site_name, code: site_code}
-      renderChart(stationMeta, parsedDatas, ghg, graphsDataLabels);
+      renderChart(stationMeta, parsedDatas, ghg, labels);
     } catch (err) {
       console.error(err)
     }

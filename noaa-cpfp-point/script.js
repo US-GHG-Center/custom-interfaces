@@ -1,6 +1,4 @@
 import { MEDIUM, TYPES, GHG, CH4, FLASK, SURFACE, ghgBlue, INSITU, PFP, FLASK_PFP} from './src/enumeration.js';
-import { getStationsMeta, constructStationDataSourceUrlsAndLabels, getStationDatas, constructDataAccessSourceUrl } from "./src/utils";
-import { openChart, renderChart } from './src/chart/index.js';
 import { plotStations } from "./src/station/index.js";
 
 let publicUrl = process.env.PUBLIC_URL;
