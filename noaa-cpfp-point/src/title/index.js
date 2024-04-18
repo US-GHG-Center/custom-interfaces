@@ -9,7 +9,7 @@ export const drawTitle = (queryParams) => {
         GHG[ghg].long
         }`;
     if (frequency && frequency == CONTINUOUS) {
-        title += " Continuous Measurements (Surface In-Situ and Tower) </strong>";
+        title += " Continuous Measurements (Surface and Tower In-Situ) </strong>";
     } else if (frequency && frequency == NON_CONTINIOUS) {
         title += " Non-Continuous Measurements (Flask and PFP)  </strong>"
     } else if (frequency && frequency == ALL) {
