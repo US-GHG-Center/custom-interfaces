@@ -27,9 +27,9 @@ import { instrumentsMapGraphs } from "./instrumentsMapGraphs";
  * @returns {Array<Object>} An array containing stations metadata based on the query parameters.
  * NOTE: If there are overlapping stations, i.e. the stations having multiple dataset collections:\
  *       the dataset_project (medium + type) of the overlapping stations\
- *       are added into that unique station as a new key `other_dataset_project`.\
+ *       are added into that unique station as a new key `other_dataset_projects`.\
  * ie. a new array is injected to the existing station objects.
- * @var {Array<String>} other_dataset_project - An array of datasets_projects of overlapping stations.\ 
+ * @var {Array<String>} other_dataset_projects - An array of datasets_projects of overlapping stations.\ 
  *                                            - Empty array if no overlapping station.\
 
  * @throws {Error} Throws an error if station data is not available.
@@ -193,9 +193,9 @@ export async function getStationDatas(urls) {
  * This function takes in a list of stations meta object.\
  * NOTE: If there are overlapping stations:\
  *       the dataset_project (medium + type) of the overlapping stations\
- *       are added into that unique station as a new key `other_dataset_project`.\
+ *       are added into that unique station as a new key `other_dataset_projects`.\
  * ie. a new array is injected to the existing station objects.
- * @var {Array<String>} other_dataset_project - An array of datasets_projects of overlapping stations.\
+ * @var {Array<String>} other_dataset_projects - An array of datasets_projects of overlapping stations.\
  *                                            - Empty array if no overlapping station.\
  *
  * @param {Array<Object>} stations - An array of station objects.
@@ -208,16 +208,16 @@ function getUniqueStations(stations) {
         // Check if the site_code already exists in the Map
         if (!uniqueSitesMap.has(station.site_code)) {
             // If station is not added (unique station), add the current object to the Map
-            uniqueSitesMap.set(station.site_code, { ...station, other_dataset_project: [] });
+            uniqueSitesMap.set(station.site_code, { ...station, other_dataset_projects: [] });
         } else {
             // if the station is already there (not a unique station), we need to let know what else is tied with this station meta
             let temp = uniqueSitesMap.get(station.site_code);
             if (temp.dataset_project !== station.dataset_project) {
                 // To ignore the same stations having same measurement type but different data frequencies.
                 // Eg. Insitu-tower-daily and Insitu-tower-monthly are same. So dont count them as different measurement type.
-                temp.other_dataset_project.push(station.dataset_project);
+                temp.other_dataset_projects.push(station.dataset_project);
                 let onlyUnique = (value, index, array) => array.indexOf(value) === index;
-                temp.other_dataset_project = temp.other_dataset_project.filter(onlyUnique); //extra ensurity
+                temp.other_dataset_projects = temp.other_dataset_projects.filter(onlyUnique); //extra ensurity
                 uniqueSitesMap.set(station.site_code, { ...temp });
             }
         }

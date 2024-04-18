@@ -28,10 +28,10 @@ export const addMarker = (map, station, queryParams) => {
 }
 
 export const getMarkerToolTipContent = (station) => {
-    let { site_code, site_name, site_country, site_latitude, site_longitude, site_elevation, site_elevation_unit, dataset_project, other_dataset_project } = station;
-    if (other_dataset_project.length > 0) {
+    let { site_code, site_name, site_country, site_latitude, site_longitude, site_elevation, site_elevation_unit, dataset_project, other_dataset_projects } = station;
+    if (other_dataset_projects.length > 0) {
         let measurementType = dataset_project;
-        other_dataset_project.forEach(project_type => {
+        other_dataset_projects.forEach(project_type => {
             measurementType += " & " + project_type
         });
         dataset_project = measurementType;
@@ -66,9 +66,9 @@ export const getMarkerToolTipContent = (station) => {
  */
 export const getMarkerStyle = (station, queryParams) => {
     let {ghg, frequency, type, medium} = queryParams;
-    let { dataset_project, other_dataset_project } = station;
+    let { dataset_project, other_dataset_projects } = station;
 
-    if (other_dataset_project.length > 0) {
+    if (other_dataset_projects.length > 0) {
         let className = "marker";
         return className;
     }
