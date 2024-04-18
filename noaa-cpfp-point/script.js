@@ -1,4 +1,5 @@
-import { MEDIUM, TYPES, GHG, CH4, FLASK, SURFACE, ghgBlue, INSITU, PFP, FLASK_PFP} from './src/enumeration.js';
+import { CH4, FLASK, SURFACE, INSITU, PFP, FLASK_PFP} from './src/enumeration.js';
+import { drawTitle } from './src/title/index.js';
 import { plotStations } from "./src/station/index.js";
 
 let publicUrl = process.env.PUBLIC_URL;
@@ -36,13 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     stationCode
   }
 
-  // Add title of the NOAA according to the query params
-  const titleContainer = document.getElementById("title");
-  titleContainer.innerHTML = `<strong> NOAA: ESRL Global Monitoring Laboratory: ${
-    GHG[selectedGhg].long
-  } (${MEDIUM[selectedMedium].long}-${TYPES[selectedType].long}) </strong>`;
-  titleContainer.style.display = "block";
-  titleContainer.style.color = ghgBlue;
+  drawTitle({...parsedQueryParams});
 
   // options for selection
   let collectionMechanismDropdown = document.getElementById("collection-mechanism");
