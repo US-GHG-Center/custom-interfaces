@@ -1,48 +1,106 @@
 import stations_data from "../../stations";
-import { TYPES, GHG} from "../enumeration.js";
+import { GHG, CO2, CONTINUOUS, NON_CONTINIOUS, TYPES, FLASK, PFP, INSITU, SURFACE, TOWER, ALL} from "../enumeration.js";
 import { instrumentsMapGraphs } from "./instrumentsMapGraphs";
 
-let publicUrl = process.env.PUBLIC_URL;
-
 /**
- * Retrieves station meta data based on the specified parameters. Similar to fetching data from a database.
+ * Retrieves stations metadata based on the provided query parameters. 
+ * This functions similar to fetching data from a database.
  * Here, as a static site application, stations_data in station.js can be considered as a database.
  * 
- * @param {string} [ghg="ch4"] - The greenhouse gas (GHG) type. Default is "ch4".
- * @param {string} [type="flask"] - The type of station. Default is "flask".
- * @param {string} [medium="surface"] - The medium from which the data is collected. Default is "surface".
- * @returns {Array} - The stations data corresponding to the provided parameters.
- * @throws {Error} - If station data is not available for the specified parameters.
+ * The function accepts query parameters including greenhouse gas (ghg), type,
+ * medium, and frequency. If any of these parameters are not provided, default
+ * values are used. The function then retrieves stations metadata based on the
+ * provided parameters.
+ * 
+ * @param {Object} queryParams - An object containing query parameters.
+ * @param {string} [queryParams.ghg='co2'] - The greenhouse gas (CO2 or CH4).
+ *                                          Possible values: 'co2', 'ch4'.
+ * @param {string} [queryParams.type='flask'] - The type of data (insitu, flask, or pfp).
+ *                                              Possible values: 'insitu', 'flask', 'pfp'.
+ * @param {string} [queryParams.medium='surface'] - The medium of measurement (tower or surface).
+ *                                                   Possible values: 'tower', 'surface'.
+ * @param {string} [queryParams.frequency='continuous'] - The frequency of measurement (continuous or non-continuous).
+ *                                                        Possible values: 'continuous', 'non-continuous', 'all'
+ * NOTE: Unless frequency is skipped in query params, type and medium values are not considered 
+ * @returns {Array<Object>} An array containing stations metadata based on the query parameters.
+ * NOTE: If there are overlapping stations, i.e. the stations having multiple dataset collections:\
+ *       the dataset_project (medium + type) of the overlapping stations\
+ *       are added into that unique station as a new key `other_dataset_project`.\
+ * ie. a new array is injected to the existing station objects.
+ * @var {Array<String>} other_dataset_project - An array of datasets_projects of overlapping stations.\ 
+ *                                            - Empty array if no overlapping station.\
+
+ * @throws {Error} Throws an error if station data is not available.
  */
-export function getStationsMeta(ghg="ch4", type="flask", medium="surface") {
+export function getStationsMeta(queryParams) {
+    let {ghg, frequency, type, medium} = queryParams;
+
+    // For now if no value in query params, we default to default values. Except for frequency
+    if (!ghg) {
+        ghg = CO2;
+    }
+    if (!type) {
+        type = FLASK;
+    }
+    if (!medium) {
+        medium = SURFACE;
+    }
+    // frequency can be empty.
+
+    let insituSurfaceStations = stations_data[ghg]["insitu"]["surface"];
+    let insituTowerStations = stations_data[ghg]["insitu"]["tower"];
+    let pfpSurfaceStations = stations_data[ghg]["pfp"]["surface"];
+    let flaskSurfaceStations = stations_data[ghg]["flask"]["surface"];
+
     try {
-        let stations = [];
-        if (type == "insitu" & medium == "surface-tower") {
-            /**
-             * To show both surface and tower insitu, filter out unique one based of station_name (site_code)
-             * also plant in medium value to do so.
-            **/
-            let surfaceStations = stations_data[ghg][type]["surface"].map(data => ({...data, medium: "surface"}));
-            let towerStations = stations_data[ghg][type]["tower"].map(data => ({...data, medium: "tower"}));
-            stations = getUniqueStations([...surfaceStations, ...towerStations]);
-        } else if (type == "insitu") {
-            /**
-             * For a single station and a medium, there are daily, hourly and monthly
-             * We can't plot them all. So, filter out unique one, based of station_name (site_code)
-            **/
-            stations = stations_data[ghg][type][medium];
-            stations = getUniqueStations(stations);
-        } else if (type == "flask-pfp" & medium == "surface") {
-            /**
-             * To show both flask and pfp, filter out unique one based of station_name (site_code)
-             * also plant in type value to do so.
-            **/
-            let flaskStations = stations_data[ghg]["flask"][medium].map(data => ({...data, type: "flask"}));;
-            let pfpStations = stations_data[ghg]["pfp"][medium].map(data => ({...data, type: "pfp"}));
-            stations = getUniqueStations([...flaskStations, ...pfpStations]);
-        } else {
-            stations = stations_data[ghg][type][medium];
+        // frequency has the higher precedence/priority among other query params
+        if (frequency && frequency === CONTINUOUS) {
+            // select insitu tower and surface
+            let stations = getUniqueStations([...insituSurfaceStations, ...insituTowerStations]);
+            return stations;
         }
+        if (frequency && frequency === NON_CONTINIOUS) {
+            // select flask surface and pfp surface
+            let stations = getUniqueStations([...pfpSurfaceStations, ...flaskSurfaceStations]);
+            return stations;
+        }
+        if (frequency && frequency === ALL) {
+            // select flask surface and pfp surface
+            let stations = getUniqueStations([...pfpSurfaceStations, ...flaskSurfaceStations, ...insituSurfaceStations, ...insituTowerStations]);
+            return stations;
+        }
+        if (frequency) {
+            // other frequency values not known
+            let stations = [];
+            return stations;
+        }
+
+        // When no frequency, compute the following
+        if (type === INSITU && medium === SURFACE) {
+            // return insitu surface
+            let stations = getUniqueStations([...insituSurfaceStations]);
+            return stations;
+        }
+
+        if (type === INSITU && medium === TOWER) {
+            // return insitu tower
+            let stations = getUniqueStations([...insituTowerStations]);
+            return stations;
+        }
+
+        if (type === PFP && medium === SURFACE) {
+            // return pfp surface
+            let stations = getUniqueStations([...pfpSurfaceStations]);
+            return stations;
+        }
+
+        if (type === FLASK && medium === SURFACE) {
+            // return flask surface
+            let stations = getUniqueStations([...flaskSurfaceStations]);
+            return stations;
+        }
+
+        let stations = [];
         return stations;
     } catch (err) {
         return new Error("station data not available.");
@@ -56,7 +114,6 @@ export function getStationsMeta(ghg="ch4", type="flask", medium="surface") {
  * @param {string} [type="flask"] - The type of data collection. Default is "flask".
  * @param {string} [medium="surface"] - The medium from which the data is collected. Default is "surface".
  * @param {string} datasetName - The name of the dataset. ref. to the station meta data
- * publicUrl is the base URL of the server hosting the data files.
  * @returns {Array[string]} - The constructed URLs for fetching the station datas.
  */
 export function constructStationDataSourceUrlsAndLabels(ghg="ch4", type="flask", medium="surface", datasetName) {
@@ -139,14 +196,33 @@ export async function getStationDatas(urls) {
 
 // helper
 
+/**
+ * Retrieves a list of unique stations from the given array of stations.
+ *
+ * This function takes in a list of stations meta object.\
+ * NOTE: If there are overlapping stations:\
+ *       the dataset_project (medium + type) of the overlapping stations\
+ *       are added into that unique station as a new key `other_dataset_project`.\
+ * ie. a new array is injected to the existing station objects.
+ * @var {Array<String>} other_dataset_project - An array of datasets_projects of overlapping stations.\
+ *                                            - Empty array if no overlapping station.\
+ *
+ * @param {Array<Object>} stations - An array of station objects.
+ * @returns {Array<Object>} An array containing unique station objects.
+ */
 function getUniqueStations(stations) {
     // Map to store unique stations based on their site_code
     const uniqueSitesMap = new Map();
     stations.forEach(station => {
         // Check if the site_code already exists in the Map
         if (!uniqueSitesMap.has(station.site_code)) {
-            // If not, add the current object to the Map
-            uniqueSitesMap.set(station.site_code, station);
+            // If station is not added (unique station), add the current object to the Map
+            uniqueSitesMap.set(station.site_code, { ...station, other_dataset_project: [] });
+        } else {
+            // if the station is already there (not a unique station), we need to let know what else is tied with this station meta
+            let temp = uniqueSitesMap.get(station.site_code);
+            temp.other_dataset_project.push(station.dataset_project);
+            uniqueSitesMap.set(station.site_code, { ...temp });
         }
     });
     const uniqueSites = Array.from(uniqueSitesMap.values());

@@ -1,15 +1,26 @@
+// Instrument types
 export const FLASK = "flask";
 export const PFP = "pfp";
 export const FLASK_PFP = "flask-pfp";
 export const INSITU = "insitu";
+// GHG
 export const CH4 = "ch4";
 export const CO2 = "co2";
+// Medium
 export const SURFACE = "surface";
 export const TOWER = "tower";
 export const SURFACE_TOWER = "surface-tower";
 export const AIRCRAFT = "aircraft";
+// Frequency
+export const CONTINUOUS = "continuous";
+export const NON_CONTINIOUS = "non-continuous";
+// WildCard
+export const ALL = "all";
+
+// Color defination
 export const ghgBlue = "#082A63";
 
+// For nomenclature/Naming
 
 export const MEDIUM = {
   [SURFACE]: {
@@ -60,5 +71,16 @@ export const GHG = {
     short: "CO₂",
     long: "Carbon Dioxide",
     unit: "ppm"
+  }
+}
+
+export const FREQUENCY = {
+  [CONTINUOUS]: {
+    short: "continuous",
+    long: "Continuous"
+  },
+  [NON_CONTINIOUS]: {
+    short: "non-continuous",
+    long: "Non Continuous"
   }
 }
