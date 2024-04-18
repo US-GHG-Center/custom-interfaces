@@ -99,20 +99,23 @@ const handleStationClick = async (station, queryParams) => {
         }
       });
 
-      // filtered data and labels
+      // filtered data and labels, based off availabillity
       datas = datas.filter(data => data);
       let labels = dataSourceAndLabels.map(elem => elem.label);
 
-      let parsedDatas;
-      if (type === "insitu") {
-        let jsonConversionPromises = datas.map(data => data.json());
-        parsedDatas = await Promise.all(jsonConversionPromises);
-      } else {
-        let textConversionPromises = datas.map(data => data.text());
-        let responses = await Promise.all(textConversionPromises);
-        // Parse data (you may need to adjust this based on your CSV format)
-        parsedDatas = responses.map(response => parseData(response));
-      }
+      // promises to convert them to appropriate json.
+      const conversionPromises = [];
+      datas.forEach(data => {
+        if (data && data.url && !data.url.includes("insitu")) {
+          let promise = data.text().then(res => parseData(res));
+          conversionPromises.push(promise);
+        } else { // new ones will have json by default
+          let promise = data.json();
+          conversionPromises.push(promise);
+        }
+      });
+      let parsedDatas = await Promise.all(conversionPromises);
+
       // Render chart
       let stationMeta = {name: site_name, code: site_code}
       renderChart(stationMeta, parsedDatas, ghg, labels);

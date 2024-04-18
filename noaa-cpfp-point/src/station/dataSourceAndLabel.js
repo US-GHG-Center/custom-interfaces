@@ -85,21 +85,21 @@ const getDataSourceAndLabelsRefDict = (datasetName) => {
                 surface: {
                     daily: {
                         datasource: `${publicUrl ? publicUrl : ""}/data/processed/co2/insitu/surface/${getInsituFilename(datasetName, "daily")}.json`,
-                        label: `Observed ${GHG[CO2].short} Concentration (Daily)`
+                        label: `Observed ${GHG[CO2].short} Concentration (Daily In-situ)`
                     },
                     monthly: {
                         datasource: `${publicUrl ? publicUrl : ""}/data/processed/co2/insitu/surface/${getInsituFilename(datasetName, "monthly")}.json`,
-                        label: `Observed ${GHG[CO2].short} Concentration (Monthly)`
+                        label: `Observed ${GHG[CO2].short} Concentration (Monthly In-situ)`
                     }
                 },
                 tower: {
                     daily: {
                         datasource: `${publicUrl ? publicUrl : ""}/data/processed/co2/insitu/tower/${getInsituFilename(datasetName, "daily")}.json`,
-                        label: `Observed ${GHG[CO2].short} Concentration (Daily)`
+                        label: `Observed ${GHG[CO2].short} Concentration (Daily In-situ)`
                     },
                     monthly: {
                         datasource: `${publicUrl ? publicUrl : ""}/data/processed/co2/insitu/tower/${getInsituFilename(datasetName, "monthly")}.json`,
-                        label: `Observed ${GHG[CO2].short} Concentration (Monthly)`
+                        label: `Observed ${GHG[CO2].short} Concentration (Monthly In-situ)`
                     }
                 }
                 
@@ -122,21 +122,21 @@ const getDataSourceAndLabelsRefDict = (datasetName) => {
                 surface: {
                     daily: {
                         datasource: `${publicUrl ? publicUrl : ""}/data/processed/ch4/insitu/surface/${getInsituFilename(datasetName, "daily")}.json`,
-                        label: `Observed ${GHG[CH4].short} Concentration (Daily)`
+                        label: `Observed ${GHG[CH4].short} Concentration (Daily In-situ)`
                     },
                     monthly: {
                         datasource: `${publicUrl ? publicUrl : ""}/data/processed/ch4/insitu/surface/${getInsituFilename(datasetName, "monthly")}.json`,
-                        label: `Observed ${GHG[CH4].short} Concentration (Monthly)`
+                        label: `Observed ${GHG[CH4].short} Concentration (Monthly In-situ)`
                     }
                 },
                 tower: {
                     daily: {
                         datasource: `${publicUrl ? publicUrl : ""}/data/processed/ch4/insitu/tower/${getInsituFilename(datasetName, "daily")}.json`,
-                        label: `Observed ${GHG[CH4].short} Concentration (Daily)`
+                        label: `Observed ${GHG[CH4].short} Concentration (Daily In-situ)`
                     },
                     monthly: {
                         datasource: `${publicUrl ? publicUrl : ""}/data/processed/ch4/insitu/tower/${getInsituFilename(datasetName, "monthly")}.json`,
-                        label: `Observed ${GHG[CH4].short} Concentration (Monthly)`
+                        label: `Observed ${GHG[CH4].short} Concentration (Monthly In-situ)`
                     }
                 }
                 
