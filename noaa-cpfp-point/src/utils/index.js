@@ -26,12 +26,15 @@ import { instrumentsMapGraphs } from "./instrumentsMapGraphs";
  * NOTE: Unless frequency is skipped in query params, type and medium values are not considered 
  * @returns {Array<Object>} An array containing stations metadata based on the query parameters.
  * NOTE: If there are overlapping stations, i.e. the stations having multiple dataset collections:\
- *       the dataset_project (medium + type) of the overlapping stations\
+ *       The dataset_project (medium + type) of the overlapping stations\
  *       are added into that unique station as a new key `other_dataset_projects`.\
+ *       Additionally, the dataset_name of the overlapping stations \
+ *       are also added into the unique station as a new key `other_dataset_names`.\
  * ie. a new array is injected to the existing station objects.
- * @var {Array<String>} other_dataset_projects - An array of datasets_projects of overlapping stations.\ 
- *                                            - Empty array if no overlapping station.\
-
+ * @var {Array<String>} other_dataset_projects - An array of datasets_projects of overlapping stations.\
+ *                                             - Empty array if no overlapping station.\
+ * @var {Array<String>} other_dataset_names - An array of datasets_names of overlapping stations.\
+ *                                          - Empty array if no overlapping station.\
  * @throws {Error} Throws an error if station data is not available.
  */
 export function getStationsMeta(queryParams) {
@@ -194,9 +197,13 @@ export async function getStationDatas(urls) {
  * NOTE: If there are overlapping stations:\
  *       the dataset_project (medium + type) of the overlapping stations\
  *       are added into that unique station as a new key `other_dataset_projects`.\
+ *       Additionally, the dataset_name of the overlapping stations \
+ *       are also added into the unique station as a new key `other_dataset_names`.\
  * ie. a new array is injected to the existing station objects.
  * @var {Array<String>} other_dataset_projects - An array of datasets_projects of overlapping stations.\
  *                                            - Empty array if no overlapping station.\
+ * @var {Array<String>} other_dataset_names - An array of datasets_names of overlapping stations.\
+ *                                          - Empty array if no overlapping station.\
  *
  * @param {Array<Object>} stations - An array of station objects.
  * @returns {Array<Object>} An array containing unique station objects.
@@ -208,7 +215,7 @@ function getUniqueStations(stations) {
         // Check if the site_code already exists in the Map
         if (!uniqueSitesMap.has(station.site_code)) {
             // If station is not added (unique station), add the current object to the Map
-            uniqueSitesMap.set(station.site_code, { ...station, other_dataset_projects: [] });
+            uniqueSitesMap.set(station.site_code, { ...station, other_dataset_projects: [], other_dataset_names: [] });
         } else {
             // if the station is already there (not a unique station), we need to let know what else is tied with this station meta
             let temp = uniqueSitesMap.get(station.site_code);
@@ -216,8 +223,10 @@ function getUniqueStations(stations) {
                 // To ignore the same stations having same measurement type but different data frequencies.
                 // Eg. Insitu-tower-daily and Insitu-tower-monthly are same. So dont count them as different measurement type.
                 temp.other_dataset_projects.push(station.dataset_project);
+                temp.other_dataset_names.push(station.dataset_name)
                 let onlyUnique = (value, index, array) => array.indexOf(value) === index;
                 temp.other_dataset_projects = temp.other_dataset_projects.filter(onlyUnique); //extra ensurity
+                temp.other_dataset_names = temp.other_dataset_names.filter(onlyUnique); //extra ensurity
                 uniqueSitesMap.set(station.site_code, { ...temp });
             }
         }
