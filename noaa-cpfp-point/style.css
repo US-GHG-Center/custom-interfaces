@@ -85,7 +85,7 @@ body {
 }
 
 .marker {
-    background-image: url('./public/marker-blue.png');
+    background-image: url('./public/marker-default.png');
     background-size: cover;
     width: 30px;
     height: 30px;
@@ -96,20 +96,34 @@ body {
 
 .marker-gold {
     background-image: url('./public/marker-gold.png');
-    background-size: cover;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
 }
 
 .marker-tower {
     background-image: url('./public/marker-tower.png');
-    background-size: cover;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
+}
+
+.marker-pink-red {
+    background-image: url('./public/marker-pink-red.png');
+}
+
+.marker-pink {
+    background-image: url('./public/marker-pink.png');
+}
+
+.marker-red {
+    background-image: url('./public/marker-red.png');
+}
+
+.marker-blue-purple {
+    background-image: url('./public/marker-blue-purple.png');
+}
+
+.marker-blue {
+    background-image: url('./public/marker-blue.png');
+}
+
+.marker-purple {
+    background-image: url('./public/marker-purple.png');
 }
 
 #logo {

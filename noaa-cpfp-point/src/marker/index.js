@@ -55,6 +55,16 @@ export const getMarkerToolTipContent = (station) => {
  * 
  * Note: Put thing that is priority comparision in the top.
  *
+ * Note: The color are selected to enable Semantic Inferencing. Its done on the following basis:
+ *  The logical ordering of all the insrument data is done in the following way:
+ *	|_ALL DATA :: use :: marker-gold
+ *		|_continuous (collection):: use :: gradient color 2 :: use :: marker-pink-red
+ *			|_pfp surface :: use :: marker-red
+ *			|_flask surface :: use :: marker-pink
+ *		|_non-continuous (collection):: use :: gradient color 2 :: use :: marker-blue-purple
+ *			|_insitu surface :: use :: marker-blue
+ *			|_insitu tower :: use :: marker-purple
+ *
  * @param {Object} station - The metadata of the station.
  * @param {string} station.dataset_project - The project (<medium>_<type>) from which dataset was collected.
  * @param {Object} queryParams - An object containing query parameters.
@@ -69,7 +79,7 @@ export const getMarkerStyle = (station, queryParams) => {
     let { dataset_project, other_dataset_projects } = station;
 
     if (other_dataset_projects.length > 0) {
-        let className = "marker";
+        let className = "marker marker-gold";
         return className;
     }
 
@@ -79,34 +89,34 @@ export const getMarkerStyle = (station, queryParams) => {
         // selected insitu tower and surface
         // color surface insitu and tower insitu differently
         if (dataset_project.includes("tower")) {
-            let className = "marker-tower";
+            let className = "marker marker-purple";
             return className;
         }
         if (dataset_project.includes("surface")) {
-            let className = "marker-gold";
+            let className = "marker marker-blue";
             return className;
         }
     }
     if (frequency && frequency === NON_CONTINIOUS) {
         // selected flask surface and pfp surface
         if (dataset_project.includes("flask")) {
-            let className = "marker-tower";
+            let className = "marker marker-pink";
             return className;
         }
         if (dataset_project.includes("pfp")) {
-            let className = "marker-gold";
+            let className = "marker marker-red";
             return className;
         }
     }
     if (frequency && frequency === ALL) {
         // color flask surface and pfp surface as one
         if (dataset_project.includes("flask") || dataset_project.includes("pfp")) {
-            let className = "marker-gold";
+            let className = "marker marker-pink-red";
             return className;
         }
         // color insitu surface and tower as one
         if (dataset_project === "tower-insitu" || dataset_project === "surface-insitu") {
-            let className = "marker-tower";
+            let className = "marker marker-blue-purple";
             return className;
         }
         // TODO: add for overlapping ones as well.
@@ -115,25 +125,25 @@ export const getMarkerStyle = (station, queryParams) => {
     /* When no frequency, compute the following */
     if (type === INSITU && medium === SURFACE) {
         // return insitu surface
-        let className = "marker-gold";
+        let className = "marker marker-blue";
         return className;
     }
 
     if (type === INSITU && medium === TOWER) {
         // return insitu tower
-        let className = "marker-tower";
+        let className = "marker marker-purple";
         return className;
     }
 
     if (type === PFP && medium === SURFACE) {
         // return pfp surface
-        let className = "marker-gold";
+        let className = "marker marker-red";
         return className;
     }
 
     if (type === FLASK && medium === SURFACE) {
         // return flask surface
-        let className = "marker-gold";
+        let className = "marker marker-pink";
         return className;
     }
 
