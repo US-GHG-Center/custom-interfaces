@@ -51,6 +51,12 @@ export const plugin = {
     },
 };
 
+/**
+ * Generates options object for configuring the Chart.js chart based on the provided station and selected greenhouse gas.
+ * @param {Object} station - The station object containing information about the station.
+ * @param {string} selectedGhg - The selected greenhouse gas.
+ * @returns {Object} The options object for configuring the Chart.js chart.
+ */
 export const getOptions = (station, selectedGhg)=> ({
     interaction: {
         intersect: false,
@@ -168,7 +174,11 @@ export const getOptions = (station, selectedGhg)=> ({
     },
 });
 
-// Function to update zoom instructions
+/**
+ * Updates the visibility of zoom instructions.
+ * If zoomed, the instructions are hidden.
+ * @returns {void}
+ */
 function updateZoomInstructions() {
     const zoomInstructions = document.getElementById("zoom-instructions");
     if (zoomInstructions) {

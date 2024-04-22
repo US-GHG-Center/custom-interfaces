@@ -1,5 +1,13 @@
 import { CONTINUOUS, NON_CONTINIOUS, ALL } from "../enumeration";
 
+/**
+ * Shows options based on the provided query parameters and handles user interaction.
+ * @param {Object} queryParams - The query parameters.
+ * @param {string} queryParams.ghg - The type of greenhouse gas.
+ * @param {string} queryParams.frequency - The frequency of measurements.
+ * @param {string} queryParams.type - The type of measurement.
+ * @returns {void}
+ */
 export const showOptions = (queryParams) => {
     let publicUrl = process.env.PUBLIC_URL;
     let {ghg, frequency, type} = queryParams;

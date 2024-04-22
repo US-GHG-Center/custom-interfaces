@@ -1,5 +1,14 @@
 import { ghgBlue, GHG, MEDIUM, TYPES, CONTINUOUS, NON_CONTINIOUS, ALL } from "../enumeration";
 
+/**
+ * Draws the title for the NOAA ESRL Global Monitoring Laboratory based on the provided query parameters.
+ * @param {Object} queryParams - The query parameters.
+ * @param {string} queryParams.ghg - The type of greenhouse gas.
+ * @param {string} queryParams.frequency - The frequency of measurements.
+ * @param {string} queryParams.type - The type of measurement.
+ * @param {string} queryParams.medium - The medium of measurement.
+ * @returns {void}
+ */
 export const drawTitle = (queryParams) => {
     let {ghg, frequency, type, medium} = queryParams;
 

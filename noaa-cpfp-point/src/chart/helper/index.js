@@ -1,3 +1,7 @@
+/**
+ * Styles for various types of charts.
+ * @constant {Object[]} chartStyles - An array of objects containing styles for different types of charts.
+ */
 const chartStyles = [
     {
         type: "line",
@@ -42,6 +46,12 @@ const chartStyles = [
     }
 ]
 
+/**
+ * Generates datasets for the Chart.js chart based on the provided data and labels.
+ * @param {Object[]} datas - An array of datasets containing time series data.
+ * @param {string[]} graphsLabel - An array of data labels for the chart.
+ * @returns {Object[]} An array of datasets formatted for Chart.js.
+ */
 export const getDatasets = (datas, graphsLabel) => {
     return datas.map((data, idx) => {
         let chartStyle = chartStyles[idx];

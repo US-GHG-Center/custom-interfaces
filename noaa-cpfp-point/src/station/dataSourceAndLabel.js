@@ -148,6 +148,12 @@ const getDataSourceAndLabelsRefDict = (datasetName) => {
 
 // helper
 
+/**
+ * Generates a modified filename based on the provided filename and frequency.
+ * @param {string} filename - The original filename.
+ * @param {string} frequency - The frequency of the data (daily, monthly, hourly).
+ * @returns {string} The modified filename based on the frequency.
+ */
 function getInsituFilename(filename, frequency) {
     if (!filename) {
         return "";

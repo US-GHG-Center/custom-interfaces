@@ -1,5 +1,19 @@
 import { ghgBlue, GHG, CO2, CONTINUOUS, NON_CONTINIOUS, TYPES, FLASK, PFP, INSITU, SURFACE, TOWER, ALL} from "../enumeration.js";
 
+/**
+ * Generates tooltip content for a marker representing a station.
+ * @param {Object} station - The station object containing information about the station.
+ * @param {string} station.site_code - The code of the station.
+ * @param {string} station.site_name - The name of the station.
+ * @param {string} station.site_country - The country where the station is located.
+ * @param {number} station.site_latitude - The latitude of the station.
+ * @param {number} station.site_longitude - The longitude of the station.
+ * @param {number} station.site_elevation - The elevation of the station.
+ * @param {string} station.site_elevation_unit - The unit of elevation (e.g., meters).
+ * @param {string} station.dataset_project - The project type of the dataset.
+ * @param {string[]} station.other_dataset_projects - Other project types associated with the dataset.
+ * @returns {string} The HTML content for the marker tooltip.
+ */
 export const getMarkerToolTipContent = (station) => {
     let { site_code, site_name, site_country, site_latitude, site_longitude, site_elevation, site_elevation_unit, dataset_project, other_dataset_projects } = station;
     if (other_dataset_projects.length > 0) {

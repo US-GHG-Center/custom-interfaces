@@ -3,6 +3,17 @@ import { getDatasets } from './helper/index.js';
 
 let chart = null;
 
+/**
+ * Renders a time series chart based on the provided station data, datasets, selected greenhouse gas, and data labels.
+ * @param {Object} station - The station object containing information about the station.
+ * @param {string} station.name: The station name.
+ * @param {string} station.code - The station site code.
+ *
+ * @param {Object[]} datas - An array of datasets containing time series data.
+ * @param {string} selectedGhg - The selected greenhouse gas.
+ * @param {string[]} graphsDataLabels - An array of data labels for the chart.
+ * @returns {void}
+ */
 // Function to render the time series chart
 export function renderChart(station, datas, selectedGhg, graphsDataLabels) {
     const chartContainer = document.getElementById("chart");
@@ -36,7 +47,10 @@ export function renderChart(station, datas, selectedGhg, graphsDataLabels) {
     });
 }
 
-// Function to toggle map height and show/hide chart
+/**
+ * shows/hides chart. And toggles map, menu, legend height when chart is opened.
+ * @returns {void}
+ */
 export function openChart() {
     const mapContainer = document.getElementById("map-container");
     const chartContainerB = document.getElementById("chart-container");
