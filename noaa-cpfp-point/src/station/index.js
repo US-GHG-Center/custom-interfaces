@@ -1,4 +1,5 @@
 import { addMarker } from "../marker";
+import { drawLegend } from "../marker/legend/legend";
 import { openChart } from "../chart";
 import { getStationsMeta, getStationDatas, constructDataAccessSourceUrl } from "../utils";
 import { parseData } from "./dataPreprocessor";
@@ -39,6 +40,8 @@ export const plotStations = (map, queryParams) => {
             // console.log(err)
         }
     });
+
+    drawLegend(queryParams);
 
     const { stationCode } = queryParams;
     // If specific station chart directly queried using URL

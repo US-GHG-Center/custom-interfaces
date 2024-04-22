@@ -192,3 +192,23 @@ a {
     z-index: 1000;
     background-color: rgba(255, 255, 255, 0.7);
 }
+
+#legend-head {
+    font-size: 16px;
+    margin-bottom: 7px;
+    text-align: center;
+}
+
+#legend-line {
+    border-top: 1px solid rgba(74, 69, 69, 0.2);
+    margin-bottom: 7px;
+}
+
+.legend-element {
+    display: flex;
+    align-items: center; /* Align items vertically */
+}
+
+.legend-text {
+    margin-left: 4px;
+}
