@@ -16,7 +16,7 @@ export function constructDataAccessSourceUrl(station, queryParams) {
     const { site_code: siteCode } = station;
 
     // default params construct
-    const GMLBaseUrl = "https://gml.noaa.gov/dv/data/index.php"
+    const GMLBaseUrl = "https://gml.noaa.gov/dv/data/index.php"; // query params of GML is case sensitive
     const parameterName = `${GHG[ghg].long.replace(" ", "%2B")}`;
     const category = "Greenhouse Gases".replace(" ", "%2B");
     const default_queryParams = `category=${category}&parameter_name=${parameterName}`;
@@ -49,18 +49,25 @@ export function constructDataAccessSourceUrl(station, queryParams) {
     /* When no frequency, compute the following */
     if (type === INSITU) {
         // GML query param doesnot take medium (surface/tower) for Insitu
-        let GMLQueryParams = `?site=${siteCode}&type=${type}&${default_queryParams}`;
+        let modType = "Insitu";
+        let GMLQueryParams = `?site=${siteCode}&type=${modType}&${default_queryParams}`;
         let dataAccessUrl = GMLBaseUrl + GMLQueryParams;
         return dataAccessUrl;
     }
 
     if ((type === FLASK || type == PFP) && medium === SURFACE) {
-        // GML query param takes <type>+<medium> as type for PFP and Flask
-        let modType = `${type} ${medium}`.replace(" ", "%2B");
+        // GML query param takes <medium>+<type> as type for PFP and Flask
+        let modType = `${capitalize(medium)} ${type.toUpperCase()}`.replace(" ", "%2B");
         let GMLQueryParams = `?site=${siteCode}&type=${modType}&${default_queryParams}`;
         let dataAccessUrl = GMLBaseUrl + GMLQueryParams;
         return dataAccessUrl;
     }
 
     return GMLBaseUrl;
+}
+
+// helper
+
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
