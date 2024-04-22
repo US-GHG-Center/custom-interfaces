@@ -53,6 +53,7 @@ export const getDataSourceAndLabels = (station, queryParams) => {
     return allDataSourceAndLabelsForStation;
 }
 
+// helper
 
 /**
  * A dictionary containing data sources and labels within the dataset hierarchy.
@@ -144,9 +145,6 @@ const getDataSourceAndLabelsRefDict = (datasetName) => {
         }
     })
 };
-
-
-// helper
 
 /**
  * Generates a modified filename based on the provided filename and frequency.

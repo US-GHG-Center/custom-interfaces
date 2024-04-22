@@ -1,7 +1,7 @@
 import { addMarker } from "../marker";
 import { drawLegend } from "../marker/legend/legend";
 import { openChart } from "../chart";
-import { getStationsMeta, getStationDatas, constructDataAccessSourceUrl } from "../utils";
+import { getStationsMeta, getStationDatas } from "../utils";
 import { parseData } from "./dataPreprocessor";
 import { renderChart } from "../chart";
 import { getDataSourceAndLabels } from "./dataSourceAndLabel";
@@ -82,13 +82,9 @@ export const plotStations = (map, queryParams) => {
 const handleStationClick = async (station, queryParams) => {
     const { ghg, type } = queryParams;
     const { site_code, site_name } = station;
-    openChart();
+    openChart({ ...queryParams });
 
     let dataSourceAndLabels = getDataSourceAndLabels(station, {...queryParams});
-    const dataAccessUrl = constructDataAccessSourceUrl(ghg, type, site_code);
-
-    // Add in data access url link to the selected station
-    document.getElementById("data-source").innerHTML = `<a href="${dataAccessUrl}"> Access data at NOAA ↗ </a>`
 
     // Fetch data and render chart
     try {

@@ -1,6 +1,7 @@
 import { getOptions, plugin } from './config.js';
 import { getDatasets } from './helper/index.js';
 import { setZoomInstructionEvents } from './helper/zoomInstructions.js';
+import { constructDataAccessSourceUrl } from './helper/dataAccessUrl.js';
 
 let chart = null;
 
@@ -49,9 +50,17 @@ export function renderChart(station, datas, selectedGhg, graphsDataLabels) {
  * shows/hides chart. Map covers 50% whereas chart covers 50% of screen realstate.
  * @returns {void}
  */
-export function openChart() {
+export function openChart(queryParams) {
     const mapContainer = document.getElementById("map-container");
     const chartContainerB = document.getElementById("chart-container");
+    const dataSource = document.getElementById("data-source");
+
+    const { ghg, type, site_code } = queryParams;
+    const dataAccessUrl = constructDataAccessSourceUrl(ghg, type, site_code);
+    // Add in data access url link to the selected station
+    dataSource.innerHTML = `
+                            <a href="${dataAccessUrl}"> Access data at NOAA ↗ </a>
+                            `;
     // Show chart and make map half-height
     mapContainer.style.height = "50%";
     chartContainerB.style.height = "50%";
