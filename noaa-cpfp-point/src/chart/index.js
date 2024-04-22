@@ -1,5 +1,6 @@
 import { getOptions, plugin } from './config.js';
 import { getDatasets } from './helper/index.js';
+import { setZoomInstructionEvents } from './helper/zoomInstructions.js';
 
 let chart = null;
 
@@ -17,11 +18,8 @@ let chart = null;
 // Function to render the time series chart
 export function renderChart(station, datas, selectedGhg, graphsDataLabels) {
     const chartContainer = document.getElementById("chart");
-    const zoomInstructions = document.getElementById("zoom-instructions");
-    
-    if (zoomInstructions) {
-        zoomInstructions.style.display = "block"; // Show instructions when not zoomed
-    }
+
+    setZoomInstructionEvents();
 
     if (!!chart) {
         chart.destroy();

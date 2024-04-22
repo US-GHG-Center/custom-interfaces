@@ -1,4 +1,5 @@
 import { GHG, ghgBlue} from '../enumeration.js';
+import { updateZoomInstructions } from "./helper/zoomInstructions.js";
 
 export const plugin = {
     id: "corsair",
@@ -173,15 +174,3 @@ export const getOptions = (station, selectedGhg)=> ({
         },
     },
 });
-
-/**
- * Updates the visibility of zoom instructions.
- * If zoomed, the instructions are hidden.
- * @returns {void}
- */
-function updateZoomInstructions() {
-    const zoomInstructions = document.getElementById("zoom-instructions");
-    if (zoomInstructions) {
-    zoomInstructions.style.display = "none"; // Show instructions when not zoomed
-    }
-}
