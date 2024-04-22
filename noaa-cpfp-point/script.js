@@ -1,4 +1,4 @@
-import { CH4, FLASK, SURFACE, INSITU, PFP, FLASK_PFP} from './src/enumeration.js';
+import { CH4, FLASK, SURFACE } from './src/enumeration.js';
 import { drawTitle } from './src/title/index.js';
 import { plotStations } from "./src/station/index.js";
 import { showOptions } from './src/menu/index.js';
