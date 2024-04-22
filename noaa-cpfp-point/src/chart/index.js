@@ -48,7 +48,7 @@ export function renderChart(station, datas, selectedGhg, graphsDataLabels) {
 }
 
 /**
- * shows/hides chart. And toggles map, menu, legend height when chart is opened.
+ * shows/hides chart. Map covers 50% whereas chart covers 50% of screen realstate.
  * @returns {void}
  */
 export function openChart() {
@@ -58,9 +58,4 @@ export function openChart() {
     mapContainer.style.height = "50%";
     chartContainerB.style.height = "50%";
     chartContainerB.style.display = "block";
-
-    let collectionMechanismDropdownContainer = document.getElementById("collection-mechanism-selection-container");
-    collectionMechanismDropdownContainer.style.height = "54%";
-    let legendContainer = document.getElementById("legend-container");
-    legendContainer.style.height = "61%";
-  }
+}
