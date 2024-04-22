@@ -47,4 +47,6 @@ export function openChart() {
 
     let collectionMechanismDropdownContainer = document.getElementById("collection-mechanism-selection-container");
     collectionMechanismDropdownContainer.style.height = "54%";
+    let legendContainer = document.getElementById("legend-container");
+    legendContainer.style.height = "61%";
   }
