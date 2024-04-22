@@ -82,7 +82,7 @@ export const plotStations = (map, queryParams) => {
 const handleStationClick = async (station, queryParams) => {
     const { ghg, type } = queryParams;
     const { site_code, site_name } = station;
-    openChart({ ...queryParams });
+    openChart(station, { ...queryParams });
 
     let dataSourceAndLabels = getDataSourceAndLabels(station, {...queryParams});
 

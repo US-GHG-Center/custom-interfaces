@@ -50,13 +50,12 @@ export function renderChart(station, datas, selectedGhg, graphsDataLabels) {
  * shows/hides chart. Map covers 50% whereas chart covers 50% of screen realstate.
  * @returns {void}
  */
-export function openChart(queryParams) {
+export function openChart(station, queryParams) {
     const mapContainer = document.getElementById("map-container");
     const chartContainerB = document.getElementById("chart-container");
     const dataSource = document.getElementById("data-source");
 
-    const { ghg, type, site_code } = queryParams;
-    const dataAccessUrl = constructDataAccessSourceUrl(ghg, type, site_code);
+    const dataAccessUrl = constructDataAccessSourceUrl({...station}, {...queryParams});
     // Add in data access url link to the selected station
     dataSource.innerHTML = `
                             <a href="${dataAccessUrl}"> Access data at NOAA ↗ </a>

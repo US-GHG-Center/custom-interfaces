@@ -1,21 +1,66 @@
-import { GHG, CO2, CONTINUOUS, NON_CONTINIOUS, TYPES, FLASK, PFP, INSITU, SURFACE, TOWER, ALL} from "../../enumeration.js";
+import { GHG, CONTINUOUS, NON_CONTINIOUS, FLASK, PFP, INSITU, SURFACE } from "../../enumeration.js";
 
 /**
- * Generates a data source URL for Data Access, based on the specified parameters.
- * 
- * @param {string} [ghg="ch4"] - The greenhouse gas (GHG) type. Default is "ch4".
- * @param {string} [type="flask"] - The type of station. Default is "flask".
- * @param {string} siteCode - The code identifying the specific monitoring site.
- * @returns {string} - The data source URL for accessing the specified data.
+ * Constructs the data access source URL based on the provided station and query parameters.
+ * @param {Object} station - The station object containing information about the station.
+ * @param {Object} station.site_code - The station code.
+ * @param {Object} queryParams - The query parameters.
+ * @param {string} queryParams.ghg - The type of greenhouse gas.
+ * @param {string} queryParams.frequency - The frequency of measurements.
+ * @param {string} queryParams.type - The type of measurement.
+ * @param {string} queryParams.medium - The medium of measurement.
+ * @returns {string} The constructed data access source URL.
  */
-export function constructDataAccessSourceUrl(ghg="ch4", type="flask", siteCode) {
-    // get the data source for access
-    const dataSourceBaseUrl = "https://gml.noaa.gov/dv/data/index.php"
-    let frequency = "Discrete";
-    if (type == "insitu") {
-        frequency="continuous"
+export function constructDataAccessSourceUrl(station, queryParams) {
+    let { ghg, frequency, type, medium } = queryParams;
+    const { site_code: siteCode } = station;
+
+    // default params construct
+    const GMLBaseUrl = "https://gml.noaa.gov/dv/data/index.php"
+    const parameterName = `${GHG[ghg].long.replace(" ", "%2B")}`;
+    const category = "Greenhouse Gases".replace(" ", "%2B");
+    const default_queryParams = `category=${category}&parameter_name=${parameterName}`;
+
+    // var declrn
+    const hourly_averages = "Hourly Averages".replace(" ", "%2B");
+    const discrete = "Discrete";
+
+    // frequency can be empty. And
+    /* frequency has the higher precedence/priority among other query params */
+    if (frequency && frequency === CONTINUOUS) {
+        // frequency = Hourly%2BAverages (for continuous)
+        // will for sure have hourly data in continuous.
+        let GMLQueryParams = `?site=${siteCode}&frequency=${hourly_averages}&${default_queryParams}`;
+        let dataAccessUrl = GMLBaseUrl + GMLQueryParams;
+        return dataAccessUrl;
     }
-    const dataSourceQueryParams = `?type=${TYPES[type].long.replace(" ", "%2B")}&frequency=${frequency}&site=${siteCode}&amp;parameter_name=${GHG[ghg].long.replace(" ", "%2B")}`
-    const dataSource = dataSourceBaseUrl + dataSourceQueryParams;
-    return dataSource
+    if (frequency && frequency === NON_CONTINIOUS) {
+        // frequency = Discrete
+        let GMLQueryParams = `?site=${siteCode}&frequency=${discrete}&${default_queryParams}`;
+        let dataAccessUrl = GMLBaseUrl + GMLQueryParams;
+        return dataAccessUrl;
+    }
+    if (frequency) {
+        let GMLQueryParams = `?site=${siteCode}&${default_queryParams}`;
+        let dataAccessUrl = GMLBaseUrl + GMLQueryParams;
+        return dataAccessUrl;
+    }
+
+    /* When no frequency, compute the following */
+    if (type === INSITU) {
+        // GML query param doesnot take medium (surface/tower) for Insitu
+        let GMLQueryParams = `?site=${siteCode}&type=${type}&${default_queryParams}`;
+        let dataAccessUrl = GMLBaseUrl + GMLQueryParams;
+        return dataAccessUrl;
+    }
+
+    if ((type === FLASK || type == PFP) && medium === SURFACE) {
+        // GML query param takes <type>+<medium> as type for PFP and Flask
+        let modType = `${type} ${medium}`.replace(" ", "%2B");
+        let GMLQueryParams = `?site=${siteCode}&type=${modType}&${default_queryParams}`;
+        let dataAccessUrl = GMLBaseUrl + GMLQueryParams;
+        return dataAccessUrl;
+    }
+
+    return GMLBaseUrl;
 }
