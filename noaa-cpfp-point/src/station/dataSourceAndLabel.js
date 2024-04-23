@@ -109,13 +109,13 @@ const getDataSourceAndLabelsRefDict = (datasetName) => {
         ch4: {
             flask: {
                 surface: {
-                    datasource: `${publicUrl ? publicUrl : ""}/data/processed/ch4/flask/surface/${datasetName}.txt`,
+                    datasource: `${publicUrl ? publicUrl : ""}/data/processed/ch4/flask/surface/${datasetName}.json`,
                     label: `Observed ${GHG[CH4].short} Concentration (Flask)`
                 },
             },
             pfp: {
                 surface: {
-                    datasource: `${publicUrl ? publicUrl : ""}/data/processed/ch4/pfp/surface/${datasetName}.txt`,
+                    datasource: `${publicUrl ? publicUrl : ""}/data/processed/ch4/pfp/surface/${datasetName}.json`,
                     label: `Observed ${GHG[CH4].short} Concentration (PFP)`    
                 }
             },
