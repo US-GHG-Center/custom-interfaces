@@ -5,8 +5,8 @@
 const chartStyles = [
     {
         type: "line",
-        borderColor: "#440154",
-        pointHoverBackgroundColor: "#440154",
+        borderColor: "rgba(68, 1, 84, 0.7)", // egg plant color
+        pointHoverBackgroundColor: "rgba(68, 1, 84, 1)",
         pointHoverBorderColor: "#FFFFFF",
         borderWidth: 2,
         hoverBorderWidth: 3,
@@ -15,9 +15,8 @@ const chartStyles = [
     },
     {
         type: "line",
-        borderColor: "#330154",
-        borderColor: "red",
-        pointHoverBackgroundColor: "#330154",
+        borderColor: "rgba(255, 0, 0, 0.8)", // red
+        pointHoverBackgroundColor: "rgba(255, 0, 0, 1)",
         pointHoverBorderColor: "#FFFFFF",
         borderWidth: 2,
         hoverBorderWidth: 3,
@@ -26,8 +25,8 @@ const chartStyles = [
     },
     {
         type: "line",
-        borderColor: "green",
-        pointHoverBackgroundColor: "#220154",
+        borderColor: "rgba(0, 128, 0, 1)", // green
+        pointHoverBackgroundColor: "rgba(0, 128, 0, 1)",
         pointHoverBorderColor: "#FFFFFF",
         borderWidth: 2,
         hoverBorderWidth: 3,
@@ -37,8 +36,8 @@ const chartStyles = [
     {
         type: "line",
         borderColor: "blue",
-        pointHoverBackgroundColor: "#220154",
-        pointHoverBorderColor: "#FFFFFF",
+        pointHoverBackgroundColor: "rgba(0, 20, 252, 0.8)", // blue
+        pointHoverBorderColor: "rgba(0, 20, 252, 1)",
         borderWidth: 2,
         hoverBorderWidth: 3,
         spanGaps: true,
