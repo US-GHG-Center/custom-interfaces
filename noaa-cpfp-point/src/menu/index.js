@@ -32,15 +32,15 @@ export const showOptions = (queryParams) => {
     collectionMechanismDropdown.addEventListener("change", (e) => {
         let clickedVal = e.target.value;
         if (clickedVal == NON_CONTINIOUS & type != NON_CONTINIOUS) { // and previous is not continuous
-            let newlocation = `${publicUrl}/?ghg=${ghg}&frequency=${NON_CONTINIOUS}`;
+            let newlocation = `${publicUrl}/index.html?ghg=${ghg}&frequency=${NON_CONTINIOUS}`;
             window.location.href = newlocation;
             collectionMechanismDropdown.value = NON_CONTINIOUS;
         } else if (clickedVal == CONTINUOUS & type != CONTINUOUS) { // and previous is discrete
-            let newlocation = `${publicUrl}/?ghg=${ghg}&frequency=${CONTINUOUS}`;
+            let newlocation = `${publicUrl}/index.html?ghg=${ghg}&frequency=${CONTINUOUS}`;
             window.location.href = newlocation;
             collectionMechanismDropdown.value = CONTINUOUS;
         } else if (clickedVal == ALL & type != ALL) { // and previous is discrete
-            let newlocation = `${publicUrl}/?ghg=${ghg}&frequency=${ALL}`;
+            let newlocation = `${publicUrl}/index.html?ghg=${ghg}&frequency=${ALL}`;
             window.location.href = newlocation;
             collectionMechanismDropdown.value = ALL;} 
         else {
