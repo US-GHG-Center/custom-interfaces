@@ -2,7 +2,6 @@ import { addMarker } from "../marker";
 import { drawLegend } from "../marker/legend/legend";
 import { openChart } from "../chart";
 import { getStationsMeta, getStationDatas } from "../utils";
-import { parseData } from "./dataPreprocessor";
 import { renderChart } from "../chart";
 import { getDataSourceAndLabels } from "./dataSourceAndLabel";
 
@@ -105,13 +104,8 @@ const handleStationClick = async (station, queryParams) => {
       // promises to convert them to appropriate json.
       const conversionPromises = [];
       datas.forEach(data => {
-        if (data && data.url && !data.url.includes("insitu")) {
-          let promise = data.text().then(res => parseData(res));
-          conversionPromises.push(promise);
-        } else { // new ones will have json by default
           let promise = data.json();
           conversionPromises.push(promise);
-        }
       });
       let parsedDatas = await Promise.all(conversionPromises);
 

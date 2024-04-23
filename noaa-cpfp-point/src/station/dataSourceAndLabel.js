@@ -72,13 +72,13 @@ const getDataSourceAndLabelsRefDict = (datasetName) => {
         co2: {
             flask: {
                 surface: {
-                    datasource: `${publicUrl ? publicUrl : ""}/data/raw/co2/flask/surface/${datasetName}.txt`,
+                    datasource: `${publicUrl ? publicUrl : ""}/data/processed/co2/flask/surface/${datasetName}.json`,
                     label: `Observed ${GHG[CO2].short} Concentration (Flask)`
                 },
             },
             pfp: {
                 surface: {
-                    datasource: `${publicUrl ? publicUrl : ""}/data/raw/co2/pfp/surface/${datasetName}.txt`,
+                    datasource: `${publicUrl ? publicUrl : ""}/data/processed/co2/pfp/surface/${datasetName}.json`,
                     label: `Observed ${GHG[CO2].short} Concentration (PFP)`    
                 }
             },
@@ -109,13 +109,13 @@ const getDataSourceAndLabelsRefDict = (datasetName) => {
         ch4: {
             flask: {
                 surface: {
-                    datasource: `${publicUrl ? publicUrl : ""}/data/raw/ch4/flask/surface/${datasetName}.txt`,
+                    datasource: `${publicUrl ? publicUrl : ""}/data/processed/ch4/flask/surface/${datasetName}.txt`,
                     label: `Observed ${GHG[CH4].short} Concentration (Flask)`
                 },
             },
             pfp: {
                 surface: {
-                    datasource: `${publicUrl ? publicUrl : ""}/data/raw/ch4/pfp/surface/${datasetName}.txt`,
+                    datasource: `${publicUrl ? publicUrl : ""}/data/processed/ch4/pfp/surface/${datasetName}.txt`,
                     label: `Observed ${GHG[CH4].short} Concentration (PFP)`    
                 }
             },

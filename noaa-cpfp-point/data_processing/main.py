@@ -1,4 +1,4 @@
-""" Module providing a function to processes data from various (insitu) source directories and convert them to visualization ready JSON format. """
+""" Module providing a function to processes data from various source directories and convert them to visualization ready JSON format. """
 import os
 import json
 from viz_data_gen import extact_viz_json
@@ -7,7 +7,7 @@ from utils import get_insitu_filename_wo_daily_data, get_insitu_filename_wo_mont
 
 def main():
     """
-    Processes data from various (insitu) source directories and converts them to visualization ready JSON format.
+    Processes data from various source directories and converts them to visualization ready JSON format.
     Raw insitu data is converted to processed data with specific directories for GHG (Green House Gases).
 
     This function performs the following tasks:
@@ -29,16 +29,22 @@ def main():
     insitu_dest_dirs = ["../data/processed/co2/insitu/surface/", "../data/processed/co2/insitu/tower/",
                 "../data/processed/ch4/insitu/surface/", "../data/processed/ch4/insitu/tower/"]
 
-    for dest_dir in insitu_dest_dirs:
+    # dirs that only need general .txt to .json conversion.
+    data_src_dirs = ["../data/raw/co2/pfp/surface/", "../data/raw/co2/flask/surface/", "../data/raw/ch4/pfp/surface/", "../data/raw/ch4/flask/surface/"]
+    data_dest_dirs = ["../data/processed/co2/pfp/surface/", "../data/processed/co2/flask/surface/", "../data/processed/ch4/pfp/surface/", "../data/processed/ch4/flask/surface/"]
+
+    for dest_dir in insitu_dest_dirs+data_dest_dirs:
         if not os.path.exists(dest_dir):
             os.makedirs(dest_dir)
 
     # Convert the files in the src_dir and store them in the dest dir.
-    for idx, src_dir in enumerate(insitu_src_dirs):
+    txt_src_dirs = data_src_dirs+insitu_src_dirs
+    json_dest_dirs = data_dest_dirs+insitu_dest_dirs
+    for idx, src_dir in enumerate(txt_src_dirs):
         files = get_file_names(src_dir)
         for filename in files:
             src_filepath = src_dir + filename
-            dest_filepath = insitu_dest_dirs[idx] + json_filename(filename)
+            dest_filepath = json_dest_dirs[idx] + json_filename(filename)
             csv_to_json(src_filepath, dest_filepath)
 
     print("Converted the .txt data to visualization ready JSON.")
