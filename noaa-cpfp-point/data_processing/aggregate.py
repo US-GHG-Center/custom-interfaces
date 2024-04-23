@@ -57,6 +57,7 @@ def daily_aggregate(filepath):
             filtered_df = dataframe[mask].reset_index(drop=True)
             # Aggregate data (hourly into daily)
             aggregated_df = filtered_df.groupby(['year', 'month', 'day'])['value'].mean().reset_index()
+            aggregated_df['value'] = aggregated_df['value'].round(2)
             # necessary columns, processed df
             aggregated_df['datetime'] = pd.to_datetime(aggregated_df[['year', 'month', 'day']])
             aggregated_df['datetime'] = aggregated_df['datetime'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
@@ -127,6 +128,7 @@ def monthly_aggregate(filepath):
             filtered_df = dataframe[mask].reset_index(drop=True)
             # Aggregate data (hourly into monthly)
             aggregated_df = filtered_df.groupby(['year', 'month'])['value'].mean().reset_index()
+            aggregated_df['value'] = aggregated_df['value'].round(2)
             # necessary columns, processed df
             aggregated_df['datetime'] = pd.to_datetime(aggregated_df[['year', 'month']].assign(day=1))
             aggregated_df['datetime'] = aggregated_df['datetime'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
