@@ -65,55 +65,36 @@ export const getMarkerStyle = (station, queryParams) => {
     let {ghg, frequency, type, medium} = queryParams;
     let { dataset_project, other_dataset_projects } = station;
 
+    let continuousMarkerClassName = "marker marker-blue";
+    let nonContinuousMarkerClassName = "marker marker-gold";
+
     // frequency can be empty. And
     /* frequency has the higher precedence/priority among other query params */
     if (frequency && frequency === ALL) {
         // color flask surface and pfp surface as one
         if (other_dataset_projects.length > 0 && hasHeterogenousInstrumentTypes([...other_dataset_projects, dataset_project])) { // and heterogenous collection
-            let className = "marker marker-gold";
+            let className = continuousMarkerClassName; // continuous color
             return className;
         }
         // if homogenous group them inside one
         if (dataset_project.includes("flask") || dataset_project.includes("pfp")) {
-            let className = "marker marker-pink-red";
+            let className = nonContinuousMarkerClassName; // non-continuous color
             return className;
         }
         // color insitu surface and tower as one
         if (dataset_project === "tower-insitu" || dataset_project === "surface-insitu") {
-            let className = "marker marker-blue-purple";
+            let className = continuousMarkerClassName;
             return className;
         }
     }
     if (frequency && frequency === CONTINUOUS) {
         // selected insitu tower and surface
         // color surface insitu and tower insitu differently
-        if (other_dataset_projects.length > 0) {
-            let className = "marker marker-purple-blue";
-            return className;
-        }
-        if (dataset_project.includes("tower")) {
-            let className = "marker marker-purple";
-            return className;
-        }
-        if (dataset_project.includes("surface")) {
-            let className = "marker marker-blue";
-            return className;
-        }
+        return continuousMarkerClassName;
     }
     if (frequency && frequency === NON_CONTINIOUS) {
         // selected flask surface and pfp surface
-        if (other_dataset_projects.length > 0) {
-            let className = "marker marker-pink-red";
-            return className;
-        }
-        if (dataset_project.includes("flask")) {
-            let className = "marker marker-pink";
-            return className;
-        }
-        if (dataset_project.includes("pfp")) {
-            let className = "marker marker-red";
-            return className;
-        }
+        return nonContinuousMarkerClassName;
     }
 
     /* When no frequency, compute the following */

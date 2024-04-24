@@ -2,18 +2,18 @@ import { ALL, CONTINUOUS, FLASK, PFP, NON_CONTINIOUS, INSITU, SURFACE, TOWER } f
 
 const legendsDictionary = {
     [CONTINUOUS]: {
-        color: "blue-purple",
-        imageClass: "marker marker-blue-purple",
+        color: "blue",
+        imageClass: "marker marker-blue",
         text: "Surface and Tower In-situ"
     },
     [NON_CONTINIOUS]: {
-        color: "pink-red",
-        imageClass: "marker marker-pink-red",
+        color: "gold",
+        imageClass: "marker marker-gold",
         text: "Flask and PFP"
     },
     [ALL]: {
-        color: "gold",
-        imageClass: "marker marker-gold",
+        color: "blue",
+        imageClass: "marker marker-blue",
         text: "Flask, PFP and In-situ"
     },
     [FLASK]: {
@@ -59,29 +59,26 @@ export const getLegends = (queryParams) => {
     /* frequency has the higher precedence/priority among other query params */
     if (frequency && frequency === ALL) {
         // add in continuous, non-continuous and all legends
-        // let continuous = { ...legendsDictionary[CONTINUOUS] };
-        // continuous.text = "Continuous Measurements (Surface and Tower In-situ)";
         let nonContinuous = { ...legendsDictionary[NON_CONTINIOUS] };
-        nonContinuous.text = "Non-Continuous Measurements (Flask and PFP)";
-        let all = { ...legendsDictionary[ALL] };
-        all.text = "Mixed Measurements (Flask, PFP and In-situ)";
+        nonContinuous.text = "Non-Continuous Measurements";
+        let all = { ...legendsDictionary[ALL] }; // also includes continuous
+        all.text = "Continuous Measurements";
         let legends = [nonContinuous, all]
         return legends;
     }
     if (frequency && frequency === CONTINUOUS) {
         // add in insitu surface, insitu tower legends
         // and continuous legends: skip
-        let insituSurface = { ...legendsDictionary[INSITU][SURFACE] };
-        let insituTower = { ...legendsDictionary[INSITU][TOWER] };
-        let legends = [insituSurface, insituTower];
+        let continuous = { ...legendsDictionary[ALL] }; // also includes continuous
+        continuous.text = "Continuous Measurements";
+        let legends = [continuous];
         return legends;
     }
     if (frequency && frequency === NON_CONTINIOUS) {
         // add in flask surface, PFP surface and non-continuous legends
-        let flaskSurface = { ...legendsDictionary[FLASK][SURFACE] };
-        let pfpSurface = { ...legendsDictionary[PFP][SURFACE] };
         let nonContinuous = { ...legendsDictionary[NON_CONTINIOUS] };
-        let legends = [flaskSurface, pfpSurface, nonContinuous];
+        nonContinuous.text = "Non-Continuous Measurements";
+        let legends = [nonContinuous];
         return legends;
     }
 
