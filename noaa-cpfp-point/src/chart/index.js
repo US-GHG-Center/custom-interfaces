@@ -71,6 +71,7 @@ export function openChart(station, queryParams) {
         mapContainer.style.height = "100%";
         chartContainerB.style.height = "0%";
         chartContainerB.style.display = "none";
+        if (chart) chart.clear();
     });
 
 }
