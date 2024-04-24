@@ -17,7 +17,7 @@ export const drawLegend = (queryParams) => {
         return
     }
 
-    let legendsDOMString = `<div id="legend-head">Legends</div>
+    let legendsDOMString = `<div id="legend-head">Legend</div>
                             <div id="legend-line"></div>`;
     legends.forEach( legend => {
         let { text, imageClass } = legend;
