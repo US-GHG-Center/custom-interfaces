@@ -54,6 +54,7 @@ export function openChart(station, queryParams) {
     const mapContainer = document.getElementById("map-container");
     const chartContainerB = document.getElementById("chart-container");
     const dataSource = document.getElementById("data-source");
+    const closeButton = document.getElementById("chart-close-button");
 
     const dataAccessUrl = constructDataAccessSourceUrl({...station}, {...queryParams});
     // Add in data access url link to the selected station
@@ -64,4 +65,12 @@ export function openChart(station, queryParams) {
     mapContainer.style.height = "50%";
     chartContainerB.style.height = "50%";
     chartContainerB.style.display = "block";
+
+    // add event listner to chart-close-button
+    closeButton.addEventListener("click", () => {
+        mapContainer.style.height = "100%";
+        chartContainerB.style.height = "0%";
+        chartContainerB.style.display = "none";
+    });
+
 }
