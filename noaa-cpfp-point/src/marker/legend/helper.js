@@ -63,7 +63,7 @@ export const getLegends = (queryParams) => {
         nonContinuous.text = "Non-Continuous Measurements";
         let all = { ...legendsDictionary[ALL] }; // also includes continuous
         all.text = "Continuous Measurements";
-        let legends = [nonContinuous, all]
+        let legends = [all, nonContinuous]
         return legends;
     }
     if (frequency && frequency === CONTINUOUS) {
