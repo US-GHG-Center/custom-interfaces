@@ -59,7 +59,7 @@ export function openChart(station, queryParams) {
     const dataAccessUrl = constructDataAccessSourceUrl({...station}, {...queryParams});
     // Add in data access url link to the selected station
     dataSource.innerHTML = `
-                            <a href="${dataAccessUrl}"> Access data at NOAA ↗ </a>
+                            <a href="${dataAccessUrl}" target="_blank"> Access data at NOAA ↗ </a>
                             `;
     // Show chart and make map half-height
     mapContainer.style.height = "50%";
