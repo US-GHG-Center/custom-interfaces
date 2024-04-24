@@ -1,2 +1,7 @@
 node_modules/*
 dist/*
+tmp/*
+temp/*
+tmp.json
+temp.json
+__pycache__/

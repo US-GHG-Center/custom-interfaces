@@ -22,15 +22,21 @@ body {
 
 #zoom-instructions {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: rgba(255, 255, 255, 0.8);
+    top: 17px;
+    left: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 10px;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     z-index: 1000;
     display: none;
-    font-size: 12px;
+    font-size: 11px;
+}
+
+#zoom-instruction-info-circle {
+    position: absolute;
+    top: 5px;
+    left: 8px;
 }
 
 /* Full-screen map container */
@@ -79,13 +85,45 @@ body {
 }
 
 .marker {
-    background-image: url('marker-sdf.png');
+    background-image: url('./public/marker-default.png');
     background-size: cover;
     width: 30px;
     height: 30px;
     border-radius: 50%;
     cursor: pointer;
     /* box-shadow: 1px 1px white; */
+}
+
+.marker-gold {
+    background-image: url('./public/marker-gold.png');
+}
+
+.marker-tower {
+    background-image: url('./public/marker-tower.png');
+}
+
+.marker-pink-red {
+    background-image: url('./public/marker-pink-red.png');
+}
+
+.marker-pink {
+    background-image: url('./public/marker-pink.png');
+}
+
+.marker-red {
+    background-image: url('./public/marker-red.png');
+}
+
+.marker-blue-purple {
+    background-image: url('./public/marker-blue-purple.png');
+}
+
+.marker-blue {
+    background-image: url('./public/marker-blue.png');
+}
+
+.marker-purple {
+    background-image: url('./public/marker-purple.png');
 }
 
 #logo {
@@ -97,16 +135,83 @@ body {
 
 #data-source {
     display: flex;
-    padding-top: 6px;
     justify-content: center;
     font-size: 14px;
     position: absolute;
-    top: 10px;
+    top: 46px;
     right: 10px;
+}
+
+#chart-close-button {
+    display: flex;
+    padding: 6px;
+    justify-content: center;
+    font-size: 24px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #eadede1c;
 }
 
 a {
     text-decoration: none;
     /* color: inherit; */
     color: "#082A63" !important;
+}
+
+#collection-mechanism-selection-container {
+    position: absolute;
+    display: block;
+    font-size: 14px;
+    bottom: 5%;
+    left: 10px;
+}
+
+#collection-mechanism {
+    position: relative;
+    padding: 10px 24px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    border: rgba(27, 26, 26, 0.9);
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+#legend-container {
+    position: absolute;
+    display: block;
+    font-size: 14px;
+    bottom: 5%;
+    right: 10px;
+}
+
+#legend {
+    position: relative;
+    padding: 10px 24px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+#legend-head {
+    font-size: 16px;
+    margin-bottom: 7px;
+    text-align: center;
+}
+
+#legend-line {
+    border-top: 1px solid rgba(74, 69, 69, 0.2);
+    margin-bottom: 7px;
+}
+
+.legend-element {
+    display: flex;
+    align-items: center; /* Align items vertically */
+}
+
+.legend-text {
+    margin-left: 4px;
 }
