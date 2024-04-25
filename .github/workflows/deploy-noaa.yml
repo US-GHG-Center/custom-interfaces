@@ -90,8 +90,7 @@ jobs:
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NOAA }} | sed -E 's|^https?://[^/]+/||')
           echo $PUBLIC_URL
           aws s3 cp "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-develop/${PUBLIC_URL}/ --recursive
-          aws s3 sync "./noaa-cpfp-point/flask" s3://ghgc-custom-interfaces-develop/${PUBLIC_URL}/flask/
-          aws s3 sync "./noaa-cpfp-point/surface-pfp" s3://ghgc-custom-interfaces-develop/${PUBLIC_URL}/surface-pfp/
+          aws s3 cp "./noaa-cpfp-point/data" s3://ghgc-custom-interfaces-develop/${PUBLIC_URL}/data/ --recursive
         env:
           PUBLIC_URL: ${{ vars.PUBLIC_URL_NOAA }}
 
@@ -131,8 +130,7 @@ jobs:
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NOAA }} | sed -E 's|^https?://[^/]+/||')
           echo $PUBLIC_URL
           aws s3 cp "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ --recursive
-          aws s3 sync "./noaa-cpfp-point/flask" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/flask/
-          aws s3 sync "./noaa-cpfp-point/surface-pfp" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/surface-pfp/
+          aws s3 cp "./noaa-cpfp-point/data" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/data/ --recursive
         env:
           PUBLIC_URL: ${{ vars.PUBLIC_URL_NOAA }}
 
@@ -171,7 +169,6 @@ jobs:
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NOAA }} | sed -E 's|^https?://[^/]+/||')
           echo $PUBLIC_URL
           aws s3 cp "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/ --recursive
-          aws s3 sync "./noaa-cpfp-point/flask" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/flask/
-          aws s3 sync "./noaa-cpfp-point/surface-pfp" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/surface-pfp/
+          aws s3 cp "./noaa-cpfp-point/data" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/data/ --recursive
         env:
           PUBLIC_URL: ${{ vars.PUBLIC_URL_NOAA }}
