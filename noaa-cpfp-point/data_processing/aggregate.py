@@ -168,6 +168,6 @@ if __name__ == "__main__":
     if result is not None:
         print(result)
         # save the json file for reference
-        out_path = f"{hourly_data_filepath.split("/")[-1]}.json"
+        out_path = f"{hourly_data_filepath.split('/')[-1]}.json"
         with open(out_path, "w", encoding="utf-8") as file:
             json.dump(result, file)
