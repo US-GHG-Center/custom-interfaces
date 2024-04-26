@@ -93,7 +93,7 @@ def combine_to_name(row):
         filename = combine_to_name({"ghg": "co2", "station": "crv", "medium-type": "tower"})
     """
     # ref: co2_crv_tower-insitu_1_ccgg_HourlyData.txt
-    return f"{row["ghg"]}_{row["station"]}_{row["medium-type"]}_1_ccgg_HourlyData.txt"
+    return f"{row['ghg']}_{row['station']}_{row['medium-type']}_1_ccgg_HourlyData.txt"
 
 def get_file_names(base_dir):
     """
