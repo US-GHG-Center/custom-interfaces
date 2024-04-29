@@ -1,0 +1,205 @@
+# header_lines : 147
+#
+# ------------------------------------------------------------->>>>
+# DATA SET NAME
+#
+# dataset_name: ch4_klm_surface-pfp_1_ccgg_event
+#
+# ------------------------------------------------------------->>>>
+# DESCRIPTION
+#
+# dataset_description: Atmospheric Methane Dry Air Mole Fractions from NOAA GML Tall Tower and other Continental Sites  2005-Present
+#
+# ------------------------------------------------------------->>>>
+# CITATION
+#
+# dataset_citation: Andrews, A., Crotwell, A., Crotwell, M., Handley, P., Higgs, J., Kofler, J., Lan, X., Legard, T., Madronich, M., McKain, K., Miller, J., Moglia, E., Mund, J., Neff, D., Newberger, T., Petron, G., Turnbull, J., Vimont, I., Wolter, S., & NOAA Global Monitoring Laboratory. (2023). NOAA Global Greenhouse Gas Reference Network Flask-Air PFP Sample Measurements of CH4 at Tall Tower and other Continental Sites, 2005-Present [Data set]. NOAA GML. https://doi.org/10.15138/35JE-6D55 Version: 2023-08-23.
+#
+# ------------------------------------------------------------->>>>
+# FAIR USE POLICY
+#
+# dataset_fair_use: These data are made freely available to the public and the scientific community in the belief that their wide dissemination will lead to greater understanding and new scientific insights. To ensure that GML receives fair credit for their work please include relevant citation text in publications. We encourage users to contact the data providers, who can provide detailed information about the measurements and scientific insight.  In cases where the data are central to a publication, coauthorship for data providers may be appropriate. 
+#
+# ------------------------------------------------------------->>>>
+# WARNING
+#
+# dataset_warning: Every effort is made to produce the most accurate and precise measurements possible.  However, we reserve the right to make corrections to the data based on recalibration of standard gases or for other reasons deemed scientifically justified.  We are not responsible for results and conclusions based on use of these data without regard to this warning.
+#
+# ------------------------------------------------------------->>>>
+# GLOBAL ATTRIBUTES
+#
+# site_code : KLM
+# site_name : Kohler Mesa, Boulder, Colorado
+# site_country : United States
+# site_country_flag : https://gml.noaa.gov/webdata/ccgg/ObsPack/images/flags/UNST0001.GIF
+# site_latitude : 39.99
+# site_longitude : -105.27
+# site_elevation : 1725.0
+# site_elevation_unit : masl
+# site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
+# site_utc2lst : -7.0
+# site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
+# dataset_creation_date : 2023-08-23T12:43:40.384141
+# dataset_num : 36
+# dataset_name : ch4_klm_surface-pfp_1_ccgg_event
+# dataset_parameter : ch4
+# dataset_parameter_name : Methane
+# dataset_parameter_industrial_name : Methane
+# dataset_project : surface-pfp
+# dataset_platform : fixed
+# dataset_selection : event
+# dataset_selection_tag : event
+# dataset_comment : PFP test site on Kohler Mesa just west of NOAA in Boulder, Colorado.
+# dataset_calibration_scale : CH4_X2004A
+# dataset_start_date : 2006-02-22T20:21:00Z
+# dataset_stop_date : 2006-06-29T19:14:13Z
+# dataset_usage_description : Please cite the product's citation when using data from this dataset.
+# dataset_provider_license : These data were produced by NOAA and are not subject to copyright protection in the United States. NOAA waives any potential copyright and related rights in these data worldwide through the Creative Commons Zero 1.0 Universal Public Domain Dedication (CC0-1.0).
+# dataset_reference_total_listed : 0
+# dataset_contribution : These data are provided by NOAA. Principal investigators include Xin Lan (NOAA).
+# lab_total_listed : 1
+# lab_1_number : 1
+# lab_1_abbr : NOAA
+# lab_1_name : NOAA Global Monitoring Laboratory
+# lab_1_address1 : 325 Broadway
+# lab_1_address2 : NOAA R/GML-1
+# lab_1_address3 : Boulder, CO 80305-3328
+# lab_1_country : United States
+# lab_1_url : https://gml.noaa.gov/ccgg/
+# lab_1_parameter : Lab has contributed measurements for: ch4
+# lab_1_country_flag : https://gml.noaa.gov/webdata/ccgg/ObsPack/images/flags/UNST0001.GIF
+# lab_1_logo : https://gml.noaa.gov/webdata/ccgg/ObsPack/images/logos/noaa_medium.png
+# lab_1_ongoing_atmospheric_air_comparison : T
+# provider_total_listed : 1
+# provider_1_name : Xin Lan
+# provider_1_address1 : NOAA GML
+# provider_1_address2 : 325 Broadway R/GML-1
+# provider_1_address3 : Boulder, CO 80305-3328
+# provider_1_country : United States
+# provider_1_affiliation : National Oceanic and Atmospheric Administration
+# provider_1_email : Xin.Lan@noaa.gov
+# provider_1_parameter : Provider has contributed measurements for: ch4
+# ------------------------------------------------------------->>>>
+# VARIABLE ATTRIBUTES
+#
+# site_code:long_name : site_name_abbreviation.
+# site_code:comment : Site code is an abbreviation for the sampling site name.
+# time_components:_FillValue : -9
+# time_components:long_name : integer_components_of_UTC_date/time
+# time_components:order : year, month, day, hour, minute, second
+# time_components:comment : Calendar time components as integers. Times and dates are UTC. Time-averaged values are reported at the start of the averaging interval.
+# datetime:long_name : air_sample_date_and_time_in_UTC
+# datetime:comment : Air sample date and time in UTC ISO 8601 format. Time-averaged values are reported at the start of the averaging interval.
+# time_decimal:_FillValue : -999.999
+# time_decimal:long_name : sample_decimal_year_in_UTC
+# time_decimal:comment : decimal year in UTC. Time-averaged values are reported at the start of the averaging interval.
+# air_sample_container_id:long_name : Air_Sample_Container_ID
+# air_sample_container_id:comment : ID of air sample container. See provider_comment if available.
+# value:_FillValue : -999.999
+# value:long_name : measured_mole_fraction_of_trace_gas_in_dry_air
+# value:units : nanomol mol-1
+# value:comment : Mole fraction reported in units of nanomol mol-1 (10-9 mol per mol of dry air); abbreviated as ppb (parts per billion).
+# value:scale_comment : CH4_X2004A
+# value_unc:_FillValue : -999.999
+# value_unc:long_name : estimated_uncertainty_in_reported_value
+# value_unc:units : nanomol mol-1
+# value_unc:comment : This is the estimated uncertainty of the reported value. See provider_comment if available.
+# latitude:_FillValue : -999.999
+# latitude:standard_name : latitude
+# latitude:long_name : sample_latitude_in_decimal_degrees
+# latitude:units : degrees_north
+# latitude:comment : Latitude at which air sample was collected.
+# longitude:_FillValue : -999.999
+# longitude:standard_name : longitude
+# longitude:long_name : sample_longitude_in_decimal_degrees
+# longitude:units : degrees_east
+# longitude:comment : Longitude at which air sample was collected using a range of -180 degrees to +180 degrees.
+# altitude:_FillValue : -999.999
+# altitude:standard_name : altitude
+# altitude:long_name : sample_altitude_in_meters_above_sea_level
+# altitude:units : m
+# altitude:comment : Altitude (in meters above sea level). See provider_comment if available.
+# altitude:provider_comment : Altitude for this dataset is the sum of surface elevation (masl) and sample intake height (magl).
+# elevation:_FillValue : -999.999
+# elevation:standard_name : elevation
+# elevation:long_name : surface_elevation_in_meters_above_sea_level
+# elevation:units : m
+# elevation:comment : Surface elevation in meters above sea level. See provider_comment if available.
+# intake_height:_FillValue : -999.999
+# intake_height:long_name : sample_intake_height_in_meters_above_ground_level
+# intake_height:units : m
+# intake_height:comment : Sample intake height in meters above ground level (magl). See provider_comment if available.
+# method:long_name : air_sample_collection_method
+# method:comment : Air sample collection method. See provider_comment if available.
+# method:provider_comment : A single-character code is used to identify the sample collection method. The codes are: A - The automated or manual filling of a whole air sample using the Programmable Flask Package (PFP) and Programmable Compressor Package (PCP)air sampling devices. The air sample is contained in a 0.7 liter borosilicate glass container (flask) fitted with two Glass Expansion high vacuum glass piston valves sealed with PTFE O-rings. The flasks are typically flushed with 10 liters (aircraft samples) or 75 liters (tower samples) of ambient air and then pressurized to 40 psia. Air is delivered through an intake tube using two diaphragm pumps connected in series and controlled with a microprocessor. The flow rate is approximately 15 L/min at sea level. See Sweeney et al. 2015 and Andrews et al. 2014 for more details. C - Air samples are collected as with method 'A', but the sample air is dried before sample collection. Flasks are not pre-filled with ambient air before flushing and collecting the air sample. I - Air is sampled from a 15L spherical stainless steel mixing volume after being filled with ambient air that was pulled through an M&C Techgroup Model ECP 20-2 gas chiller using an integrating compressor and mass flow controller. The two stainless steel dryer traps are plumbed in series, held at approximately 5 degrees C and the condensed water is removed with a peristaltic pump. Prior to sample collection, an additional glass conditioning step known as "prefilling" occurs where the glass containers are flushed and filled with ambient air and then vented and flushed immediately before air sample collection. This is a glass conditioning step that addresses glass wall effects of the gases of interest. After 'prefilling', the integration starts with a high flow rate of 3.8 SLM and decreases over time to 0.29 SLM over 1 hour. The resulting one hour time averaged ambient air sample is compressed into a 0.75 liter borosilicate glass container (flask) fitted with 2 Glass Expansion high vacuum glass valves and PTFE O-rings. The flask is typically filled to 40 psia. (See Turnbull, J.C., Guenther, D., Karion, A., Sweeney, C., Anderson, E., Andrews, A.E., Kofler, J., Miles, N.L., Newberger, T., Richardson, S.J., Tans, P.P., 2012. An integrated flask sample collection system for greenhouse gas measurements. Atmos. Meas. Tech. 5, 2321-2327.) B - Air samples are collected as with method 'R', but with an additional drying step using one of several techniques. In one method, e.g. site=ACT, air samples were dried with a two-stage chiller cooled to 5 degrees C; those taken below 3000 m MSL were also pressurized to 40 psia to further facilitate air sample drying (Baier et al. 2019). At tower sampling sites, M&C chillers with temperatures set to approximately 3 degrees C and sub-ambient pressure due to high flow are used (Andrew et al. 2014). At CRV tower, a two-stage chiller set to -26 degrees C is used. R - Air samples are collected as with method 'A', but with an additional glass conditioning step known as "prefilling". During prefilling, the glass containers are flushed and filled with ambient air and then vented and flushed immediately before air sample collection. This is a glass conditioning step that addresses glass wall effects of the gasses of interest (Andrews et al. 2014). X - Testing method for pfp drying experiments. CP-> chiller pressurized
+# event_number:long_name : Unique_Air_Sample_Event_Number
+# event_number:comment : Identifies each discrete air sample collected at some time and location with a unique sample event number.  The event number (reported as a string) can be used to relate measurements of different trace gases and isotopes from the same sample.
+# instrument:long_name : instrument_ID_to_detect_atmospheric_parameter
+# instrument:comment : Instrument ID used to detect atmospheric parameter. See provider_comment if available.
+# analysis_datetime:long_name : air_sample_measurement_date_and_time_in_LT
+# analysis_datetime:comment : Air sample measurement date and time in LT. See provider_comment if available.
+# qcflag:long_name : quality_control_flag
+# qcflag:comment : This quality control flag is provided by the contributing PIs. See provider_comment if available.
+# qcflag:provider_comment : This is the NOAA 3-character quality control flag.  Column 1 is the REJECTION flag. An alphanumeric other than a period (.) in the FIRST column indicates a sample with obvious problems during collection or analysis. This measurement should not be interpreted. Column 2 is the SELECTION flag. An alphanumeric other than a period (.) in the SECOND column indicates a sample that is likely valid but does not meet selection criteria determined by the goals of a particular investigation. For example, it might not have been obtained during 'background' conditions.  Column 3 is the INFORMATION flag. An alphanumeric other than a period (.) in the THIRD column provides additional information about the collection or analysis of the sample. A P in the 3rd column of the QC flag indicates the measurement result is preliminary and has not yet been carefully examined by the PI.  The P flag is removed once the quality of the measurement has been determined.
+#
+# VARIABLE ORDER
+#
+site_code year month day hour minute second datetime time_decimal air_sample_container_id value value_unc latitude longitude altitude elevation intake_height method event_number instrument analysis_datetime qcflag
+KLM 2006 2 22 20 21 0 2006-02-22T20:21:00Z 2006.1447888127855 3019-01 1845.79 2.05 39.98 -105.26 1729.0 1725.0 4.0 A 213519 H4 2006-03-06T17:56:00 ...
+KLM 2006 2 22 21 21 0 2006-02-22T21:21:00Z 2006.1449029680366 3019-02 1842.4 2.05 39.98 -105.26 1729.0 1725.0 4.0 A 213520 H4 2006-03-06T18:11:00 ...
+KLM 2006 2 22 22 21 0 2006-02-22T22:21:00Z 2006.1450171232877 3019-03 1847.99 2.05 39.98 -105.26 1729.0 1725.0 4.0 A 213521 H4 2006-03-06T18:26:00 ...
+KLM 2006 2 22 23 21 0 2006-02-22T23:21:00Z 2006.1451312785389 3019-04 1849.65 2.05 39.98 -105.26 1729.0 1725.0 4.0 A 213522 H4 2006-03-06T18:40:00 ...
+KLM 2006 2 23 8 6 0 2006-02-23T08:06:00Z 2006.1461301369864 3019-05 1872.24 2.05 39.98 -105.26 1729.0 1725.0 4.0 A 213523 H4 2006-03-06T18:55:00 ...
+KLM 2006 2 23 9 6 0 2006-02-23T09:06:00Z 2006.1462442922375 3019-06 1867.52 2.05 39.98 -105.26 1729.0 1725.0 4.0 A 213524 H4 2006-03-06T19:10:00 ...
+KLM 2006 2 23 10 6 0 2006-02-23T10:06:00Z 2006.1463584474886 3019-07 1867.3 2.05 39.98 -105.26 1729.0 1725.0 4.0 A 213525 H4 2006-03-06T19:25:00 ...
+KLM 2006 2 23 15 11 0 2006-02-23T15:11:00Z 2006.146938736682 3019-10 1849.03 2.05 39.98 -105.26 1729.0 1725.0 4.0 A 213526 H4 2006-03-06T19:40:00 ...
+KLM 2006 2 23 16 11 0 2006-02-23T16:11:00Z 2006.147052891933 3019-11 1909.15 2.05 39.98 -105.26 1729.0 1725.0 4.0 A 213527 H4 2006-03-06T19:54:00 ...
+KLM 2006 2 23 17 11 0 2006-02-23T17:11:00Z 2006.1471670471842 3019-12 1840.38 2.05 39.98 -105.26 1729.0 1725.0 4.0 A 213528 H4 2006-03-06T20:09:00 ...
+KLM 2006 3 21 20 5 57 2006-03-21T20:05:57Z 2006.218732781583 3019-01 2027.58 1.31 39.99 -105.27 1729.0 1725.0 4.0 A 214212 H6 2006-03-22T12:19:00 ...
+KLM 2006 3 21 21 5 57 2006-03-21T21:05:57Z 2006.218846936834 3019-02 2016.09 1.31 39.99 -105.27 1729.0 1725.0 4.0 A 214213 H6 2006-03-22T12:35:00 ...
+KLM 2006 3 21 22 5 56 2006-03-21T22:05:56Z 2006.2189610603755 3019-03 2005.53 1.31 39.99 -105.27 1729.0 1725.0 4.0 A 214214 H6 2006-03-22T12:50:00 ...
+KLM 2006 3 21 23 15 56 2006-03-21T23:15:56Z 2006.2190942415018 3019-04 1952.82 1.31 39.99 -105.27 1729.0 1725.0 4.0 A 214215 H6 2006-03-22T13:05:00 ...
+KLM 2006 3 22 2 15 56 2006-03-22T02:15:56Z 2006.2194367072552 3019-05 1937.79 1.31 39.99 -105.27 1729.0 1725.0 4.0 A 214216 H6 2006-03-22T13:20:00 ...
+KLM 2006 3 22 3 15 56 2006-03-22T03:15:56Z 2006.2195508625064 3019-06 1935.7 1.31 39.99 -105.27 1729.0 1725.0 4.0 A 214217 H6 2006-03-22T13:35:00 ...
+KLM 2006 3 22 4 15 57 2006-03-22T04:15:57Z 2006.2196650494673 3019-07 1946.8 1.31 39.99 -105.27 1729.0 1725.0 4.0 A 214218 H6 2006-03-22T13:50:00 ...
+KLM 2006 3 22 5 20 56 2006-03-22T05:20:56Z 2006.2197886859462 3019-08 1974.06 1.31 39.99 -105.27 1729.0 1725.0 4.0 A 214219 H6 2006-03-22T14:05:00 ...
+KLM 2006 3 22 6 20 57 2006-03-22T06:20:57Z 2006.2199028729071 3019-09 1966.62 1.31 39.99 -105.27 1729.0 1725.0 4.0 A 214220 H6 2006-03-22T14:20:00 ...
+KLM 2006 3 22 8 20 57 2006-03-22T08:20:57Z 2006.2201311834094 3019-10 1966.66 1.31 39.99 -105.27 1729.0 1725.0 4.0 A 214221 H6 2006-03-22T14:35:00 ...
+KLM 2006 3 22 9 25 55 2006-03-22T09:25:55Z 2006.2202547881786 3019-11 1967.53 1.31 39.99 -105.27 1729.0 1725.0 4.0 A 214222 H6 2006-03-22T14:50:00 ...
+KLM 2006 3 22 10 26 0 2006-03-22T10:26:00Z 2006.2203691019788 3019-12 1976.18 1.31 39.99 -105.27 1729.0 1725.0 4.0 A 214223 H6 2006-03-22T15:06:00 ...
+KLM 2006 6 15 1 6 16 2006-06-15T01:06:16Z 2006.4521808726536 3019-01 1799.54 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218434 H4 2006-06-16T20:13:00 ...
+KLM 2006 6 15 2 6 16 2006-06-15T02:06:16Z 2006.4522950279047 3019-02 1798.6 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218435 H4 2006-06-16T20:28:00 ...
+KLM 2006 6 15 3 6 16 2006-06-15T03:06:16Z 2006.4524091831559 3019-03 1794.8 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218436 H4 2006-06-16T20:43:00 ...
+KLM 2006 6 15 4 6 16 2006-06-15T04:06:16Z 2006.452523338407 3019-04 1794.31 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218437 H4 2006-06-16T20:58:00 ...
+KLM 2006 6 15 5 11 15 2006-06-15T05:11:15Z 2006.4526469748857 3019-05 1801.96 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218438 H4 2006-06-16T21:13:00 ...
+KLM 2006 6 15 7 11 15 2006-06-15T07:11:15Z 2006.452875285388 3019-06 1890.67 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218439 H4 2006-06-16T21:27:00 ...
+KLM 2006 6 15 8 11 18 2006-06-15T08:11:18Z 2006.4529895357687 3019-07 1884.58 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218440 H4 2006-06-16T21:42:00 ...
+KLM 2006 6 15 9 11 16 2006-06-15T09:11:16Z 2006.4531036276003 3019-08 1855.06 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218441 H4 2006-06-16T21:57:00 ...
+KLM 2006 6 15 10 21 16 2006-06-15T10:21:16Z 2006.4532368087266 3019-09 1850.1 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218442 H4 2006-06-16T22:12:00 ...
+KLM 2006 6 15 11 21 16 2006-06-15T11:21:16Z 2006.4533509639778 3019-10 1837.95 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218443 H4 2006-06-16T22:26:00 ...
+KLM 2006 6 15 13 21 16 2006-06-15T13:21:16Z 2006.45357927448 3019-11 1861.23 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218444 H4 2006-06-16T22:41:00 ...
+KLM 2006 6 15 14 21 17 2006-06-15T14:21:17Z 2006.453693461441 3019-12 1865.86 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218445 H4 2006-06-16T22:56:00 ...
+KLM 2006 6 28 21 19 8 2006-06-28T21:19:08Z 2006.4901048959919 3034-01 1815.52 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218919 H4 2006-07-01T05:19:00 ...
+KLM 2006 6 28 21 19 14 2006-06-28T21:19:14Z 2006.4901050862507 3065-01 1819.94 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218931 H4 2006-06-30T18:45:00 ...
+KLM 2006 6 29 0 44 8 2006-06-29T00:44:08Z 2006.4904949264333 3034-02 1803.65 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218920 H4 2006-07-01T05:34:00 ...
+KLM 2006 6 29 0 44 14 2006-06-29T00:44:14Z 2006.490495116692 3065-02 1805.63 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218932 H4 2006-06-30T19:00:00 ...
+KLM 2006 6 29 2 44 8 2006-06-29T02:44:08Z 2006.4907232369355 3034-03 1808.99 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218921 H4 2006-07-01T05:48:00 ...
+KLM 2006 6 29 2 44 13 2006-06-29T02:44:13Z 2006.4907233954846 3065-03 1805.23 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218933 H4 2006-06-30T19:15:00 ...
+KLM 2006 6 29 4 44 8 2006-06-29T04:44:08Z 2006.4909515474378 3034-04 1806.79 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218922 H4 2006-07-01T06:03:00 ...
+KLM 2006 6 29 4 44 14 2006-06-29T04:44:14Z 2006.4909517376966 3065-04 1810.07 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218934 H4 2006-06-30T19:30:00 ...
+KLM 2006 6 29 6 49 8 2006-06-29T06:49:08Z 2006.4911893708777 3034-05 1813.7 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218923 H4 2006-07-01T06:18:00 ...
+KLM 2006 6 29 6 49 15 2006-06-29T06:49:15Z 2006.4911895928462 3065-05 1810.39 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218935 H4 2006-06-30T19:44:00 ...
+KLM 2006 6 29 8 14 8 2006-06-29T08:14:08Z 2006.4913510908168 3034-06 1816.91 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218924 H4 2006-07-01T06:33:00 ...
+KLM 2006 6 29 8 14 14 2006-06-29T08:14:14Z 2006.4913512810756 3065-06 1815.43 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218936 H4 2006-06-30T19:59:00 ...
+KLM 2006 6 29 10 19 8 2006-06-29T10:19:08Z 2006.4915889142567 3034-07 1810.09 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218925 H4 2006-07-01T06:47:00 ...
+KLM 2006 6 29 10 19 13 2006-06-29T10:19:13Z 2006.4915890728057 3065-07 1810.3 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218937 H4 2006-06-30T20:14:00 ...
+KLM 2006 6 29 12 4 13 2006-06-29T12:04:13Z 2006.4917888444952 3065-08 1806.16 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218938 H4 2006-06-30T20:29:00 ...
+KLM 2006 6 29 12 39 8 2006-06-29T12:39:08Z 2006.4918552765093 3034-08 1806.04 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218926 H4 2006-07-01T07:02:00 ...
+KLM 2006 6 29 14 19 8 2006-06-29T14:19:08Z 2006.4920455352612 3034-09 1824.29 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218927 H4 2006-07-01T07:17:00 ...
+KLM 2006 6 29 14 19 13 2006-06-29T14:19:13Z 2006.4920456938103 3065-09 1827.69 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218939 H4 2006-06-30T20:43:00 ...
+KLM 2006 6 29 16 9 8 2006-06-29T16:09:08Z 2006.4922548198883 3034-10 1824.08 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218928 H4 2006-07-01T07:32:00 ...
+KLM 2006 6 29 16 9 14 2006-06-29T16:09:14Z 2006.4922550101471 3065-10 1825.37 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218940 H4 2006-06-30T20:58:00 ...
+KLM 2006 6 29 17 4 8 2006-06-29T17:04:08Z 2006.4923594622019 3034-11 1818.43 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218929 H4 2006-07-01T07:47:00 ...
+KLM 2006 6 29 17 4 13 2006-06-29T17:04:13Z 2006.492359620751 3065-11 1822.45 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218941 H4 2006-06-30T21:13:00 ...
+KLM 2006 6 29 19 14 8 2006-06-29T19:14:08Z 2006.4926067985793 3034-12 1831.82 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218930 H4 2006-07-01T08:01:00 ...
+KLM 2006 6 29 19 14 13 2006-06-29T19:14:13Z 2006.4926069571284 3065-12 1834.49 2.05 39.99 -105.27 1729.0 1725.0 4.0 A 218942 H4 2006-06-30T21:28:00 ...
