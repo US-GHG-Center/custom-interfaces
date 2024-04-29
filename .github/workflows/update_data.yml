@@ -22,6 +22,14 @@ jobs:
       - name: Run the data download script
         run: ./noaa-cpfp-point/download.sh
 
+      # Runs the data preprocessing and aggregation on the extracted files
+      - name: Run data preprocessing and aggregation on the downloaded data
+        run: |
+          cd ./noaa-cpfp-point/data_processing
+          pip install -r ./requirements.txt
+          python3 ./main.py
+          cd ..
+
       - name: Set current date as env variable
         run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
@@ -33,7 +41,7 @@ jobs:
             commit_message: Update data
             create_branch: true
             branch: update-data-${{ env.NOW }}
-            file_pattern: 'flask/*/*.txt surface-pfp/*/*.txt'
+            file_pattern: 'data/**'
 
       # Create a PR from the new branch (if there was a change) to main
       - name: Create pull request to main
