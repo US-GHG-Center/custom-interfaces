@@ -29,6 +29,7 @@ module.exports = {
 
       // Pass the full url with the key!
       publicUrl: process.env.PUBLIC_URL,
+      proxyServerURL: process.env.PROXY_SERVER_URL
     }),
     new CopyPlugin({
       patterns: [
