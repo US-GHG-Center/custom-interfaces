@@ -1,59 +1,42 @@
-// dataPreprocessor.js
+import { YearlyDataPreprocessor, MonthlyDataPreprocessor, DailyDataPreprocessor } from "../dataPreprocessor";
+
 /**
- * Parses CSV data and returns an array of objects representing the parsed data.
- * 
- * This function takes CSV .txt data as input and parses it into an array of objects,
- * where each object represents a row of data. The CSV data is expected to have
- * a specific structure, and the function performs parsing based on that structure.
- * 
- * @param {string} csvdata - The CSV data to be parsed.
- * @returns {Array<Object>} An array of objects representing the parsed data.
- * @example
- * // Example input: "# dataset_name: co2_daily_mlo.txt"
- * // Example output: [{ date: "1974-05-19", value: 333.46 }, { date: "1974-05-20", value: 333.64 }]
+ * Parses the given CSV data and returns a visualization JSON object based on the specified data
+frequency.
+ *
+ * @param {string} csvdata - The text (CSV) data to parse.
+ * @param {string} frequency - The frequency at which the data was recorded ("yearly", "monthly",
+or "daily").
+ * @returns {Array<Object>} A array of visualization JSON object representing the parsed data.
+ * example: [{ date: date1, value: value1 }, { date: date2, value: value2}, ...]
  */
-export function parseData(csvdata) {
-    // Parse your CSV data here and return it as ank array of objects
-    let dataArr = csvdata.split("\n");
-    let dataIndex = getDataIndex(csvdata);
-    let data = dataArr.slice(dataIndex);
-
-    // form dataframe
-    let lines = data.map((line) => line.replace("\n", "").split(" "));
-    let dataframe = lines.map(line => line.filter(data => data != ""));
-
-    // now iterate on each dataline
-    let returnValue = dataframe.map((row) => {
-        let singleDigits = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
-        let year = row[0];
-        let month = row[1];
-        let day = row[2];
-        if (singleDigits.includes(day)) {
-            day = `0${day}`;
-        }
-        if (singleDigits.includes(month)) {
-            month = `0${month}`;
-        }
-        let date = `${year}-${month}-${day}T00:00:00Z`;
-        let value = row[4];
-        return {
-            date: date,
-            value: value,
-        };
-    });
-    return returnValue;
-    // return [{ date: "2023-01-01", value: 10 }, { date: "2023-01-02", value: 20 }, { date: "2023-01-03", value: 15 }]
+export function parseData(csvdata, frequency) {
+    let dp;
+    if (frequency.toLowerCase() === "yearly") {
+        dp = new YearlyDataPreprocessor(csvdata);
+    } else if (frequency.toLowerCase() === "monthly") {
+        dp = new MonthlyDataPreprocessor(csvdata);
+    } else {
+        dp = new DailyDataPreprocessor(csvdata);
+    }
+    let vizJSON = dp.getVizJSON();
+    return vizJSON;
 }
 
-function getDataIndex(csvdata) {
-    // by skipping the header section
-    // split the string text based on new line
-    let data = csvdata.split("\n");
-    // get the header lines. header lines start with #.
-    for (let i = 0; i < data.length; i++) {
-        if (!data[i].startsWith("#")) {
+/**
+ * Returns the index of a station in the `stations` array that matches the given `site_code` and
+`ghg`.
+ *
+ * @param {Array<Station>} stations - The list of stations to search.
+ * @param {string} ghg - The Greenhouse Gas code to match.
+ * @param {string} site_code - The site code to match.
+ * @returns {number} The index of the matching station, or -1 if no match is found.
+ */
+export function getStationIdx(stations, ghg, site_code) {
+    for (let i=0; i < stations.length; i++) {
+        if (stations[i].stationCode.toLowerCase() === site_code.toLowerCase() && stations[i].ghg.toLowerCase() === ghg.toLowerCase()) {
             return i;
         }
     }
-    return data.length;
+    return -1;
 }

@@ -1,5 +1,5 @@
 import { nrtStations } from './meta.js';
-import { parseData } from './helper/index.js';
+import { parseData, getStationIdx } from './helper';
 
 const proxyServerURL = process.env.PROXY_SERVER_URL || "https://corsproxy.io";
 
@@ -30,7 +30,7 @@ export async function nrtResolver(station, queryParams, data, labels) {
         return [data, labels];
     }
 
-    let stationIdx = nrtStationCodes.indexOf(site_code);
+    let stationIdx = getStationIdx(nrtStations, ghg, site_code);
     let stationMeta = nrtStations[stationIdx];
     if (stationMeta.ghg && stationMeta.ghg.toLowerCase() !== ghg.toLowerCase()) {
         return [data, labels];
@@ -38,10 +38,11 @@ export async function nrtResolver(station, queryParams, data, labels) {
 
     let dataSource = stationMeta.source;
     let dataLabel = stationMeta.label;
+    let frequency = stationMeta.frequency;
     try {
         let stationDataRaw = await fetch(`${proxyServerURL}?${dataSource}`);
         let stationDataText = await stationDataRaw.text();
-        let stationDataJSON = parseData(stationDataText);
+        let stationDataJSON = parseData(stationDataText, frequency);
         data.push(stationDataJSON);
         labels.push(dataLabel);
         return [data, labels];
