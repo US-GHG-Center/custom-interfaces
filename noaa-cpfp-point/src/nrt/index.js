@@ -31,10 +31,11 @@ export async function nrtResolver(station, queryParams, data, labels) {
     }
 
     let stationIdx = getStationIdx(nrtStations, ghg, site_code);
-    let stationMeta = nrtStations[stationIdx];
-    if (stationMeta.ghg && stationMeta.ghg.toLowerCase() !== ghg.toLowerCase()) {
+    if (stationIdx === -1) {
         return [data, labels];
     }
+
+    let stationMeta = nrtStations[stationIdx];
 
     let dataSource = stationMeta.source;
     let dataLabel = stationMeta.label;
