@@ -41,7 +41,7 @@ export async function nrtResolver(station, queryParams, data, labels) {
     let dataLabel = stationMeta.label;
     let frequency = stationMeta.frequency;
     try {
-        let stationDataRaw = await fetch(`${proxyServerURL}?${dataSource}`);
+        let stationDataRaw = await fetch(`${proxyServerURL}?${encodeURIComponent(dataSource)}`);
         let stationDataText = await stationDataRaw.text();
         let stationDataJSON = parseData(stationDataText, frequency);
         data.push(stationDataJSON);

@@ -215,3 +215,10 @@ a {
 .legend-text {
     margin-left: 4px;
 }
+
+.data-access-url-container {
+    box-shadow: 3px 0 5px -2px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.7);
+    padding-right: 10px;
+    margin-right: 7px;
+}

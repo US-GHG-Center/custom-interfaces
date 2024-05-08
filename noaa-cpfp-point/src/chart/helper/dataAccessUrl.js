@@ -1,7 +1,50 @@
 import { GHG, CONTINUOUS, NON_CONTINIOUS, FLASK, PFP, INSITU, SURFACE } from "../../enumeration.js";
+import { nrtStations } from "../../nrt/meta.js";
+import { getStationIdx } from "../../nrt/helper";
 
 /**
- * Constructs the data access source URL based on the provided station and query parameters.
+ * Constructs an array of data access and NRT (Near real time) data source URLs for a given station and query
+parameters.
+ *
+ * @param {Object} station - The station object containing information about the station.
+ * @param {Object} station.site_code - The station code.
+ * @param {Object} queryParams - The query parameters.
+ * @param {string} queryParams.ghg - The type of greenhouse gas.
+ * @param {string} queryParams.frequency - The frequency of measurements.
+ * @param {string} queryParams.type - The type of measurement.
+ * @param {string} queryParams.medium - The medium of measurement.
+ * @returns {Array} An array of data access source URL objects with title and
+source properties
+ *
+ */
+export function constructDataAccessSourceUrls(station, queryParams) {
+    let { ghg } = queryParams;
+    const { site_code: siteCode } = station;
+
+    let result = [];
+    let defaultDataAccess = {
+        source: getDataAccessUrl(station, queryParams),
+        title: "Access data at NOAA ↗"
+    }
+    result.push(defaultDataAccess);
+
+    // check if station and ghg has NRT data
+    let stationIdx = getStationIdx(nrtStations, ghg, siteCode);
+    if (stationIdx === -1) {
+        return result;
+    }
+
+    let nrtStation = nrtStations[stationIdx];
+    let nrtDataAccess = {
+        source: nrtStation.source,
+        title: "Access NRT Dataset ↗"
+    }
+    result.push(nrtDataAccess);
+    return result;
+}
+
+/**
+ * Constructs the base data access source URL based on the provided station and query parameters.
  * @param {Object} station - The station object containing information about the station.
  * @param {Object} station.site_code - The station code.
  * @param {Object} queryParams - The query parameters.
@@ -11,7 +54,7 @@ import { GHG, CONTINUOUS, NON_CONTINIOUS, FLASK, PFP, INSITU, SURFACE } from "..
  * @param {string} queryParams.medium - The medium of measurement.
  * @returns {string} The constructed data access source URL.
  */
-export function constructDataAccessSourceUrl(station, queryParams) {
+export function getDataAccessUrl(station, queryParams) {
     let { ghg, frequency, type, medium } = queryParams;
     const { site_code: siteCode } = station;
 
