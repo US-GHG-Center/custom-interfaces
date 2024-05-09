@@ -1,4 +1,6 @@
 import { ghgBlue, GHG, CO2, CONTINUOUS, NON_CONTINIOUS, TYPES, FLASK, PFP, INSITU, SURFACE, TOWER, ALL} from "../enumeration.js";
+import { nrtStations } from "../nrt/meta.js";
+import { getStationIdx } from "../nrt/helper";
 
 /**
  * Generates tooltip content for a marker representing a station.
@@ -64,6 +66,11 @@ export const getMarkerToolTipContent = (station) => {
 export const getMarkerStyle = (station, queryParams) => {
     let {ghg, frequency, type, medium} = queryParams;
     let { dataset_project, other_dataset_projects } = station;
+
+    let nrtMarker = getNRTMarker(station, queryParams);
+    if (!(nrtMarker === null)) {
+        return nrtMarker;
+    }
 
     let continuousMarkerClassName = "marker marker-blue";
     let nonContinuousMarkerClassName = "marker marker-gold";
@@ -177,3 +184,18 @@ const hasHeterogenousInstrumentTypes = (other_dataset_projects) => {
     }
     return isHeterogenous;
 }
+
+const getNRTMarker = (station, queryParams) => {
+    // The NRT data marker style has highest priority check before all others
+    let { ghg } = queryParams;
+    const { site_code: siteCode } = station;
+
+    // check if station and ghg has NRT data
+    let stationIdx = getStationIdx(nrtStations, ghg, siteCode);
+    if (stationIdx === -1) {
+        return null;
+    }
+    // if yes, return the marker style for NRT data
+    let NRTMarkerClassName = "marker marker-red";
+    return NRTMarkerClassName;
+};

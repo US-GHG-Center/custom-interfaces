@@ -1,4 +1,5 @@
-import { ALL, CONTINUOUS, FLASK, PFP, NON_CONTINIOUS, INSITU, SURFACE, TOWER } from "../../enumeration";
+import { ALL, CONTINUOUS, FLASK, PFP, NON_CONTINIOUS, INSITU, SURFACE, TOWER, NRT } from "../../enumeration";
+import { nrtStations } from "../../nrt/meta";
 
 const legendsDictionary = {
     [CONTINUOUS]: {
@@ -41,7 +42,12 @@ const legendsDictionary = {
             imageClass: "marker marker-purple",
             text: "Tower In-situ"
         }
-    }
+    },
+    [NRT]: {
+        color: "red",
+        imageClass: "marker marker-red",
+        text: "NRT (Near Real Time) Data"
+    },
 };
 
 /**
@@ -115,4 +121,23 @@ export const getLegends = (queryParams) => {
         return legend;
     }
     return [];
+}
+
+export const getLegendsWrapper = (queryParams) => {
+    let legends = getLegends({ ...queryParams });
+    if (hasNRTdata(queryParams)) {
+        let nrtLegend = { ...legendsDictionary[NRT] };
+        legends.push(nrtLegend);
+    }
+    return legends;
+}
+
+const hasNRTdata = (queryParams) => {
+    // check if station and ghg has NRT data
+    let { ghg } = queryParams;
+    let ghgWithNRT = nrtStations.map(station => station.ghg);
+    if ( ghgWithNRT.includes(ghg) ) {
+        return true;
+    }
+    return false;
 }
