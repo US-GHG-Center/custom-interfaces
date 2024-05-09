@@ -46,7 +46,7 @@ const legendsDictionary = {
     [NRT]: {
         color: "red",
         imageClass: "marker marker-red",
-        text: "NRT (Near Real Time) Data"
+        text: "NRT (Near Real Time) Measurements"
     },
 };
 
