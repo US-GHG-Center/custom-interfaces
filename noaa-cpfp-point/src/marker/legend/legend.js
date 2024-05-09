@@ -20,10 +20,10 @@ export const drawLegend = (queryParams) => {
     let legendsDOMString = `<div id="legend-head">Legend</div>
                             <div id="legend-line"></div>`;
     legends.forEach( legend => {
-        let { text, imageClass } = legend;
+        let { text, className } = legend;
         let elem = `
             <div class="legend-element">
-                <div class="${imageClass}"></div>
+                <div class="${className}"></div>
                 <span class="legend-text">${text}<span>
             </div>
         `;

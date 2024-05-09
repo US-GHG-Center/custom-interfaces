@@ -1,54 +1,6 @@
 import { ALL, CONTINUOUS, FLASK, PFP, NON_CONTINIOUS, INSITU, SURFACE, TOWER, NRT } from "../../enumeration";
 import { nrtStations } from "../../nrt/meta";
-
-const legendsDictionary = {
-    [CONTINUOUS]: {
-        color: "blue",
-        imageClass: "marker marker-blue",
-        text: "Surface and Tower In-situ"
-    },
-    [NON_CONTINIOUS]: {
-        color: "gold",
-        imageClass: "marker marker-gold",
-        text: "Flask and PFP"
-    },
-    [ALL]: {
-        color: "blue",
-        imageClass: "marker marker-blue",
-        text: "Flask, PFP and In-situ"
-    },
-    [FLASK]: {
-        [SURFACE]: {
-            color: "pink",
-            imageClass: "marker marker-pink",
-            text: "Flask"
-        }
-    },
-    [PFP]: {
-        [SURFACE]: {
-            color: "red",
-            imageClass: "marker marker-red",
-            text: "PFP"
-        }
-    },
-    [INSITU]: {
-        [SURFACE]: {
-            color: "blue",
-            imageClass: "marker marker-blue",
-            text: "Surface In-situ"
-        },
-        [TOWER]: {
-            color: "purple",
-            imageClass: "marker marker-purple",
-            text: "Tower In-situ"
-        }
-    },
-    [NRT]: {
-        color: "red",
-        imageClass: "marker marker-red",
-        text: "NRT (Near Real Time) Measurements"
-    },
-};
+import { legendsDictionary } from "../meta";
 
 /**
  * Retrieves legends based on the provided query parameters.
