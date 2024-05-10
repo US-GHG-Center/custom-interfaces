@@ -75,6 +75,14 @@ export const getLegends = (queryParams) => {
     return [];
 }
 
+/**
+ * Returns an array of legend objects (ref. legendsDictionary in meta) based on the provided query parameters.
+ * In addition checks if there are NRT data available for the selected GHG, and if yes, adds NRT legend.
+ *
+ * @param {object} queryParams - The query parameters defining ghg.
+ *
+ * @returns {array} An array of legend objects.
+ */
 export const getLegendsWrapper = (queryParams) => {
     let legends = getLegends({ ...queryParams });
     if (hasNRTdata(queryParams)) {
@@ -84,6 +92,12 @@ export const getLegendsWrapper = (queryParams) => {
     return legends;
 }
 
+/**
+ * Checks if the NRT data is available for the selected GHG (explained by the queryParam).
+ *
+ * @param {object} queryParams - The query parameters to check.
+ * @returns {boolean} True if the query parameters contain NRT data, false otherwise.
+ */
 const hasNRTdata = (queryParams) => {
     // check if station and ghg has NRT data
     let { ghg } = queryParams;
