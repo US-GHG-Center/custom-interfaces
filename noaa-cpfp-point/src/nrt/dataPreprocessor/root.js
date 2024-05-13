@@ -105,7 +105,6 @@ export class DataPreprocessor {
 
         // yearly
         if ((this.year !== null) && (this.month === null) && (this.day === null)) {
-            console.log("11111111")
             year = dfRow[this.year];
             return `${year}-${month}-${day}T00:00:00Z`;
         }
