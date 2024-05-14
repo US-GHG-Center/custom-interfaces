@@ -81,7 +81,7 @@ body {
     border-radius: 5px;
     z-index: 1000;
     /* Ensure it's above other elements */
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 .marker {
@@ -176,6 +176,7 @@ a {
     border: rgba(27, 26, 26, 0.9);
     z-index: 1000;
     background-color: rgba(255, 255, 255, 0.8);
+    border-right: 14px solid transparent;
 }
 
 #legend-container {
@@ -193,7 +194,7 @@ a {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     z-index: 1000;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 #legend-head {
@@ -218,7 +219,7 @@ a {
 
 .data-access-url-container {
     box-shadow: 3px 0 5px -2px rgba(0, 0, 0, 0.2);
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.8);
     padding-right: 10px;
     margin-right: 7px;
 }
