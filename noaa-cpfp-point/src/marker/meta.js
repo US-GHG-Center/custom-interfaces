@@ -44,7 +44,7 @@ export const legendsDictionary = {
     },
     [NRT]: {
         color: "red",
-        className: "marker marker-red",
+        className: "marker marker-unique",
         text: "NRT (Near Real Time) Measurements"
     },
 };

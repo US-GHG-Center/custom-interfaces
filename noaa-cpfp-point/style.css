@@ -126,6 +126,10 @@ body {
     background-image: url('./public/marker-purple.png');
 }
 
+.marker-unique {
+    background-image: url('./public/marker-unique.png');
+}
+
 #logo {
     position: absolute;
     right: 10px;

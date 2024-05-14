@@ -42,6 +42,16 @@ const chartStyles = [
         hoverBorderWidth: 3,
         spanGaps: true,
         showLine: true,
+    },
+    {
+        type: "line",
+        borderColor: "purple",
+        pointHoverBackgroundColor: "rgba(226, 118, 255, 0.8)", // purple
+        pointHoverBorderColor: "rgba(226, 118, 255, 1)",
+        borderWidth: 2,
+        hoverBorderWidth: 3,
+        spanGaps: true,
+        showLine: true,
     }
 ]
 
