@@ -93,7 +93,7 @@ jobs:
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
           echo $PUBLIC_URL
-          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-develop/${PUBLIC_URL}/ --recursive
+          aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-develop/${PUBLIC_URL}/ --recursive
         env:
           PUBLIC_URL: ${{ vars.PUBLIC_URL_EMIT }}
 
@@ -128,7 +128,7 @@ jobs:
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
           echo $PUBLIC_URL
-          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ --recursive
+          aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ --recursive
 
 
   deploy-production:
@@ -162,4 +162,4 @@ jobs:
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
           echo $PUBLIC_URL
-          aws s3 cp "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/ --recursive
+          aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/ --recursive
