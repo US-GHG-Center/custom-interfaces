@@ -128,7 +128,7 @@ jobs:
       - name: Upload to S3
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NOAA }} | sed -E 's|^https?://[^/]+/||')
-          echo $PUBLIC_URL
+          echo "$PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
           aws s3 sync "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ 
           aws s3 sync "./noaa-cpfp-point/data" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/data/ 
         env:
@@ -139,7 +139,7 @@ jobs:
         with:
           distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
           paths: |
-            ${{ env.PUBLIC_URL_NOAA.split('/').slice(3).join('/') }}*
+            /${{ env.PUBLIC_URL }}*
 
   deploy-production:
     needs:
