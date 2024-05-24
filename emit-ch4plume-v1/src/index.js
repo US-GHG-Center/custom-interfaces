@@ -162,7 +162,7 @@ function addPolygon(polygonSourceId, polygonLayerId, polygonFeature) {
 
         layout: {},
         paint: {
-          "fill-outline-color": "#ff0000",
+          "fill-outline-color": "#00FFFF",
           'fill-color': 'transparent'
         },
       });
@@ -174,7 +174,7 @@ function addPolygon(polygonSourceId, polygonLayerId, polygonFeature) {
         'source': polygonSourceId,
         'layout': {},
         'paint': {
-            'line-color': "#ff0000",
+            'line-color': "#00FFFF",
             'line-width': 3
         }
     });
