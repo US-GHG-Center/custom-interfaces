@@ -127,7 +127,7 @@ jobs:
       - name: Upload to S3
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
-          echo "$PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
+          echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
           aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ 
 
       - name: Request Invalidation to AWS Cloudfront
@@ -168,7 +168,7 @@ jobs:
       - name: Upload to S3
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
-          echo "$PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
+          echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
           aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/ 
 
       - name: Request Invalidation to AWS Cloudfront
