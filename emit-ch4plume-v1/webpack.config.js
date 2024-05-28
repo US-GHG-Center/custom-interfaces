@@ -4,6 +4,10 @@ const Dotenv = require('dotenv-webpack');
 const path = require('path');
 module.exports = (env) => {
   return {
+    resolve: {
+      fallback: { "path": require.resolve("path-browserify") }
+    },
+    
 
     entry: './src/index.js',
     output: {
