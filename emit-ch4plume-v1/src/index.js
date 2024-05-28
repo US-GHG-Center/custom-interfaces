@@ -1,4 +1,5 @@
 const mapboxgl = require("mapbox-gl");
+const path = require('path');
 import "./style.css";
 const {
     createColorbar,
@@ -183,23 +184,19 @@ function addPolygon(polygonSourceId, polygonLayerId, polygonFeature) {
     }
 }
 
-function addRaster(itemIds, feature, polygonId, fromZoom) {
+function addRaster(itemProps, feature, polygonId, fromZoom) {
     var props = feature.properties;
     const collection = "emit-ch4plume-v1";
     const assets = "ch4-plume-emissions";
 
     if (!IDS_ON_MAP.has(feature.id)) {
-        var subset = itemIds.filter((item) =>
-            props["Data Download"].includes(item.id)
-        );
 
-        subset.forEach(function(item) {
         const TILE_URL =
             "https://ghg.center/api/raster/stac/tiles/WebMercatorQuad/{z}/{x}/{y}@1x" +
             "?collection=" +
             collection +
             "&item=" +
-            item.id +
+            itemProps.id +
             "&assets=" +
             assets +
             "&bidx=1&colormap_name=plasma&rescale=" +
@@ -213,7 +210,7 @@ function addRaster(itemIds, feature, polygonId, fromZoom) {
             type: "raster",
             tiles: [TILE_URL],
             tileSize: 256,
-            bounds: item.bbox,
+            bounds: itemProps.bbox,
         });
         const layer_id = "raster-layer-" + feature.id
         map.addLayer({
@@ -234,7 +231,7 @@ function addRaster(itemIds, feature, polygonId, fromZoom) {
 
         map.moveLayer(polygonId);
         RASTER_IDS_ON_MAP.add(feature);
-        });
+        
 
         IDS_ON_MAP.add(feature.id);
     }
@@ -273,7 +270,7 @@ async function main() {
         const methanMetadata = await (
             await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
           ).json();
-          const methaneStacMetadata = await (
+          const itemIds = await (
             await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
           ).json();
         const features = methanMetadata.features;
@@ -309,12 +306,10 @@ async function main() {
             .map((f, i) => {
                 f.id = i;
                 return f;
-            });
-
-        const itemIds = methaneStacMetadata.features.map((feature) => feature);
-
+            })
 
         points.forEach(function(point) {
+            const itemName = path.basename(point.feature.properties["Data Download"]);
             const coords = point.feature.geometry.coordinates
             const markerEl = document.createElement("div");
             markerEl.className = "marker";
@@ -381,8 +376,8 @@ async function main() {
               IDS_ON_MAP.delete(point.feature.id)
             }
             else {
-              addRaster(
-                itemIds,
+                addRaster(
+                itemIds[itemName],
                 point.feature,
                 polygonLayerId,
                 true
@@ -417,9 +412,8 @@ async function main() {
           polygon.feature
         )
 
-
         addRaster(
-            itemIds,
+            itemIds[itemName],
             point.feature,
             polygonLayerId
         );

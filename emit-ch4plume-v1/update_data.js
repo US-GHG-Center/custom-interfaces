@@ -9,14 +9,18 @@ var features = [];
 var there_is_more_data = true;
 var endpoint = STAC_ENDPOINT;
 var methane_stac_geojson;
+var items = {};
 while (there_is_more_data) {
 
  methane_stac_geojson= await (
  await fetch(endpoint)
  ).json();
 
-const slim_features = methane_stac_geojson.features.map(({ id, bbox }) => ({ id, bbox }));
-features = features.concat(slim_features);
+const stac_features = methane_stac_geojson.features
+stac_features.forEach(feature => {
+  items[`${feature.id}.tif`] = {id: feature.id, bbox: feature.bbox}
+});
+
 let links = methane_stac_geojson.links;
 
 for (const link of links) {
@@ -30,13 +34,7 @@ there_is_more_data = false;
 }
 }
 
-methane_stac_geojson.matched = methane_stac_geojson.context.matched
-// deleting unecessary items
-delete methane_stac_geojson.context;
-delete methane_stac_geojson.type;
-delete methane_stac_geojson.links;
-methane_stac_geojson.features = features;
-return methane_stac_geojson
+return items
 
 }
 
