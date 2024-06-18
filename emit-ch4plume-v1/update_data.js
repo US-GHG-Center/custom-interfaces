@@ -2,7 +2,7 @@
 const fs = require("fs");
 
 const COMBINED_METADATA_ENDPOINT = "https://earth.jpl.nasa.gov/emit-mmgis-lb/Missions/EMIT/Layers/coverage/combined_plume_metadata.json";
-const STAC_ENDPOINT = "https://ghg.center/api/stac/collections/emit-ch4plume-v1/items?limit=500";
+const STAC_ENDPOINT = "https://earth.gov/ghgcenter/api/stac/collections/emit-ch4plume-v1/items?limit=500";
 
 const get_methane_geojson = async () => {
 var features = [];
