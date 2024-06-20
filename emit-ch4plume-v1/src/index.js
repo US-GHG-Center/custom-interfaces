@@ -87,9 +87,6 @@ class LayerButtonControl {
         $("#layer-eye").toggleClass("fa-eye fa-eye-slash");
         // Toggle layer visibility
         layerToggled = !layerToggled;
-
-        console.log(layerToggled);
-
         // Set the map's center and zoom to the desired location
         RASTER_IDS_ON_MAP.forEach((raster_id_on_map) => {
 
@@ -295,7 +292,6 @@ document.addEventListener("click", function (e) {
         drawplume_idList([]);
         MARKERS_ON_MAP.forEach(marker => {
             if (text === marker.feature.properties["Plume ID"]) {
-                console.log(marker);
                 let plumeName = path.basename(marker.feature.properties["Data Download"]);
                 let mark_polygon = polygons[marker.id];
                 addPolygon(
@@ -569,7 +565,6 @@ async function main() {
         clearTimeout(typingTimeout);
         typingTimeout = setTimeout(() => {
         $('.search-box').keyup((e) => {
-            console.log($(e.target).val());
             const copy_procedures = handleSearch($(e.target).val())
             drawplume_idList(copy_procedures);
           })
