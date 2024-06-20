@@ -269,6 +269,7 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
 .autocomplete-search-box .search-result li:hover {
   background: #082a63;
   color: white;
+  cursor: pointer;
 }
 
 .autocomplete-search-box .search-result {
