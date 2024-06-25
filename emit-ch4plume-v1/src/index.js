@@ -51,8 +51,7 @@ class HomeButtonControl {
         $("#display_props").css({
             "visibility": "hidden"
         });
-        // Empty Search Bar
-        $('.search-box').val("");
+
         // For each element in counter_clicker set the unvisible to visible
         markerClickTracker.forEach((element) => {
             element.style.visibility = "visible";
@@ -257,7 +256,7 @@ function addRaster(itemProps, feature, polygonId, fromZoom) {
 function handleSearch (keyword) {
     let plumeIds = new Array()
     MARKERS_ON_MAP.forEach(marker => {
-        plumeIds.push(marker.feature.properties["Plume ID"])
+        plumeIds.push(`${marker.feature.properties["Plume ID"]} (${marker.feature.properties["Location"]})`)
 
     })
 
@@ -291,7 +290,8 @@ document.addEventListener("click", function (e) {
         $('.search-box').val(text);
         drawplume_idList([]);
         MARKERS_ON_MAP.forEach(marker => {
-            if (text === marker.feature.properties["Plume ID"]) {
+            console.log("====>", text.split()[0]);
+            if (text.split(" ")[0] === marker.feature.properties["Plume ID"]) {
                 let plumeName = path.basename(marker.feature.properties["Data Download"]);
                 let mark_polygon = polygons[marker.id];
                 addPolygon(
@@ -302,7 +302,7 @@ document.addEventListener("click", function (e) {
                   )
                 addRaster(itemIds[plumeName], marker.feature, "polygon-layer-" + marker.id, false)
 
-                return
+                return true;
                 
             }
             
@@ -310,7 +310,9 @@ document.addEventListener("click", function (e) {
         })
 
     }
-    
+    else {
+        $('.search-box').val("");
+    }
 });
 
 

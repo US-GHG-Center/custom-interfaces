@@ -3,9 +3,10 @@ const fs = require("fs");
 
 const COMBINED_METADATA_ENDPOINT = "https://earth.jpl.nasa.gov/emit-mmgis-lb/Missions/EMIT/Layers/coverage/combined_plume_metadata.json";
 const STAC_ENDPOINT = "https://earth.gov/ghgcenter/api/stac/collections/emit-ch4plume-v1/items?limit=500";
-
+const LAT_LON_TO_COUNTRY_ENDPOINT = "https://api.geoapify.com/v1/geocode/reverse"; //?lat=33.81&lon=-101.92&format=json"
+const APIKEY = process.env.GEOAPIFY_APIKEY;
+var lon_lat_lookup = {};
 const get_methane_geojson = async () => {
-var features = [];
 var there_is_more_data = true;
 var endpoint = STAC_ENDPOINT;
 var methane_stac_geojson;
@@ -33,11 +34,65 @@ there_is_more_data = false;
 
 }
 }
-
 return items
-
 }
 
+
+async function similarrity_location_lookup(lat, lon) {
+  let floor_lat = Number(lat.toFixed(1));
+  let floor_lon = Number(lon.toFixed(1));
+  let location = ""
+
+  if (lon_lat_lookup[`${floor_lat}-${floor_lon}`] == undefined) {
+    try {
+      const response = await fetch(`${LAT_LON_TO_COUNTRY_ENDPOINT}?lat=${lat}&lon=${lon}&&apiKey=${APIKEY}`);
+      const location_data = await response.json();
+      let location_prpoperties = location_data.features[0].properties;
+      let sub_location = location_prpoperties["city"] || location_prpoperties["county"] || "Unknown";
+      let state = location_prpoperties["state"] || ""
+      location = `${sub_location}, ${state}, ${location_prpoperties["country"]}`;
+      console.log("Sleeping some seconds");
+      await sleep(250);
+    } catch (error) {
+      console.error(`Error fetching location for ${lat}, ${lon}:`, error);
+      location = "Unknown";
+    }
+    lon_lat_lookup[`${floor_lat}-${floor_lon}`] = location
+  }
+  return location;
+}
+
+async function processFeatures(features) {
+  const lookup_location = require('./lookups/plume_id_location.json');
+  var change_lookup = false;
+  for (const feature of features) {
+    const lat = feature.properties["Latitude of max concentration"];
+    const lon = feature.properties["Longitude of max concentration"];
+    if (lookup_location[feature.properties['Plume ID']] != undefined) {
+      feature.properties["Location"] = lookup_location[feature.properties['Plume ID']]
+    }
+    else {
+      feature.properties["Location"] = await similarrity_location_lookup(lat, lon);
+      lookup_location[feature.properties['Plume ID']] = feature.properties["Location"];
+      change_lookup = true;
+    }
+  }
+  if (change_lookup) {
+    fs.writeFileSync(
+      "./lookups/plume_id_location.json",
+      JSON.stringify(lookup_location, null, 2)
+      );
+
+  }
+
+
+
+  return features
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 async function main() {
 // fetch data from the stac endpoint
@@ -60,6 +115,8 @@ methane_stac_data.features.forEach(feature => {
 
 });
 
+methane_stac_data.features = await processFeatures(methane_stac_data.features);
+
 fs.writeFileSync(
   "./data/combined_plume_metadata.json",
   JSON.stringify(methane_stac_data, null, 2)
@@ -77,6 +134,39 @@ fs.writeFileSync(
 
 }
 
- main()
+main()
+// async function create_lookup() {
+  // const methane_stac_data = await (
+  //   await fetch("http://localhost:8000/data/combined_plume_metadata.json")
+  //   ).json();
+  // // Write the data to a file
+  
+  // // Remove "crs" field
+  // delete methane_stac_data.crs;
+  // var lookup_location = {};
+  
+  // // Remove "style" field from each feature
+  // methane_stac_data.features.forEach(feature => {
+  //   let plume_id = feature.properties["Plume ID"];
+    
+  //   lookup_location[plume_id] = feature.properties.Location;
+  //   console.log(lookup_location);
+    
+  
+  // });
 
+  // fs.writeFileSync(
+  //   "./lookups/plume_id_location.json",
+  //   JSON.stringify(lookup_location, null, 2)
+  //   );
+  //   var dict = {};
 
+  //   dict['key'] = "testing";
+    
+  //   console.log(dict);
+  
+//   console.log(lookup_location['CH4_PlumeComplex-2296']);
+
+// }
+
+// create_lookup()
