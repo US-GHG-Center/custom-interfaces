@@ -49,8 +49,8 @@ async function similarrity_location_lookup(lat, lon) {
       const location_data = await response.json();
       let location_prpoperties = location_data.features[0].properties;
       let sub_location = location_prpoperties["city"] || location_prpoperties["county"] || "Unknown";
-      let state = location_prpoperties["state"] || ""
-      location = `${sub_location}, ${state}, ${location_prpoperties["country"]}`;
+      let state = location_prpoperties["state"]? `${location_prpoperties["state"]}, ` :  ""
+      location = `${sub_location}, ${state}${location_prpoperties["country"]}`;
       console.log("Sleeping some seconds");
       await sleep(250);
     } catch (error) {
