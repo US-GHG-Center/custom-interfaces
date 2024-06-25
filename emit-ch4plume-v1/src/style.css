@@ -21,6 +21,7 @@ body {
   table {
     border-spacing: 13px;
   }
+ 
 .ui-widget-header { background: #082A63; }
 
 .mapboxgl-ctrl  button .mapboxgl-ctrl-icon {
@@ -105,7 +106,6 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   display: none !important;
 }
 
-
 .ui-slider .ui-slider-handle {
   position: absolute;
   z-index: 2;
@@ -113,8 +113,6 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   height: 1.2em;
   cursor: col-resize;
 }
-
-
 
 .lds-roller {
   display: inline-block;
@@ -203,7 +201,6 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   }
 }
 
-
 .filter-ctrl {
   position: absolute;
   z-index: 1;
@@ -244,7 +241,6 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   overflow:  hidden;
   z-index: 1;
 }
-
 
 .autocomplete-search-box .search-box {
   width: 100%;
