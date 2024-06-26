@@ -4,6 +4,7 @@ import { openChart } from "../chart";
 import { getStationsMeta, getStationDatas } from "../utils";
 import { renderChart } from "../chart";
 import { getDataSourceAndLabels } from "./dataSourceAndLabel";
+import { nrtResolver } from "../nrt";
 
 /**
  * Plots stations on the provided map based on the given query parameters.
@@ -109,9 +110,12 @@ const handleStationClick = async (station, queryParams) => {
       });
       let parsedDatas = await Promise.all(conversionPromises);
 
+      // NRT data injector
+      let [parsedDatas1, labels1] = await nrtResolver(station, queryParams, parsedDatas, labels);
+
       // Render chart
       let stationMeta = {name: site_name, code: site_code}
-      renderChart(stationMeta, parsedDatas, ghg, labels);
+      renderChart(stationMeta, parsedDatas1, ghg, labels1);
     } catch (err) {
       console.error(err)
     }

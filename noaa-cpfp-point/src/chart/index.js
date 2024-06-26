@@ -1,7 +1,7 @@
 import { getOptions, plugin } from './config.js';
 import { getDatasets } from './helper/index.js';
 import { setZoomInstructionEvents } from './helper/zoomInstructions.js';
-import { constructDataAccessSourceUrl } from './helper/dataAccessUrl.js';
+import { constructDataAccessSourceUrls } from './helper/dataAccessUrl.js';
 
 let chart = null;
 
@@ -56,11 +56,14 @@ export function openChart(station, queryParams) {
     const dataSource = document.getElementById("data-source");
     const closeButton = document.getElementById("chart-close-button");
 
-    const dataAccessUrl = constructDataAccessSourceUrl({...station}, {...queryParams});
-    // Add in data access url link to the selected station
-    dataSource.innerHTML = `
-                            <a href="${dataAccessUrl}" target="_blank"> Access data at NOAA ↗ </a>
-                            `;
+    const dataAccessUrls = constructDataAccessSourceUrls({...station}, {...queryParams});
+    dataSource.innerHTML = "";
+    dataAccessUrls.forEach(element => {
+        // Add in data access url link to the selected station
+        dataSource.innerHTML += `
+                                    <div class="data-access-url-container"><a href="${element.source}" target="_blank"> ${element.title} </a></div>
+                                `;
+    });
     // Show chart and make map half-height
     mapContainer.style.height = "50%";
     chartContainerB.style.height = "50%";
