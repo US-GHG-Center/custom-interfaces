@@ -21,7 +21,7 @@ jobs:
       # Downloads and extracts the files to the respective directory
       - name: Run the data download script
         run: |
-          cd /noaa-cpfp-point
+          cd ./noaa-cpfp-point
           ./download.sh
 
       # Runs the data preprocessing and aggregation on the extracted files
