@@ -13,9 +13,9 @@ export const nrtStations = [
         stationName: "Mauna Loa, Hawaii",
         stationCode: "MLO",
         source: `${publicUrl}/data/raw/co2/insitu/surface/co2_mko_surface-insitu_1_ccgg_DailyData.txt`,
-        label: "Observed CO₂ Concentration (MKO Station)",
+        label: "Observed CO₂ Concentration (MKO Daily In-situ)",
         ghg: "co2",
-        frequency: "custom",
+        frequency: "customMKO",
         skipProxy: true
     },
     // {

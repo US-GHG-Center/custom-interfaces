@@ -62,7 +62,7 @@ export class YearlyDataPreprocessor extends DataPreprocessor {
 
 
 /**
- * Class that extends the DataPreprocessor to preprocess daily surface insitu MKO data in txt format and generates
+ * Class that extends the DataPreprocessor to preprocess daily surface insitu of MKO data in txt format and generates
 visualization-ready JSON data.
  *
  * @method setDataColumnIndex()  - Sets the column indices for the year, month, day, and value
@@ -74,7 +74,7 @@ attributes. Specifically sets:
  *
  * Note: all the other methods are inherited from the DataPreprocessor class.
  */
-export class CustomDataPreprocessor extends DataPreprocessor {
+export class CustomMKODataPreprocessor extends DataPreprocessor {
     // overrides
 
     setDataColumnIndex() {
