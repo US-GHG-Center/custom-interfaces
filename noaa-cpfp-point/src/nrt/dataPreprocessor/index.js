@@ -85,12 +85,14 @@ export class CustomDataPreprocessor extends DataPreprocessor {
         this.qc = 18;
     }
 
-    createDataframe(csvdata) {
-        // form a 2d array representing a dataframe
-        let data = this.removeHeader(csvdata);
-        let dataframe = this.preprocessData(data);
-        let qcedDataFrame = this.qcData(dataframe);
-        return qcedDataFrame;
+    preprocessData(data) {
+        // some data preprocessing logic
+        let lines = data.map((line) => line.replace("\n", "").split(" "));
+        let filteredData = lines
+        .filter((line) => line[this.qc] == "...")
+        .filter((line) => line[this.value] !== "-999.99")
+        .filter((line) => line[this.value] !== "0")
+        return filteredData;
     }
 
     getDataIndex(dataArr) {
@@ -100,16 +102,5 @@ export class CustomDataPreprocessor extends DataPreprocessor {
         const parts = dataArr[0].split(':'); // Split the string by colon
         const number = parseInt(parts[1].trim()); // Trim any whitespace and convert to number
         return number + 1;
-    }
-
-    // helper
-
-    qcData(dataFrame) {
-        // filter out data that is not quality controlled, based on this.qc column
-        const filtered = dataframe
-        .filter((line) => line[this.qc] == "...")
-        .filter((line) => line[this.value] !== "-999.99")
-        .filter((line) => line[this.value] !== "0");
-        return dataFrame;
     }
 }
