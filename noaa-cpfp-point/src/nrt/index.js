@@ -1,5 +1,5 @@
 import { nrtStations } from './meta.js';
-import { parseData, getStationIdx } from './helper';
+import { parseData, getStationIdxs } from './helper';
 
 const proxyServerURL = process.env.PROXY_SERVER_URL || "https://corsproxy.io";
 
@@ -30,30 +30,28 @@ export async function nrtResolver(station, queryParams, data, labels) {
         return [data, labels];
     }
 
-    let stationIdx = getStationIdx(nrtStations, ghg, site_code);
-    if (stationIdx === -1) {
+    let stationIdxs = getStationIdxs(nrtStations, ghg, site_code);
+    if (stationIdxs.length === 0) {
         return [data, labels];
     }
 
-    let stationMeta = nrtStations[stationIdx];
+    for await (const stationIdx of stationIdxs) {
+        let stationMeta = nrtStations[stationIdx];
 
-    let dataSource = stationMeta.source;
-    let dataLabel = stationMeta.label;
-    let frequency = stationMeta.frequency;
-    try {
-        let stationDataRaw = "";
-        if (dataSource.includes("localhost")) {
-            console.log(">>>>>>", dataSource)
-            stationDataRaw = await fetch(dataSource);
-        } else {
-            stationDataRaw = await fetch(`${proxyServerURL}?${encodeURIComponent(dataSource)}`);
+        let dataLabel = stationMeta.label;
+        let frequency = stationMeta.frequency;
+        let skipProxy = stationMeta.skipProxy;
+        let dataSource = skipProxy ? stationMeta.source : `${proxyServerURL}?${encodeURIComponent(stationMeta.source)}`;
+        try {
+            let stationDataRaw = await fetch(dataSource);
+            let stationDataText = await stationDataRaw.text();
+            let stationDataJSON = parseData(stationDataText, frequency);
+            data.push(stationDataJSON);
+            labels.push(dataLabel);
+        } catch (err) {
+            return [data, labels];
         }
-        let stationDataText = await stationDataRaw.text();
-        let stationDataJSON = parseData(stationDataText, frequency);
-        data.push(stationDataJSON);
-        labels.push(dataLabel);
-        return [data, labels];
-    } catch (err) {
-        return [data, labels];
     }
+
+    return [data, labels];
 }

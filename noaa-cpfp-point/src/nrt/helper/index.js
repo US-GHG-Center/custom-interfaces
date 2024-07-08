@@ -36,10 +36,30 @@ export function parseData(csvdata, frequency) {
  * @returns {number} The index of the matching station, or -1 if no match is found.
  */
 export function getStationIdx(stations, ghg, site_code) {
+    let idxs = [];
     for (let i=0; i < stations.length; i++) {
         if (stations[i].stationCode.toLowerCase() === site_code.toLowerCase() && stations[i].ghg.toLowerCase() === ghg.toLowerCase()) {
             return i;
         }
     }
     return -1;
+}
+
+/**
+ * Returns the index of a station in the `stations` array that matches the given `site_code` and
+`ghg`.
+ *
+ * @param {Array<Station>} stations - The list of stations to search.
+ * @param {string} ghg - The Greenhouse Gas code to match.
+ * @param {string} site_code - The site code to match.
+ * @returns {number} The array of index of the matching station, or empty [] if no match is found.
+ */
+export function getStationIdxs(stations, ghg, site_code) {
+    let idxs = [];
+    for (let i=0; i < stations.length; i++) {
+        if (stations[i].stationCode.toLowerCase() === site_code.toLowerCase() && stations[i].ghg.toLowerCase() === ghg.toLowerCase()) {
+            idxs.push(i);
+        }
+    }
+    return idxs;
 }
