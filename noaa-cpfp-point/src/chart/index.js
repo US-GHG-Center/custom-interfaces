@@ -18,7 +18,6 @@ let chart = null;
  */
 // Function to render the time series chart
 export function renderChart(station, datas, selectedGhg, graphsDataLabels, chartColors) {
-    console.log(">>>>>>", chartColors)
     const chartContainer = document.getElementById("chart");
 
     setZoomInstructionEvents();

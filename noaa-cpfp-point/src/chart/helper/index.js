@@ -62,7 +62,6 @@ const chartStyles = [
  * @returns {Object[]} An array of datasets formatted for Chart.js.
  */
 export const getDatasets = (datas, graphsLabel, chartColors) => {
-    console.log(":>>>>", chartColors)
     return datas.map((data, idx) => {
         let chartStyle = chartStyles[idx];
         if (chartColors[idx]) {

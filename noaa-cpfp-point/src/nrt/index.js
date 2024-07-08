@@ -22,7 +22,6 @@ const proxyServerURL = process.env.PROXY_SERVER_URL || "https://corsproxy.io";
  * Note: If no NRT data, the function will return the original `data` and `labels` arrays.
  */
 export async function nrtResolver(station, queryParams, data, labels, chartColors) {
-    console.log(">>>>>>", chartColors)
     const { site_code } = station;
     const { ghg } = queryParams;
 
