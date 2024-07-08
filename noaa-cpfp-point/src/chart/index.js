@@ -17,7 +17,8 @@ let chart = null;
  * @returns {void}
  */
 // Function to render the time series chart
-export function renderChart(station, datas, selectedGhg, graphsDataLabels) {
+export function renderChart(station, datas, selectedGhg, graphsDataLabels, chartColors) {
+    console.log(">>>>>>", chartColors)
     const chartContainer = document.getElementById("chart");
 
     setZoomInstructionEvents();
@@ -28,16 +29,11 @@ export function renderChart(station, datas, selectedGhg, graphsDataLabels) {
     // Create a Chart.js chart here using 'data'
     // Example:
 
-    let datasets = getDatasets(datas, graphsDataLabels);
+    let datasets = getDatasets(datas, graphsDataLabels, chartColors);
     let options = getOptions(station, selectedGhg);
 
     chart = new Chart(chartContainer, {
         type: "line",
-        // data: {
-        // // labels: data.map((item, index) => (index % stepSize === 0) ? item.date : ''), // Show label every stepSize data points
-        // labels: datas[0].map((item) => item.date), // Show label every stepSize data points
-        // datasets: getDatasets(datas, selectedGhg),
-        // },
         data: {
             datasets: datasets,
         },

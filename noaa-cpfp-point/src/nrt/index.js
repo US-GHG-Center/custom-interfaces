@@ -21,18 +21,19 @@ const proxyServerURL = process.env.PROXY_SERVER_URL || "https://corsproxy.io";
  * @returns {array} A tuple containing the updated `data` and `labels` arrays.
  * Note: If no NRT data, the function will return the original `data` and `labels` arrays.
  */
-export async function nrtResolver(station, queryParams, data, labels) {
+export async function nrtResolver(station, queryParams, data, labels, chartColors) {
+    console.log(">>>>>>", chartColors)
     const { site_code } = station;
     const { ghg } = queryParams;
 
     let nrtStationCodes = nrtStations.map(station => station.stationCode);
     if (!nrtStationCodes.includes(site_code)) {
-        return [data, labels];
+        return [data, labels, chartColors];
     }
 
     let stationIdxs = getStationIdxs(nrtStations, ghg, site_code);
     if (stationIdxs.length === 0) {
-        return [data, labels];
+        return [data, labels, chartColors];
     }
 
     for await (const stationIdx of stationIdxs) {
@@ -48,10 +49,11 @@ export async function nrtResolver(station, queryParams, data, labels) {
             let stationDataJSON = parseData(stationDataText, frequency);
             data.push(stationDataJSON);
             labels.push(dataLabel);
+            chartColors.push(stationMeta.chartColor);
         } catch (err) {
-            return [data, labels];
+            return [data, labels, chartColors];
         }
     }
 
-    return [data, labels];
+    return [data, labels, chartColors];
 }

@@ -61,9 +61,13 @@ const chartStyles = [
  * @param {string[]} graphsLabel - An array of data labels for the chart.
  * @returns {Object[]} An array of datasets formatted for Chart.js.
  */
-export const getDatasets = (datas, graphsLabel) => {
+export const getDatasets = (datas, graphsLabel, chartColors) => {
+    console.log(":>>>>", chartColors)
     return datas.map((data, idx) => {
         let chartStyle = chartStyles[idx];
+        if (chartColors[idx]) {
+            chartStyle = {...chartStyle, borderColor: chartColors[idx]};
+        }
         return {
                 label: graphsLabel[idx],
                 data: data.map(elem => ({x: elem.date, y: elem.value})),

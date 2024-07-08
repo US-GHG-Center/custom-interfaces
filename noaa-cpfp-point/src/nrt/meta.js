@@ -4,19 +4,21 @@ export const nrtStations = [
     {
         stationName: "Mauna Loa, Hawaii",
         stationCode: "MLO",
-        source: "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_daily_mlo.txt",
-        label: "Observed CO₂ Concentration (Daily NRT)",
-        ghg: "co2",
-        frequency: "daily"
-    },
-    {
-        stationName: "Mauna Loa, Hawaii",
-        stationCode: "MLO",
         source: `${publicUrl}/data/raw/co2/insitu/surface/co2_mko_surface-insitu_1_ccgg_DailyData.txt`,
         label: "Observed CO₂ Concentration (MKO Daily In-situ)",
         ghg: "co2",
         frequency: "customMKO",
-        skipProxy: true
+        skipProxy: true,
+        chartColor: "#ff6868"
+    },
+    {
+        stationName: "Mauna Loa, Hawaii",
+        stationCode: "MLO",
+        source: "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_daily_mlo.txt",
+        label: "Observed CO₂ Concentration (Daily NRT)",
+        ghg: "co2",
+        frequency: "daily",
+        chartColor: "blue"
     },
     // {
     //     stationName: "Mauna Loa, Hawaii",

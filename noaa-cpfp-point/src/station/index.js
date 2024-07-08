@@ -109,13 +109,14 @@ const handleStationClick = async (station, queryParams) => {
           conversionPromises.push(promise);
       });
       let parsedDatas = await Promise.all(conversionPromises);
+      let chartColors = new Array(parsedDatas.length);
 
       // NRT data injector
-      let [parsedDatas1, labels1] = await nrtResolver(station, queryParams, parsedDatas, labels);
+      let [parsedDatas1, labels1, chartColors1] = await nrtResolver(station, queryParams, parsedDatas, labels, chartColors);
 
       // Render chart
       let stationMeta = {name: site_name, code: site_code}
-      renderChart(stationMeta, parsedDatas1, ghg, labels1);
+      renderChart(stationMeta, parsedDatas1, ghg, labels1, chartColors1);
     } catch (err) {
       console.error(err)
     }
