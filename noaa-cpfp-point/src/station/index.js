@@ -5,6 +5,7 @@ import { getStationsMeta, getStationDatas } from "../utils";
 import { renderChart } from "../chart";
 import { getDataSourceAndLabels } from "./dataSourceAndLabel";
 import { nrtResolver } from "../nrt";
+import { openNotice, closeNotice } from "../notice";
 
 /**
  * Plots stations on the provided map based on the given query parameters.
@@ -112,7 +113,14 @@ const handleStationClick = async (station, queryParams) => {
       let chartColors = new Array(parsedDatas.length);
 
       // NRT data injector
-      let [parsedDatas1, labels1, chartColors1] = await nrtResolver(station, queryParams, parsedDatas, labels, chartColors);
+      let [parsedDatas1, labels1, chartColors1, notices] = await nrtResolver(station, queryParams, parsedDatas, labels, chartColors);
+
+      // Show notices
+      if (!notices) {
+        closeNotice();
+      } else {
+        openNotice(notices.join("\n"));
+      }
 
       // Render chart
       let stationMeta = {name: site_name, code: site_code}

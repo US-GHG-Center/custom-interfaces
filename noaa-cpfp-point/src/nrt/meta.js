@@ -9,7 +9,8 @@ export const nrtStations = [
         ghg: "co2",
         frequency: "customMKO",
         skipProxy: true,
-        chartColor: "#ff6868"
+        chartColor: "#ff6868",
+        notice: "Due to the eruption of the Mauna Loa Volcano, measurements from Mauna Loa Observatory were suspended as of Nov. 29, 2022. Observations from December 2022 to July 4, 2023 are from a site at the Maunakea Observatories, approximately 21 miles north of the Mauna Loa Observatory. Mauna Loa observations resumed in July 2023."
     },
     {
         stationName: "Mauna Loa, Hawaii",

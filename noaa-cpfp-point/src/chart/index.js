@@ -2,6 +2,7 @@ import { getOptions, plugin } from './config.js';
 import { getDatasets } from './helper/index.js';
 import { setZoomInstructionEvents } from './helper/zoomInstructions.js';
 import { constructDataAccessSourceUrls } from './helper/dataAccessUrl.js';
+import { closeNotice } from "../notice";
 
 let chart = null;
 
@@ -59,6 +60,7 @@ export function openChart(station, queryParams) {
                                     <div class="data-access-url-container"><a href="${element.source}" target="_blank"> ${element.title} </a></div>
                                 `;
     });
+
     // Show chart and make map half-height
     mapContainer.style.height = "50%";
     chartContainerB.style.height = "50%";
@@ -66,6 +68,8 @@ export function openChart(station, queryParams) {
 
     // add event listner to chart-close-button
     closeButton.addEventListener("click", () => {
+        closeNotice();
+
         mapContainer.style.height = "100%";
         chartContainerB.style.height = "0%";
         chartContainerB.style.display = "none";

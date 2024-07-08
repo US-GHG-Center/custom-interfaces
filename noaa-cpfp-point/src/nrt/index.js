@@ -1,5 +1,6 @@
 import { nrtStations } from './meta.js';
 import { parseData, getStationIdxs } from './helper';
+import { openNotice } from '../notice';
 
 const proxyServerURL = process.env.PROXY_SERVER_URL || "https://corsproxy.io";
 
@@ -35,6 +36,8 @@ export async function nrtResolver(station, queryParams, data, labels, chartColor
         return [data, labels, chartColors];
     }
 
+    let notices = [];
+
     for await (const stationIdx of stationIdxs) {
         let stationMeta = nrtStations[stationIdx];
 
@@ -49,10 +52,13 @@ export async function nrtResolver(station, queryParams, data, labels, chartColor
             data.push(stationDataJSON);
             labels.push(dataLabel);
             chartColors.push(stationMeta.chartColor);
+            if (stationMeta.notice) {
+                notices.push(stationMeta.notice);
+            }
         } catch (err) {
             return [data, labels, chartColors];
         }
     }
 
-    return [data, labels, chartColors];
+    return [data, labels, chartColors, notices];
 }
