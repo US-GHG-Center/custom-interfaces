@@ -4,7 +4,7 @@ export const nrtStations = [
     {
         stationName: "Mauna Loa, Hawaii",
         stationCode: "MLO",
-        source: `${publicUrl}/data/raw/co2/insitu/surface/co2_mko_surface-insitu_1_ccgg_DailyData.txt`,
+        source: `${publicUrl}/data/raw/co2/insitu/surface/co2_mko_surface-insitu_1_ccgg_DailyData.txt`, // treated as a nrt data for custom condition
         label: "Observed CO₂ Concentration (MKO Daily In-situ)",
         ghg: "co2",
         frequency: "customMKO",
