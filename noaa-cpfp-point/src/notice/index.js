@@ -6,16 +6,16 @@ const mapContainer = document.getElementById("map-container");
 export function openNotice(text) {
     // Add in notice text to the notice area
     noticeContent.innerText = text;
-    // Show notice and make 4% height
-    noticeContainer.style.height = "4%";
+    // Show notice and make 6% height
+    noticeContainer.style.height = "6%";
     noticeContainer.style.bottom = "0";
     noticeContainer.style.display = "block";
 
     // Show chart and take remaining height
-    chartContainer.style.bottom = "4%";
+    chartContainer.style.bottom = "6%";
 
     // make up space for the notice
-    mapContainer.style.height = "46%";
+    mapContainer.style.height = "44%";
 }
 
 export function closeNotice() {

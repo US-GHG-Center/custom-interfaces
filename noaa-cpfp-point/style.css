@@ -233,5 +233,19 @@ a {
     display: block;
     font-size: 14px;
     bottom: 0;
-    padding: 3px 30px;
+    margin: 0 10px 0 49px;
+    padding-right: 8px;
+    box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+#notice-content {
+    font-size: 13px;
+    background-color: white;
+}
+
+#notice-header {
+    font-size: 16px;
+    color: #8251df;
+    margin-bottom: 5px;
 }
