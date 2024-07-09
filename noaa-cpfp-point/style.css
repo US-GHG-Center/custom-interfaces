@@ -230,7 +230,7 @@ a {
 
 #notice-container {
     position: absolute;
-    display: block;
+    display: none;
     font-size: 14px;
     bottom: 0;
     margin: 0 10px 0 49px;
