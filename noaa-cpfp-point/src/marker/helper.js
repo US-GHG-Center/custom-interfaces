@@ -58,10 +58,10 @@ export const getMarkerStyle = (station, queryParams) => {
     let {ghg, frequency, type, medium} = queryParams;
     let { dataset_project, other_dataset_projects } = station;
 
-    let nrtMarker = getNRTMarker(station, queryParams);
-    if (!(nrtMarker === null)) {
-        return nrtMarker;
-    }
+    // let nrtMarker = getNRTMarker(station, queryParams);
+    // if (!(nrtMarker === null)) {
+    //     return nrtMarker;
+    // }
 
     let continuousMarkerClassName = legendsDictionary[CONTINUOUS].className;
     let nonContinuousMarkerClassName = legendsDictionary[NON_CONTINIOUS].className;

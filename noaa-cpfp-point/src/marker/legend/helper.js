@@ -85,10 +85,10 @@ export const getLegends = (queryParams) => {
  */
 export const getLegendsWrapper = (queryParams) => {
     let legends = getLegends({ ...queryParams });
-    if (hasNRTdata(queryParams)) {
-        let nrtLegend = { ...legendsDictionary[NRT] };
-        legends.push(nrtLegend);
-    }
+    // if (hasNRTdata(queryParams)) {
+    //     let nrtLegend = { ...legendsDictionary[NRT] };
+    //     legends.push(nrtLegend);
+    // }
     return legends;
 }
 
