@@ -7,15 +7,15 @@ export function openNotice(text) {
     // Add in notice text to the notice area
     noticeContent.innerText = text;
     // Show notice and make 6% height
-    noticeContainer.style.height = "6%";
+    noticeContainer.style.height = "7%";
     noticeContainer.style.bottom = "0";
     noticeContainer.style.display = "block";
 
     // Show chart and take remaining height
-    chartContainer.style.bottom = "6%";
+    chartContainer.style.bottom = "7%";
 
     // make up space for the notice
-    mapContainer.style.height = "44%";
+    mapContainer.style.height = "43%";
 }
 
 export function closeNotice() {
