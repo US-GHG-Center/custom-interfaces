@@ -10,7 +10,7 @@ export const nrtStations = [
         frequency: "customMKO",
         skipProxy: true,
         chartColor: "#FF7F50",
-        notice: "Mauna Loa Observatory measurements were suspended from November 29, 2022 through July 4, 2023 due to the volcanic eruption. Measurements from the Mauna Kea observatory (21 miles to the north) are substituted during this time period to fill in the Mauna Loa record. The Mauna Kea quality-controlled measurments are noted using a lighter shade of red. NRT data exist for the entire period."
+        notice: "Mauna Loa Observatory measurements were suspended from November 29, 2022 through July 4, 2023 due to the volcanic eruption. Measurements from the Mauna Kea observatory (21 miles to the north) are substituted during this time period to fill in the Mauna Loa record. The Mauna Kea quality-controlled measurments are noted using coral color. NRT data exist for the entire period."
     },
     {
         stationName: "Mauna Loa, Hawaii",
