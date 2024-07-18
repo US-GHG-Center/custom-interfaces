@@ -51,6 +51,7 @@ export function openChart(station, queryParams) {
     const chartContainerB = document.getElementById("chart-container");
     const dataSource = document.getElementById("data-source");
     const closeButton = document.getElementById("chart-close-button");
+    const zoomResetButton = document.getElementById("zoom-reset-button");
 
     const dataAccessUrls = constructDataAccessSourceUrls({...station}, {...queryParams});
     dataSource.innerHTML = "";
@@ -76,4 +77,9 @@ export function openChart(station, queryParams) {
         if (chart) chart.clear();
     });
 
+    zoomResetButton.addEventListener("click", () => {
+        if (chart) {
+            chart.resetZoom();
+        }
+    });
 }
