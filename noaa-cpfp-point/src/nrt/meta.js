@@ -19,7 +19,8 @@ export const nrtStations = [
         label: "Observed CO₂ Concentration (Daily NRT)",
         ghg: "co2",
         frequency: "daily",
-        chartColor: "blue"
+        chartColor: "blue",
+        useAsDataAccess: true
     },
     // {
     //     stationName: "Mauna Loa, Hawaii",

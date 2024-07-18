@@ -1,6 +1,6 @@
 import { GHG, CONTINUOUS, NON_CONTINIOUS, FLASK, PFP, INSITU, SURFACE } from "../../enumeration.js";
 import { nrtStations } from "../../nrt/meta.js";
-import { getStationIdx } from "../../nrt/helper";
+import { getDataAccessStationIdx } from "../../nrt/helper";
 
 /**
  * Constructs an array of data access and NRT (Near real time) data source URLs for a given station and query
@@ -29,7 +29,7 @@ export function constructDataAccessSourceUrls(station, queryParams) {
     result.push(defaultDataAccess);
 
     // check if station and ghg has NRT data
-    let stationIdx = getStationIdx(nrtStations, ghg, siteCode);
+    let stationIdx = getDataAccessStationIdx(nrtStations, ghg, siteCode);
     if (stationIdx === -1) {
         return result;
     }
