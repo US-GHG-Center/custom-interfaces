@@ -25,7 +25,7 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/dev" ]; then
             echo "target_branch=dev" >> $GITHUB_OUTPUT
             echo "env_name=development" >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref }}" = "refs/heads/production" ] || [ "${{ github.event_name }} = "schedule"]; then
+          elif [ "${{ github.ref }}" = "refs/heads/production" ] || [ "${{ github.event_name }}" = "schedule"]; then
             echo "target_branch=production" >> $GITHUB_OUTPUT
             echo "env_name=production" >> $GITHUB_OUTPUT
           fi
