@@ -19,7 +19,7 @@ jobs:
       - name: Set the environment based on the branch
         id: define_environment
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/production" ] || [ "${{ github.event_name }}" = "schedule"]; then
+          if [ "${{ github.ref }}" = "refs/heads/production" ] || [ "${{ github.event_name }}" = "schedule" ]; then
             echo "target_branch=production" >> $GITHUB_OUTPUT
             echo "env_name=production" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
