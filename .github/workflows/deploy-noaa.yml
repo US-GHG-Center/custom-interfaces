@@ -3,9 +3,9 @@ name: Deploy NOAA
 on:
   workflow_dispatch:
   push:
-    branches: [dev, production ] #[ main, dev, production ]
+    branches: [ main, dev, production ]
   pull_request:
-    branches: [dev, production ] #[ main, dev, production ]
+    branches: [ main, dev, production ]
 
 jobs:
   define-environment:
