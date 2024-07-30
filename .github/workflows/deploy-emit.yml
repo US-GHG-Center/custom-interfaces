@@ -1,26 +1,33 @@
 name: Build and Deploy EMIT
 on:
+  schedule:
+    - cron: '15 17 * * *' # Every day at 12:15 CT (5:15 PM UTC)
   workflow_dispatch:
   push:
     branches: [ main, dev, production ]
     paths:
       - emit-ch4plume-v1/**
+
 jobs:
   define-environment:
     name: Set environment
     runs-on: ubuntu-latest
     outputs:
       env_name: ${{ steps.define_environment.outputs.env_name }}
+      target_branch: ${{ steps.define_environment.outputs.target_branch }}
     steps:
       - name: Set the environment based on the branch
         id: define_environment
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/production" ] || [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "target_branch=production" >> $GITHUB_OUTPUT
+            echo "env_name=production" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "target_branch=main" >> $GITHUB_OUTPUT
             echo "env_name=staging" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+            echo "target_branch=dev" >> $GITHUB_OUTPUT
             echo "env_name=development" >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
-            echo "env_name=production" >> $GITHUB_OUTPUT
           fi
       - name: Print the environment
         run: echo "The environment is ${{ steps.define_environment.outputs.env_name }}"
@@ -36,6 +43,7 @@ jobs:
         with:
           sparse-checkout: 'emit-ch4plume-v1/'
           sparse-checkout-cone-mode: false
+          ref: ${{ needs.define-environment.outputs.target_branch }}
 
       - uses: actions/setup-node@v3
         with:
@@ -66,7 +74,7 @@ jobs:
     needs:
       - build
       - define-environment
-    if: github.ref == 'refs/heads/dev'
+    if: needs.define-environment.outputs.target_branch == 'dev'
     environment: ${{ needs.define-environment.outputs.env_name }}
 
     permissions:
@@ -101,7 +109,7 @@ jobs:
     needs:
       - build
       - define-environment
-    if: github.ref == 'refs/heads/main'
+    if: needs.define-environment.outputs.target_branch == 'main'
     environment: ${{ needs.define-environment.outputs.env_name }}
 
     permissions:
@@ -142,7 +150,7 @@ jobs:
     needs:
       - build
       - define-environment
-    if: github.ref == 'refs/heads/production'
+    if: needs.define-environment.outputs.target_branch == 'production'
     environment: ${{ needs.define-environment.outputs.env_name }}
 
     permissions:
