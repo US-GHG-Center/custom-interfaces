@@ -1,7 +1,7 @@
 name: Build and Deploy EMIT
 on:
   schedule:
-    - cron: '15 12 * * *' # Every day at 12:15
+    - cron: '15 17 * * *' # Every day at 12:15 CT (5:15 PM UTC)
   workflow_dispatch:
   push:
     branches: [ main, dev, production ]
