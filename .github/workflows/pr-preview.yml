@@ -1,0 +1,87 @@
+name: PR preview
+
+on:
+  pull_request:
+    paths:
+      - 'emit-ch4plume-v1/**'
+      - 'noaa-cpfp-point/**'
+
+jobs:
+  build_and_deploy:
+    environment: development
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    env:
+      S3_BUCKET: ghgc-custom-interfaces-develop
+      PR_NUMBER: ${{ github.event.number }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 'v20.9.0'
+
+      - name: Build emit-ch4plume-v1
+        if: contains(github.event.pull_request.changed_files, 'emit-ch4plume-v1/')
+        working-directory: ./emit-ch4plume-v1
+        run: |
+          echo MAP_STYLE="${{ vars.MAP_STYLE }}" >> .env
+          echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
+          echo PUBLIC_URL="${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_NUMBER }}" >> .env
+          echo STAGE="production" >> .env
+          npm install
+          npm run deploy
+
+      - name: Build noaa-cpfp-point
+        if: contains(github.event.pull_request.changed_files, 'noaa-cpfp-point/')
+        working-directory: ./noaa-cpfp-point
+        run: |
+          echo PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_NUMBER }}" >> .env
+          echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
+          npm i
+          npm run production
+        env:
+          PUBLIC_URL: ${{ vars.PUBLIC_URL_NOAA }}
+
+      - name: Configure AWS Credentials 
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
+          role-session-name: ${{ github.repository_owner}}
+          aws-region: us-west-2
+
+      - name: Upload to S3 (emit-ch4plume-v1)
+        if: contains(github.event.pull_request.changed_files, 'emit-ch4plume-v1/')
+        run: |
+          aws s3 sync emit-ch4plume-v1/dist s3://${{ env.S3_BUCKET }}/${{ env.PUBLIC_URL }}/${{ env.PR_NUMBER }}/
+        env:
+          PUBLIC_URL: ${{ vars.PUBLIC_URL_EMIT }}
+
+      - name: Upload to S3 (noaa-cpfp-point)
+        if: contains(github.event.pull_request.changed_files, 'noaa-cpfp-point/')
+        run: |
+          aws s3 sync noaa-cpfp-point/dist s3://${{ env.S3_BUCKET }}/${{ env.PUBLIC_URL }}/${{ env.PR_NUMBER }}/
+        env:
+          PUBLIC_URL: ${{ vars.PUBLIC_URL_NOAA }}
+
+      - name: Add PR comment (emit-ch4plume-v1)
+        if: contains(github.event.pull_request.changed_files, 'emit-ch4plume-v1/')
+        run: |
+          COMMENT="The website for emit-ch4plume-v1 has been built and uploaded. You can view it here: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com/${{ env.PUBLIC_URL }}/${{ env.PR_NUMBER }}/"
+          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -X POST -d "{\"body\":\"$COMMENT\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add PR comment (noaa-cpfp-point)
+        if: contains(github.event.pull_request.changed_files, 'noaa-cpfp-point/')
+        run: |
+          COMMENT="The website for noaa-cpfp-point has been built and uploaded. You can view it here: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com/${{ env.PUBLIC_URL }}/${{ env.PR_NUMBER }}/"
+          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -X POST -d "{\"body\":\"$COMMENT\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
