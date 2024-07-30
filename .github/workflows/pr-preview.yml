@@ -104,8 +104,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  delete_s3_content:
+  clean_up:
     if: ${{ github.event.action == 'closed' }}
+    environment: development
     runs-on: ubuntu-latest
 
     permissions:
