@@ -35,6 +35,7 @@ jobs:
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
           git diff --name-only origin/${{ github.event.pull_request.base.ref }} > changed_files.txt
+          cat changed_files.txt
 
           # Initialize CHANGED_WEBSITES as an empty array
           CHANGED_WEBSITES=()
@@ -46,7 +47,10 @@ jobs:
           if grep -q 'noaa-cpfp-point/' changed_files.txt; then
             CHANGED_WEBSITES+=('noaa-cpfp-point')
           fi
+          echo $CHANGED_WEBSITES
           echo "CHANGED_WEBSITES=${CHANGED_WEBSITES}" >> $GITHUB_ENV
+      
+      - run: echo "CHANGED_WEBSITES ${{ env.CHANGED_WEBSITES }}"
 
       - name: Configure AWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4
