@@ -20,7 +20,7 @@ jobs:
 
     env:
       S3_BUCKET: ghgc-custom-interfaces-develop
-      PR_NUMBER: ${{ github.event.number }}
+      PR_STRING: ${{ github.event.number }}
 
     steps:
       - name: Checkout code
@@ -50,10 +50,7 @@ jobs:
           # Convert array to comma-separated string and set it as an environment variable
           CHANGED_WEBSITES_STRING=$(IFS=, ; echo "${CHANGED_WEBSITES[*]}")
           echo "CHANGED_WEBSITES=$CHANGED_WEBSITES_STRING" >> $GITHUB_ENV
-          echo "Changed websites: $CHANGED_WEBSITES_STRING"
       
-      - run: echo "CHANGED_WEBSITES ${{ env.CHANGED_WEBSITES }}"
-
       - name: Configure AWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -69,25 +66,25 @@ jobs:
             if [ "$WEBSITE" == "emit-ch4plume-v1" ]; then
               echo MAP_STYLE="${{ vars.MAP_STYLE }}" >> ./emit-ch4plume-v1/.env
               echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./emit-ch4plume-v1/.env
-              echo PUBLIC_URL="${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_NUMBER }}" >> ./emit-ch4plume-v1/.env
+              echo PUBLIC_URL="${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}" >> ./emit-ch4plume-v1/.env
               echo STAGE="production" >> ./emit-ch4plume-v1/.env
               cd ./emit-ch4plume-v1
               npm install
               npm run deploy
               cd ..
-              aws s3 sync emit-ch4plume-v1/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_NUMBER }}/
-              COMMENT+="- 🛰️ emit-ch4plume-v1: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_NUMBER }}/index.html"
+              aws s3 sync emit-ch4plume-v1/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/
+              COMMENT+="- 🛰️ emit-ch4plume-v1: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/index.html \n \n"
             elif [ "$WEBSITE" == "noaa-cpfp-point" ]; then
-              echo PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_NUMBER }}" >> ./noaa-cpfp-point/.env
+              echo PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}" >> ./noaa-cpfp-point/.env
               echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./noaa-cpfp-point/.env
               cd ./noaa-cpfp-point
               npm install
-              PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_NUMBER }}" npm run production
+              PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}" npm run production
               cd ..
-              aws s3 sync noaa-cpfp-point/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_NUMBER }}/
-              aws s3 sync noaa-cpfp-point/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_NUMBER }}/data/
+              aws s3 sync noaa-cpfp-point/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/
+              aws s3 sync noaa-cpfp-point/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/data/
 
-              COMMENT+="- 🗼 noaa-cpfp-point: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_NUMBER }}/index.html"
+              COMMENT+="- 🗼 noaa-cpfp-point: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/index.html"
             fi
             echo "COMMENT=${COMMENT}" >> $GITHUB_ENV
           done
@@ -116,7 +113,7 @@ jobs:
 
     env:
       S3_BUCKET: ghgc-custom-interfaces-develop
-      PR_NUMBER: ${{ github.event.number }}
+      PR_STRING: pr-preview-${{ github.event.number }}
 
     steps:
       - name: Configure AWS Credentials 
@@ -128,5 +125,5 @@ jobs:
 
       - name: Delete built websites from S3
         run: |
-          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_NUMBER }}/ --recursive
-          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_NUMBER }}/ --recursive
+          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ --recursive
+          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/ --recursive
