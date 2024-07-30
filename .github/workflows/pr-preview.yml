@@ -47,8 +47,10 @@ jobs:
           if grep -q 'noaa-cpfp-point/' changed_files.txt; then
             CHANGED_WEBSITES+=('noaa-cpfp-point')
           fi
-          echo $CHANGED_WEBSITES
-          echo "CHANGED_WEBSITES=${CHANGED_WEBSITES}" >> $GITHUB_ENV
+          # Convert array to comma-separated string and set it as an environment variable
+          CHANGED_WEBSITES_STRING=$(IFS=, ; echo "${CHANGED_WEBSITES[*]}")
+          echo "CHANGED_WEBSITES=$CHANGED_WEBSITES_STRING" >> $GITHUB_ENV
+          echo "Changed websites: $CHANGED_WEBSITES_STRING"
       
       - run: echo "CHANGED_WEBSITES ${{ env.CHANGED_WEBSITES }}"
 
@@ -61,7 +63,7 @@ jobs:
 
       - name: Build and deploy
         run: |
-          WEBSITES=(${{ env.CHANGED_WEBSITES }})
+          IFS=',' read -r -a WEBSITES <<< "${{ env.CHANGED_WEBSITES }}"
           COMMENT="### ✅ Deploy Preview for *custom-interfaces* is ready! \n \n"
           for WEBSITE in "${WEBSITES[@]}"; do
             if [ "$WEBSITE" == "emit-ch4plume-v1" ]; then
