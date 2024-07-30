@@ -27,6 +27,9 @@ jobs:
         with:
           node-version: 'v20.9.0'
 
+      - run: |
+          echo ${{ github.event.pull_request.changed_files }}
+
       - name: Build emit-ch4plume-v1
         if: contains(github.event.pull_request.changed_files, 'emit-ch4plume-v1/')
         working-directory: ./emit-ch4plume-v1
