@@ -141,12 +141,7 @@ jobs:
           role-session-name: ${{ github.repository_owner }}
           aws-region: us-west-2
 
-      - name: Delete emit-ch4plume-v1 from S3
+      - name: Delete built websites from S3
         run: |
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_NUMBER }}/ --recursive
-        if: ${{ github.event.pull_request.merged }} || contains(github.event.pull_request.changed_files, 'emit-ch4plume-v1/')
-
-      - name: Delete noaa-cpfp-point from S3
-        run: |
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_NUMBER }}/ --recursive
-        if: ${{ github.event.pull_request.merged }} || contains(github.event.pull_request.changed_files, 'noaa-cpfp-point/')
