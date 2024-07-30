@@ -32,7 +32,12 @@ jobs:
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
           git diff --name-only origin/${{ github.event.pull_request.base.ref }} > changed_files.txt
-          echo "CHANGED_FILES=$(cat changed_files.txt)" >> $GITHUB_ENV
+          {
+            echo 'CHANGED_FILES<<EOF'
+            cat changed_files.txt
+            echo EOF
+          } >> "$GITHUB_ENV"
+          echo $CHANGED_FILES
 
       - name: Build emit-ch4plume-v1
         if: contains(env.CHANGED_FILES, 'emit-ch4plume-v1/')
