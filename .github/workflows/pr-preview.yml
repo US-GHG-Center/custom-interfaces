@@ -7,6 +7,10 @@ on:
       - 'emit-ch4plume-v1/**'
       - 'noaa-cpfp-point/**'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   S3_BUCKET: ghgc-custom-interfaces-develop
   PR_STRING: pr-preview-${{ github.event.number }}
