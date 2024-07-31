@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [ main, production ]
+    paths:
+      - noaa-cpfp-point/**
 
 jobs:
   define-environment:
