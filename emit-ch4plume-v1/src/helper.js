@@ -123,7 +123,7 @@ function createColorbar(VMIN, VMAX) {
     .attr("type", "text")
     .attr("id", "amount")
     .style("border", "0")
-    .style("color", "#f6931f") // Adjust margin as needed
+    .style("color", "#C85964")
     .style("font-weight", "bold")
     .style("size", "100")
     .style("width", "240px");

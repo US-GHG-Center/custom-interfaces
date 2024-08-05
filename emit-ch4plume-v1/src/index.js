@@ -18,15 +18,15 @@ const PUBLIC_URL = process.env.PUBLIC_URL || ".";
 const ZOOM_THRESHOLD = 8;
 mapboxgl.accessToken = process.env.MAP_ACCESS_TOKEN;
 
-const markerClickTracker = new Array(2)
+const markerClickTracker = new Array(2);
 
-const markerProps = new Object()
+const markerProps = new Object();
 
-var counter_clicks_marker = 0
+var counter_clicks_marker = 0;
 
 var layerToggled = true;
 var polygons;
-
+var itemIds;
 
 
 const map = new mapboxgl.Map({
@@ -51,6 +51,7 @@ class HomeButtonControl {
         $("#display_props").css({
             "visibility": "hidden"
         });
+
         // For each element in counter_clicker set the unvisible to visible
         markerClickTracker.forEach((element) => {
             element.style.visibility = "visible";
@@ -85,9 +86,6 @@ class LayerButtonControl {
         $("#layer-eye").toggleClass("fa-eye fa-eye-slash");
         // Toggle layer visibility
         layerToggled = !layerToggled;
-
-        console.log(layerToggled);
-
         // Set the map's center and zoom to the desired location
         RASTER_IDS_ON_MAP.forEach((raster_id_on_map) => {
 
@@ -163,7 +161,7 @@ function addPolygon(polygonSourceId, polygonLayerId, polygonFeature) {
 
         layout: {},
         paint: {
-          "fill-outline-color": "#00FFFF",
+          "fill-outline-color": "#20B2AA",
           'fill-color': 'transparent'
         },
       });
@@ -175,7 +173,7 @@ function addPolygon(polygonSourceId, polygonLayerId, polygonFeature) {
         'source': polygonSourceId,
         'layout': {},
         'paint': {
-            'line-color': "#00FFFF",
+            'line-color': "#20B2AA",
             'line-width': 3
         }
     });
@@ -192,7 +190,7 @@ function addRaster(itemProps, feature, polygonId, fromZoom) {
     if (!IDS_ON_MAP.has(feature.id)) {
 
         const TILE_URL =
-            "https://ghg.center/api/raster/stac/tiles/WebMercatorQuad/{z}/{x}/{y}@1x" +
+            "https://earth.gov/ghgcenter/api/raster/stac/tiles/WebMercatorQuad/{z}/{x}/{y}@1x" +
             "?collection=" +
             collection +
             "&item=" +
@@ -255,22 +253,77 @@ function addRaster(itemProps, feature, polygonId, fromZoom) {
 }
 
 
+function handleSearch (keyword) {
+    let plumeIds = new Array()
+    MARKERS_ON_MAP.forEach(marker => {
+        plumeIds.push(`${marker.feature.properties["Plume ID"]} (${marker.feature.properties["Location"]})`)
+
+    })
 
 
+    plumeIds.sort((a, b) => {
+        return getSimilarity(b, keyword) - getSimilarity(a, keyword)
+    })
+    plumeIds = plumeIds.filter(plume_id => {
+        return getSimilarity(plume_id, keyword) > 0
+      })
+    return plumeIds;
+    }
+    
+    
+function getSimilarity (data, keyword) {
+    data = data.toLowerCase()
+    keyword = keyword.toLowerCase()
+    return data.length - data.replace(new RegExp(keyword, 'g'), '').length
+    }
 
+function drawplume_idList (_plume_ids) {
+    $('.autocomplete-search-box .search-result').html('')
+    for (let i = 0; i < _plume_ids.length; i++) {
+        $('.autocomplete-search-box .search-result').append(`<li class="plume_ids">${_plume_ids[i]}</li>`)
+    }
+    }
 
+document.addEventListener("click", function (e) {
+    if (e.target && e.target.nodeName === "LI" && e.target.classList.contains('plume_ids')) {
+        let text = e.target.textContent || e.target.innerText
+        $('.search-box').val(text);
+        drawplume_idList([]);
+        MARKERS_ON_MAP.forEach(marker => {
+            console.log("====>", text.split()[0]);
+            if (text.split(" ")[0] === marker.feature.properties["Plume ID"]) {
+                let plumeName = path.basename(marker.feature.properties["Data Download"]);
+                let mark_polygon = polygons[marker.id];
+                addPolygon(
+                    "polygon-source-" + marker.id,
+                    "polygon-layer-" + marker.id,
+                    mark_polygon.feature
+      
+                  )
+                addRaster(itemIds[plumeName], marker.feature, "polygon-layer-" + marker.id, false)
+
+                return true;
+                
+            }
+            
+    
+        })
+
+    }
+    else {
+        $('.search-box').val("");
+    }
+});
 
 
 async function main() {
-
-
 
     map.on("load", async () => {
 
         const methanMetadata = await (
             await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
           ).json();
-          const itemIds = await (
+        itemIds = await (
             await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
           ).json();
         const features = methanMetadata.features;
@@ -296,6 +349,10 @@ async function main() {
               return prev_date - next_date
         
           });
+
+
+
+
         createColorbar(VMIN, VMAX);
 
 
@@ -459,9 +516,9 @@ async function main() {
                         );
 
                         if (point_date >= startDate && point_date <= stopDate) {
-                            markerProps[layerID].addTo(map)
+                            
+                            markerProps[layerID].addTo(map);
                             MARKERS_ON_MAP.add(point);
-
 
                         } else {
                             markerProps[layerID].remove()
@@ -503,6 +560,18 @@ async function main() {
                 startDate.toUTCString().slice(0, -13) + " - " + stopDate.toUTCString().slice(0, -13)
             );
         });
+
+
+
+        let typingTimeout = null;
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => {
+        $('.search-box').keyup((e) => {
+            const copy_procedures = handleSearch($(e.target).val())
+            drawplume_idList(copy_procedures);
+          })
+        },500);
+
     });
 }
 
