@@ -29,4 +29,8 @@ export function setZoomInstructionEvents () {
     infoCircle.addEventListener("mouseleave", () => {
         zoomInstructions.style.display = "none";
     });
+
+    infoCircle.addEventListener("click", () => {
+        zoomInstructions.style.display = "none";
+    });
 }

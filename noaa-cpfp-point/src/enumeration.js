@@ -14,6 +14,8 @@ export const CONTINUOUS = "continuous";
 export const NON_CONTINIOUS = "non-continuous";
 // WildCard
 export const ALL = "all";
+// for near realtime data
+export const NRT = "nrt";
 
 // Color defination
 export const ghgBlue = "#082A63";

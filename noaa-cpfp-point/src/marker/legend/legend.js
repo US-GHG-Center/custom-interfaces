@@ -1,4 +1,4 @@
-import { getLegends } from "./helper";
+import { getLegendsWrapper } from "./helper";
 
 /**
  * Draws legends for the markers based on the provided query parameters.
@@ -9,7 +9,7 @@ import { getLegends } from "./helper";
  * @returns {void}
  */
 export const drawLegend = (queryParams) => {
-    let legends = getLegends({ ...queryParams });
+    let legends = getLegendsWrapper({ ...queryParams });
 
     if (legends && legends.length == 0) {
         let legendContainer = document.getElementById("legend-container");
@@ -20,10 +20,10 @@ export const drawLegend = (queryParams) => {
     let legendsDOMString = `<div id="legend-head">Legend</div>
                             <div id="legend-line"></div>`;
     legends.forEach( legend => {
-        let { text, imageClass } = legend;
+        let { text, className } = legend;
         let elem = `
             <div class="legend-element">
-                <div class="${imageClass}"></div>
+                <div class="${className}"></div>
                 <span class="legend-text">${text}<span>
             </div>
         `;

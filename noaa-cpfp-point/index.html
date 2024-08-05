@@ -39,9 +39,19 @@
         </div>
         <canvas id="chart">
         </canvas>
-        <i id="chart-close-button" class="fa fa-solid fa-xmark" title="Close"></i>
         <div id="data-source">
         </div>
+        <div id="chart-controls">
+            <i id="zoom-reset-button" class="fa fa-solid fa-undo" title="Reset Zoom" style="font-size: 19px"></i>
+            <i id="chart-close-button" class="fa fa-solid fa-xmark" title="Close"></i>
+            </div>
+        </div>
+    </div>
+    <div id="notice-container">
+        <div id="notice-header">
+            <i class="fa-regular fa-message"></i> <b>Note </b>
+        </div>
+        <div id="notice-content"></div>
     </div>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
