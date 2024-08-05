@@ -19,7 +19,7 @@ export const nrtStations = [
         ghg: "co2",
         frequency: "daily",
         chartColor: "blue",
-        useAsDataAccess: false,
+        useAsDataAccess: true,
         useProxy: true,
     },
     // {
