@@ -17,7 +17,7 @@ export const nrtStations = [
         source: "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_daily_mlo.txt",
         label: "Observed CO₂ Concentration (Daily NRT)",
         ghg: "co2",
-        frequency: "daily",
+        frequency: "customNRTMLO",
         chartColor: "blue",
         useAsDataAccess: true,
         useProxy: true,
