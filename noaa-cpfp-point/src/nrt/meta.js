@@ -8,19 +8,19 @@ export const nrtStations = [
         label: "Observed CO₂ Concentration (MKO Daily In-situ)",
         ghg: "co2",
         frequency: "customMKO",
-        // useProxy: true,
         chartColor: "#FF7F50",
         notice: "Mauna Loa Observatory measurements were suspended from November 29, 2022 through July 4, 2023 due to the volcanic eruption. Measurements from the Mauna Kea observatory (21 miles to the north) are substituted during this time period to fill in the Mauna Loa record. The Mauna Kea quality-controlled measurments are noted using coral color. NRT data exist for the entire period."
     },
     {
-        stationName: "Mauna Loa, Hawaii",
+        stationName: "Mauna Loa, Hawaii", // A Daily NRT for CO2 measured in MLO station
         stationCode: "MLO",
         source: "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_daily_mlo.txt",
         label: "Observed CO₂ Concentration (Daily NRT)",
         ghg: "co2",
         frequency: "daily",
         chartColor: "blue",
-        useAsDataAccess: true
+        useAsDataAccess: false,
+        // useProxy: true,
     },
     // {
     //     stationName: "Mauna Loa, Hawaii",
