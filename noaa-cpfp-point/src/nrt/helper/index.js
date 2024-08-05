@@ -1,4 +1,4 @@
-import { YearlyDataPreprocessor, MonthlyDataPreprocessor, DailyDataPreprocessor } from "../dataPreprocessor";
+import { YearlyDataPreprocessor, MonthlyDataPreprocessor, DailyDataPreprocessor, CustomMKODataPreprocessor } from "../dataPreprocessor";
 
 /**
  * Parses the given CSV data and returns a visualization JSON object based on the specified data
@@ -16,8 +16,11 @@ export function parseData(csvdata, frequency) {
         dp = new YearlyDataPreprocessor(csvdata);
     } else if (frequency.toLowerCase() === "monthly") {
         dp = new MonthlyDataPreprocessor(csvdata);
-    } else {
+    } else if (frequency.toLowerCase() === "daily") {
         dp = new DailyDataPreprocessor(csvdata);
+    } else if (frequency.toLowerCase() === "customMKO".toLowerCase()) {
+        // to handle mko station data inside mlo station
+        dp = new CustomMKODataPreprocessor(csvdata);
     }
     let vizJSON = dp.getVizJSON();
     return vizJSON;
@@ -39,4 +42,41 @@ export function getStationIdx(stations, ghg, site_code) {
         }
     }
     return -1;
+}
+
+/**
+ * Returns the index of a station in the `stations` array that matches the given `site_code` and
+`ghg` and from which source is to be used as data access url.
+ *
+ * @param {Array<Station>} stations - The list of stations to search.
+ * @param {string} ghg - The Greenhouse Gas code to match.
+ * @param {string} site_code - The site code to match.
+ * @returns {number} The index of the matching station, or -1 if no match is found.
+ */
+export function getDataAccessStationIdx(stations, ghg, site_code) {
+    for (let i=0; i < stations.length; i++) {
+        if (stations[i].stationCode.toLowerCase() === site_code.toLowerCase() && stations[i].ghg.toLowerCase() === ghg.toLowerCase() && stations[i].useAsDataAccess) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/**
+ * Returns the index of a station in the `stations` array that matches the given `site_code` and
+`ghg`.
+ *
+ * @param {Array<Station>} stations - The list of stations to search.
+ * @param {string} ghg - The Greenhouse Gas code to match.
+ * @param {string} site_code - The site code to match.
+ * @returns {number} The array of index of the matching station, or empty [] if no match is found.
+ */
+export function getStationIdxs(stations, ghg, site_code) {
+    let idxs = [];
+    for (let i=0; i < stations.length; i++) {
+        if (stations[i].stationCode.toLowerCase() === site_code.toLowerCase() && stations[i].ghg.toLowerCase() === ghg.toLowerCase()) {
+            idxs.push(i);
+        }
+    }
+    return idxs;
 }
