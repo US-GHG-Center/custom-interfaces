@@ -43,8 +43,8 @@ export async function nrtResolver(station, queryParams, data, labels, chartColor
 
         let dataLabel = stationMeta.label;
         let frequency = stationMeta.frequency;
-        let skipProxy = stationMeta.skipProxy;
-        let dataSource = skipProxy ? stationMeta.source : `${proxyServerURL}?${encodeURIComponent(stationMeta.source)}`;
+        let useProxy = stationMeta.useProxy;
+        let dataSource = useProxy ? `${proxyServerURL}?${encodeURIComponent(stationMeta.source)}` : stationMeta.source;
         try {
             let stationDataRaw = await fetch(dataSource);
             let stationDataText = await stationDataRaw.text();
