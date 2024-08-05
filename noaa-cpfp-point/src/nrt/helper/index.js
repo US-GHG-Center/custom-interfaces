@@ -1,4 +1,4 @@
-import { YearlyDataPreprocessor, MonthlyDataPreprocessor, DailyDataPreprocessor, CustomMKODataPreprocessor } from "../dataPreprocessor";
+import { YearlyDataPreprocessor, MonthlyDataPreprocessor, DailyDataPreprocessor, CustomMKODataPreprocessor, CustomNRTMLODataPreprocessor } from "../dataPreprocessor";
 
 /**
  * Parses the given CSV data and returns a visualization JSON object based on the specified data
@@ -18,6 +18,8 @@ export function parseData(csvdata, frequency) {
         dp = new MonthlyDataPreprocessor(csvdata);
     } else if (frequency.toLowerCase() === "daily") {
         dp = new DailyDataPreprocessor(csvdata);
+    } else if (frequency.toLowerCase() === "customNRTMLO".toLowerCase()) {
+        dp = new CustomNRTMLODataPreprocessor(csvdata);
     } else if (frequency.toLowerCase() === "customMKO".toLowerCase()) {
         // to handle mko station data inside mlo station
         dp = new CustomMKODataPreprocessor(csvdata);

@@ -104,3 +104,49 @@ export class CustomMKODataPreprocessor extends DataPreprocessor {
         return number + 1;
     }
 }
+
+
+/**
+ * Class that extends the DataPreprocessor to preprocess NRT data in txt format and generates
+visualization-ready JSON data for MLO station. There are custom criterias for this data.
+ * custom criterias: Only show non QCed data after the point where there is no QCed data.
+ *
+ * @method setDataColumnIndex()  - Sets the column indices for the year, month, day, and value
+attributes. Specifically sets:
+ *      - this.year to 0 (default: null)
+ *      - this.month to 1 (default: null)
+ *      - this.day to 2 (default: null)
+ *      - this.value to 4 (default: null)
+ *
+ * Note: all the other methods are inherited from the DataPreprocessor class.
+ */
+export class CustomNRTMLODataPreprocessor extends DataPreprocessor {
+    setDataColumnIndex() {
+        this.year = 0;
+        this.month = 1;
+        this.day = 2;
+        this.value = 4;
+    }
+
+    // overriding the method
+    getVizJSON() {
+        this.setDataColumnIndex();
+        // filter the data from the point when there is no QCed data
+        const cutOffDate = new Date("2023-04-30T00:00:00Z");
+        let dataFrame = this.createDataframe(this.data);
+        let vizJSONFilter = dataFrame.map((row) => {
+            let date = this.formDate(row);
+            let value = row[this.value];
+            let jsDate = new Date(date);
+            if (jsDate < cutOffDate) {
+                return null;
+            }
+            return {
+                date: date,
+                value: value,
+            };
+        });
+        let vizJSON = vizJSONFilter.filter((data) => data !== null);
+        return vizJSON;
+    }
+}
