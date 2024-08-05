@@ -36,14 +36,22 @@ jobs:
         with:
           sparse-checkout: 'noaa-cpfp-point/'
           sparse-checkout-cone-mode: true
-      
+
+      - name: Read Node.js version from .nvmrc
+        id: nvm
+        run: echo "::set-output name=NODE_VERSION::$(cat noaa-cpfp-point/.nvmrc)"
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
+
       - name: Build for production 🔧
         working-directory: ./noaa-cpfp-point
         run: |
           echo PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}" >> .env
           echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
-          npm i
-          npm run production
+          yarn
+          yarn production
         env:
           PUBLIC_URL: ${{ vars.PUBLIC_URL_NOAA }}
       
