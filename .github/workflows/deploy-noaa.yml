@@ -45,6 +45,9 @@ jobs:
         with:
           node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
 
+      - name: Install Yarn
+        run: npm install -g yarn
+
       - name: Build for production 🔧
         working-directory: ./noaa-cpfp-point
         run: |
