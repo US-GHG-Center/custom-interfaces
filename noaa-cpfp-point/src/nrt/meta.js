@@ -20,7 +20,7 @@ export const nrtStations = [
         frequency: "daily",
         chartColor: "blue",
         useAsDataAccess: false,
-        // useProxy: true,
+        useProxy: true,
     },
     // {
     //     stationName: "Mauna Loa, Hawaii",
