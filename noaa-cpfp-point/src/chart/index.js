@@ -1,7 +1,8 @@
 import { getOptions, plugin } from './config.js';
 import { getDatasets } from './helper/index.js';
 import { setZoomInstructionEvents } from './helper/zoomInstructions.js';
-import { constructDataAccessSourceUrl } from './helper/dataAccessUrl.js';
+import { constructDataAccessSourceUrls } from './helper/dataAccessUrl.js';
+import { closeNotice } from "../notice";
 
 let chart = null;
 
@@ -17,7 +18,7 @@ let chart = null;
  * @returns {void}
  */
 // Function to render the time series chart
-export function renderChart(station, datas, selectedGhg, graphsDataLabels) {
+export function renderChart(station, datas, selectedGhg, graphsDataLabels, chartColors) {
     const chartContainer = document.getElementById("chart");
 
     setZoomInstructionEvents();
@@ -28,16 +29,11 @@ export function renderChart(station, datas, selectedGhg, graphsDataLabels) {
     // Create a Chart.js chart here using 'data'
     // Example:
 
-    let datasets = getDatasets(datas, graphsDataLabels);
+    let datasets = getDatasets(datas, graphsDataLabels, chartColors);
     let options = getOptions(station, selectedGhg);
 
     chart = new Chart(chartContainer, {
         type: "line",
-        // data: {
-        // // labels: data.map((item, index) => (index % stepSize === 0) ? item.date : ''), // Show label every stepSize data points
-        // labels: datas[0].map((item) => item.date), // Show label every stepSize data points
-        // datasets: getDatasets(datas, selectedGhg),
-        // },
         data: {
             datasets: datasets,
         },
@@ -55,12 +51,17 @@ export function openChart(station, queryParams) {
     const chartContainerB = document.getElementById("chart-container");
     const dataSource = document.getElementById("data-source");
     const closeButton = document.getElementById("chart-close-button");
+    const zoomResetButton = document.getElementById("zoom-reset-button");
 
-    const dataAccessUrl = constructDataAccessSourceUrl({...station}, {...queryParams});
-    // Add in data access url link to the selected station
-    dataSource.innerHTML = `
-                            <a href="${dataAccessUrl}" target="_blank"> Access data at NOAA ↗ </a>
-                            `;
+    const dataAccessUrls = constructDataAccessSourceUrls({...station}, {...queryParams});
+    dataSource.innerHTML = "";
+    dataAccessUrls.forEach(element => {
+        // Add in data access url link to the selected station
+        dataSource.innerHTML += `
+                                    <div class="data-access-url-container"><a href="${element.source}" target="_blank"> ${element.title} </a></div>
+                                `;
+    });
+
     // Show chart and make map half-height
     mapContainer.style.height = "50%";
     chartContainerB.style.height = "50%";
@@ -68,10 +69,17 @@ export function openChart(station, queryParams) {
 
     // add event listner to chart-close-button
     closeButton.addEventListener("click", () => {
+        closeNotice();
+
         mapContainer.style.height = "100%";
         chartContainerB.style.height = "0%";
         chartContainerB.style.display = "none";
         if (chart) chart.clear();
     });
 
+    zoomResetButton.addEventListener("click", () => {
+        if (chart) {
+            chart.resetZoom();
+        }
+    });
 }

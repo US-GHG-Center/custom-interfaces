@@ -1,4 +1,7 @@
-import { ghgBlue, GHG, CO2, CONTINUOUS, NON_CONTINIOUS, TYPES, FLASK, PFP, INSITU, SURFACE, TOWER, ALL} from "../enumeration.js";
+import { ghgBlue, GHG, CO2, CONTINUOUS, NON_CONTINIOUS, TYPES, FLASK, PFP, INSITU, SURFACE, TOWER, ALL, NRT} from "../enumeration.js";
+import { nrtStations } from "../nrt/meta.js";
+import { getStationIdx } from "../nrt/helper";
+import { legendsDictionary } from "./meta.js";
 
 /**
  * Generates tooltip content for a marker representing a station.
@@ -42,16 +45,6 @@ export const getMarkerToolTipContent = (station) => {
  * 
  * Note: Put thing that is priority comparision in the top.
  *
- * Note: The color are selected to enable Semantic Inferencing. Its done on the following basis:
- *  The logical ordering of all the insrument data is done in the following way:
- *	|_ALL DATA :: use :: marker-gold
- *		|_continuous (collection):: use :: gradient color 2 :: use :: marker-pink-red
- *			|_pfp surface :: use :: marker-red
- *			|_flask surface :: use :: marker-pink
- *		|_non-continuous (collection):: use :: gradient color 2 :: use :: marker-blue-purple
- *			|_insitu surface :: use :: marker-blue
- *			|_insitu tower :: use :: marker-purple
- *
  * @param {Object} station - The metadata of the station.
  * @param {string} station.dataset_project - The project (<medium>_<type>) from which dataset was collected.
  * @param {Object} queryParams - An object containing query parameters.
@@ -65,8 +58,13 @@ export const getMarkerStyle = (station, queryParams) => {
     let {ghg, frequency, type, medium} = queryParams;
     let { dataset_project, other_dataset_projects } = station;
 
-    let continuousMarkerClassName = "marker marker-blue";
-    let nonContinuousMarkerClassName = "marker marker-gold";
+    // let nrtMarker = getNRTMarker(station, queryParams);
+    // if (!(nrtMarker === null)) {
+    //     return nrtMarker;
+    // }
+
+    let continuousMarkerClassName = legendsDictionary[CONTINUOUS].className;
+    let nonContinuousMarkerClassName = legendsDictionary[NON_CONTINIOUS].className;
 
     // frequency can be empty. And
     /* frequency has the higher precedence/priority among other query params */
@@ -100,25 +98,26 @@ export const getMarkerStyle = (station, queryParams) => {
     /* When no frequency, compute the following */
     if (type === INSITU && medium === SURFACE) {
         // return insitu surface
-        let className = "marker marker-blue";
+        let className = legendsDictionary[INSITU][SURFACE].className;
         return className;
     }
 
     if (type === INSITU && medium === TOWER) {
         // return insitu tower
-        let className = "marker marker-purple";
+        let className = legendsDictionary[INSITU][TOWER].className;
         return className;
     }
 
     if (type === PFP && medium === SURFACE) {
         // return pfp surface
-        let className = "marker marker-red";
+        // let className = "marker marker-red";
+        let className = legendsDictionary[PFP][SURFACE].className;
         return className;
     }
 
     if (type === FLASK && medium === SURFACE) {
         // return flask surface
-        let className = "marker marker-pink";
+        let className = legendsDictionary[FLASK][SURFACE].className;
         return className;
     }
 
@@ -177,3 +176,18 @@ const hasHeterogenousInstrumentTypes = (other_dataset_projects) => {
     }
     return isHeterogenous;
 }
+
+const getNRTMarker = (station, queryParams) => {
+    // The NRT data marker style has highest priority check before all others
+    let { ghg } = queryParams;
+    const { site_code: siteCode } = station;
+
+    // check if station and ghg has NRT data
+    let stationIdx = getStationIdx(nrtStations, ghg, siteCode);
+    if (stationIdx === -1) {
+        return null;
+    }
+    // if yes, return the marker style for NRT data
+    let NRTMarkerClassName = legendsDictionary[NRT].className;
+    return NRTMarkerClassName;
+};

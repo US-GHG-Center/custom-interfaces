@@ -1,48 +1,6 @@
-import { ALL, CONTINUOUS, FLASK, PFP, NON_CONTINIOUS, INSITU, SURFACE, TOWER } from "../../enumeration";
-
-const legendsDictionary = {
-    [CONTINUOUS]: {
-        color: "blue",
-        imageClass: "marker marker-blue",
-        text: "Surface and Tower In-situ"
-    },
-    [NON_CONTINIOUS]: {
-        color: "gold",
-        imageClass: "marker marker-gold",
-        text: "Flask and PFP"
-    },
-    [ALL]: {
-        color: "blue",
-        imageClass: "marker marker-blue",
-        text: "Flask, PFP and In-situ"
-    },
-    [FLASK]: {
-        [SURFACE]: {
-            color: "pink",
-            imageClass: "marker marker-pink",
-            text: "Flask"
-        }
-    },
-    [PFP]: {
-        [SURFACE]: {
-            color: "red",
-            imageClass: "marker marker-red",
-            text: "PFP"
-        }
-    },
-    [INSITU]: {
-        [SURFACE]: {
-            color: "blue",
-            imageClass: "marker marker-blue",
-            text: "Surface In-situ"
-        },
-        [TOWER]: {
-            color: "purple",
-            imageClass: "marker marker-purple",
-            text: "Tower In-situ"
-        }
-    }
-};
+import { ALL, CONTINUOUS, FLASK, PFP, NON_CONTINIOUS, INSITU, SURFACE, TOWER, NRT } from "../../enumeration";
+import { nrtStations } from "../../nrt/meta";
+import { legendsDictionary } from "../meta";
 
 /**
  * Retrieves legends based on the provided query parameters.
@@ -115,4 +73,37 @@ export const getLegends = (queryParams) => {
         return legend;
     }
     return [];
+}
+
+/**
+ * Returns an array of legend objects (ref. legendsDictionary in meta) based on the provided query parameters.
+ * In addition checks if there are NRT data available for the selected GHG, and if yes, adds NRT legend.
+ *
+ * @param {object} queryParams - The query parameters defining ghg.
+ *
+ * @returns {array} An array of legend objects.
+ */
+export const getLegendsWrapper = (queryParams) => {
+    let legends = getLegends({ ...queryParams });
+    // if (hasNRTdata(queryParams)) {
+    //     let nrtLegend = { ...legendsDictionary[NRT] };
+    //     legends.push(nrtLegend);
+    // }
+    return legends;
+}
+
+/**
+ * Checks if the NRT data is available for the selected GHG (explained by the queryParam).
+ *
+ * @param {object} queryParams - The query parameters to check.
+ * @returns {boolean} True if the query parameters contain NRT data, false otherwise.
+ */
+const hasNRTdata = (queryParams) => {
+    // check if station and ghg has NRT data
+    let { ghg } = queryParams;
+    let ghgWithNRT = nrtStations.map(station => station.ghg);
+    if ( ghgWithNRT.includes(ghg) ) {
+        return true;
+    }
+    return false;
 }

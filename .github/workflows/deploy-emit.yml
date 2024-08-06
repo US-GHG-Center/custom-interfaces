@@ -1,26 +1,30 @@
 name: Build and Deploy EMIT
 on:
+  schedule:
+    - cron: '15 17 * * *' # Every day at 12:15 CT (5:15 PM UTC)
   workflow_dispatch:
   push:
-    branches: [ main, dev, production ]
-  pull_request:
-    branches: [ main, dev, production ]
+    branches: [ main, production ]
+    paths:
+      - emit-ch4plume-v1/**
+
 jobs:
   define-environment:
     name: Set environment
     runs-on: ubuntu-latest
     outputs:
       env_name: ${{ steps.define_environment.outputs.env_name }}
+      target_branch: ${{ steps.define_environment.outputs.target_branch }}
     steps:
       - name: Set the environment based on the branch
         id: define_environment
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            echo "env_name=staging" >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref }}" = "refs/heads/dev" ]; then
-            echo "env_name=development" >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/production" ] || [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "target_branch=production" >> $GITHUB_OUTPUT
             echo "env_name=production" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "target_branch=main" >> $GITHUB_OUTPUT
+            echo "env_name=staging" >> $GITHUB_OUTPUT
           fi
       - name: Print the environment
         run: echo "The environment is ${{ steps.define_environment.outputs.env_name }}"
@@ -36,6 +40,7 @@ jobs:
         with:
           sparse-checkout: 'emit-ch4plume-v1/'
           sparse-checkout-cone-mode: false
+          ref: ${{ needs.define-environment.outputs.target_branch }}
 
       - uses: actions/setup-node@v3
         with:
@@ -62,46 +67,11 @@ jobs:
           name: dist_folder
           path: ./emit-ch4plume-v1/dist
 
-  deploy-dev:
-    needs:
-      - build
-      - define-environment
-    if: github.ref == 'refs/heads/dev'
-    environment: ${{ needs.define-environment.outputs.env_name }}
-
-    permissions:
-      id-token: write
-      contents: read
-
-    runs-on: ubuntu-latest
-    steps:
-      
-      - name: Download dist folder
-        uses: actions/download-artifact@v4
-        with:
-          name: dist_folder
-          path: ./emit-ch4plume-v1/dist
-
-      - name: ConfigureAWS Credentials 
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
-          role-session-name: ${{ github.repository_owner}}
-          aws-region: us-west-2
-      
-      - name: Upload to S3
-        run: |
-          export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
-          echo $PUBLIC_URL
-          aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-develop/${PUBLIC_URL}/ 
-        env:
-          PUBLIC_URL: ${{ vars.PUBLIC_URL_EMIT }}
-
   deploy-staging:
     needs:
       - build
       - define-environment
-    if: github.ref == 'refs/heads/main'
+    if: needs.define-environment.outputs.target_branch == 'main'
     environment: ${{ needs.define-environment.outputs.env_name }}
 
     permissions:
@@ -137,12 +107,11 @@ jobs:
           paths: |
             /${{ env.PUBLIC_URL }}*
 
-
   deploy-production:
     needs:
       - build
       - define-environment
-    if: github.ref == 'refs/heads/production'
+    if: needs.define-environment.outputs.target_branch == 'production'
     environment: ${{ needs.define-environment.outputs.env_name }}
 
     permissions:

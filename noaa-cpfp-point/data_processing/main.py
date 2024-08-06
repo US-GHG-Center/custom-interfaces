@@ -33,6 +33,13 @@ def main():
     data_src_dirs = ["../data/raw/co2/pfp/surface/", "../data/raw/co2/flask/surface/", "../data/raw/ch4/pfp/surface/", "../data/raw/ch4/flask/surface/"]
     data_dest_dirs = ["../data/processed/co2/pfp/surface/", "../data/processed/co2/flask/surface/", "../data/processed/ch4/pfp/surface/", "../data/processed/ch4/flask/surface/"]
 
+    # absolute paths conversion
+    dirname = os.path.dirname(__file__) # absolute path of this file (which will be executed)
+    insitu_src_dirs = [os.path.join(dirname, relative_dir) for relative_dir in insitu_src_dirs]
+    insitu_dest_dirs = [os.path.join(dirname, relative_dir) for relative_dir in insitu_dest_dirs]
+    data_src_dirs = [os.path.join(dirname, relative_dir) for relative_dir in data_src_dirs]
+    data_dest_dirs = [os.path.join(dirname, relative_dir) for relative_dir in data_dest_dirs]
+
     for dest_dir in insitu_dest_dirs+data_dest_dirs:
         if not os.path.exists(dest_dir):
             os.makedirs(dest_dir)

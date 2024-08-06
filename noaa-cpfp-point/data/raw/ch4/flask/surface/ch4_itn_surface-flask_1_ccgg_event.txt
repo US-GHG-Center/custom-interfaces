@@ -8,12 +8,12 @@
 # ------------------------------------------------------------->>>>
 # DESCRIPTION
 #
-# dataset_description: Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1983-2022
+# dataset_description: Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, starting in 1983
 #
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, M.J. Crotwell, E. Moglia,  M. Madronich, D. Neff and K.W. Thoning (2023), Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network,  1983-2022, Version: 2023-08-28, https://doi.org/10.15138/VNCZ-M766
+# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2024), Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1983-2023,  Version: 2024-07-30, https://doi.org/10.15138/VNCZ-M766
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -39,8 +39,8 @@
 # site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
 # site_utc2lst : -5.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
-# dataset_creation_date : 2023-08-28T15:12:28.852086
-# dataset_num : 276
+# dataset_creation_date : 2024-07-30T08:28:36.338781
+# dataset_num : 120
 # dataset_name : ch4_itn_surface-flask_1_ccgg_event
 # dataset_parameter : ch4
 # dataset_parameter_name : Methane

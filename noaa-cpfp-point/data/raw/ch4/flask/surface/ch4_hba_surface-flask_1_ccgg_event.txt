@@ -8,12 +8,12 @@
 # ------------------------------------------------------------->>>>
 # DESCRIPTION
 #
-# dataset_description: Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1983-2022
+# dataset_description: Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, starting in 1983
 #
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, M.J. Crotwell, E. Moglia,  M. Madronich, D. Neff and K.W. Thoning (2023), Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network,  1983-2022, Version: 2023-08-28, https://doi.org/10.15138/VNCZ-M766
+# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2024), Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1983-2023,  Version: 2024-07-30, https://doi.org/10.15138/VNCZ-M766
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -39,8 +39,8 @@
 # site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
 # site_utc2lst : -2.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
-# dataset_creation_date : 2023-08-28T15:12:28.852086
-# dataset_num : 271
+# dataset_creation_date : 2024-07-30T08:28:36.338781
+# dataset_num : 115
 # dataset_name : ch4_hba_surface-flask_1_ccgg_event
 # dataset_parameter : ch4
 # dataset_parameter_name : Methane
@@ -52,7 +52,7 @@
 # dataset_comment : For more information about these data, please see https://gml.noaa.gov/aftp/data/trace_gases/ch4/flask/README_ch4_surface-flask_ccgg.html
 # dataset_calibration_scale : CH4_X2004A
 # dataset_start_date : 1983-01-17T18:30:00Z
-# dataset_stop_date : 2022-12-26T12:20:00Z
+# dataset_stop_date : 2023-02-02T12:17:00Z
 # dataset_usage_description : Please cite the product's citation when using data from this dataset. Relevant literature references for this dataset are listed below for convenience.
 # dataset_provider_license : These data were produced by NOAA and are not subject to copyright protection in the United States. NOAA waives any potential copyright and related rights in these data worldwide through the Creative Commons Zero 1.0 Universal Public Domain Dedication (CC0-1.0).
 # dataset_reference_total_listed : 1
@@ -2833,3 +2833,21 @@ HBA 2022 12 16 17 53 0 2022-12-16T17:53:00Z 2022.9582058599697 363-99 1863.41 0.
 HBA 2022 12 16 17 53 0 2022-12-16T17:53:00Z 2022.9582058599697 4010-99 1863.53 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521185 PC2 2023-07-21T11:53:58 ...
 HBA 2022 12 26 12 20 0 2022-12-26T12:20:00Z 2022.9849695585997 1614-99 1860.39 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521181 PC2 2023-07-21T11:23:34 ...
 HBA 2022 12 26 12 20 0 2022-12-26T12:20:00Z 2022.9849695585997 224-99 1860.18 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521180 PC2 2023-07-21T11:08:22 ...
+HBA 2023 1 4 18 38 0 2023-01-04T18:38:00Z 2023.0103462709285 1196-99 1857.21 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521186 PC2 2023-07-21T10:38:02 ...
+HBA 2023 1 4 18 38 0 2023-01-04T18:38:00Z 2023.0103462709285 2998-99 1858.1 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521187 PC2 2023-07-21T10:53:09 ...
+HBA 2023 1 12 16 21 0 2023-01-12T16:21:00Z 2023.0320034246574 1739-99 1855.03 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521260 PC2 2023-07-24T09:16:58 ..C
+HBA 2023 1 12 16 21 0 2023-01-12T16:21:00Z 2023.0320034246574 179-99 1856.79 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521267 PC2 2023-07-21T13:57:15 ...
+HBA 2023 1 12 16 21 0 2023-01-12T16:21:00Z 2023.0320034246574 3610-99 1856.69 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521259 PC2 2023-07-24T09:32:04 ..C
+HBA 2023 1 12 16 21 0 2023-01-12T16:21:00Z 2023.0320034246574 5611-99 1856.85 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521268 PC2 2023-07-21T14:12:33 ...
+HBA 2023 1 17 14 58 0 2023-01-17T14:58:00Z 2023.0455441400304 217-99 1855.55 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521265 PC2 2023-07-21T13:26:29 ...
+HBA 2023 1 17 14 58 0 2023-01-17T14:58:00Z 2023.0455441400304 2619-99 1855.44 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521266 PC2 2023-07-21T13:11:04 ...
+HBA 2023 1 17 14 58 0 2023-01-17T14:58:00Z 2023.0455441400304 2899-99 1843.76 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521257 PC2 2023-07-21T15:44:15 C..
+HBA 2023 1 17 14 58 0 2023-01-17T14:58:00Z 2023.0455441400304 3320-99 1851.29 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521258 PC2 2023-07-21T15:28:52 C..
+HBA 2023 1 27 14 39 0 2023-01-27T14:39:00Z 2023.0729052511415 1186-99 1853.14 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521271 PC2 2023-07-21T14:43:07 ...
+HBA 2023 1 27 14 39 0 2023-01-27T14:39:00Z 2023.0729052511415 1543-99 1853.14 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521272 PC2 2023-07-21T14:27:50 ...
+HBA 2023 1 28 14 36 0 2023-01-28T14:36:00Z 2023.0756392694063 2864-99 1852.39 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521269 PC2 2023-07-21T12:40:13 ...
+HBA 2023 1 28 14 36 0 2023-01-28T14:36:00Z 2023.0756392694063 2994-99 1852.36 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521270 PC2 2023-07-21T12:55:40 ...
+HBA 2023 2 1 12 43 0 2023-02-01T12:43:00Z 2023.0863831811264 4138-99 1852.68 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521263 PC2 2023-07-24T09:47:04 ...
+HBA 2023 2 1 12 43 0 2023-02-01T12:43:00Z 2023.0863831811264 4213-99 1852.62 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521264 PC2 2023-07-24T10:02:06 ...
+HBA 2023 2 2 12 17 0 2023-02-02T12:17:00Z 2023.0890734398783 2240-99 1851.97 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521261 PC2 2023-07-21T15:13:37 ...
+HBA 2023 2 2 12 17 0 2023-02-02T12:17:00Z 2023.0890734398783 2811-99 1852.04 0.575 -75.605 -26.21 35.0 30.0 5.0 P 521262 PC2 2023-07-21T14:58:22 ...
