@@ -98,7 +98,7 @@ jobs:
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
           echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
-          aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ 
+          aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
 
       - name: Request Invalidation to AWS Cloudfront
         uses: oneyedev/aws-cloudfront-invalidation@v1
@@ -138,7 +138,7 @@ jobs:
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
           echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
-          aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/ 
+          aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
 
       - name: Request Invalidation to AWS Cloudfront
         uses: oneyedev/aws-cloudfront-invalidation@v1
