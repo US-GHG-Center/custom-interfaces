@@ -18,6 +18,7 @@ body {
     flex-direction: column;
     font-family: 'Inter', sans-serif;
     color: #3E4651;
+    background: white;
 }
 
 #zoom-instructions {
