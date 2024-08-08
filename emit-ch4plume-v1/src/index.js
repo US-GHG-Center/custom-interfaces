@@ -303,6 +303,7 @@ document.addEventListener("click", function(e) {
 
     } else {
         $('.search-box').val("");
+        drawplume_idList([]);
     }
 });
 
