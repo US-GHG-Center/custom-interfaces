@@ -74,9 +74,25 @@ body {
   color:#fff;
   cursor: pointer;
 }
+.marker_l300 {
+  background-image: url("./marker_l300.png");
+}
+.marker_l600 {
+  background-image: url("./marker_l600.png");
+}
+.marker_l900 {
+  background-image: url("./marker_l900.png");
+}
+.marker_l1200 {
+  background-image: url("./marker_l1200.png");
+}
+
+.marker_g1500 {
+  background-image: url("./marker_g1500.png");
+}
+
 
 .marker {
-  background-image: url("./marker-sdf-2.png");
   background-size: cover;
   width: 30px;
   height: 30px;
