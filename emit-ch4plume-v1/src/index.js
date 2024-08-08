@@ -353,9 +353,28 @@ async function main() {
 
         points.forEach(function(point) {
             const itemName = path.basename(point.feature.properties["Data Download"]);
-            const coords = point.feature.geometry.coordinates
+            const coords = point.feature.geometry.coordinates;
+            const localProps = point.feature.properties;
             const markerEl = document.createElement("div");
             markerEl.className = "marker";
+            const max_conc = localProps["Max Plume Concentration (ppm m)"];
+            if ( max_conc < 300) {
+                markerEl.className += " marker_l300";
+
+            }
+            else if (max_conc < 600) {
+                markerEl.className += " marker_l600";
+            }
+            else if (max_conc < 900) {
+                markerEl.className += " marker_l900";
+            }
+            else if (max_conc < 1200) {
+                markerEl.className += " marker_l1200";
+            }
+            else {
+                markerEl.className += " marker_g1500";
+            }
+            
             markerEl.id = `marker-${point.id}`;
             const marker = new mapboxgl.Marker(markerEl)
                 .setLngLat([coords[0], coords[1]])
@@ -363,7 +382,7 @@ async function main() {
 
             MARKERS_ON_MAP.add(point);
 
-            const localProps = point.feature.properties
+            
 
             const tooltipContent = `
         <strong> Max Methane Enh: <span style="color: red">${localProps["Max Plume Concentration (ppm m)"]} (ppm m)</span></strong><br>
