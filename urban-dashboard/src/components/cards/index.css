@@ -1,0 +1,10 @@
+.card {
+    padding: 5px 15px;
+}
+
+.explore-more-card {
+    display: flex;
+    text-decoration: none !important;
+    margin-right: 10px;
+    justify-content: space-between;
+}
