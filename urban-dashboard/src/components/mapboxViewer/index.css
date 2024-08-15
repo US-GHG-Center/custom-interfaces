@@ -1,0 +1,14 @@
+.mapSection {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+
+.marker {
+  background-image: url('../../../public/marker-gold.png');
+  background-size: cover;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+}
