@@ -6,6 +6,7 @@ import { ConcentrationChart } from '../chart';
 
 export function Dashboard() {
   const [ selectedStationId, setSelectedStationId ] = useState("");
+  const [ displayChart, setDisplayChart ] = useState(false);
   const [ NISTStations, setNISTStations ] = useState([]);
 
   const dataPreprocess = (collections) => {
@@ -45,8 +46,8 @@ export function Dashboard() {
   return (
     <Box className="fullSize">
         <Title selection={selectedStationId}/>
-        <MapBoxViewer stations={NISTStations} setSelection={setSelectedStationId}/>
-        {selectedStationId && <ConcentrationChart selectedStationId={selectedStationId}/>}
+        <MapBoxViewer stations={NISTStations} setSelection={setSelectedStationId} setDisplayChart={setDisplayChart} />
+        {displayChart && <ConcentrationChart selectedStationId={selectedStationId} setDisplayChart={setDisplayChart} />}
     </Box>
   );
 }

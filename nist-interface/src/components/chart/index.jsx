@@ -2,7 +2,7 @@ import { Component, createRef } from 'react';
 import Chart from 'chart.js/auto';
 import Box from '@mui/material/Box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import faRotateLeft from '@fortawesome/free-solid-svg-icons/faRotateLeft';
+import { faXmark, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 
 import { plugin, options } from './helper';
 
@@ -122,23 +122,32 @@ export class ConcentrationChart extends Component {
     return stationName.toUpperCase();
   }
 
+  handleRefresh = () => {
+    if (this.chart) {
+      this.chart.resetZoom();
+    }
+  }
+
+  handleClose = () => {
+    this.props.setDisplayChart(false);
+  }
+
   // helpers end
 
   render() {
     return (
       <Box sx={{height: "30em"}} id="chart-box">
           <div id="chart-container" className='fullSize'>
+            <div id="chart-controls">
+              <FontAwesomeIcon id="zoom-reset-button" icon={faRotateLeft} title="Reset Zoom" onClick={this.handleRefresh}/>
+              <FontAwesomeIcon id="chart-close-button" icon={faXmark} title="Close" onClick={this.handleClose}/>
+            </div>
             <canvas
               id = "chart"
               className='fullWidth'
               style={{width: "100%", height: "100%"}}
               ref={chartCanvas => (this.chartCanvas = chartCanvas)}
             />
-            <div id="chart-controls">
-              <FontAwesomeIcon icon="fa-solid fa-xmark" />
-              {/* <FontAwesomeIcon id="zoom-reset-button" icon={["fa", "fa-solid", "fa-undo"]} title="Reset Zoom" style="font-size: 19px" />
-              <FontAwesomeIcon id="chart-close-button" icon={["fa", "fa-solid", "fa-xmark"]} title="Close" /> */}
-            </div>
           </div>
       </Box>
     );

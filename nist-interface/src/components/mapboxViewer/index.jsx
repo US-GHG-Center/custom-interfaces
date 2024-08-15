@@ -56,6 +56,7 @@ export class MapBoxViewer extends Component {
             let marker = this.addMarker(map, el, name, lon, lat);
 
             marker.getElement().addEventListener('click', () => {
+                this.props.setDisplayChart(true);
                 this.props.setSelection(id);
             });
         });
