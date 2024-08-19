@@ -7,11 +7,12 @@ import {
 import './App.css';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Dashboard } from './components/dashboard';
+import { DashboardContainer } from './components/dashboardContainer';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Dashboard />,
+    element: <DashboardContainer />,
   }
 ]);
 

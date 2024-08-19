@@ -109,7 +109,7 @@ export class ConcentrationChart extends Component {
     features.forEach((feature) => {
       if (feature && feature.properties) {
         time.push(feature.properties.datetime);
-        concentration.push(feature.properties.co2_ppm);
+        concentration.push(feature.properties.value);
       }
     });
     return {time, concentration};
