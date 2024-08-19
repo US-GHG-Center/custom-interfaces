@@ -44,6 +44,12 @@ export function DashboardContainer() {
     }, []); // only on initial mount
 
     return (
-        <Dashboard NISTStations={NISTStations} selectedStationId={selectedStationId} setSelectedStationId={setSelectedStationId} />
+        <Dashboard
+            NISTStations={NISTStations}
+            selectedStationId={selectedStationId}
+            setSelectedStationId={setSelectedStationId}
+            ghg={ghg}
+            agency={agency}
+        />
     );
 }
