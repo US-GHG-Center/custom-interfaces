@@ -10,11 +10,11 @@ export function DashboardContainer() {
 
     // get the query params
     const [ searchParams ] = useSearchParams();
-    const agency = searchParams.get('agency') || ""; // nist, noaa, or nasa
-    const dataCategory = searchParams.get('data-category') || ""; // testbed
-    const region = searchParams.get('region') || ""; // lam or nec
-    const ghg = searchParams.get('ghg') || ""; // co2 or ch4
-    const stationCode = searchParams.get('station_code') || ""; // buc, smt, etc
+    const [ agency ] = useState(searchParams.get('agency') || ""); // nist, noaa, or nasa
+    const [ dataCategory ] = useState(searchParams.get('data-category') || ""); // testbed
+    const [ region ] = useState(searchParams.get('region') || ""); // lam or nec
+    const [ ghg ] = useState(searchParams.get('ghg') || ""); // co2 or ch4
+    const [ stationCode ] = useState(searchParams.get('station_code') || ""); // buc, smt, etc
 
     useEffect(() => {
         const fetchStationData = async () => {
@@ -41,7 +41,7 @@ export function DashboardContainer() {
         };
 
         fetchStationData().catch(console.error);
-    }, []);
+    }, []); // only on initial mount
 
     return (
         <Dashboard NISTStations={NISTStations} selectedStationId={selectedStationId} setSelectedStationId={setSelectedStationId} />
