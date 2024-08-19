@@ -32,8 +32,8 @@ export function DashboardContainer() {
                 if (stationCode) {
                     let stationCodeLowerCase = stationCode.toLowerCase();
                     // find the collection id for that station code and then set the selectedStationId
-                    let collectionId = stations.find(station => station.id.includes(stationCodeLowerCase)).id;
-                    if (collectionId) setSelectedStationId(collectionId);
+                    let collection = stations.find(station => station.id.includes(stationCodeLowerCase));
+                    if (collection) setSelectedStationId(collection.id);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
