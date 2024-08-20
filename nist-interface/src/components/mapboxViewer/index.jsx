@@ -48,12 +48,13 @@ export class MapBoxViewer extends Component {
 
     plotStations = (map, stations) => {
         stations.forEach(station => {
-            const { id, title: name, location } = station;
+            // get the station meta and show them
+            const { id, title: name, location, properties } = station;
             const [lon,  lat] = location;
             const el = document.createElement('div');
             el.className = 'marker';
             
-            let marker = this.addMarker(map, el, name, lon, lat);
+            let marker = this.addMarker(map, el, name, lon, lat, properties);
 
             marker.getElement().addEventListener('click', () => {
                 this.props.setDisplayChart(true);
@@ -62,14 +63,14 @@ export class MapBoxViewer extends Component {
         });
     }
 
-    addMarker = (map, element, name, lon, lat) => {
+    addMarker = (map, element, name, lon, lat, properties) => {
         let marker = new mapboxgl.Marker(element)
         .setLngLat([lon, lat])
         // .setPopup(new mapboxgl.Popup({ offset: 25 })
         // .setText(name)
         .addTo(map);
 
-        const tooltipContent = `<strong>${name}<strong>`;
+        const tooltipContent = this.getToolTipContent(properties);
         const popup = new mapboxgl.Popup().setHTML(tooltipContent);
         marker.setPopup(popup);
         marker.getElement().addEventListener("mouseenter", () => {
@@ -80,6 +81,20 @@ export class MapBoxViewer extends Component {
         });
 
         return marker;
+    }
+
+    getToolTipContent = (stationProperties) => {
+        let { siteCode, siteName, siteCountry, latitude, longitude,
+            elevation, elevationUnit, instrumentType } = stationProperties;
+        let siteNameAddOn = siteName ? ` : ${siteName}` : "";
+        let firstRow = `<strong>${siteCode.toUpperCase()}${siteNameAddOn}</strong><br>`;
+        let secondRow = siteCountry ? `<strong>${siteCountry}</strong><br>` : "";
+        let thirdRow = latitude ? `Latitude: ${Number(latitude).toFixed(2)}<br>` : "";
+        let fourthRow = longitude ? `Longitude: ${Number(longitude).toFixed(2)}<br>` : "";
+        let fifthRow = elevation ? `Elevation: ${Number(elevation).toFixed(2)} ${elevationUnit}<br>` : "";
+        let sixthRow = instrumentType ? `Instrument Type: ${instrumentType}<br>` : "";
+        let result = firstRow + secondRow + thirdRow + fourthRow + fifthRow + sixthRow;
+        return result;
     }
 
     render() {
