@@ -41,11 +41,13 @@ export class ConcentrationChart extends Component {
   }
 
   populateChart = (chartDOMRef, data=[], labels=[], stationMeta) => {
+    // TODO: take the ghg label and unit from the collection item properties instead.
+    let label = this.props.ghg === 'ch4' ? 'CH₄ Concentration (ppb)' : 'CO₂ Concentration (ppm)';
     let dataset = {
       labels: labels,
       datasets: [
         {
-          label: 'CO2 Concentration (ppm)',
+          label: label,
           data: data,
           borderColor: "#ff6384",
           yAxisID: 'y',

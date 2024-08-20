@@ -17,7 +17,7 @@ export function Dashboard({ NISTStations, selectedStationId, setSelectedStationI
     <Box className="fullSize">
         <Title ghg={ghg} agency={agency}/>
         { NISTStations && <MapBoxViewer stations={NISTStations} setSelection={setSelectedStationId} setDisplayChart={setDisplayChart} />}
-        { displayChart && <ConcentrationChart selectedStationId={selectedStationId} setDisplayChart={setDisplayChart}/> }
+        { displayChart && <ConcentrationChart selectedStationId={selectedStationId} setDisplayChart={setDisplayChart} ghg={ghg}/> }
     </Box>
   );
 }
