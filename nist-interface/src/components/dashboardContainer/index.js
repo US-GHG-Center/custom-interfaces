@@ -10,10 +10,10 @@ export function DashboardContainer() {
 
     // get the query params
     const [ searchParams ] = useSearchParams();
-    const [ agency ] = useState(searchParams.get('agency') || ""); // nist, noaa, or nasa
+    const [ agency ] = useState(searchParams.get('agency') || "nist"); // nist, noaa, or nasa
     const [ dataCategory ] = useState(searchParams.get('data-category') || ""); // testbed
     const [ region ] = useState(searchParams.get('region') || ""); // lam or nec
-    const [ ghg ] = useState(searchParams.get('ghg') || ""); // co2 or ch4
+    const [ ghg ] = useState(searchParams.get('ghg') || "co2"); // co2 or ch4
     const [ stationCode ] = useState(searchParams.get('station_code') || ""); // buc, smt, etc
 
     useEffect(() => {
