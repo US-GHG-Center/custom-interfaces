@@ -124,7 +124,7 @@ export class ConcentrationChart extends Component {
     let stationName = titleParts[3].toUpperCase();
 
     let feature = result.features[0];
-    let stationLocation = feature.properties.location.replace("_", " ");
+    let stationLocation = feature.properties.location.replace("_", ", ");
     return { stationName, stationLocation };
   }
 
