@@ -23,8 +23,8 @@ export class ConcentrationChart extends Component {
     if (this.props.selectedStationId !== prevProps.selectedStationId) {
       // fetch the data from the api and then initialize the chart.
       this.fetchStationData(this.props.selectedStationId).then(data => {
-        const { time, concentration, stationName } = data;
-        this.updateChart(concentration, time, stationName);
+        const { time, concentration, stationMeta } = data;
+        this.updateChart(concentration, time, stationMeta);
       });
     }
   }
@@ -35,12 +35,12 @@ export class ConcentrationChart extends Component {
     }
     // fetch the data from the api and then initialize the chart.
     this.fetchStationData(this.props.selectedStationId).then(data => {
-      const { time, concentration, stationName } = data;
-      this.populateChart(this.chartCanvas, concentration, time, stationName);
+      const { time, concentration, stationMeta } = data;
+      this.populateChart(this.chartCanvas, concentration, time, stationMeta);
     });
   }
 
-  populateChart = (chartDOMRef, data=[], labels=[], stationName="") => {
+  populateChart = (chartDOMRef, data=[], labels=[], stationMeta) => {
     let dataset = {
       labels: labels,
       datasets: [
@@ -54,8 +54,9 @@ export class ConcentrationChart extends Component {
       ]
     };
 
+    let { stationName, stationLocation } = stationMeta;
     if (stationName) {
-      options.plugins.title.text = ` NIST CO2 (${stationName})`;
+      options.plugins.title.text = ` ${stationLocation} (${stationName})`;
     }
 
     this.chart = new Chart(chartDOMRef, {
@@ -66,7 +67,7 @@ export class ConcentrationChart extends Component {
     });
   }
 
-  updateChart = (data, label, stationName) => {
+  updateChart = (data, label, stationMeta) => {
     if (this.chart) {
       // first reset the zoom
       this.chart.resetZoom();
@@ -75,8 +76,10 @@ export class ConcentrationChart extends Component {
       this.chart.data.labels = label;
       this.chart.data.datasets[0].data = data;
 
+      let { stationName, stationLocation } = stationMeta;
+
       if (stationName) {
-        this.chart.options.plugins.title.text = ` NIST CO2 (${stationName})`;
+        this.chart.options.plugins.title.text = ` ${stationLocation} (${stationName})`;
       }
 
       // update the chart
@@ -93,9 +96,9 @@ export class ConcentrationChart extends Component {
       }
       const result = await response.json();
       const { title, features } = result;
-      const stationName = this.getStationName(title);
+      const stationMeta = this.getStationMeta(result);
       const { time, concentration } = this.dataPreprocess(features);
-      return { time, concentration, stationName };
+      return { time, concentration, stationMeta };
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -115,11 +118,14 @@ export class ConcentrationChart extends Component {
     return {time, concentration};
   }
 
-  getStationName = (title) => {
+  getStationMeta = (result) => {
+    let title = result.title;
     let titleParts = title.split("_");
-    let stationName = titleParts[titleParts.length - 2];
-    let ghg = titleParts[titleParts.length - 1];
-    return stationName.toUpperCase();
+    let stationName = titleParts[3].toUpperCase();
+
+    let feature = result.features[0];
+    let stationLocation = feature.properties.location.replace("_", " ");
+    return { stationName, stationLocation };
   }
 
   handleRefresh = () => {
