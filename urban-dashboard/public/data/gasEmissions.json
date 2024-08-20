@@ -1,0 +1,25 @@
+{
+    "labels": [
+        "Carbon Dioxide (CO2)",
+        "Methane (CH4)",
+        "Nitrous Oxide (N2O)",
+        "Fluorinated Gases"
+    ],
+    "datasets": [
+        {
+            "label": "Emissions by Gas",
+            "data": [
+                74,
+                16,
+                6,
+                4
+            ],
+            "backgroundColor": [
+                "rgb(255, 99, 132)",
+                "rgb(54, 162, 235)",
+                "rgb(75, 192, 192)",
+                "rgb(255, 205, 86)"
+            ]
+        }
+    ]
+}

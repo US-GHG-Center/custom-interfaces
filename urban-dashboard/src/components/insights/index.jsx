@@ -7,6 +7,9 @@ import { TransportationCard } from "../cards/transportation";
 import { LandCoverageCard } from "../cards/landCoverage";
 import { AirQualityCard } from "../cards/defaultAir";
 import { ExploreMoreCard } from "../cards/explore";
+import { GasEmissionsCard } from "../cards/gasEmissions";
+import { SeasonalEmissionsCard } from "../cards/seasonalEmissions";
+import { DatasetCard } from "../cards/dataset";
 
 export function Insights({ urbanRegion }) {
     const towerDataViewerUrl = "/explore/tower";
@@ -15,14 +18,17 @@ export function Insights({ urbanRegion }) {
     return (
         <div className="insights">
             <LeftInsights>
-                <PopulationCard/>
-                <TransportationCard/>
+                <PopulationCard />
+                {/* <TransportationCard /> */}
+                <DatasetCard />
             </LeftInsights>
             <RightInsights>
-                <LandCoverageCard/>
-                <AirQualityCard/>
-                <ExploreMoreCard description="Explore the Tower Data" link={towerDataViewerUrl}/>
-                <ExploreMoreCard description="Explore the Airborne Data" link={airborneViewerUrl}/>
+                <GasEmissionsCard />
+                <SeasonalEmissionsCard />
+                {/* <LandCoverageCard/> */}
+                {/* <AirQualityCard /> */}
+                {/* <ExploreMoreCard description="Explore the Tower Data" link={towerDataViewerUrl} /> */}
+                {/* <ExploreMoreCard description="Explore the Airborne Data" link={airborneViewerUrl} /> */}
             </RightInsights>
         </div>
     );

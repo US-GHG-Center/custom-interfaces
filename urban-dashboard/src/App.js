@@ -6,14 +6,14 @@ import {
 
 import './App.css';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Dashboard } from './components/dashboard';
 import { ExploreTowerData } from './components/exploreData/exploreTowerData';
 import { ExploreAirborneData } from './components/exploreData/exploreAirborneData';
+import { DashboardContainer } from './components/dashboardContainer';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Dashboard />,
+    element: <DashboardContainer />,
   },
   {
     path: "/explore/tower",
