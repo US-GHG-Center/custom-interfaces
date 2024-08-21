@@ -6,12 +6,18 @@ import { DetailAnalysis } from '../detailAnalysis';
 
 export function Dashboard({ dataset }) {
   const [urbanRegion, setUrbanRegion] = useState("");
+  const [zoomOut, setZoomOut] = useState(false);
+
+  const handleZoomOut = () => {
+    setZoomOut(!zoomOut);
+  };
+
 
   return (
     <Box
       className="fullSize">+
-      <Title selection={urbanRegion} setSelection={setUrbanRegion} />
-      <MapBoxViewer urbanRegion={urbanRegion} setSelection={setUrbanRegion} />
+      <Title selection={urbanRegion} setSelection={setUrbanRegion} handleZoomOut={handleZoomOut} />
+      <MapBoxViewer urbanRegion={urbanRegion} setSelection={setUrbanRegion} zoomOut={zoomOut} />
       {/* <DetailAnalysis/>
         <Box marginBottom={8} sx={{ height: "5%" }} /> */}
     </Box>

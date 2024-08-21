@@ -24,7 +24,7 @@ export class MapBoxViewer extends Component {
         }
     }
 
-    componentDidMount() {
+    plotMap() {
         mapboxgl.accessToken = accessToken;
         let mapboxStyleUrl = 'mapbox://styles/mapbox/streets-v12';
         if (mapboxStyleBaseUrl) {
@@ -38,24 +38,45 @@ export class MapBoxViewer extends Component {
             center: [-94.676392, 39.106667], // Center of the USA
             zoom: 4.8 // Adjust zoom level to fit the USA
         });
-        this.setState({currentViewer: map});
-        
+        this.setState({ currentViewer: map });
+
         // show the whole map of usa and show all the urban areas
         this.plotUrbanRegions(map, URBAN_REGIONS);
+    }
+
+    componentDidMount() {
+        this.plotMap();
+    }
+
+    // Trigger zoom out when zoomOut button is clicked.
+    componentDidUpdate = (prevProps) => {
+        if (prevProps.zoomOut != this.props.zoomOut) {
+            this.resetMapView();
+        }
+    }
+
+    resetMapView = () => {
+        const { currentViewer } = this.state;
+        if (currentViewer) {
+            this.state.selectedUrbanRegion = false; //giving this incorrect state will force it to reset
+            this.plotMap();
+        } else {
+            console.log("Map instance not initialized yet...")
+        }
     }
 
     plotUrbanRegions = (map, urbanRegions) => {
         urbanRegions.forEach(urbanRegion => {
             const { name, center, geojson } = urbanRegion;
-            const [lon,  lat] = center;
+            const [lon, lat] = center;
             const el = document.createElement('div');
             el.className = 'marker';
-            
+
             let marker = this.addMarker(map, el, name, lon, lat);
             // when clicked on a urban region, focus on it
             // this.focusSelectedUrbanRegion(map, center, GeoJSON);
             marker.getElement().addEventListener('click', () => {
-                this.setState({selectedUrbanRegion: name});
+                this.setState({ selectedUrbanRegion: name });
                 this.props.setSelection(name);
                 this.focusSelectedUrbanRegion(map, center, geojson);
             });
@@ -64,10 +85,10 @@ export class MapBoxViewer extends Component {
 
     addMarker = (map, element, name, lon, lat) => {
         let marker = new mapboxgl.Marker(element)
-        .setLngLat([lon, lat])
-        // .setPopup(new mapboxgl.Popup({ offset: 25 })
-        // .setText(name)
-        .addTo(map);
+            .setLngLat([lon, lat])
+            // .setPopup(new mapboxgl.Popup({ offset: 25 })
+            // .setText(name)
+            .addTo(map);
 
         const tooltipContent = `<strong>${name}<strong>`;
         const popup = new mapboxgl.Popup().setHTML(tooltipContent);
@@ -81,12 +102,12 @@ export class MapBoxViewer extends Component {
 
         return marker;
     }
-    
+
 
     focusSelectedUrbanRegion = (map, center, GeoJSON) => {
         map.setCenter(center);
         map.setZoom(9);
-        
+
         // map.remove();
 
         let sourceName = 'urban-boundary';
@@ -132,8 +153,8 @@ export class MapBoxViewer extends Component {
                         {/* <div id="mapbox-container" className='fullSize' style={{ position: "relative", width: "auto", height: "1024px" }}></div> */}
                     </Grid>
                 </Grid>
-                { this.state.selectedUrbanRegion && <Insights urbanRegion={ this.props.urbanRegion }/> }
+                {this.state.selectedUrbanRegion && <Insights urbanRegion={this.props.urbanRegion} />}
             </Box>
-        );    
+        );
     }
 }

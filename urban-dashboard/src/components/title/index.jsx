@@ -1,10 +1,13 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import { UrbanSelector } from './helper/urbanSelector.jsx';
+import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 
 import './index.css';
+import { Icon, Zoom } from '@mui/material';
 
-export function Title({ children, selection, setSelection }) {
+export function Title({ children, selection, setSelection, handleZoomOut }) {
+
     if (!children) {
         children = (
             <>
@@ -19,8 +22,14 @@ export function Title({ children, selection, setSelection }) {
         )
     }
     return (
-        <div id="title">
-            {children}
+        <div>
+            <div id="title-left">
+                {children}
+            </div>
+            <div id="title-right">
+                <ZoomOutMapIcon onClick={handleZoomOut} sx={{ color: 'white', fontSize: 40 }} />
+            </div>
         </div>
+
     );
 }
