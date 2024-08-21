@@ -33,10 +33,6 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     z-index: 1000;
     font-size: 11px;
-    display: none;
-}
-
-.icon-and-instructions:hover #chart-instructions {
     display: block;
 }
 

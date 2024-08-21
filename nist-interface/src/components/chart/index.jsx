@@ -12,6 +12,7 @@ export class ConcentrationChart extends Component {
   constructor(props) {
     super(props);
     this.chart = null;
+    this.state = { showChartInstructions: true };
   }
 
   componentDidMount() {
@@ -149,11 +150,17 @@ export class ConcentrationChart extends Component {
             <div id="chart-tools">
               <div id="chart-instructions-container">
               <div className="icon-and-instructions">
-                <FontAwesomeIcon icon={faCircleInfo} style={{margin: "12px"}}/>
-                <div id="chart-instructions">
+                <FontAwesomeIcon
+                  icon={faCircleInfo}
+                  style={{margin: "12px"}}
+                  onMouseEnter={() => this.setState({showChartInstructions: true})}
+                  onMouseLeave={() => this.setState({showChartInstructions: false})}
+                />
+                {this.state.showChartInstructions && <div id="chart-instructions">
                   <p>1. Click and drag, scroll or pinch on the chart to zoom in.</p>
                   <p>2. Click on the rectangle boxes on the side to toggle chart.</p>
                 </div>
+                }
               </div>
               </div>
               <div id="chart-controls">
