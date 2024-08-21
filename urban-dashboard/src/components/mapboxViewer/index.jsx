@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 
 import './index.css';
 
-import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT } from './helper';
+import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT, VULCAN_RASTER_URL } from './helper';
 import { Insights } from '../insights';
 
 import { URBAN_REGIONS } from '../../assets/geojson';
@@ -38,7 +38,28 @@ export class MapBoxViewer extends Component {
             center: [-94.676392, 39.106667], // Center of the USA
             zoom: 4.8 // Adjust zoom level to fit the USA
         });
+
         this.setState({ currentViewer: map });
+
+        // add the tile sources 
+        map.on("load", () => {
+            map.addSource("raster-tiles-vulcan", {
+                "type": "raster",
+                "tiles": [VULCAN_RASTER_URL]
+            })
+
+            if (this.props.dataset == "vulcan") {
+                map.addLayer({
+                    "id": "raster-layer",
+                    "type": "raster",
+                    "source": "raster-tiles-vulcan",
+                    "paint": {
+                        "raster-opacity": 0.7
+                    }
+                })
+            }
+
+        })
 
         // show the whole map of usa and show all the urban areas
         this.plotUrbanRegions(map, URBAN_REGIONS);
@@ -53,11 +74,25 @@ export class MapBoxViewer extends Component {
         if (prevProps.zoomOut != this.props.zoomOut) {
             this.resetMapView();
         }
+
+        if (prevProps.urbanRegion != this.props.urbanRegion) {
+            console.log("urban region changed to ", this.props.urbanRegion);
+
+            //TODO: set focused region to selected urban region
+
+            // const urbanRegion = URBAN_REGIONS.filter(item => item.name = this.props.urbanRegion)[0];
+            // console.log(urbanRegion);
+            // const { name, center, geojson } = urbanRegion;
+            // this.setState({ selectedUrbanRegion: name });
+            // this.props.setSelection(name);
+            // this.focusSelectedUrbanRegion(this.state.currentViewer, center, geojson);
+        }
     }
 
     resetMapView = () => {
         const { currentViewer } = this.state;
         if (currentViewer) {
+            this.props.setSelection("");
             this.state.selectedUrbanRegion = false; //giving this incorrect state will force it to reset
             this.plotMap();
         } else {
@@ -153,8 +188,15 @@ export class MapBoxViewer extends Component {
                         {/* <div id="mapbox-container" className='fullSize' style={{ position: "relative", width: "auto", height: "1024px" }}></div> */}
                     </Grid>
                 </Grid>
-                {this.state.selectedUrbanRegion && <Insights urbanRegion={this.props.urbanRegion} />}
+                {this.state.selectedUrbanRegion
+                    &&
+                    <Insights
+                        urbanRegion={this.props.urbanRegion}
+                        dataset={this.props.dataset}
+                    />
+                }
             </Box>
         );
     }
 }
+

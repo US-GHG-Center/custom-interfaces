@@ -11,7 +11,7 @@ import { GasEmissionsCard } from "../cards/gasEmissions";
 import { SeasonalEmissionsCard } from "../cards/seasonalEmissions";
 import { DatasetCard } from "../cards/dataset";
 
-export function Insights({ urbanRegion }) {
+export function Insights({ urbanRegion, dataset }) {
     const towerDataViewerUrl = "/explore/tower";
     const airborneViewerUrl = "/explore/airborne";
 
@@ -20,16 +20,19 @@ export function Insights({ urbanRegion }) {
             <LeftInsights>
                 <PopulationCard />
                 {/* <TransportationCard /> */}
-                <DatasetCard />
-            </LeftInsights>
+                <div className="dataset-card">
+                    <DatasetCard dataset={dataset} />
+                </div>
+            </LeftInsights >
+
             <RightInsights>
-                <GasEmissionsCard />
-                <SeasonalEmissionsCard />
+                {dataset === "gra2pes" && <GasEmissionsCard />}
+                {dataset === "vulcan" && <SeasonalEmissionsCard />}
                 {/* <LandCoverageCard/> */}
                 {/* <AirQualityCard /> */}
                 {/* <ExploreMoreCard description="Explore the Tower Data" link={towerDataViewerUrl} /> */}
                 {/* <ExploreMoreCard description="Explore the Airborne Data" link={airborneViewerUrl} /> */}
             </RightInsights>
-        </div>
+        </div >
     );
 }

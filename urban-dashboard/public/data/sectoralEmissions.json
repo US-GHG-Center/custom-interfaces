@@ -10,7 +10,7 @@
     ],
     "datasets": [
         {
-            "label": "Seasonal Plot",
+            "label": "Agriculture",
             "data": [
                 65,
                 59,
@@ -22,6 +22,54 @@
             ],
             "fill": false,
             "borderColor": "rgb(75, 192, 192)",
+            "backgroundColor": "rgba(75, 192, 192, 0.2)",
+            "tension": 0.4
+        },
+        {
+            "label": "Commerical",
+            "data": [
+                65,
+                59,
+                80,
+                81,
+                56,
+                55,
+                40
+            ],
+            "fill": false,
+            "borderColor": "rgb(70, 192, 192)",
+            "backgroundColor": "rgba(75, 192, 192, 0.2)",
+            "tension": 0.4
+        },
+        {
+            "label": "Residential",
+            "data": [
+                65,
+                50,
+                80,
+                85,
+                56,
+                55,
+                40
+            ],
+            "fill": false,
+            "borderColor": "rgb(70, 192, 192)",
+            "backgroundColor": "rgba(75, 192, 192, 0.2)",
+            "tension": 0.4
+        },
+        {
+            "label": "Industry",
+            "data": [
+                75,
+                69,
+                90,
+                91,
+                66,
+                65,
+                50
+            ],
+            "fill": false,
+            "borderColor": "rgb(70, 192, 192)",
             "backgroundColor": "rgba(75, 192, 192, 0.2)",
             "tension": 0.4
         }

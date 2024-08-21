@@ -11,6 +11,7 @@ ChartJS.register(LineElement, PointElement, LinearScale, Title, Tooltip, Legend)
 export function SeasonalEmissionsCard() {
     const description = "CO₂ emissions from power generation can be higher in the winter when homes and businesses are being heated, or in the summer when we run the air conditioning."
 
+    //break these into multiple states 
     const [data, setData] = useState({
         labels: [],
         datasets: [{
@@ -33,7 +34,7 @@ export function SeasonalEmissionsCard() {
 
     return (
         <OutlinedCard>
-            <RootCard title="CO₂ Emissions Throughout the Year" description={description}>
+            <RootCard title="CO₂ Emissions by Sector" description={description}>
                 <CardContent>
                     <Line data={data} />
                 </CardContent>

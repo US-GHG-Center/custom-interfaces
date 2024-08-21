@@ -12,12 +12,20 @@ export function Dashboard({ dataset }) {
     setZoomOut(!zoomOut);
   };
 
-
   return (
     <Box
-      className="fullSize">+
-      <Title selection={urbanRegion} setSelection={setUrbanRegion} handleZoomOut={handleZoomOut} />
-      <MapBoxViewer urbanRegion={urbanRegion} setSelection={setUrbanRegion} zoomOut={zoomOut} />
+      className="fullSize">
+      <Title
+        selection={urbanRegion}
+        setSelection={setUrbanRegion}
+        handleZoomOut={handleZoomOut}
+      />
+      <MapBoxViewer
+        urbanRegion={urbanRegion}
+        setSelection={setUrbanRegion}
+        zoomOut={zoomOut}
+        dataset={dataset}
+      />
       {/* <DetailAnalysis/>
         <Box marginBottom={8} sx={{ height: "5%" }} /> */}
     </Box>
