@@ -32,24 +32,18 @@ export class ConcentrationChart extends Component {
 
   initializeChart = () => {
     if (this.chart) {
+      // a fresh start
       this.chart.destroy();
     }
-    // fetch the data from the api and then initialize the chart.
-    this.fetchStationData(this.props.selectedStationId).then(data => {
-      const { time, concentration, stationMeta } = data;
-      this.populateChart(this.chartCanvas, concentration, time, stationMeta);
-    });
-  }
 
-  populateChart = (chartDOMRef, data=[], labels=[], stationMeta) => {
     // TODO: take the ghg label and unit from the collection item properties instead.
     let label = this.props.ghg === 'ch4' ? 'CH₄ Concentration (ppb)' : 'CO₂ Concentration (ppm)';
     let dataset = {
-      labels: labels,
+      labels: [],
       datasets: [
         {
           label: label,
-          data: data,
+          data: [],
           borderColor: "#ff6384",
           yAxisID: 'y',
           showLine: false
@@ -57,16 +51,17 @@ export class ConcentrationChart extends Component {
       ]
     };
 
-    let { stationName, stationLocation } = stationMeta;
-    if (stationName) {
-      options.plugins.title.text = ` ${stationLocation} (${stationName})`;
-    }
-
-    this.chart = new Chart(chartDOMRef, {
+    this.chart = new Chart(this.chartCanvas, {
       type: 'line',
       data: dataset,
       options: options,
       plugins: [plugin]
+    });
+
+    // fetch the data from the api and then initialize the chart.
+    this.fetchStationData(this.props.selectedStationId).then(data => {
+      const { time, concentration, stationMeta } = data;
+      this.updateChart(concentration, time, stationMeta);
     });
   }
 
