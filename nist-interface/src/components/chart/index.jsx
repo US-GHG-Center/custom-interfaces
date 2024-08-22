@@ -212,12 +212,14 @@ export class ConcentrationChart extends Component {
             </div>
             {
               this.state.chartDataIsLoading && <Oval
+                color="#082A63"
+                secondaryColor='#2C3E50'
                 wrapperStyle={{
                   justifyContent: "center",
                   alignItems: "center",
                   position: "absolute",
                   width: "100%",
-                  height: "100%"
+                  height: "100%",
                 }}
               />
             }
