@@ -6,7 +6,7 @@ import { dataPreprocess } from './helper';
 
 export function DashboardContainer() {
     const [ selectedStationId, setSelectedStationId ] = useState("");
-    const [ NISTStations, setNISTStations ] = useState([]);
+    const [ stations, setStations ] = useState([]);
 
     // get the query params
     const [ searchParams ] = useSearchParams();
@@ -25,14 +25,14 @@ export function DashboardContainer() {
                     throw new Error('Error in Network');
                 }
                 const result = await response.json();
-                const stations = dataPreprocess(result.collections, agency, ghg, dataCategory, region);
-                setNISTStations(stations);
-                // then plot the NIST stations on the map
+                const filteredStations = dataPreprocess(result.collections, agency, ghg, dataCategory, region);
+                setStations(filteredStations);
+                // then plot the filteredStations on the map
                 // if station_code is also present, set the selectedStationId state, and let it react!!
                 if (stationCode) {
                     let stationCodeLowerCase = stationCode.toLowerCase();
                     // find the collection id for that station code and then set the selectedStationId
-                    let collection = stations.find(station => station.id.includes(stationCodeLowerCase));
+                    let collection = filteredStations.find(station => station.id.includes(stationCodeLowerCase));
                     if (collection) setSelectedStationId(collection.id);
                 }
             } catch (error) {
@@ -45,7 +45,7 @@ export function DashboardContainer() {
 
     return (
         <Dashboard
-            NISTStations={NISTStations}
+            stations={stations}
             selectedStationId={selectedStationId}
             setSelectedStationId={setSelectedStationId}
             ghg={ghg}
