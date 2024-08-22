@@ -3,6 +3,7 @@ import Chart from 'chart.js/auto';
 import Box from '@mui/material/Box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faRotateLeft, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { Oval } from "react-loader-spinner";
 
 import { plugin, options } from './helper';
 
@@ -12,7 +13,10 @@ export class ConcentrationChart extends Component {
   constructor(props) {
     super(props);
     this.chart = null;
-    this.state = { showChartInstructions: true };
+    this.state = {
+      showChartInstructions: true,
+      chartDataIsLoading: false
+    };
   }
 
   componentDidMount() {
@@ -22,6 +26,13 @@ export class ConcentrationChart extends Component {
   componentDidUpdate(prevProps, prevState) {
     // when new props is received, initialize the chart with data.
     if (this.props.selectedStationId !== prevProps.selectedStationId) {
+      // clean previous chart data
+      if (this.chart) {
+        this.chart.data.labels = [];
+        this.chart.data.datasets[0].data = [];
+        this.chart.update();
+      }
+
       // fetch the data from the api and then initialize the chart.
       this.fetchStationData(this.props.selectedStationId).then(data => {
         const { time, concentration, stationMeta } = data;
@@ -87,6 +98,7 @@ export class ConcentrationChart extends Component {
 
   fetchStationData = async (stationId) => {
     try {
+      this.setState({chartDataIsLoading: true});
       // fetch in the collection from the features api
       const response = await fetch(`https://dev.ghg.center/api/features/collections/${stationId}/items?limit=10000&offset=0`);
       if (!response.ok) {
@@ -104,6 +116,7 @@ export class ConcentrationChart extends Component {
       const { features } = result;
       const stationMeta = this.getStationMeta(result);
       const { time, concentration } = this.dataPreprocess(features);
+      this.setState({chartDataIsLoading: false});
       return { time, concentration, stationMeta };
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -197,6 +210,17 @@ export class ConcentrationChart extends Component {
                 <FontAwesomeIcon id="chart-close-button" icon={faXmark} title="Close" onClick={this.handleClose}/>
               </div>
             </div>
+            {
+              this.state.chartDataIsLoading && <Oval
+                wrapperStyle={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%"
+                }}
+              />
+            }
             <canvas
               id = "chart"
               className='fullWidth'
