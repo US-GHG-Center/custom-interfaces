@@ -37,16 +37,16 @@ export class MapBoxViewer extends Component {
         });
         this.setState({currentViewer: map});
         
-        // show the whole map of usa and show all the NIST stations
-        this.plotStations(map, this.props.stations);
+        // show the world map and show all the stations
+        this.plotStations(map, this.props.stations, this.props.region, this.props.agency, this.props.stationCode);
     }
 
     componentDidUpdate(prevProps, prevState) {
         // on page refresh, show the whole map of usa and show all the NIST stations
-        this.plotStations(this.state.currentViewer, this.props.stations);
+        this.plotStations(this.state.currentViewer, this.props.stations, this.props.region, this.props.agency, this.props.stationCode);
     }
 
-    plotStations = (map, stations) => {
+    plotStations = (map, stations, region, agency, stationCode) => {
         stations.forEach(station => {
             // get the station meta and show them
             const { id, title: name, location, properties } = station;
@@ -61,6 +61,53 @@ export class MapBoxViewer extends Component {
                 this.props.setSelection(id);
             });
         });
+
+        // zoom to certian place, based on region and agency
+        let zoomLocation = this.getLocationToZoom(stations, stationCode);
+        let zoomLevel = this.getZoomLevel(region, agency, stationCode);
+        if (zoomLocation) {
+            map.flyTo({ center: zoomLocation, zoom: zoomLevel });
+        }
+    }
+
+    // utils
+
+    getLocationToZoom = (stations, stationCode) => {
+        if (stations.length<1) {
+            return null;
+        }
+        if (stationCode) {
+            let station = stations.find(station => station.id.includes(stationCode));
+            if (station) {
+                let { location } = station;
+                return location;
+            }
+        }
+        // go through the stations and average the lat and lon to get the center
+        let latSum = 0;
+        let lonSum = 0;
+        stations.forEach((station) => {
+            let { location } = station;
+            let [lon, lat] = location;
+            latSum += lat;
+            lonSum += lon;
+        });
+        let latCenter = latSum / stations.length;
+        let lonCenter = lonSum / stations.length;
+        return [lonCenter, latCenter];
+    }
+
+    getZoomLevel = (region, agency, stationCode) => {
+        if (stationCode) {
+            return 6;
+        } else if (agency && region) {
+            return 5;
+        } else if (agency === "nist" && !region) {
+            // nist is for conus region, so zoom more to conus
+            return 4;
+        } else {
+            return 2;
+        }
     }
 
     addMarker = (map, element, name, lon, lat, properties) => {

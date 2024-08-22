@@ -50,6 +50,8 @@ export function DashboardContainer() {
             setSelectedStationId={setSelectedStationId}
             ghg={ghg}
             agency={agency}
+            region={region}
+            stationCode={stationCode}
         />
     );
 }

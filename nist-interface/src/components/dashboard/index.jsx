@@ -4,7 +4,7 @@ import { MapBoxViewer } from '../mapboxViewer';
 import { Title } from '../title';
 import { ConcentrationChart } from '../chart';
 
-export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency }) {
+export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode }) {
   const [ displayChart, setDisplayChart ] = useState(false);
 
   useEffect(() => {
@@ -16,8 +16,19 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
   return (
     <Box className="fullSize">
         <Title ghg={ghg} agency={agency}/>
-        { stations && <MapBoxViewer stations={stations} setSelection={setSelectedStationId} setDisplayChart={setDisplayChart} />}
-        { displayChart && <ConcentrationChart selectedStationId={selectedStationId} setDisplayChart={setDisplayChart} ghg={ghg}/> }
+        { stations && <MapBoxViewer
+                        stations={stations}
+                        region={region}
+                        agency={agency}
+                        stationCode={stationCode}
+                        setSelection={setSelectedStationId}
+                        setDisplayChart={setDisplayChart}
+                      />}
+        { displayChart && <ConcentrationChart
+                            selectedStationId={selectedStationId}
+                            setDisplayChart={setDisplayChart}
+                            ghg={ghg}
+                          /> }
     </Box>
   );
 }
