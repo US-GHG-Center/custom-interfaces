@@ -1,4 +1,4 @@
-name: Deploy urban
+name: Deploy urban - test
 
 on:
   workflow_dispatch:
