@@ -88,15 +88,49 @@ export class ConcentrationChart extends Component {
   fetchStationData = async (stationId) => {
     try {
       // fetch in the collection from the features api
-      const response = await fetch(`https://dev.ghg.center/api/features/collections/${stationId}/items?limit=10000`);
+      const response = await fetch(`https://dev.ghg.center/api/features/collections/${stationId}/items?limit=10000&offset=0`);
       if (!response.ok) {
         throw new Error('Error in Network');
       }
       const result = await response.json();
-      const { title, features } = result;
+
+      // need to pull in remaining data based on the pagination information
+      const { numberMatched, numberReturned } = result;
+      if (numberMatched > numberReturned) {
+        let remainingData = await this.featchRemainingData(stationId, numberMatched, numberReturned);
+        result.features = result.features.concat(remainingData);
+      }
+
+      const { features } = result;
       const stationMeta = this.getStationMeta(result);
       const { time, concentration } = this.dataPreprocess(features);
       return { time, concentration, stationMeta };
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  featchRemainingData = async (stationId, numberMatched, numberReturned) => {
+    let remaining = numberMatched - numberReturned;
+    // so we still have some remaining data to fetch
+    let batches = Math.ceil(remaining / 10000);
+    let offsets = []; // when we are pulling data in the capacity of 10,000 per batches
+    for (let i = 1; i <= batches; i++) {
+      offsets.push(i * 10000 + 1);
+    }
+
+    let dataFetchPromises = [];
+
+    offsets.forEach(async (offset) => {
+        const response = fetch(`https://dev.ghg.center/api/features/collections/${stationId}/items?limit=10000&offset=${offset}`);
+        dataFetchPromises.push(response);
+    });
+
+    try {
+      let results = await Promise.all(dataFetchPromises);
+      let jsonResult = await Promise.all(results.map(result => result.json()));
+      let features = jsonResult.map(result => result.features).flat();
+      return features;
     } catch (error) {
       console.error('Error fetching data:', error);
     }
