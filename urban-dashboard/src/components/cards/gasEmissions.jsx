@@ -44,8 +44,8 @@ export function GasEmissionsCard() {
             <RootCard title="Emissions by Sector" description={description}>
                 <CardContent>
                     {/* TODO: what could be the best way to accommodate 5 pie charts? */}
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
+                    <Grid container alignItems="center" spacing={2}>
+                        <Grid item xs={6} md={6}>
                             <Pie data={data} options={options} />
                             <Typography variant='h7'>
                                 CO₂
@@ -53,6 +53,16 @@ export function GasEmissionsCard() {
                             <Pie data={data} options={options} />
                             <Typography variant='h7'>
                                 CO
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={6} md={6}>
+                            <Pie data={data} options={options} />
+                            <Typography variant='h7'>
+                                NOx
+                            </Typography>
+                            <Pie data={data} options={options} />
+                            <Typography variant='h7'>
+                                SOx
                             </Typography>
                         </Grid>
                     </Grid>
