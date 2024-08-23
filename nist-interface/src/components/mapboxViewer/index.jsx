@@ -47,13 +47,16 @@ export class MapBoxViewer extends Component {
     }
 
     plotStations = (map, stations, region, agency, stationCode) => {
+        let regions = this.getUniqueRegions(stations);
         stations.forEach(station => {
             // get the station meta and show them
             const { id, title: name, location, properties } = station;
             const [lon,  lat] = location;
             const el = document.createElement('div');
-            el.className = 'marker';
-            
+            let stationRegion = this.getStationRegion(id);
+            const markerStyleIndex = regions[stationRegion];
+            el.className = this.getMarkerStyle(markerStyleIndex);
+
             let marker = this.addMarker(map, el, name, lon, lat, properties);
 
             marker.getElement().addEventListener('click', () => {
@@ -156,6 +159,32 @@ export class MapBoxViewer extends Component {
         // combine all the rows
         let result = firstRow + secondRow + wildRow + thirdRow + fourthRow + fifthRow + sixthRow;
         return result;
+    }
+
+    getMarkerStyle = (index) => {
+        let markersClasses = ["marker", "marker marker-blue", "marker marker-purple", "marker marker-pink", "marker marker-red" ];
+        return markersClasses[index];
+    }
+
+    getUniqueRegions = (stations) => {
+        // got through all station. scrape out the region name from id
+        // then make a hash of the unique regions.
+        let memo = {};
+        let idx = 0;
+        for (let i=0; i<stations.length; i++) {
+            let station = stations[i];
+            // <agency>_<data_category>_<region>_<sitecode>_<ghg>_<frequency>_concentrations
+            let regionName = this.getStationRegion(station.id);
+            if (!(regionName in memo)) {
+                memo[regionName] = idx;
+                idx++;
+            }
+        }
+        return memo;
+    }
+
+    getStationRegion = (stationId) => {
+        return stationId.split("_")[2];
     }
 
     render() {
