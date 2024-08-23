@@ -73,6 +73,10 @@ export class ConcentrationChart extends Component {
       plugins: [plugin]
     });
 
+    this.chart.options.plugins.zoom.zoom.onZoom = () => {
+      this.setState({showChartInstructions: false});
+    }
+
     // fetch the data from the api and then initialize the chart.
     this.fetchStationData(this.props.selectedStationId).then(data => {
       const { time, concentration, stationMeta } = data;
