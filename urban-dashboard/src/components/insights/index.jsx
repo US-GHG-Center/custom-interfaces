@@ -1,4 +1,4 @@
-import { LeftInsights } from "./helper/left";
+import { BottomLeftInsights, LeftInsights } from "./helper/left";
 import { RightInsights } from "./helper/right";
 import './index.css';
 
@@ -19,15 +19,21 @@ export function Insights({ urbanRegion, dataset }) {
         <div className="insights">
             <LeftInsights>
                 <PopulationCard />
-                {/* <TransportationCard /> */}
-                <div className="dataset-card">
-                    <DatasetCard dataset={dataset} />
-                </div>
-            </LeftInsights >
 
-            <RightInsights>
                 {dataset === "gra2pes" && <GasEmissionsCard />}
                 {dataset === "vulcan" && <SeasonalEmissionsCard />}
+                {/* <TransportationCard /> */}
+                {/* <div className="dataset-card">
+                    <DatasetCard dataset={dataset} />
+                </div> */}
+            </LeftInsights >
+            <BottomLeftInsights>
+                <DatasetCard dataset={dataset} />
+            </BottomLeftInsights>
+
+            <RightInsights>
+                {/* {dataset === "gra2pes" && <GasEmissionsCard />}
+                {dataset === "vulcan" && <SeasonalEmissionsCard />} */}
                 {/* <LandCoverageCard/> */}
                 {/* <AirQualityCard /> */}
                 {/* <ExploreMoreCard description="Explore the Tower Data" link={towerDataViewerUrl} /> */}

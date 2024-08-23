@@ -18,8 +18,13 @@
 
 #title-right {
   position: absolute;
-  top: 1%;
-  right: 1%;
+  top: 7%;
+  right: 9px;
   z-index: 1000;
-  border: 2px solid white;
+  /* border: 2px solid white; */
+  background-color: rgba(9, 42, 98, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px;
 }

@@ -14,25 +14,25 @@ export function RootCard({ children, title, description, subDescription }) {
       <CardHeader
         title={title}
         subheader={subDescription}
-        sx={{marginBottom: 0}}
+        sx={{ marginBottom: -3 }}
       />
       {children}
       {description &&
         <CardContent>
-            <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary">
             {description}
-            </Typography>
+          </Typography>
         </CardContent>
-    }
+      }
     </Card>
   );
 }
 
 RootCard.propTypes = {
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.element),
-      PropTypes.element.isRequired
-    ]),
-    title: PropTypes.string,
-    description: PropTypes.string
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.element.isRequired
+  ]),
+  title: PropTypes.string,
+  description: PropTypes.string
 }

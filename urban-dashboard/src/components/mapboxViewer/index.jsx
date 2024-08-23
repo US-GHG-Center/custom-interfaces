@@ -1,4 +1,4 @@
-import { Component, Fragment } from 'react';
+import { Component, Fragment, useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -15,6 +15,57 @@ import { URBAN_REGIONS } from '../../assets/geojson';
 const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
 
+// const HomeButtonControl = ({ map }) => {
+//     const containerRef = useRef(null);
+
+//     useEffect(() => {
+//         // Handle button click
+//         const handleClick = () => {
+//             if (map) {
+//                 map.flyTo({
+//                     center: [-98, 39], // Replace with the desired latitude and longitude
+//                     zoom: 4,
+//                 });
+
+//                 // Hide the display_props element
+//                 document.getElementById('display_props').style.visibility = 'hidden';
+
+//                 // // Make each element in markerClickTracker visible
+//                 // markerClickTracker.forEach((element) => {
+//                 //     element.style.visibility = 'visible';
+//                 // });
+//             }
+//         };
+
+//         // Create the control element
+//         const container = document.createElement('div');
+//         container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+//         container.addEventListener('click', handleClick);
+//         container.innerHTML = `
+//       <div class="tools-box">
+//         <button>
+//           <span class="mapboxgl-ctrl-icon btn fa fa-refresh" aria-hidden="true" title="Reset To USA"></span>
+//         </button>
+//       </div>
+//     `;
+//         containerRef.current = container;
+
+//         // Add control to the map
+//         map.addControl({
+//             onAdd: () => container,
+//             onRemove: () => {
+//                 container.parentNode.removeChild(container);
+//             },
+//         });
+
+//         // Cleanup function to remove event listeners
+//         return () => {
+//             container.removeEventListener('click', handleClick);
+//         };
+//     }, [map]);
+
+//     return null; // This component does not render anything in the React DOM
+// };
 export class MapBoxViewer extends Component {
     constructor(props) {
         super(props);
@@ -36,10 +87,16 @@ export class MapBoxViewer extends Component {
             container: 'mapbox-container',
             style: mapboxStyleUrl,
             center: [-94.676392, 39.106667], // Center of the USA
-            zoom: 4.8 // Adjust zoom level to fit the USA
+            zoom: 4.8, // Adjust zoom level to fit the USA
+            zoomControl: true
         });
 
         this.setState({ currentViewer: map });
+
+        // map.addControl(HomeButtonControl);
+        map.addControl(new mapboxgl.NavigationControl());
+
+
 
         // add the tile sources 
         map.on("load", () => {
@@ -126,7 +183,9 @@ export class MapBoxViewer extends Component {
             .addTo(map);
 
         const tooltipContent = `<strong>${name}<strong>`;
-        const popup = new mapboxgl.Popup().setHTML(tooltipContent);
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+        }).setHTML(tooltipContent);
         marker.setPopup(popup);
         marker.getElement().addEventListener("mouseenter", () => {
             popup.addTo(map);
@@ -186,6 +245,7 @@ export class MapBoxViewer extends Component {
                     <Grid item xs={12}>
                         <div id="mapbox-container" className='fullSize' style={{ position: "absolute" }}></div>
                         {/* <div id="mapbox-container" className='fullSize' style={{ position: "relative", width: "auto", height: "1024px" }}></div> */}
+
                     </Grid>
                 </Grid>
                 {this.state.selectedUrbanRegion

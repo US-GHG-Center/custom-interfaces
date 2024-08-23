@@ -5,7 +5,7 @@
     display: block;
     position: absolute;
     width: 100%;
-    height: auto;
+    height: 100vh;
     top: 11%;
     color: white;
 }
@@ -18,9 +18,11 @@
     bottom: 0;
 }
 
-.dataset-card {
+.insights-bottom-left {
     position: absolute;
     z-index: 1000;
+    bottom: 15%;
+    left: 1%;
 }
 
 .insights-right {
