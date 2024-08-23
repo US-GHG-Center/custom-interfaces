@@ -28,6 +28,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
         { displayChart && <SelectGHG selectedGHG={ghg} setSelectedGHG={setSelectedGHG} />}
         { displayChart && <ConcentrationChart
                             selectedStationId={selectedStationId}
+                            setSelectedStationId={setSelectedStationId}
                             setDisplayChart={setDisplayChart}
                             ghg={ghg}
                           /> }

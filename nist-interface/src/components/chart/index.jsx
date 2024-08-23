@@ -37,6 +37,11 @@ export class ConcentrationChart extends Component {
         this.chart.update();
       }
 
+      if (this.props.ghg !== prevProps.ghg) {
+        let changedStationId = this.getChangedGHGStationId(this.props.selectedStationId, this.props.ghg);
+        this.props.setSelectedStationId(changedStationId);
+      }
+
       // fetch the data from the api and then initialize the chart.
       this.fetchStationData(this.props.selectedStationId).then(data => {
         const { time, concentration, stationMeta } = data;
@@ -189,6 +194,14 @@ export class ConcentrationChart extends Component {
   getYAxisLabel = (ghg) => {
       let label = ghg === 'ch4' ? 'CH₄ Concentration (ppb)' : 'CO₂ Concentration (ppm)';
       return label;
+  }
+
+  getChangedGHGStationId = (selectedStationId, changedGHG) => {
+    // stationId (collectionId) format: <agency>_<data_category>_<region>_<sitecode>_<ghg>_<frequency>_concentrations
+    let stationId = selectedStationId.split("_");
+    stationId[4] = changedGHG;
+    let changedStationId = stationId.join("_");
+    return changedStationId;
   }
 
   handleRefresh = () => {
