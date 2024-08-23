@@ -3,8 +3,9 @@ import Box from '@mui/material/Box';
 import { MapBoxViewer } from '../mapboxViewer';
 import { Title } from '../title';
 import { ConcentrationChart } from '../chart';
+import { SelectGHG } from '../dropdown';
 
-export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode }) {
+export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode, setSelectedGHG }) {
   const [ displayChart, setDisplayChart ] = useState(false);
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
                         setSelection={setSelectedStationId}
                         setDisplayChart={setDisplayChart}
                       />}
+        { displayChart && <SelectGHG selectedGHG={ghg} setSelectedGHG={setSelectedGHG} />}
         { displayChart && <ConcentrationChart
                             selectedStationId={selectedStationId}
                             setDisplayChart={setDisplayChart}

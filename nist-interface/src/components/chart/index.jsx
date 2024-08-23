@@ -29,7 +29,7 @@ export class ConcentrationChart extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     // when new props is received, initialize the chart with data.
-    if (this.props.selectedStationId !== prevProps.selectedStationId) {
+    if (this.props.selectedStationId !== prevProps.selectedStationId || this.props.ghg !== prevProps.ghg) {
       // clean previous chart data
       if (this.chart) {
         this.chart.data.labels = [];
@@ -52,12 +52,12 @@ export class ConcentrationChart extends Component {
     }
 
     // TODO: take the ghg label and unit from the collection item properties instead.
-    let label = this.props.ghg === 'ch4' ? 'CH₄ Concentration (ppb)' : 'CO₂ Concentration (ppm)';
+    let dataPointLabel = this.getYAxisLabel(this.props.ghg);
     let dataset = {
       labels: [],
       datasets: [
         {
-          label: label,
+          label: dataPointLabel,
           data: [],
           borderColor: "#ff6384",
           yAxisID: 'y',
@@ -73,6 +73,7 @@ export class ConcentrationChart extends Component {
       plugins: [plugin]
     });
 
+    this.chart.options.scales.y.title.text = dataPointLabel;
     this.chart.options.plugins.zoom.zoom.onZoom = () => {
       this.setState({showChartInstructions: false});
     }
@@ -88,6 +89,10 @@ export class ConcentrationChart extends Component {
     if (this.chart) {
       // first reset the zoom
       this.chart.resetZoom();
+
+      let labelY = this.getYAxisLabel(this.props.ghg);
+      this.chart.data.datasets[0].label = labelY;
+      this.chart.options.scales.y.title.text = labelY;
 
       // update that value in the chart.
       this.chart.data.labels = label;
@@ -179,6 +184,11 @@ export class ConcentrationChart extends Component {
     let feature = result.features[0];
     let stationLocation = feature.properties.location.replace("_", ", ");
     return { stationName, stationLocation };
+  }
+
+  getYAxisLabel = (ghg) => {
+      let label = ghg === 'ch4' ? 'CH₄ Concentration (ppb)' : 'CO₂ Concentration (ppm)';
+      return label;
   }
 
   handleRefresh = () => {
