@@ -9,6 +9,10 @@ import { plugin, options } from './helper';
 
 import './index.css';
 
+const collectionItemURL = (collectionId, offset=0, limit=10000) => {
+  return `${process.env.REACT_APP_FEATURES_API_URL}/collections/${collectionId}/items?limit=${limit}&offset=${offset}&is_max_height_data=True`;
+}
+
 export class ConcentrationChart extends Component {
   constructor(props) {
     super(props);
@@ -100,7 +104,7 @@ export class ConcentrationChart extends Component {
     try {
       this.setState({chartDataIsLoading: true});
       // fetch in the collection from the features api
-      const response = await fetch(`https://dev.ghg.center/api/features/collections/${stationId}/items?limit=10000&offset=0`);
+      const response = await fetch(collectionItemURL(stationId));
       if (!response.ok) {
         throw new Error('Error in Network');
       }
@@ -109,7 +113,7 @@ export class ConcentrationChart extends Component {
       // need to pull in remaining data based on the pagination information
       const { numberMatched, numberReturned } = result;
       if (numberMatched > numberReturned) {
-        let remainingData = await this.featchRemainingData(stationId, numberMatched, numberReturned);
+        let remainingData = await this.fetchRemainingData(stationId, numberMatched, numberReturned);
         result.features = result.features.concat(remainingData);
       }
 
@@ -123,7 +127,7 @@ export class ConcentrationChart extends Component {
     }
   }
 
-  featchRemainingData = async (stationId, numberMatched, numberReturned) => {
+  fetchRemainingData = async (stationId, numberMatched, numberReturned) => {
     let remaining = numberMatched - numberReturned;
     // so we still have some remaining data to fetch
     let batches = Math.ceil(remaining / 10000);
@@ -135,7 +139,7 @@ export class ConcentrationChart extends Component {
     let dataFetchPromises = [];
 
     offsets.forEach(async (offset) => {
-        const response = fetch(`https://dev.ghg.center/api/features/collections/${stationId}/items?limit=10000&offset=${offset}`);
+        const response = fetch(collectionItemURL(stationId, offset));
         dataFetchPromises.push(response);
     });
 

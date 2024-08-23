@@ -20,7 +20,7 @@ export function DashboardContainer() {
         const fetchStationData = async () => {
             try {
                 // fetch in the collection from the features api
-                const response = await fetch('https://dev.ghg.center/api/features/collections');
+                const response = await fetch(`${process.env.REACT_APP_FEATURES_API_URL}/collections?limit=1000`);
                 if (!response.ok) {
                     throw new Error('Error in Network');
                 }
