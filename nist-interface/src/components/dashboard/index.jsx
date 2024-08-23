@@ -16,7 +16,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
 
   return (
     <Box className="fullSize">
-        <Title ghg={ghg} agency={agency}/>
+        <Title ghg={ghg} agency={agency} region={region}/>
         { stations && <MapBoxViewer
                         stations={stations}
                         region={region}

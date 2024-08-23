@@ -2,23 +2,30 @@ import React from 'react';
 
 import './index.css';
 
-const GHG_FULL_NAME = {
-    CO2: 'Carbon Dioxide',
-    CH4: 'Methane'
-};
+export function Title ({ ghg, agency, region }) {
+    return (
+        <div id="title">
+            <strong>
+                {getTitle(agency, ghg, region)}
+            </strong>
+        </div>
+    );
+}
 
-export function Title ({ ghg, agency }) {
+function getTitle(agency, ghg, region) {
+    const GHG_FULL_NAME = {
+        CO2: 'Carbon Dioxide',
+        CH4: 'Methane'
+    };
+
     let GHG = ghg.toUpperCase();
     let GHGFullName = GHG;
     if (GHG in GHG_FULL_NAME) {
         GHGFullName = GHG_FULL_NAME[GHG];
     }
 
-    return (
-        <div id="title">
-            <strong>
-                {agency.toUpperCase()}: {GHGFullName} Concentration Measurements
-            </strong>
-        </div>
-    );
+    let regionPhrase = region ? `${region.toUpperCase()} :` : '';
+
+    let formedTitle = `${agency.toUpperCase()}: ${regionPhrase} ${GHGFullName} Concentration Measurements`;
+    return formedTitle;
 }
