@@ -3,3 +3,5 @@ node_modules
 dist
 index_dev.html
 data
+.DS_Store
+.idea
