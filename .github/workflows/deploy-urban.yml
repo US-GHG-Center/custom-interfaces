@@ -53,8 +53,9 @@ jobs:
         run: |
           echo PUBLIC_URL="${{ vars.PUBLIC_URL_URBAN }}" >> .env
           echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
-          CI=false yarn
-          CI=false yarn build
+          echo CI= false >> .env
+          yarn
+          yarn build
         env:
           PUBLIC_URL: ${{ vars.PUBLIC_URL_URBAN }}
       
