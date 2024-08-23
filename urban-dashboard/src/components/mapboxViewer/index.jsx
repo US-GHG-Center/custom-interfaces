@@ -14,58 +14,6 @@ import { URBAN_REGIONS } from '../../assets/geojson';
 
 const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
-
-// const HomeButtonControl = ({ map }) => {
-//     const containerRef = useRef(null);
-
-//     useEffect(() => {
-//         // Handle button click
-//         const handleClick = () => {
-//             if (map) {
-//                 map.flyTo({
-//                     center: [-98, 39], // Replace with the desired latitude and longitude
-//                     zoom: 4,
-//                 });
-
-//                 // Hide the display_props element
-//                 document.getElementById('display_props').style.visibility = 'hidden';
-
-//                 // // Make each element in markerClickTracker visible
-//                 // markerClickTracker.forEach((element) => {
-//                 //     element.style.visibility = 'visible';
-//                 // });
-//             }
-//         };
-
-//         // Create the control element
-//         const container = document.createElement('div');
-//         container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
-//         container.addEventListener('click', handleClick);
-//         container.innerHTML = `
-//       <div class="tools-box">
-//         <button>
-//           <span class="mapboxgl-ctrl-icon btn fa fa-refresh" aria-hidden="true" title="Reset To USA"></span>
-//         </button>
-//       </div>
-//     `;
-//         containerRef.current = container;
-
-//         // Add control to the map
-//         map.addControl({
-//             onAdd: () => container,
-//             onRemove: () => {
-//                 container.parentNode.removeChild(container);
-//             },
-//         });
-
-//         // Cleanup function to remove event listeners
-//         return () => {
-//             container.removeEventListener('click', handleClick);
-//         };
-//     }, [map]);
-
-//     return null; // This component does not render anything in the React DOM
-// };
 export class MapBoxViewer extends Component {
     constructor(props) {
         super(props);
@@ -95,8 +43,6 @@ export class MapBoxViewer extends Component {
 
         // map.addControl(HomeButtonControl);
         map.addControl(new mapboxgl.NavigationControl());
-
-
 
         // add the tile sources 
         map.on("load", () => {
@@ -136,13 +82,24 @@ export class MapBoxViewer extends Component {
             console.log("urban region changed to ", this.props.urbanRegion);
 
             //TODO: set focused region to selected urban region
+            const urbanRegion = URBAN_REGIONS.filter(item => item.name == this.props.urbanRegion)[0];
+            if (urbanRegion) {
+                console.log("selected region is: ", urbanRegion);
+                const name = urbanRegion.center;
+                const center = urbanRegion.center;
+                const geojson = urbanRegion.geojson;
 
-            // const urbanRegion = URBAN_REGIONS.filter(item => item.name = this.props.urbanRegion)[0];
-            // console.log(urbanRegion);
-            // const { name, center, geojson } = urbanRegion;
-            // this.setState({ selectedUrbanRegion: name });
-            // this.props.setSelection(name);
-            // this.focusSelectedUrbanRegion(this.state.currentViewer, center, geojson);
+                // update selected region 
+                // this.setState({ selectedUrbanRegion: name });
+                // this.props.setSelection(name);
+
+                //focus on selected region 
+                this.focusSelectedUrbanRegion(
+                    this.state.currentViewer,
+                    center,
+                    geojson
+                );
+            }
         }
     }
 
