@@ -132,15 +132,29 @@ export class MapBoxViewer extends Component {
 
     getToolTipContent = (stationProperties) => {
         let { siteCode, siteName, siteCountry, latitude, longitude,
-            elevation, elevationUnit, instrumentType } = stationProperties;
+            elevation, elevationUnit, instrumentType, region } = stationProperties;
+
+        // making sure that they appear, for demo purpose. TODO: remove this 
+        region = "<undefined>"; instrumentType = "<undefined>"; elevation = "<undefined>"; elevationUnit = "<undefined>";
+
+        // siteCode acornym and full name
         let siteNameAddOn = siteName ? ` : ${siteName}` : "";
         let firstRow = `<strong>${siteCode.toUpperCase()}${siteNameAddOn}</strong><br>`;
+        // site region
+        let wildRow = region ? `Region: ${region}<br>` : "";
+        // siteCountry
         let secondRow = siteCountry ? `<strong>${siteCountry}</strong><br>` : "";
+        // latitude
         let thirdRow = latitude ? `Latitude: ${Number(latitude).toFixed(2)}<br>` : "";
+        // longitude
         let fourthRow = longitude ? `Longitude: ${Number(longitude).toFixed(2)}<br>` : "";
-        let fifthRow = elevation ? `Elevation: ${Number(elevation).toFixed(2)} ${elevationUnit}<br>` : "";
+        // elevation
+        // let fifthRow = elevation ? `Elevation: ${Number(elevation).toFixed(2)} ${elevationUnit}<br>` : "";
+        let fifthRow = elevation ? `Elevation: ${elevation} ${elevationUnit}<br>` : "";
+        // instrumentType
         let sixthRow = instrumentType ? `Instrument Type: ${instrumentType}<br>` : "";
-        let result = firstRow + secondRow + thirdRow + fourthRow + fifthRow + sixthRow;
+        // combine all the rows
+        let result = firstRow + secondRow + wildRow + thirdRow + fourthRow + fifthRow + sixthRow;
         return result;
     }
 
