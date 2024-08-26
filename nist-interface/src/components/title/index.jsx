@@ -2,9 +2,9 @@ import React from 'react';
 
 import './index.css';
 
-export function Title ({ ghg, agency, region }) {
+export function Title ({ ghg, agency, region, style }) {
     return (
-        <div id="title">
+        <div id="title" style={style}>
             <strong>
                 {getTitle(agency, ghg, region)}
             </strong>

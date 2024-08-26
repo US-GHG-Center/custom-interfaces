@@ -191,7 +191,7 @@ export class MapBoxViewer extends Component {
 
     render() {
         return (
-            <Box component="main" className="map-section fullSize" sx={{ flexGrow: 1 }}>
+            <Box component="main" className="map-section fullSize" sx={{ flexGrow: 1 }} style={this.props.style}>
                 <Grid container className="fullSize">
                     <Grid item xs={12} sx={{ position: "relative" }}>
                         { this.props.stations.length < 1 && this.state.currentViewer && <LoadingSpinner /> }

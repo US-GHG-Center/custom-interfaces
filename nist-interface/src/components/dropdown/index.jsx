@@ -12,7 +12,7 @@ export function SelectGHG({selectedGHG, setSelectedGHG}) {
   };
 
   return (
-    <Box id="GHG-dropdown" sx={{ minWidth: 120, maxWidth: 240 }}>
+    <Box id="GHG-dropdown" sx={{ minWidth: 120, maxWidth: 240 }} style={this.props.style}>
       <FormControl fullWidth>
         <Select
           value={selectedGHG}

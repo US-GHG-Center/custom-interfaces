@@ -218,7 +218,7 @@ export class ConcentrationChart extends Component {
 
   render() {
     return (
-      <Box id="chart-box">
+      <Box id="chart-box" style={this.props.style}>
           <div id="chart-container" className='fullSize'>
             <div id="chart-tools">
               <div id="chart-instructions-container">
