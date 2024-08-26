@@ -1,13 +1,13 @@
-#chart-container {
-    display: flex;
-}
-
 #chart-box {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 40%;
+    height: 50%;
     background-color: white;
+}
+
+#chart-container {
+    display: flex;
 }
 
 #chart {
