@@ -2,3 +2,7 @@
     display: block;
     position: static;
 }
+
+.resize-handle {
+    text-align: center;
+}
