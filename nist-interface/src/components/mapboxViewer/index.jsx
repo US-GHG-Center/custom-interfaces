@@ -45,7 +45,10 @@ export class MapBoxViewer extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         // on page refresh, show the whole map of usa and show all the NIST stations
-        this.plotStations(this.state.currentViewer, this.props.stations, this.props.region, this.props.agency, this.props.stationCode);
+        if (this.props.stationCode !== prevProps.stationCode || this.props.agency !== prevProps.agency ||
+            this.props.region !== prevProps.region || this.props.stations !== prevProps.stations) {
+            this.plotStations(this.state.currentViewer, this.props.stations, this.props.region, this.props.agency, this.props.stationCode);
+        }
     }
 
     plotStations = (map, stations, region, agency, stationCode) => {
