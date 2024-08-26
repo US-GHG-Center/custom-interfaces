@@ -1,9 +1,9 @@
-import { Component, createRef } from 'react';
+import { Component } from 'react';
 import Chart from 'chart.js/auto';
 import Box from '@mui/material/Box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faRotateLeft, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
-import { Oval } from "react-loader-spinner";
+import { LoadingSpinner } from '../loading';
 
 import { plugin, options } from './helper';
 
@@ -242,17 +242,7 @@ export class ConcentrationChart extends Component {
               </div>
             </div>
             {
-              this.state.chartDataIsLoading && <Oval
-                color="#082A63"
-                secondaryColor='#2C3E50'
-                wrapperStyle={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  position: "absolute",
-                  width: "100%",
-                  height: "100%",
-                }}
-              />
+              this.state.chartDataIsLoading && <LoadingSpinner />
             }
             <canvas
               id = "chart"

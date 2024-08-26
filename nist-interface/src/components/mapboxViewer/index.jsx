@@ -5,6 +5,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
+import { LoadingSpinner } from '../loading';
+
 import './index.css';
 
 import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT } from './helper';
@@ -192,6 +194,7 @@ export class MapBoxViewer extends Component {
             <Box component="main" className="map-section fullSize" sx={{ flexGrow: 1 }}>
                 <Grid container className="fullSize">
                     <Grid item xs={12} sx={{ position: "relative" }}>
+                        { this.props.stations.length < 1 && this.state.currentViewer && <LoadingSpinner /> }
                         <div id="mapbox-container" className='fullSize' style={{ position: "absolute" }}></div>
                     </Grid>
                 </Grid>
