@@ -6,8 +6,8 @@ import {
 
 import './App.css';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Dashboard } from './components/dashboard';
-import { DashboardContainer } from './components/dashboardContainer';
+import { Dashboard } from './pages/dashboard';
+import { DashboardContainer } from './pages/dashboardContainer';
 
 const router = createBrowserRouter([
   {
