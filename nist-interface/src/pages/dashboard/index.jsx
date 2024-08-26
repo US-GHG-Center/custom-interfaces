@@ -42,7 +42,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
                   <PanelResizeHandle className='resize-handle'>
                     <DragHandleIcon/>
                   </PanelResizeHandle>
-                  <Panel maxSize={75} minSize={40} defaultSize={20} className='panel panel-timeline'>
+                  <Panel maxSize={75} minSize={40} defaultSize={40} className='panel panel-timeline'>
                     <ConcentrationChart
                       selectedStationId={selectedStationId}
                       setSelectedStationId={setSelectedStationId}
