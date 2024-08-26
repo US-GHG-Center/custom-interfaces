@@ -6,13 +6,13 @@ import Select from '@mui/material/Select';
 
 import "./index.css";
 
-export function SelectGHG({selectedGHG, setSelectedGHG}) {
+export function SelectGHG({selectedGHG, setSelectedGHG, style}) {
   const handleChange = (event) => {
     setSelectedGHG(event.target.value);
   };
 
   return (
-    <Box id="GHG-dropdown" sx={{ minWidth: 120, maxWidth: 240 }} style={this.props.style}>
+    <Box id="GHG-dropdown" sx={{ minWidth: 120, maxWidth: 240 }} style={style}>
       <FormControl fullWidth>
         <Select
           value={selectedGHG}
