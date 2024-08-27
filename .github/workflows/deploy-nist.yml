@@ -51,7 +51,7 @@ jobs:
       - name: Build for production 🔧
         working-directory: ./nist-interface
         run: |
-          echo PUBLIC_URL="${{ vars.PUBLIC_URL_nist }}" >> .env
+          echo PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}" >> .env
           echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
           echo CI=false >> .env  
           export CI=false
