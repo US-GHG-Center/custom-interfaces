@@ -24,7 +24,7 @@ function getTitle(agency, ghg, region) {
         GHGFullName = GHG_FULL_NAME[GHG];
     }
 
-    let regionPhrase = region ? `${region.toUpperCase()} :` : '';
+    let regionPhrase = region ? `${region.toUpperCase()}:` : '';
 
     let formedTitle = `${agency.toUpperCase()}: ${regionPhrase} ${GHGFullName} Concentration Measurements`;
     return formedTitle;
