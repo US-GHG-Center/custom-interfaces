@@ -16,10 +16,9 @@ export function SelectGHG({selectedGHG, setSelectedGHG, style}) {
       <FormControl fullWidth>
         <Select
           value={selectedGHG}
-          label="GHG"
           onChange={handleChange}
-          inputProps={{ 'aria-label': 'Without label' }}
           displayEmpty
+          inputProps={{ 'aria-label': 'Without label' }}
         >
           <MenuItem value={"co2"}>Carbon Dioxide</MenuItem>
           <MenuItem value={"ch4"}>Methane</MenuItem>
