@@ -21,7 +21,12 @@ export function Dashboard({ dataset }) {
         setSelection={setUrbanRegion}
         handleZoomOut={handleZoomOut}
       /> */}
-      <InfoSidebar dataset={dataset} />
+      <InfoSidebar
+        selection={urbanRegion}
+        setSelection={setUrbanRegion}
+        handleZoomOut={handleZoomOut}
+        dataset={dataset}
+      />
       <MapBoxViewer
         urbanRegion={urbanRegion}
         setSelection={setUrbanRegion}

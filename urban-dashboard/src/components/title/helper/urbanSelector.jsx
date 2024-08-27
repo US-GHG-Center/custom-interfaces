@@ -1,11 +1,22 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import { Typography } from '@mui/material';
+
+import { Select, MenuItem, Typography, Box } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+
+
+function DropdownIconComponent(props) {
+  return (
+    <>
+      <FontAwesomeIcon
+        icon={faChevronDown}
+        {...props}
+        style={{ color: "#082A64", fontSize: 20 }} />
+    </>
+  )
+}
+
 
 export function UrbanSelector({ urbanRegion, setUrbanRegion }) {
   const [selectedRegion, setSelectedRegion] = useState(urbanRegion);
@@ -31,9 +42,22 @@ export function UrbanSelector({ urbanRegion, setUrbanRegion }) {
         variant='standard'
         disableUnderline={true}
         onChange={handleSelect}
+        IconComponent={(props) => (<DropdownIconComponent {...props} />)}
       >
         {urbanRegions.map((region) => (
-          <MenuItem value={region}><Typography variant='h5'>{region}</Typography></MenuItem>
+          <MenuItem
+            value={region}
+          >
+            <Box display="flex" alignItems="center">
+              <Typography sx={{
+                // width: "170px",
+                mr: 3,
+                color: "#082A64",
+                fontSize: "20px",
+                lineHeight: "24.2px"
+              }}>{region}</Typography>
+            </Box>
+          </MenuItem>
         ))}
       </Select>
     </React.Fragment>

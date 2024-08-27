@@ -12,34 +12,49 @@ import { Typography } from '@mui/material';
 import { PopulationCard } from '../cards/population';
 import { SeasonalEmissionsCard } from '../cards/seasonalEmissions';
 import { DataInsightsCard } from '../cards/dataInsights';
+import { Title } from '../title';
 
 
 
-export function InfoSidebar({ dataset }) {
+export function InfoSidebar({
+    selection,
+    setSelection,
+    handleZoomOut,
+    dataset
+}) {
     const briefSnippet = "Cities shown on the map have been selected based on their innovative GHG measurements and geographic diversity."
 
     return (
         <div className="info-sidebar">
 
-            <Typography variant='h5'>
-                San Francisco
-            </Typography>
+            <Title
+                selection={selection}
+                setSelection={setSelection}
+                handleZoomOut={handleZoomOut}
+            />
 
-            {/* Population and Area Card */}
-            <PopulationCard />
+            {selection && (
+                <>
+                    {/* Population and Area Card */}
+                    <PopulationCard />
 
-            {/* Data Snippet Card */}
-            <Typography style={{ fontSize: '14px', color: '#1E1E1E' }}>
-                {briefSnippet}
-            </Typography>
+                    {/* Data Snippet Card */}
+                    <Typography style={{ fontSize: '14px', color: '#1E1E1E' }}>
+                        {briefSnippet}
+                    </Typography>
+                    {/* Primary separator line */}
+                    <div className="info-border-primary" />
+                    {/* Dataset Card */}
+                    {dataset == "vulcan" && <VulcanDatasetCard />}
+                    {dataset == "gra2pes" && <Grap2pesDatasetCard />}
+                    {/* Secondary separator line */}
+                    <div className="info-border-secondary" />
+                    {/* Dataset Insights Card */}
+                    <DataInsightsCard dataset={dataset} />
 
-            <div className="info-border-primary" />
+                </>
+            )}
 
-            {dataset == "vulcan" && <VulcanDatasetCard />}
-            {dataset == "gra2pes" && <Grap2pesDatasetCard />}
-
-            <div className="info-border-secondary" />
-            <DataInsightsCard dataset={dataset} />
         </div>
     )
 }

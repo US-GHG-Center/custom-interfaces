@@ -41,7 +41,7 @@ export function PopulationCard() {
         </div>
         <div class="population-info">
           <p class="population-label">Area</p>
-          <p class="population-value">{area} mi<sup>2</sup></p>
+          <p class="population-value">{area} mi²</p>
         </div>
       </div>
     </div>
