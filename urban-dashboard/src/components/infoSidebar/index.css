@@ -1,0 +1,25 @@
+.info-sidebar {
+    position: absolute;
+    top: 35px;
+    left: 28px;
+    border-radius: 6px;
+    bottom: 10%;
+    width: 383px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-border-primary {
+    border: 3px solid #082A64;
+}
+
+.info-border-secondary {
+    border: 1px solid #D0D0D0;
+}

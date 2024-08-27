@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { MapBoxViewer } from '../mapboxViewer';
 import { Title } from '../title';
 import { DetailAnalysis } from '../detailAnalysis';
+import { InfoSidebar } from '../infoSidebar';
 
 export function Dashboard({ dataset }) {
   const [urbanRegion, setUrbanRegion] = useState("");
@@ -15,11 +16,12 @@ export function Dashboard({ dataset }) {
   return (
     <Box
       className="fullSize">
-      <Title
+      {/* <Title
         selection={urbanRegion}
         setSelection={setUrbanRegion}
         handleZoomOut={handleZoomOut}
-      />
+      /> */}
+      <InfoSidebar dataset={dataset} />
       <MapBoxViewer
         urbanRegion={urbanRegion}
         setSelection={setUrbanRegion}

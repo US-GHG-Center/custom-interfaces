@@ -205,13 +205,13 @@ export class MapBoxViewer extends Component {
 
                     </Grid>
                 </Grid>
-                {this.state.selectedUrbanRegion
+                {/* {this.state.selectedUrbanRegion
                     &&
                     <Insights
                         urbanRegion={this.props.urbanRegion}
                         dataset={this.props.dataset}
                     />
-                }
+                } */}
             </Box>
         );
     }

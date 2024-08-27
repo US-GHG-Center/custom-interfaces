@@ -33,13 +33,13 @@ export function Grap2pesDatasetCard() {
     const description = "Monthly emission rates of greenhouse gases for ten different sectors, regridded to 0.1 x 0.1 degree resolution."
 
     return (
-        <OutlinedCard>
-            <RootCard title={title}>
-                <CardContent>
-                    {description}
-                </CardContent>
-            </RootCard>
-        </OutlinedCard>
+        <div class="dataset-card">
+            <h2>{title}</h2>
+            <p>
+                {description}
+                <a href="#"> Click here for more details.</a>
+            </p>
+        </div>
     )
 }
 
@@ -48,13 +48,12 @@ export function VulcanDatasetCard() {
     const description = "Provides annual CO2 emissions estimates for ten different sectors at 1km resolution. It is designed to be used as emission estimates in atmospheric transport modeling, policy, mapping, and other data analyses and applications."
 
     return (
-        <OutlinedCard>
-            <RootCard title={title}>
-                <CardContent>
-                    {description}
-                </CardContent>
-            </RootCard>
-        </OutlinedCard>
+        <div class="dataset-card">
+            <h2>{title}</h2>
+            <p>
+                {description}
+                <a href="#"> Click here for more details.</a>
+            </p>
+        </div>
     )
-
 }
