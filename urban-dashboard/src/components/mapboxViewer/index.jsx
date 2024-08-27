@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 
 import './index.css';
 
-import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT, VULCAN_RASTER_URL } from './helper';
+import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT, VULCAN_RASTER_URL, GRA2PES_RASTER_URL } from './helper';
 import { Insights } from '../insights';
 
 import { URBAN_REGIONS } from '../../assets/geojson';
@@ -51,11 +51,25 @@ export class MapBoxViewer extends Component {
                 "tiles": [VULCAN_RASTER_URL]
             })
 
+            map.addSource("raster-tiles-gra2pes", {
+                "type": "raster",
+                "tiles": [GRA2PES_RASTER_URL]
+            })
+
             if (this.props.dataset == "vulcan") {
                 map.addLayer({
                     "id": "raster-layer",
                     "type": "raster",
                     "source": "raster-tiles-vulcan",
+                    "paint": {
+                        "raster-opacity": 0.7
+                    }
+                })
+            } else if (this.props.dataset == "gra2pes") {
+                map.addLayer({
+                    "id": "raster-layer",
+                    "type": "raster",
+                    "source": "raster-tiles-gra2pes",
                     "paint": {
                         "raster-opacity": 0.7
                     }
