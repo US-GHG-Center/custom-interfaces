@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [ add/cicd-nist-urban, production ]
-    paths:
-      - nist-interface/**
+    # paths:
+      # - nist-interface/**
 
 jobs:
   define-environment:
