@@ -14,7 +14,8 @@ export function DashboardContainer() {
     const [ dataCategory ] = useState(searchParams.get('data-category') || ""); // testbed
     const [ region ] = useState(searchParams.get('region') || ""); // lam or nec
     const [ ghg, setSelectedGHG ] = useState(searchParams.get('ghg') || "co2"); // co2 or ch4
-    const [ stationCode ] = useState(searchParams.get('station_code') || ""); // buc, smt, etc
+    const [ stationCode ] = useState(searchParams.get('station-code') || ""); // buc, smt, etc
+    const [ zoomLevel ] = useState (searchParams.get('zoom-level')); // let default zoom level controlled by map component
 
     useEffect(() => {
         const fetchStationData = async () => {
@@ -53,6 +54,7 @@ export function DashboardContainer() {
             agency={agency}
             region={region}
             stationCode={stationCode}
+            zoomLevel={zoomLevel}
         />
     );
 }

@@ -34,7 +34,7 @@ export class MapBoxViewer extends Component {
             container: 'mapbox-container',
             style: mapboxStyleUrl,
             center: [-98.585522, 1.8333333], // Centered on the US
-            zoom: 2,
+            zoom: this.props.zoomLevel || 2,
             projection: 'equirectangular'
         });
         this.setState({currentViewer: map});
@@ -106,16 +106,22 @@ export class MapBoxViewer extends Component {
     }
 
     getZoomLevel = (region, agency, stationCode) => {
+        if (this.props.zoomLevel) {
+            // zoom-level in queryParam has highest precedence
+            return this.props.zoomLevel;
+        }
         if (stationCode) {
+            // station-code present in queryParam has second highest precedence
             return 6;
-        } else if (agency && region) {
+        }
+        if (agency && region) {
             return 5;
-        } else if (agency === "nist" && !region) {
+        }
+        if (agency === "nist" && !region) {
             // nist is for conus region, so zoom more to conus
             return 4;
-        } else {
-            return 2;
         }
+        return 2;
     }
 
     addMarker = (map, element, name, lon, lat, properties) => {

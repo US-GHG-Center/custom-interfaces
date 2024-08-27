@@ -9,7 +9,7 @@ import { SelectGHG } from '../../components/dropdown';
 
 import "./index.css";
 
-export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode, setSelectedGHG }) {
+export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode, setSelectedGHG, zoomLevel }) {
   const [ displayChart, setDisplayChart ] = useState(false);
 
   useEffect(() => {
@@ -32,6 +32,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
                             region={region}
                             agency={agency}
                             stationCode={stationCode}
+                            zoomLevel={zoomLevel}
                             setSelection={setSelectedStationId}
                             setDisplayChart={setDisplayChart}
                           />}
