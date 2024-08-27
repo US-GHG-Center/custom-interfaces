@@ -1,9 +1,9 @@
-name: Deploy urban
+name: Deploy Nist
 
 on:
   workflow_dispatch:
   push:
-    branches: [ main, production ]
+    branches: [ add/cicd-nist-urban, production ]
     paths:
       - nist-interface/**
 
@@ -17,7 +17,7 @@ jobs:
       - name: Set the environment based on the branch
         id: define_environment
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/add/cicd-nist-urban" ]; then
             echo "env_name=staging" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
             echo "env_name=production" >> $GITHUB_OUTPUT
@@ -53,22 +53,24 @@ jobs:
         run: |
           echo PUBLIC_URL="${{ vars.PUBLIC_URL_nist }}" >> .env
           echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
+          echo CI=false >> .env  
+          export CI=false
           yarn
-          yarn production
+          yarn build
         env:
           PUBLIC_URL: ${{ vars.PUBLIC_URL_NIST }}
       
-      - name: Upload dist folder
+      - name: Upload build folder
         uses: actions/upload-artifact@v4
         with:
-          name: dist_folder
-          path: ./nist-interface/dist
+          name: build_folder
+          path: ./nist-interface/build
 
   deploy-staging:
     needs:
       - build
       - define-environment
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/add/cicd-nist-urban'
     environment: ${{ needs.define-environment.outputs.env_name }}
     
     permissions:
@@ -81,11 +83,11 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      - name: Download dist folder
+      - name: Download build folder
         uses: actions/download-artifact@v4
         with:
-          name: dist_folder
-          path: ./nist-interface/dist
+          name: build_folder
+          path: ./nist-interface/build
 
       - name: ConfigureAWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4
@@ -98,8 +100,7 @@ jobs:
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NIST }} | sed -E 's|^https?://[^/]+/||')
           echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
-          aws s3 sync "./nist-interface/dist" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
-          aws s3 sync "./nist-interface/data" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/data/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
         env:
           PUBLIC_URL: ${{ vars.PUBLIC_URL_NIST }}
 
@@ -127,11 +128,11 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      - name: Download dist folder
+      - name: Download build folder
         uses: actions/download-artifact@v4
         with:
-          name: dist_folder
-          path: ./nist-interface/dist
+          name: build_folder
+          path: ./nist-interface/build
 
       - name: ConfigureAWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4
@@ -144,8 +145,8 @@ jobs:
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NIST }} | sed -E 's|^https?://[^/]+/||')
           echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
-          aws s3 sync "./nist-interface/dist" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
-          aws s3 sync "./nist-interface/data" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/data/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          
         env:
           PUBLIC_URL: ${{ vars.PUBLIC_URL_NIST }}
 
