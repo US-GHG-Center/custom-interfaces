@@ -30,17 +30,16 @@ export class ConcentrationChart extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     // when new props is received, initialize the chart with data.
-    if (this.props.selectedStationId !== prevProps.selectedStationId || this.props.ghg !== prevProps.ghg) {
+    if (this.props.ghg !== prevProps.ghg) {
+      let changedStationId = this.getChangedGHGStationId(this.props.selectedStationId, this.props.ghg);
+      this.props.setSelectedStationId(changedStationId);
+    }
+    if (this.props.selectedStationId !== prevProps.selectedStationId) {
       // clean previous chart data
       if (this.chart) {
         this.chart.data.labels = [];
         this.chart.data.datasets[0].data = [];
         this.chart.update();
-      }
-
-      if (this.props.ghg !== prevProps.ghg) {
-        let changedStationId = this.getChangedGHGStationId(this.props.selectedStationId, this.props.ghg);
-        this.props.setSelectedStationId(changedStationId);
       }
 
       // fetch the data from the api and then initialize the chart.
