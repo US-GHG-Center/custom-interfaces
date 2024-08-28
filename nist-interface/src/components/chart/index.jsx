@@ -20,7 +20,8 @@ export class ConcentrationChart extends Component {
     this.chart = null;
     this.state = {
       showChartInstructions: true,
-      chartDataIsLoading: false
+      chartDataIsLoading: false,
+      dataAccessLink: "",
     };
   }
 
@@ -186,24 +187,29 @@ export class ConcentrationChart extends Component {
       <Box id="chart-box" style={this.props.style}>
           <div id="chart-container" style={{width: "100%", height:"100%"}}>
             <div id="chart-tools">
-              <div id="chart-instructions-container">
-              <div className="icon-and-instructions">
-                <FontAwesomeIcon
-                  icon={faCircleInfo}
-                  style={{margin: "12px"}}
-                  onMouseEnter={() => this.setState({showChartInstructions: true})}
-                  onMouseLeave={() => this.setState({showChartInstructions: false})}
-                />
-                {this.state.showChartInstructions && <div id="chart-instructions">
-                  <p>1. Click and drag, scroll or pinch on the chart to zoom in.</p>
-                  <p>2. Click on the rectangle boxes on the side to toggle chart.</p>
+              <div id="chart-tools-left">
+                <div id="chart-instructions-container">
+                  <div className="icon-and-instructions">
+                    <FontAwesomeIcon
+                      icon={faCircleInfo}
+                      // style={{margin: "12px"}}
+                      onMouseEnter={() => this.setState({showChartInstructions: true})}
+                      onMouseLeave={() => this.setState({showChartInstructions: false})}
+                    />
+                    {this.state.showChartInstructions && <div id="chart-instructions">
+                      <p>1. Click and drag, scroll or pinch on the chart to zoom in.</p>
+                      <p>2. Click on the rectangle boxes on the side to toggle chart.</p>
+                    </div>
+                    }
+                  </div>
                 </div>
-                }
               </div>
-              </div>
-              <div id="chart-controls">
-                <FontAwesomeIcon id="zoom-reset-button" icon={faRotateLeft} title="Reset Zoom" onClick={this.handleRefresh}/>
-                <FontAwesomeIcon id="chart-close-button" icon={faXmark} title="Close" onClick={this.handleClose}/>
+              <div id="chart-tools-right">
+                { this.dataAccessLink && <a id="data-access-link" href={"SOME_URL"}>Data Access Link ↗</a> }
+                <div id="chart-controls">
+                  <FontAwesomeIcon id="zoom-reset-button" icon={faRotateLeft} title="Reset Zoom" onClick={this.handleRefresh}/>
+                  <FontAwesomeIcon id="chart-close-button" icon={faXmark} title="Close" onClick={this.handleClose}/>
+                </div>
               </div>
             </div>
             {

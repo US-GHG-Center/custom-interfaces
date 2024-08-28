@@ -23,9 +23,9 @@
 }
 
 #chart-instructions {
-    position: absolute;
-    top: 27px;
-    left: 27px;
+    position: relative;
+    top: 0;
+    left: 10px;
     background-color: rgba(255, 255, 255, 0.9);
     padding: 10px;
     border-radius: 5px;
@@ -35,15 +35,30 @@
     display: block;
 }
 
+#chart-tools-left {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#chart-tools-right {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 #chart-controls {
     display: flex;
     padding: 6px;
     justify-content: center;
     align-items: center;
     font-size: 24px;
-    position: absolute;
-    top: 8px;
-    right: 8px;
     background: #eadede1c;
 }
 
