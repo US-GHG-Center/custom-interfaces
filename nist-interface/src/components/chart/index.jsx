@@ -4,13 +4,14 @@ import Box from '@mui/material/Box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faRotateLeft, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { LoadingSpinner } from '../loading';
+import { fetchAllFromFeaturesAPI } from "../../services/api";
 
 import { plugin, options } from './helper';
 
 import './index.css';
 
-const collectionItemURL = (collectionId, offset=0, limit=10000) => {
-  return `${process.env.REACT_APP_FEATURES_API_URL}/collections/${collectionId}/items?limit=${limit}&offset=${offset}&is_max_height_data=True`;
+const collectionItemURL = (collectionId) => {
+  return `${process.env.REACT_APP_FEATURES_API_URL}/collections/${collectionId}/items?is_max_height_data=True`;
 }
 
 export class ConcentrationChart extends Component {
@@ -116,52 +117,13 @@ export class ConcentrationChart extends Component {
 
   fetchStationData = async (stationId) => {
     try {
+      let url = collectionItemURL(stationId);
       this.setState({chartDataIsLoading: true});
-      // fetch in the collection from the features api
-      const response = await fetch(collectionItemURL(stationId));
-      if (!response.ok) {
-        throw new Error('Error in Network');
-      }
-      const result = await response.json();
-
-      // need to pull in remaining data based on the pagination information
-      const { numberMatched, numberReturned } = result;
-      if (numberMatched > numberReturned) {
-        let remainingData = await this.fetchRemainingData(stationId, numberMatched, numberReturned);
-        result.features = result.features.concat(remainingData);
-      }
-
-      const { features } = result;
+      let result = await fetchAllFromFeaturesAPI(url);
       const stationMeta = this.getStationMeta(result);
-      const { time, concentration } = this.dataPreprocess(features);
+      const { time, concentration } = this.dataPreprocess(result);
       this.setState({chartDataIsLoading: false});
       return { time, concentration, stationMeta };
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }
-
-  fetchRemainingData = async (stationId, numberMatched, numberReturned) => {
-    let remaining = numberMatched - numberReturned;
-    // so we still have some remaining data to fetch
-    let batches = Math.ceil(remaining / 10000);
-    let offsets = []; // when we are pulling data in the capacity of 10,000 per batches
-    for (let i = 1; i <= batches; i++) {
-      offsets.push(i * 10000 + 1);
-    }
-
-    let dataFetchPromises = [];
-
-    offsets.forEach(async (offset) => {
-        const response = fetch(collectionItemURL(stationId, offset));
-        dataFetchPromises.push(response);
-    });
-
-    try {
-      let results = await Promise.all(dataFetchPromises);
-      let jsonResult = await Promise.all(results.map(result => result.json()));
-      let features = jsonResult.map(result => result.features).flat();
-      return features;
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -182,11 +144,9 @@ export class ConcentrationChart extends Component {
   }
 
   getStationMeta = (result) => {
-    let title = result.title;
-    let titleParts = title.split("_");
-    let stationName = titleParts[3].toUpperCase();
+    let stationName = "abc";
 
-    let feature = result.features[0];
+    let feature = result[0];
     let stationLocation = feature.properties.location.replace("_", ", ");
     return { stationName, stationLocation };
   }

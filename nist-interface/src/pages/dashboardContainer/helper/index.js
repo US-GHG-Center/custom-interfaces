@@ -1,4 +1,5 @@
 export const dataPreprocess = (collections, agency, ghg, dataCategory, region, sitecode) => {
+    // convention for station collection_id: <agency>_<data_category>_<region>_<sitecode>_<ghg>_<frequency>_concentrations
     // filter the stations that belong with respect to the query params
     let nistCollection = collections.map((collection) => {
     if (collection && collection.id &&
