@@ -32,7 +32,7 @@ const fetchRemainingData = async (featureApiUrl, numberMatched, numberReturned, 
     let batches = Math.ceil(remaining / limit);
     let offsets = []; // when we are pulling data in the capacity of 1000 per batches
     for (let i = 1; i <= batches; i++) {
-      offsets.push(i * limit + 1);
+      offsets.push(i * limit);
     }
 
     let dataFetchPromises = [];
