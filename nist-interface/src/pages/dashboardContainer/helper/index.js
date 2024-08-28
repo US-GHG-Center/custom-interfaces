@@ -8,20 +8,12 @@ export const extractStationCollections = (collections, metadataDict, agency, ghg
         collection.id.includes(agency) && collection.id.includes(ghg) &&
         collection.id.includes(dataCategory) && collection.id.includes(region)
         ) {
-        // old way of collecting propety from the collection items
-        let bbox = collection["extent"]["spatial"]["bbox"][0];
-        collection["location"] = [bbox[0], bbox[1]];
         // TODO: remove later after the functionality to add properties in collections is implemented in Features API directly.
-        collection["properties"] = extractCollectionMeta(collection);
-
-        // new way of collecting property from the metadata
         let stationId = getStationId(collection.id);
-        let collectionProperties = { ...metadataDict[stationId] }
-        collection["properties1"] = { ...collectionProperties };
+        collection["properties"] = { ...metadataDict[stationId] };
         return collection;
     }
     }).filter(elem => elem);
-    // format data such that it has [lon, lat]
     return nistCollection;
 }
 
@@ -55,20 +47,6 @@ export const getMetaDataDictionary = (collectionsMetaData) => {
 }
 
 // helper
-const extractCollectionMeta = (collection) => {
-    let bbox = collection["extent"]["spatial"]["bbox"][0];
-    return {
-        siteCode: collection.id.split("_")[3],
-        siteName: "",
-        siteCountry: "United States",
-        latitude: bbox[1],
-        longitude: bbox[0],
-        elevation: 1100,
-        elevationUnit: "m",
-        instrumentType: "",
-    }
-}
-
 const getStationId = (collectionId) => {
     const stationId = collectionId.split("_")[3];
     return stationId.toUpperCase();

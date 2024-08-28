@@ -55,18 +55,17 @@ export class MapBoxViewer extends Component {
         let regions = this.getUniqueRegions(stations);
         stations.forEach(station => {
             // get the station meta and show them
-            const { id, title: name, location, properties } = station;
-            const [lon,  lat] = location;
+            const { id: stationId, properties } = station;
             const el = document.createElement('div');
-            let stationRegion = this.getStationRegion(id);
+            let stationRegion = this.getStationRegion(stationId);
             const markerStyleIndex = regions[stationRegion];
             el.className = this.getMarkerStyle(markerStyleIndex);
 
-            let marker = this.addMarker(map, el, name, lon, lat, properties);
+            let marker = this.addMarker(map, el, properties);
 
             marker.getElement().addEventListener('click', () => {
                 this.props.setDisplayChart(true);
-                this.props.setSelection(id);
+                this.props.setSelection(stationId);
             });
         });
 
@@ -87,7 +86,8 @@ export class MapBoxViewer extends Component {
         if (stationCode) {
             let station = stations.find(station => station.id.includes(stationCode));
             if (station) {
-                let { location } = station;
+                let { properties: {longitude, latitude} } = station;
+                let location = [longitude, latitude];
                 return location;
             }
         }
@@ -95,10 +95,9 @@ export class MapBoxViewer extends Component {
         let latSum = 0;
         let lonSum = 0;
         stations.forEach((station) => {
-            let { location } = station;
-            let [lon, lat] = location;
-            latSum += lat;
-            lonSum += lon;
+            let { properties: {longitude, latitude} } = station;
+            latSum += latitude;
+            lonSum += longitude;
         });
         let latCenter = latSum / stations.length;
         let lonCenter = lonSum / stations.length;
@@ -124,11 +123,10 @@ export class MapBoxViewer extends Component {
         return 2;
     }
 
-    addMarker = (map, element, name, lon, lat, properties) => {
+    addMarker = (map, element, properties) => {
+        const {longitude, latitude} = properties;
         let marker = new mapboxgl.Marker(element)
-        .setLngLat([lon, lat])
-        // .setPopup(new mapboxgl.Popup({ offset: 25 })
-        // .setText(name)
+        .setLngLat([longitude, latitude])
         .addTo(map);
 
         const tooltipContent = this.getToolTipContent(properties);
@@ -145,30 +143,34 @@ export class MapBoxViewer extends Component {
     }
 
     getToolTipContent = (stationProperties) => {
-        let { siteCode, siteName, siteCountry, latitude, longitude,
-            elevation, elevationUnit, instrumentType, region } = stationProperties;
+        const elevationUnit = "m";
 
-        // making sure that they appear, for demo purpose. TODO: remove this 
-        region = "<undefined>"; instrumentType = "<undefined>"; elevation = "<undefined>"; elevationUnit = "<undefined>";
+        let { city, country, elevation_m, instrument_type, latitude_nwse, longitude_nwse,
+              state, station_code, station_name, status, top_agl_m} = stationProperties;
 
         // siteCode acornym and full name
-        let siteNameAddOn = siteName ? ` : ${siteName}` : "";
-        let firstRow = `<strong>${siteCode.toUpperCase()}${siteNameAddOn}</strong><br>`;
+        let siteNameAddOn = station_name ? ` : ${station_name}` : "";
+        let siteNameRow = `<strong>${station_code.toUpperCase()}${siteNameAddOn}</strong><br>`;
         // site region
-        let wildRow = region ? `Region: ${region}<br>` : "";
+        let cityAddOn = city ? `${city},` : "";
+        let regionAddOn = state ? `${cityAddOn} ${state},` : "";
         // siteCountry
-        let secondRow = siteCountry ? `<strong>${siteCountry}</strong><br>` : "";
-        // latitude
-        let thirdRow = latitude ? `Latitude: ${Number(latitude).toFixed(2)}<br>` : "";
+        let addressRow = country ? `<i>${regionAddOn} ${country}</i><br>` : "";
         // longitude
-        let fourthRow = longitude ? `Longitude: ${Number(longitude).toFixed(2)}<br>` : "";
+        let longRow = longitude_nwse ? `Longitude: ${longitude_nwse}<br>` : "";
+        // latitude
+        let latRow = latitude_nwse ? `Latitude: ${latitude_nwse}<br>` : "";
         // elevation
         // let fifthRow = elevation ? `Elevation: ${Number(elevation).toFixed(2)} ${elevationUnit}<br>` : "";
-        let fifthRow = elevation ? `Elevation: ${elevation} ${elevationUnit}<br>` : "";
+        let elevationRow = elevation_m ? `Elevation: ${elevation_m} ${elevationUnit}<br>` : "";
+        // sampling height
+        let samplingHeightRow = top_agl_m ? `Sampling Height: ${top_agl_m} ${elevationUnit}<br>` : "";
         // instrumentType
-        let sixthRow = instrumentType ? `Instrument Type: ${instrumentType}<br>` : "";
+        let instrumentRow = instrument_type ? `Instrument Type: ${instrument_type}<br>` : "";
+        // stationStatus
+        let stationStatusRow = status ? `Station Status: ${status}<br>` : "";
         // combine all the rows
-        let result = firstRow + secondRow + wildRow + thirdRow + fourthRow + fifthRow + sixthRow;
+        let result = siteNameRow + addressRow + "<hr>" + longRow + latRow + elevationRow + samplingHeightRow + instrumentRow + stationStatusRow;
         return result;
     }
 
