@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { Dashboard } from '../dashboard';
 import { dataPreprocess } from './helper';
+import { fetchAllFromFeaturesAPI } from "../../services/api";
 
 export function DashboardContainer() {
     const [ selectedStationId, setSelectedStationId ] = useState("");
@@ -21,12 +22,10 @@ export function DashboardContainer() {
         const fetchStationData = async () => {
             try {
                 // fetch in the collection from the features api
-                const response = await fetch(`${process.env.REACT_APP_FEATURES_API_URL}/collections?limit=1000`);
-                if (!response.ok) {
-                    throw new Error('Error in Network');
-                }
-                const result = await response.json();
-                const filteredStations = dataPreprocess(result.collections, agency, ghg, dataCategory, region);
+                const url = `${process.env.REACT_APP_FEATURES_API_URL}/collections`;
+                const collections = await fetchAllFromFeaturesAPI(url);
+                // const filterMetadata = extractMetaData(result.collections);
+                const filteredStations = dataPreprocess(collections, agency, ghg, dataCategory, region);
                 setStations(filteredStations);
                 // then plot the filteredStations on the map
                 // if station_code is also present, set the selectedStationId state, and let it react!!
