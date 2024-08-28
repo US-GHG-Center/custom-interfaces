@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { Dashboard } from '../dashboard';
-import { dataPreprocess } from './helper';
+import { extractStationCollections, extractMetaData, getMetaDataDictionary } from './helper';
 import { fetchAllFromFeaturesAPI } from "../../services/api";
 
 export function DashboardContainer() {
@@ -24,15 +24,16 @@ export function DashboardContainer() {
                 // fetch in the collection from the features api
                 const url = `${process.env.REACT_APP_FEATURES_API_URL}/collections`;
                 const collections = await fetchAllFromFeaturesAPI(url);
-                // const filterMetadata = extractMetaData(result.collections);
-                const filteredStations = dataPreprocess(collections, agency, ghg, dataCategory, region);
-                setStations(filteredStations);
-                // then plot the filteredStations on the map
+                const collectionsMetaData = await extractMetaData(collections);
+                const metaDataDict = getMetaDataDictionary(collectionsMetaData);
+                const stationCollections = extractStationCollections(collections, metaDataDict, agency, ghg, dataCategory, region);
+                setStations(stationCollections);
+                // then plot the stationCollections on the map
                 // if station_code is also present, set the selectedStationId state, and let it react!!
                 if (stationCode) {
                     let stationCodeLowerCase = stationCode.toLowerCase();
                     // find the collection id for that station code and then set the selectedStationId
-                    let collection = filteredStations.find(station => station.id.includes(stationCodeLowerCase));
+                    let collection = stationCollections.find(station => station.id.includes(stationCodeLowerCase));
                     if (collection) setSelectedStationId(collection.id);
                 }
             } catch (error) {

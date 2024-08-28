@@ -1,4 +1,6 @@
-export const dataPreprocess = (collections, agency, ghg, dataCategory, region, sitecode) => {
+import { fetchAllFromFeaturesAPI } from "../../../services/api";
+
+export const extractStationCollections = (collections, metadataDict, agency, ghg, dataCategory, region, sitecode) => {
     // convention for station collection_id: <agency>_<data_category>_<region>_<sitecode>_<ghg>_<frequency>_concentrations
     // filter the stations that belong with respect to the query params
     let nistCollection = collections.map((collection) => {
@@ -6,11 +8,16 @@ export const dataPreprocess = (collections, agency, ghg, dataCategory, region, s
         collection.id.includes(agency) && collection.id.includes(ghg) &&
         collection.id.includes(dataCategory) && collection.id.includes(region)
         ) {
+        // old way of collecting propety from the collection items
         let bbox = collection["extent"]["spatial"]["bbox"][0];
         collection["location"] = [bbox[0], bbox[1]];
-        // Add in additional meta properties to the station collection
-        // TODO: remove later after the functionality is implemented in Features API directly.
+        // TODO: remove later after the functionality to add properties in collections is implemented in Features API directly.
         collection["properties"] = extractCollectionMeta(collection);
+
+        // new way of collecting property from the metadata
+        let stationId = getStationId(collection.id);
+        let collectionProperties = { ...metadataDict[stationId] }
+        collection["properties1"] = { ...collectionProperties };
         return collection;
     }
     }).filter(elem => elem);
@@ -18,6 +25,36 @@ export const dataPreprocess = (collections, agency, ghg, dataCategory, region, s
     return nistCollection;
 }
 
+export const extractMetaData = async (collections) => {
+    // convention for metadata collection_id: public.<agency>_<data_category>_<region>_metadata
+    // example: public.nist_testbed_lam_metadata
+    let metaCollection = collections.map(collection => {
+        if (collection && collection.id && collection.id.includes("metadata")) {
+            return collection;
+        }
+    }).filter(elem => elem);
+    let resultPromise = metaCollection.map(collection => {
+        let url = `${process.env.REACT_APP_FEATURES_API_URL}/collections/${collection.id}/items`;
+        return fetchAllFromFeaturesAPI(url)
+    });
+    let metaDataCollectionItems = await Promise.all(resultPromise);
+    let metaDataItems = metaDataCollectionItems.flat(Infinity);
+    let metaDataProperties = metaDataItems.map(({properties}) => properties).filter(elem => elem);
+    return metaDataProperties;
+}
+
+export const getMetaDataDictionary = (collectionsMetaData) => {
+    const Dict = {};
+    collectionsMetaData.forEach((metaData) => {
+        let stationCode = metaData["station_code"].toUpperCase();
+        if (!(stationCode in Dict)) {
+            Dict[stationCode] = { ...metaData };
+        }
+    });
+    return Dict;
+}
+
+// helper
 const extractCollectionMeta = (collection) => {
     let bbox = collection["extent"]["spatial"]["bbox"][0];
     return {
@@ -30,4 +67,9 @@ const extractCollectionMeta = (collection) => {
         elevationUnit: "m",
         instrumentType: "",
     }
+}
+
+const getStationId = (collectionId) => {
+    const stationId = collectionId.split("_")[3];
+    return stationId.toUpperCase();
 }
