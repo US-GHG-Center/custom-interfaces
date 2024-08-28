@@ -8,6 +8,7 @@ import { fetchAllFromFeaturesAPI } from "../../services/api";
 export function DashboardContainer() {
     const [ selectedStationId, setSelectedStationId ] = useState("");
     const [ stations, setStations ] = useState([]);
+    const [ stationMetadata, setStationMetadata ] = useState({});
 
     // get the query params
     const [ searchParams ] = useSearchParams();
@@ -26,6 +27,7 @@ export function DashboardContainer() {
                 const collections = await fetchAllFromFeaturesAPI(url);
                 const collectionsMetaData = await extractMetaData(collections);
                 const metaDataDict = getMetaDataDictionary(collectionsMetaData);
+                setStationMetadata(metaDataDict);
                 const stationCollections = extractStationCollections(collections, metaDataDict, agency, ghg, dataCategory, region);
                 setStations(stationCollections);
                 // then plot the stationCollections on the map
@@ -48,13 +50,14 @@ export function DashboardContainer() {
         <Dashboard
             stations={stations}
             selectedStationId={selectedStationId}
-            setSelectedStationId={setSelectedStationId}
-            setSelectedGHG={setSelectedGHG}
+            stationMetadata={stationMetadata}
             ghg={ghg}
             agency={agency}
             region={region}
             stationCode={stationCode}
             zoomLevel={zoomLevel}
+            setSelectedStationId={setSelectedStationId}
+            setSelectedGHG={setSelectedGHG}
         />
     );
 }

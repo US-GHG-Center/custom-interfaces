@@ -42,10 +42,12 @@ export class ConcentrationChart extends Component {
         this.chart.update();
       }
 
+      // first change the title of the chart
+      this.changeTitle(this.props.selectedStationId);
       // fetch the data from the api and then initialize the chart.
       this.fetchStationData(this.props.selectedStationId).then(data => {
-        const { time, concentration, stationMeta } = data;
-        this.updateChart(concentration, time, stationMeta);
+        const { time, concentration } = data;
+        this.updateChart(concentration, time);
       });
     }
   }
@@ -83,14 +85,16 @@ export class ConcentrationChart extends Component {
       this.setState({showChartInstructions: false});
     }
 
+    // first change the title of the chart
+    this.changeTitle(this.props.selectedStationId);
     // fetch the data from the api and then initialize the chart.
     this.fetchStationData(this.props.selectedStationId).then(data => {
-      const { time, concentration, stationMeta } = data;
-      this.updateChart(concentration, time, stationMeta);
+      const { time, concentration } = data;
+      this.updateChart(concentration, time);
     });
   }
 
-  updateChart = (data, label, stationMeta) => {
+  updateChart = (data, label) => {
     if (this.chart) {
       // first reset the zoom
       this.chart.resetZoom();
@@ -103,12 +107,6 @@ export class ConcentrationChart extends Component {
       this.chart.data.labels = label;
       this.chart.data.datasets[0].data = data;
 
-      let { stationName, stationLocation } = stationMeta;
-
-      if (stationName) {
-        this.chart.options.plugins.title.text = ` ${stationLocation} (${stationName})`;
-      }
-
       // update the chart
       this.chart.update();
     }
@@ -119,12 +117,22 @@ export class ConcentrationChart extends Component {
       let url = collectionItemURL(stationId);
       this.setState({chartDataIsLoading: true});
       let result = await fetchAllFromFeaturesAPI(url);
-      const stationMeta = this.getStationMeta(result);
       const { time, concentration } = this.dataPreprocess(result);
       this.setState({chartDataIsLoading: false});
-      return { time, concentration, stationMeta };
+      return { time, concentration };
     } catch (error) {
       console.error('Error fetching data:', error);
+    }
+  }
+
+  changeTitle = (stationId) => {
+    const stationCode = this.getStationCode(stationId);
+    const stationProperties = this.props.stationMetadata[stationCode];
+    let { station_name: stationName } = stationProperties;
+    if (stationName) {
+      this.chart.options.plugins.title.text = ` ${stationName} (${stationCode})`;
+    // update the chart
+    this.chart.update();
     }
   }
 
@@ -140,14 +148,6 @@ export class ConcentrationChart extends Component {
       }
     });
     return {time, concentration};
-  }
-
-  getStationMeta = (result) => {
-    let stationName = "abc";
-
-    let feature = result[0];
-    let stationLocation = feature.properties.location.replace("_", ", ");
-    return { stationName, stationLocation };
   }
 
   getYAxisLabel = (ghg) => {
@@ -171,6 +171,12 @@ export class ConcentrationChart extends Component {
 
   handleClose = () => {
     this.props.setDisplayChart(false);
+  }
+
+  getStationCode = (stationId) => {
+    let stationIdParts = stationId.split("_");
+    let stationCode = stationIdParts[3];
+    return stationCode.toUpperCase();
   }
 
   // helpers end
