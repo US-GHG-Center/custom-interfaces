@@ -130,7 +130,7 @@ export class MapBoxViewer extends Component {
         .addTo(map);
 
         const tooltipContent = this.getToolTipContent(properties);
-        const popup = new mapboxgl.Popup().setHTML(tooltipContent);
+        const popup = new mapboxgl.Popup({closeButton: false}).setHTML(tooltipContent);
         marker.setPopup(popup);
         marker.getElement().addEventListener("mouseenter", () => {
             popup.addTo(map);
