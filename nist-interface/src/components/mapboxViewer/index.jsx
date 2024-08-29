@@ -152,6 +152,12 @@ export class MapBoxViewer extends Component {
         let { city, country, elevation_m, instrument_type, latitude_nwse, longitude_nwse,
               state, station_code, station_name, status, top_agl_m} = stationProperties;
 
+        if (top_agl_m.includes(",")) {
+            // there are multiple heights, so add unit to each height
+            let topAglArray = top_agl_m.replace(",", " m, ");
+            top_agl_m = topAglArray
+        }
+
         // siteCode acornym and full name
         let siteNameAddOn = station_name ? ` : ${station_name}` : "";
         let siteNameRow = `<strong>${station_code.toUpperCase()}${siteNameAddOn}</strong><br>`;
