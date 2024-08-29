@@ -54,7 +54,7 @@ jobs:
           echo PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}" >> .env
           echo REACT_APP_MAPBOX_ACCESS_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> .env
           echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> .env
-          echo REACT_APP_FEATURES_API_URL="${{ secrets.FEATURES_API_URL }}" >> .env
+          echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> .env
           echo CI=false >> .env
           cat .env
           export CI=false
