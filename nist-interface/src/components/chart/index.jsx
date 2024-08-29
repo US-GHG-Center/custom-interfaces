@@ -177,6 +177,7 @@ export class ConcentrationChart extends Component {
   }
 
   handleClose = () => {
+    this.handleRefresh(); // reset the zoom level else, next chart instance wont be able to.
     this.props.setDisplayChart(false);
   }
 
