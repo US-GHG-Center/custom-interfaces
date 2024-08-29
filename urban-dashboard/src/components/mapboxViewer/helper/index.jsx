@@ -28,5 +28,7 @@ export const BASEMAP_STYLES = [
 
 export const BASEMAP_ID_DEFAULT = 'satellite';
 
-export const VULCAN_RASTER_URL = "https://dev.ghg.center/api/raster/searches/dc3da6e6c0b1a2e941713c1c5932cb84/tiles/WebMercatorQuad/{z}/{x}/{y}?assets=total-co2&colormap_name=rdylbu_r&rescale=0%2C150"
-export const GRA2PES_RASTER_URL = "https://dev.ghg.center/api/raster/searches/0f8c6223ae1a1fa21e813239714a53cd/tiles/WebMercatorQuad/{z}/{x}/{y}?assets=co2&colormap_name=magma&rescale=0%2C15000"
+// export const VULCAN_RASTER_URL = "https://dev.ghg.center/api/raster/searches/dc3da6e6c0b1a2e941713c1c5932cb84/tiles/WebMercatorQuad/{z}/{x}/{y}?assets=total-co2&colormap_name=rdylbu_r&rescale=0%2C150"
+export const VULCAN_RASTER_URL = "https://dev.ghg.center/api/raster/searches/dc3da6e6c0b1a2e941713c1c5932cb84/tiles/WebMercatorQuad/{z}/{x}/{y}?assets=total-co2&colormap_name=spectral_r&rescale=0%2C150"
+// export const GRA2PES_RASTER_URL = "https://dev.ghg.center/api/raster/searches/0f8c6223ae1a1fa21e813239714a53cd/tiles/WebMercatorQuad/{z}/{x}/{y}?assets=co2&colormap_name=magma&rescale=0%2C15000"
+export const GRA2PES_RASTER_URL = "https://dev.ghg.center/api/raster/searches/0f8c6223ae1a1fa21e813239714a53cd/tiles/WebMercatorQuad/{z}/{x}/{y}?assets=co2&colormap_name=spectral_r&rescale=0%2C15000"

@@ -59,15 +59,18 @@ const EmissionsBySectorCard = () => {
                 title: {
                     display: true,
                     text: "Emissions (metric tons)"
+                },
+                ticks: {
+                    stepSize: 1000,
                 }
             },
         },
     };
 
     return (
-        <>
-            <Line data={data} options={options} />
-        </>
+        <div>
+            <Line data={data} options={options} height={-400} />
+        </div>
     )
 }
 
@@ -103,10 +106,11 @@ const GasEmissionsCard = () => {
 
     const Legend = () => {
         const LegendItems = [
-            { color: 'rgb(255, 99, 132)', label: 'Carbon Dioxide' }, // Light blue for Carbon Dioxide
-            { color: 'rgb(54, 162, 235)', label: 'Methane' },        // Red for Methane
-            { color: 'rgb(75, 192, 192)', label: 'Nitrous Oxide' },  // Dark blue for Nitrous Oxide
-            { color: 'rgb(250, 192, 192)', label: 'Fluorinated Gases' },
+            { color: 'rgb(255, 99, 132)', label: 'CO2' }, // Light blue for Carbon Dioxide
+            { color: 'rgb(54, 162, 235)', label: 'CO' },        // Red for Methane
+            { color: 'rgb(75, 192, 192)', label: 'PM2.5' },  // Dark blue for Nitrous Oxide
+            { color: 'rgb(250, 192, 192)', label: 'NOx' },
+            { color: 'rgb(150, 192, 192)', label: 'SOx' },
         ]
 
         return (
@@ -141,7 +145,7 @@ const GasEmissionsCard = () => {
                             fontSize: "12px",
                             color: "#1B2631"
                         }}>
-                            One sentence short description
+                            Energy Production
                         </Typography>
                     </div>
                 </Grid>
@@ -162,7 +166,7 @@ const GasEmissionsCard = () => {
                             fontSize: "12px",
                             color: "#1B2631"
                         }}>
-                            One sentence short description
+                            Manufacturing
                         </Typography>
                     </div>
                 </Grid>
@@ -176,7 +180,7 @@ const GasEmissionsCard = () => {
                             fontSize: "12px",
                             color: "#1B2631"
                         }}>
-                            One sentence short description
+                            Transportation
                         </Typography>
                     </div>
                 </Grid>
@@ -190,7 +194,7 @@ const GasEmissionsCard = () => {
                             fontSize: "12px",
                             color: "#1B2631"
                         }}>
-                            One sentence short description
+                            Agriculture
                         </Typography>
                     </div>
                 </Grid>
@@ -204,7 +208,7 @@ const GasEmissionsCard = () => {
                             fontSize: "12px",
                             color: "#1B2631"
                         }}>
-                            One sentence short description
+                            Land Use
                         </Typography>
                     </div>
                 </Grid>
