@@ -30,7 +30,7 @@ export function Title({ children, selection, setSelection, handleZoomOut }) {
                             <FontAwesomeIcon
                                 onClick={handleZoomOut}
                                 icon={faArrowLeft}
-                                style={{ color: "#082A64", fontSize: 20 }}
+                                style={{ color: "#082A64", fontSize: 20, cursor: "pointer" }}
                             />
                         </div>
 

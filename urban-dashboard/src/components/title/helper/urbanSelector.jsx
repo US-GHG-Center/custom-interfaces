@@ -12,7 +12,7 @@ function DropdownIconComponent(props) {
       <FontAwesomeIcon
         icon={faChevronDown}
         {...props}
-        style={{ color: "#082A64", fontSize: 20 }} />
+        style={{ color: "#082A64", fontSize: 20, cursor: "pointer" }} />
     </>
   )
 }
@@ -53,8 +53,9 @@ export function UrbanSelector({ urbanRegion, setUrbanRegion }) {
                 // width: "170px",
                 mr: 3,
                 color: "#082A64",
-                fontSize: "20px",
-                lineHeight: "24.2px"
+                fontSize: "16px",
+                lineHeight: "24.2px",
+                cursor: "pointer"
               }}>{region}</Typography>
             </Box>
           </MenuItem>

@@ -16,11 +16,6 @@ export function Dashboard({ dataset }) {
   return (
     <Box
       className="fullSize">
-      {/* <Title
-        selection={urbanRegion}
-        setSelection={setUrbanRegion}
-        handleZoomOut={handleZoomOut}
-      /> */}
       <InfoSidebar
         selection={urbanRegion}
         setSelection={setUrbanRegion}
@@ -33,8 +28,6 @@ export function Dashboard({ dataset }) {
         zoomOut={zoomOut}
         dataset={dataset}
       />
-      {/* <DetailAnalysis/>
-        <Box marginBottom={8} sx={{ height: "5%" }} /> */}
     </Box>
   );
 }

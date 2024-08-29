@@ -8,7 +8,6 @@ import Box from '@mui/material/Box';
 import './index.css';
 
 import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT, VULCAN_RASTER_URL, GRA2PES_RASTER_URL } from './helper';
-import { Insights } from '../insights';
 
 import { URBAN_REGIONS } from '../../assets/geojson';
 
@@ -95,7 +94,6 @@ export class MapBoxViewer extends Component {
         if (prevProps.urbanRegion != this.props.urbanRegion) {
             console.log("urban region changed to ", this.props.urbanRegion);
 
-            //TODO: set focused region to selected urban region
             const urbanRegion = URBAN_REGIONS.filter(item => item.name == this.props.urbanRegion)[0];
             if (urbanRegion) {
                 console.log("selected region is: ", urbanRegion);
@@ -136,6 +134,7 @@ export class MapBoxViewer extends Component {
             el.className = 'marker';
 
             let marker = this.addMarker(map, el, name, lon, lat);
+
             // when clicked on a urban region, focus on it
             // this.focusSelectedUrbanRegion(map, center, GeoJSON);
             marker.getElement().addEventListener('click', () => {
@@ -168,12 +167,13 @@ export class MapBoxViewer extends Component {
         return marker;
     }
 
-
     focusSelectedUrbanRegion = (map, center, GeoJSON) => {
-        map.setCenter(center);
-        map.setZoom(9);
-
-        // map.remove();
+        map.flyTo({
+            center: center,
+            zoom: 9,
+            speed: 1.2,
+            curve: 1.42
+        })
 
         let sourceName = 'urban-boundary';
 
@@ -215,8 +215,6 @@ export class MapBoxViewer extends Component {
                 <Grid container className="fullSize">
                     <Grid item xs={12}>
                         <div id="mapbox-container" className='fullSize' style={{ position: "absolute" }}></div>
-                        {/* <div id="mapbox-container" className='fullSize' style={{ position: "relative", width: "auto", height: "1024px" }}></div> */}
-
                     </Grid>
                 </Grid>
                 {/* {this.state.selectedUrbanRegion
