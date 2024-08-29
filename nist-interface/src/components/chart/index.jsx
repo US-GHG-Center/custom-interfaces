@@ -130,7 +130,7 @@ export class ConcentrationChart extends Component {
     const stationProperties = this.props.stationMetadata[stationCode];
     let { station_name: stationName, city, state } = stationProperties;
 
-    if (stationName && stationName === city) {
+    if (stationName && stationName.includes(city)) {
       this.chart.options.plugins.title.text = ` ${stationName}, ${state} (${stationCode})`;
       this.chart.update();
       return;
