@@ -179,8 +179,10 @@ export class MapBoxViewer extends Component {
     }
 
     getMarkerStyle = (index) => {
+        // Index is unlimited but markerClasses array has limited items
+        let idx = index % this.state.markerClasses.length;
         let markerClasses = this.state.markerClasses;
-        return markerClasses[index];
+        return markerClasses[idx];
     }
 
     getUniqueRegions = (stations) => {

@@ -13,7 +13,8 @@ export function MapRegionLegend({ regions, markerStylesList }) {
                 <div id="legend-head">Legend</div>
                 <div id="legend-line"></div>
                 {   regionsKeys.map((region) => {
-                        let markerStyleClass = markerStylesList[regions[region]];
+                        let styleIdx = regions[region] % markerStylesList.length;
+                        let markerStyleClass = markerStylesList[styleIdx];
                         return (
                             <div key={region} className="legend-element">
                                 <div className={`${markerStyleClass}`}></div>
