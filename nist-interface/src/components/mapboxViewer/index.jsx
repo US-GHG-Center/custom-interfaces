@@ -149,7 +149,7 @@ export class MapBoxViewer extends Component {
               state, station_code, station_name, status, top_agl_m} = stationProperties;
 
         // siteCode acornym and full name
-        let siteNameAddOn = station_name ? ` : ${station_name}` : "";
+        let siteNameAddOn = station_name ? `: ${station_name}` : "";
         let siteNameRow = `<strong>${station_code.toUpperCase()}${siteNameAddOn}</strong><br>`;
         // site region
         let cityAddOn = city ? `${city},` : "";

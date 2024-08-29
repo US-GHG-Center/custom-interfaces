@@ -43,13 +43,7 @@ export class ConcentrationChart extends Component {
         this.chart.update();
       }
 
-      // first change the title of the chart
-      this.changeTitle(this.props.selectedStationId);
-      // fetch the data from the api and then initialize the chart.
-      this.fetchStationData(this.props.selectedStationId).then(data => {
-        const { time, concentration } = data;
-        this.updateChart(concentration, time);
-      });
+      this.prepareChart();
     }
   }
 
@@ -86,6 +80,11 @@ export class ConcentrationChart extends Component {
       this.setState({showChartInstructions: false});
     }
 
+    this.prepareChart();
+  }
+
+  prepareChart = () => {
+    this.setDataAccessLink(this.props.selectedStationId);
     // first change the title of the chart
     this.changeTitle(this.props.selectedStationId);
     // fetch the data from the api and then initialize the chart.
@@ -135,6 +134,13 @@ export class ConcentrationChart extends Component {
     // update the chart
     this.chart.update();
     }
+  }
+
+  setDataAccessLink = (stationId) => {
+    const stationCode = this.getStationCode(stationId);
+    const stationProperties = this.props.stationMetadata[stationCode];
+    const { data_link: dataLink } = stationProperties;
+    this.setState({dataAccessLink: dataLink});
   }
 
   // helpers start
@@ -205,7 +211,7 @@ export class ConcentrationChart extends Component {
                 </div>
               </div>
               <div id="chart-tools-right">
-                { this.dataAccessLink && <a id="data-access-link" href={"SOME_URL"}>Data Access Link ↗</a> }
+                { this.state.dataAccessLink && <a id="data-access-link" href={this.state.dataAccessLink} target="_blank" rel='noreferrer'>Data Access Link ↗</a> }
                 <div id="chart-controls">
                   <FontAwesomeIcon id="zoom-reset-button" icon={faRotateLeft} title="Reset Zoom" onClick={this.handleRefresh}/>
                   <FontAwesomeIcon id="chart-close-button" icon={faXmark} title="Close" onClick={this.handleClose}/>
