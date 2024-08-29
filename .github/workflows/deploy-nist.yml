@@ -59,7 +59,7 @@ jobs:
           cat .env
           export CI=false
           yarn
-          yarn build
+          PUBLIC_URL=${{ vars.PUBLIC_URL_NIST }} yarn build
         env:
           PUBLIC_URL: ${{ vars.PUBLIC_URL_NIST }}
       
