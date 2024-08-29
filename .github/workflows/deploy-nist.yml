@@ -18,7 +18,7 @@ jobs:
         id: define_environment
         run: |
           if [ "${{ github.ref }}" = "refs/heads/add/cicd-nist-urban" ]; then
-            echo "env_name=development" >> $GITHUB_OUTPUT
+            echo "env_name=staging" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
             echo "env_name=production" >> $GITHUB_OUTPUT
           fi
@@ -51,17 +51,14 @@ jobs:
       - name: Build for production 🔧
         working-directory: ./nist-interface
         run: |
-          echo PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}" >> .env
           echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> .env
           echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> .env
           echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> .env
-          echo CI=false >> .env
-          cat .env
           export CI=false
           yarn
-          PUBLIC_URL=${{ vars.PUBLIC_URL_NIST }} yarn build
+          yarn build
         env:
-          PUBLIC_URL: ${{ vars.PUBLIC_URL_NIST }}
+          REACT_APP_PUBLIC_URL: ${{ vars.PUBLIC_URL_NIST }}
       
       - name: Upload build folder
         uses: actions/upload-artifact@v4
