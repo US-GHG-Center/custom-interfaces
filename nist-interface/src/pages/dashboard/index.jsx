@@ -6,6 +6,7 @@ import { MapBoxViewer } from '../../components/mapboxViewer';
 import { Title } from '../../components/title';
 import { ConcentrationChart } from '../../components/chart';
 import { SelectGHG } from '../../components/dropdown';
+import { MapRegionLegend } from '../../components/legend';
 
 import "./index.css";
 
@@ -27,16 +28,18 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
             defaultSize={100}
             className='panel'
           >
-            { stations && <MapBoxViewer
-                            stations={stations}
-                            region={region}
-                            agency={agency}
-                            stationCode={stationCode}
-                            zoomLevel={zoomLevel}
-                            setSelection={setSelectedStationId}
-                            setDisplayChart={setDisplayChart}
-                          />}
-            { displayChart && <SelectGHG selectedGHG={ghg} setSelectedGHG={setSelectedGHG} /> }
+            <div id="dashboard-map-container">
+              { stations && <MapBoxViewer
+                              stations={stations}
+                              region={region}
+                              agency={agency}
+                              stationCode={stationCode}
+                              zoomLevel={zoomLevel}
+                              setSelection={setSelectedStationId}
+                              setDisplayChart={setDisplayChart}
+                            />}
+              { displayChart && <SelectGHG selectedGHG={ghg} setSelectedGHG={setSelectedGHG} /> }
+            </div>
           </Panel>
               { displayChart &&
                 <>

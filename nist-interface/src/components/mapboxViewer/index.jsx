@@ -5,6 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
+import { MapRegionLegend } from '../legend';
 import { LoadingSpinner } from '../loading';
 
 import './index.css';
@@ -18,7 +19,9 @@ export class MapBoxViewer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentViewer: null
+            currentViewer: null,
+            markerClasses: ["marker", "marker marker-blue", "marker marker-purple", "marker marker-pink", "marker marker-red" ],
+            regions: {}
         }
     }
 
@@ -53,6 +56,7 @@ export class MapBoxViewer extends Component {
 
     plotStations = (map, stations, region, agency, stationCode) => {
         let regions = this.getUniqueRegions(stations);
+        this.setState({regions: regions});
         stations.forEach(station => {
             // get the station meta and show them
             const { id: stationId, properties } = station;
@@ -175,8 +179,8 @@ export class MapBoxViewer extends Component {
     }
 
     getMarkerStyle = (index) => {
-        let markersClasses = ["marker", "marker marker-blue", "marker marker-purple", "marker marker-pink", "marker marker-red" ];
-        return markersClasses[index];
+        let markerClasses = this.state.markerClasses;
+        return markerClasses[index];
     }
 
     getUniqueRegions = (stations) => {
@@ -209,6 +213,7 @@ export class MapBoxViewer extends Component {
                         <div id="mapbox-container" className='fullSize' style={{ position: "absolute" }}></div>
                     </Grid>
                 </Grid>
+                <MapRegionLegend regions={this.state.regions} markerStylesList={this.state.markerClasses}/>
             </Box>
         );    
     }
