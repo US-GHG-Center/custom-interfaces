@@ -5,7 +5,7 @@
   }
 
 .marker {
-  background-image: url('../../../public/marker-gold.png');
+  background-image: url('https://earth.gov/ghgcenter/custom-interfaces/noaa-gggrn-ghg-concentrations/public/marker-blue.png');
   background-size: cover;
   width: 30px;
   height: 30px;
