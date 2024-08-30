@@ -1,12 +1,6 @@
 import React from 'react';
 import "./index.css";
 
-const RegionFullNameDict = {
-    IN: "Indianapolis (IN)",
-    LAM: "Los Angeles Megacity (LAM)",
-    NEC: "North East Corridor (NEC)"
-}
-
 export function MapRegionLegend({ regions, markerStylesList }) {
     const regionsKeys = Object.keys(regions);
     if (regionsKeys.length < 2) {
@@ -19,12 +13,13 @@ export function MapRegionLegend({ regions, markerStylesList }) {
                 <div id="legend-head">Urban Test Bed Sites</div>
                 <div id="legend-line"></div>
                 {   regionsKeys.map((region) => {
-                        let styleIdx = regions[region] % markerStylesList.length;
+                        let styleIdx = regions[region].index % markerStylesList.length;
                         let markerStyleClass = markerStylesList[styleIdx];
+                        let { fullName } = regions[region];
                         return (
                             <div key={region} className="legend-element">
                                 <div className={`${markerStyleClass}`}></div>
-                                <span className="legend-text">{RegionFullNameDict[region.toUpperCase()]}</span>
+                                <span className="legend-text">{fullName}</span>
                             </div>
                         )
                     })

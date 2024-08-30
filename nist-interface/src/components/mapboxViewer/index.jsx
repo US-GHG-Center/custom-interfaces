@@ -62,7 +62,7 @@ export class MapBoxViewer extends Component {
             const { id: stationId, properties } = station;
             const el = document.createElement('div');
             let stationRegion = this.getStationRegion(stationId);
-            const markerStyleIndex = regions[stationRegion];
+            const markerStyleIndex = regions[stationRegion].index;
             el.className = this.getMarkerStyle(markerStyleIndex);
 
             let marker = this.addMarker(map, el, properties);
@@ -200,8 +200,9 @@ export class MapBoxViewer extends Component {
             let station = stations[i];
             // <agency>_<data_category>_<region>_<sitecode>_<ghg>_<frequency>_concentrations
             let regionName = this.getStationRegion(station.id);
+            let regionFullName = station.properties.region;
             if (!(regionName in memo)) {
-                memo[regionName] = idx;
+                memo[regionName] = { index: idx, fullName: regionFullName };
                 idx++;
             }
         }
