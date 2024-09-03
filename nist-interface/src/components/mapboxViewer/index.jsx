@@ -95,7 +95,25 @@ export class MapBoxViewer extends Component {
                 return location;
             }
         }
-        // go through the stations and get the mode of lat and lon to get the center
+        // TODO: ideally, if variance is less, then take mean center else take mode center
+        return this.getMeanCenterOfLocation(stations);
+    }
+
+    getMeanCenterOfLocation = (stations) => {
+        // go through the stations and average the lat and lon to get the center
+        let latSum = 0;
+        let lonSum = 0;
+        stations.forEach((station) => {
+            let { properties: {longitude, latitude} } = station;
+            latSum += latitude;
+            lonSum += longitude;
+        });
+        let latCenter = latSum / stations.length;
+        let lonCenter = lonSum / stations.length;
+        return [lonCenter, latCenter];
+    }
+
+    getModeCenterOfLocation = (stations) => {
         const latitudes = [];
         const longitudes = [];
         stations.forEach((station) => {
