@@ -30,12 +30,7 @@ export class ConcentrationChart extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // when new props is received, initialize the chart with data.
-    if (this.props.ghg !== prevProps.ghg) {
-      let changedStationId = this.getChangedGHGStationId(this.props.selectedStationId, this.props.ghg);
-      this.props.setSelectedStationId(changedStationId);
-    }
-    if (this.props.selectedStationId !== prevProps.selectedStationId) {
+    if (this.props.selectedStationId !== prevProps.selectedStationId || this.props.ghg !== prevProps.ghg) {
       // clean previous chart data
       if (this.chart) {
         this.chart.data.labels = [];
@@ -84,11 +79,12 @@ export class ConcentrationChart extends Component {
   }
 
   prepareChart = () => {
-    this.setDataAccessLink(this.props.selectedStationId);
+    let currentStationId = this.getChangedGHGStationId(this.props.selectedStationId, this.props.ghg);
+    this.setDataAccessLink(currentStationId);
     // first change the title of the chart
-    this.changeTitle(this.props.selectedStationId);
+    this.changeTitle(currentStationId);
     // fetch the data from the api and then initialize the chart.
-    this.fetchStationData(this.props.selectedStationId).then(data => {
+    this.fetchStationData(currentStationId).then(data => {
       const { time, concentration } = data;
       this.updateChart(concentration, time);
     });
