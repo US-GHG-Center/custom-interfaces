@@ -95,16 +95,19 @@ export class MapBoxViewer extends Component {
                 return location;
             }
         }
-        // go through the stations and average the lat and lon to get the center
-        let latSum = 0;
-        let lonSum = 0;
+        // go through the stations and get the mode of lat and lon to get the center
+        const latitudes = [];
+        const longitudes = [];
         stations.forEach((station) => {
             let { properties: {longitude, latitude} } = station;
-            latSum += latitude;
-            lonSum += longitude;
+            latitudes.push(latitude);
+            longitudes.push(longitude);
         });
-        let latCenter = latSum / stations.length;
-        let lonCenter = lonSum / stations.length;
+        latitudes.sort();
+        longitudes.sort();
+        const modeIdx = Math.floor(stations.length/2)
+        let latCenter = latitudes[modeIdx];
+        let lonCenter = longitudes[modeIdx];
         return [lonCenter, latCenter];
     }
 
