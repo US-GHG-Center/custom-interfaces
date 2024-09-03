@@ -198,10 +198,8 @@ function addRaster(itemProps, feature, polygonId, fromZoom) {
     if (!IDS_ON_MAP.has(feature.id)) {
 
         const TILE_URL =
-            "https://earth.gov/ghgcenter/api/raster/stac/tiles/WebMercatorQuad/{z}/{x}/{y}@1x" +
-            "?collection=" +
-            collection +
-            "&item=" +
+            `https://earth.gov/ghgcenter/api/raster/collections/${collection}/tiles/WebMercatorQuad/{z}/{x}/{y}@1x` +
+            "?item=" +
             itemProps.id +
             "&assets=" +
             assets +
