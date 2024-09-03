@@ -81,11 +81,13 @@ export class ConcentrationChart extends Component {
   prepareChart = () => {
     let currentStationId = this.getChangedGHGStationId(this.props.selectedStationId, this.props.ghg);
     this.setDataAccessLink(currentStationId);
-    // first change the title of the chart
+    // Pre data fetch, change the title of the chart
     this.changeTitle(currentStationId);
     // fetch the data from the api and then initialize the chart.
     this.fetchStationData(currentStationId).then(data => {
       const { time, concentration } = data;
+      // Post data fetch, check if the chart title needs to be modified (for race conditions when multiple stations are clicked).
+      this.changeTitle(currentStationId);
       this.updateChart(concentration, time);
     });
   }
