@@ -1,8 +1,8 @@
 import { Chart } from "chart.js";
 import zoomPlugin from "chartjs-plugin-zoom";
 import annotationPlugin from "chartjs-plugin-annotation";
-// import * as cjsam from 'chartjs-adapter-moment';
-import "chartjs-adapter-date-fns";
+import 'chartjs-adapter-luxon';
+
 
 Chart.register(zoomPlugin);
 Chart.register(annotationPlugin);
@@ -52,7 +52,8 @@ export const plugin = {
 };
 
 export const options = {
-  // responsive: true,
+  responsive: true,
+  maintainAspectRatio: false,
   interaction: {
     intersect: false,
     mode: "nearest",
@@ -67,7 +68,7 @@ export const options = {
     x: {
       title: {
         display: true,
-        text: "Observation Date/Time",
+        text: "Observation Date/Time (UTC)",
       },
       grid: {
         display: false,
@@ -77,10 +78,12 @@ export const options = {
       ticks: {
         autoSkip: true, // Enable automatic skip
         maxTicksLimit: 8, // Maximum number of ticks to display
-        // callback: function(value) {
-        //   return "fadhsdsf"
-        // }
       },
+      adapters: {
+        date: {
+          zone: "utc",
+        },
+      }
     },
     y: {
       title: {

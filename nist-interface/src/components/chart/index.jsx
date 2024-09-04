@@ -1,17 +1,28 @@
-import { Component, createRef } from 'react';
+import { Component } from 'react';
 import Chart from 'chart.js/auto';
 import Box from '@mui/material/Box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faRotateLeft, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { LoadingSpinner } from '../loading';
+import { fetchAllFromFeaturesAPI } from "../../services/api";
 
 import { plugin, options } from './helper';
 
 import './index.css';
 
+const collectionItemURL = (collectionId) => {
+  return `${process.env.REACT_APP_FEATURES_API_URL}/collections/${collectionId}/items?is_max_height_data=True`;
+}
+
 export class ConcentrationChart extends Component {
   constructor(props) {
     super(props);
     this.chart = null;
+    this.state = {
+      showChartInstructions: true,
+      chartDataIsLoading: false,
+      dataAccessLink: "",
+    };
   }
 
   componentDidMount() {
@@ -19,36 +30,32 @@ export class ConcentrationChart extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // when new props is received, initialize the chart with data.
-    if (this.props.selectedStationId !== prevProps.selectedStationId) {
-      // fetch the data from the api and then initialize the chart.
-      this.fetchStationData(this.props.selectedStationId).then(data => {
-        const { time, concentration, stationMeta } = data;
-        this.updateChart(concentration, time, stationMeta);
-      });
+    if (this.props.selectedStationId !== prevProps.selectedStationId || this.props.ghg !== prevProps.ghg) {
+      // clean previous chart data
+      if (this.chart) {
+        this.chart.data.labels = [];
+        this.chart.data.datasets[0].data = [];
+        this.chart.update();
+      }
+
+      this.prepareChart();
     }
   }
 
   initializeChart = () => {
     if (this.chart) {
+      // a fresh start
       this.chart.destroy();
     }
-    // fetch the data from the api and then initialize the chart.
-    this.fetchStationData(this.props.selectedStationId).then(data => {
-      const { time, concentration, stationMeta } = data;
-      this.populateChart(this.chartCanvas, concentration, time, stationMeta);
-    });
-  }
 
-  populateChart = (chartDOMRef, data=[], labels=[], stationMeta) => {
     // TODO: take the ghg label and unit from the collection item properties instead.
-    let label = this.props.ghg === 'ch4' ? 'CH₄ Concentration (ppb)' : 'CO₂ Concentration (ppm)';
+    let dataPointLabel = this.getYAxisLabel(this.props.ghg);
     let dataset = {
-      labels: labels,
+      labels: [],
       datasets: [
         {
-          label: label,
-          data: data,
+          label: dataPointLabel,
+          data: [],
           borderColor: "#ff6384",
           yAxisID: 'y',
           showLine: false
@@ -56,33 +63,47 @@ export class ConcentrationChart extends Component {
       ]
     };
 
-    let { stationName, stationLocation } = stationMeta;
-    if (stationName) {
-      options.plugins.title.text = ` ${stationLocation} (${stationName})`;
-    }
-
-    this.chart = new Chart(chartDOMRef, {
+    this.chart = new Chart(this.chartCanvas, {
       type: 'line',
       data: dataset,
       options: options,
       plugins: [plugin]
     });
+
+    this.chart.options.scales.y.title.text = dataPointLabel;
+    this.chart.options.plugins.zoom.zoom.onZoom = () => {
+      this.setState({showChartInstructions: false});
+    }
+
+    this.prepareChart();
   }
 
-  updateChart = (data, label, stationMeta) => {
+  prepareChart = () => {
+    let currentStationId = this.getChangedGHGStationId(this.props.selectedStationId, this.props.ghg);
+    this.setDataAccessLink(currentStationId);
+    // Pre data fetch, change the title of the chart
+    this.changeTitle(currentStationId);
+    // fetch the data from the api and then initialize the chart.
+    this.fetchStationData(currentStationId).then(data => {
+      const { time, concentration } = data;
+      // Post data fetch, check if the chart title needs to be modified (for race conditions when multiple stations are clicked).
+      this.changeTitle(currentStationId);
+      this.updateChart(concentration, time);
+    });
+  }
+
+  updateChart = (data, label) => {
     if (this.chart) {
       // first reset the zoom
       this.chart.resetZoom();
 
+      let labelY = this.getYAxisLabel(this.props.ghg);
+      this.chart.data.datasets[0].label = labelY;
+      this.chart.options.scales.y.title.text = labelY;
+
       // update that value in the chart.
       this.chart.data.labels = label;
       this.chart.data.datasets[0].data = data;
-
-      let { stationName, stationLocation } = stationMeta;
-
-      if (stationName) {
-        this.chart.options.plugins.title.text = ` ${stationLocation} (${stationName})`;
-      }
 
       // update the chart
       this.chart.update();
@@ -91,19 +112,39 @@ export class ConcentrationChart extends Component {
 
   fetchStationData = async (stationId) => {
     try {
-      // fetch in the collection from the features api
-      const response = await fetch(`https://dev.ghg.center/api/features/collections/${stationId}/items?limit=10000`);
-      if (!response.ok) {
-        throw new Error('Error in Network');
-      }
-      const result = await response.json();
-      const { title, features } = result;
-      const stationMeta = this.getStationMeta(result);
-      const { time, concentration } = this.dataPreprocess(features);
-      return { time, concentration, stationMeta };
+      let url = collectionItemURL(stationId);
+      this.setState({chartDataIsLoading: true});
+      let result = await fetchAllFromFeaturesAPI(url);
+      const { time, concentration } = this.dataPreprocess(result);
+      this.setState({chartDataIsLoading: false});
+      return { time, concentration };
     } catch (error) {
       console.error('Error fetching data:', error);
     }
+  }
+
+  changeTitle = (stationId) => {
+    const stationCode = this.getStationCode(stationId);
+    const stationProperties = this.props.stationMetadata[stationCode];
+    let { station_name: stationName, city, state } = stationProperties;
+
+    if (stationName && stationName.includes(city)) {
+      this.chart.options.plugins.title.text = ` ${stationName}, ${state} (${stationCode})`;
+      this.chart.update();
+      return;
+    }
+    if (stationName) {
+      this.chart.options.plugins.title.text = ` ${stationName}, ${city}, ${state} (${stationCode})`;
+      this.chart.update();
+      return;
+    }
+  }
+
+  setDataAccessLink = (stationId) => {
+    const stationCode = this.getStationCode(stationId);
+    const stationProperties = this.props.stationMetadata[stationCode];
+    const { data_link: dataLink } = stationProperties;
+    this.setState({dataAccessLink: dataLink});
   }
 
   // helpers start
@@ -120,14 +161,17 @@ export class ConcentrationChart extends Component {
     return {time, concentration};
   }
 
-  getStationMeta = (result) => {
-    let title = result.title;
-    let titleParts = title.split("_");
-    let stationName = titleParts[3].toUpperCase();
+  getYAxisLabel = (ghg) => {
+      let label = ghg === 'ch4' ? 'CH₄ Concentration (ppb)' : 'CO₂ Concentration (ppm)';
+      return label;
+  }
 
-    let feature = result.features[0];
-    let stationLocation = feature.properties.location.replace("_", ", ");
-    return { stationName, stationLocation };
+  getChangedGHGStationId = (selectedStationId, changedGHG) => {
+    // stationId (collectionId) format: <agency>_<data_category>_<region>_<sitecode>_<ghg>_<frequency>_concentrations
+    let stationId = selectedStationId.split("_");
+    stationId[4] = changedGHG;
+    let changedStationId = stationId.join("_");
+    return changedStationId;
   }
 
   handleRefresh = () => {
@@ -137,19 +181,51 @@ export class ConcentrationChart extends Component {
   }
 
   handleClose = () => {
+    this.handleRefresh(); // reset the zoom level else, next chart instance wont be able to.
     this.props.setDisplayChart(false);
+  }
+
+  getStationCode = (stationId) => {
+    let stationIdParts = stationId.split("_");
+    let stationCode = stationIdParts[3];
+    return stationCode.toUpperCase();
   }
 
   // helpers end
 
   render() {
     return (
-      <Box sx={{height: "30em"}} id="chart-box">
-          <div id="chart-container" className='fullSize'>
-            <div id="chart-controls">
-              <FontAwesomeIcon id="zoom-reset-button" icon={faRotateLeft} title="Reset Zoom" onClick={this.handleRefresh}/>
-              <FontAwesomeIcon id="chart-close-button" icon={faXmark} title="Close" onClick={this.handleClose}/>
+      <Box id="chart-box" style={this.props.style}>
+          <div id="chart-container" style={{width: "100%", height:"100%"}}>
+            <div id="chart-tools">
+              <div id="chart-tools-left">
+                <div id="chart-instructions-container">
+                  <div className="icon-and-instructions">
+                    <FontAwesomeIcon
+                      icon={faCircleInfo}
+                      // style={{margin: "12px"}}
+                      onMouseEnter={() => this.setState({showChartInstructions: true})}
+                      onMouseLeave={() => this.setState({showChartInstructions: false})}
+                    />
+                    {this.state.showChartInstructions && <div id="chart-instructions">
+                      <p>1. Click and drag, scroll or pinch on the chart to zoom in.</p>
+                      <p>2. Click on the rectangle boxes on the side to toggle chart.</p>
+                    </div>
+                    }
+                  </div>
+                </div>
+              </div>
+              <div id="chart-tools-right">
+                { this.state.dataAccessLink && <a id="data-access-link" href={this.state.dataAccessLink} target="_blank" rel='noreferrer'>Data Access Link ↗</a> }
+                <div id="chart-controls">
+                  <FontAwesomeIcon id="zoom-reset-button" icon={faRotateLeft} title="Reset Zoom" onClick={this.handleRefresh}/>
+                  <FontAwesomeIcon id="chart-close-button" icon={faXmark} title="Close" onClick={this.handleClose}/>
+                </div>
+              </div>
             </div>
+            {
+              this.state.chartDataIsLoading && <LoadingSpinner />
+            }
             <canvas
               id = "chart"
               className='fullWidth'

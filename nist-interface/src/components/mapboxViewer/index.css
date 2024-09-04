@@ -1,14 +1,28 @@
-.mapSection {
-    /* position: relative; */
-    /* height: 100%;
-    width: 100%; */
-  }
+.map-section {
+    position: relative;
+}
 
 .marker {
-  background-image: url('../../../public/marker-gold.png');
+  background-image: url('../../../public/markers/marker-gold.png');
   background-size: cover;
   width: 30px;
   height: 30px;
   border-radius: 50%;
   cursor: pointer;
+}
+
+.marker-blue {
+  background-image: url('../../../public/markers/marker-blue.png');
+}
+
+.marker-red {
+  background-image: url('../../../public/markers/marker-red.png');
+}
+
+.marker-purple {
+  background-image: url('../../../public/markers/marker-purple.png');
+}
+
+.marker-pink {
+  background-image: url('../../../public/markers/marker-pink.png');
 }

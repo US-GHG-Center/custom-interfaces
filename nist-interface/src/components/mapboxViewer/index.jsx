@@ -1,9 +1,12 @@
-import { Component, Fragment } from 'react';
+import { Component } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+
+import { MapRegionLegend } from '../legend';
+import { LoadingSpinner } from '../loading';
 
 import './index.css';
 
@@ -16,7 +19,9 @@ export class MapBoxViewer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentViewer: null
+            currentViewer: null,
+            markerClasses: ["marker", "marker marker-blue", "marker marker-purple", "marker marker-pink", "marker marker-red" ],
+            regions: {}
         }
     }
 
@@ -32,46 +37,125 @@ export class MapBoxViewer extends Component {
             container: 'mapbox-container',
             style: mapboxStyleUrl,
             center: [-98.585522, 1.8333333], // Centered on the US
-            zoom: 2,
+            zoom: this.props.zoomLevel || 2,
             projection: 'equirectangular'
         });
         this.setState({currentViewer: map});
         
-        // show the whole map of usa and show all the NIST stations
-        this.plotStations(map, this.props.stations);
+        // show the world map and show all the stations
+        this.plotStations(map, this.props.stations, this.props.region, this.props.agency, this.props.stationCode);
     }
 
     componentDidUpdate(prevProps, prevState) {
         // on page refresh, show the whole map of usa and show all the NIST stations
-        this.plotStations(this.state.currentViewer, this.props.stations);
+        if (this.props.stationCode !== prevProps.stationCode || this.props.agency !== prevProps.agency ||
+            this.props.region !== prevProps.region || this.props.stations !== prevProps.stations) {
+            this.plotStations(this.state.currentViewer, this.props.stations, this.props.region, this.props.agency, this.props.stationCode);
+        }
     }
 
-    plotStations = (map, stations) => {
+    plotStations = (map, stations, region, agency, stationCode) => {
+        let regions = this.getUniqueRegions(stations);
+        this.setState({regions: regions});
         stations.forEach(station => {
             // get the station meta and show them
-            const { id, title: name, location, properties } = station;
-            const [lon,  lat] = location;
+            const { id: stationId, properties } = station;
             const el = document.createElement('div');
-            el.className = 'marker';
-            
-            let marker = this.addMarker(map, el, name, lon, lat, properties);
+            let stationRegion = this.getStationRegion(stationId);
+            const markerStyleIndex = regions[stationRegion].index;
+            el.className = this.getMarkerStyle(markerStyleIndex);
+
+            let marker = this.addMarker(map, el, properties);
 
             marker.getElement().addEventListener('click', () => {
                 this.props.setDisplayChart(true);
-                this.props.setSelection(id);
+                this.props.setSelection(stationId);
             });
         });
+
+        // zoom to certian place, based on region and agency
+        let zoomLocation = this.getLocationToZoom(stations, stationCode);
+        let zoomLevel = this.getZoomLevel(region, agency, stationCode);
+        if (zoomLocation) {
+            map.flyTo({ center: zoomLocation, zoom: zoomLevel });
+        }
     }
 
-    addMarker = (map, element, name, lon, lat, properties) => {
+    // utils
+
+    getLocationToZoom = (stations, stationCode) => {
+        if (stations.length<1) {
+            return null;
+        }
+        if (stationCode) {
+            let station = stations.find(station => station.id.includes(stationCode));
+            if (station) {
+                let { properties: {longitude, latitude} } = station;
+                let location = [longitude, latitude];
+                return location;
+            }
+        }
+        // TODO: ideally, if variance is less, then take mean center else take mode center
+        return this.getMeanCenterOfLocation(stations);
+    }
+
+    getMeanCenterOfLocation = (stations) => {
+        // go through the stations and average the lat and lon to get the center
+        let latSum = 0;
+        let lonSum = 0;
+        stations.forEach((station) => {
+            let { properties: {longitude, latitude} } = station;
+            latSum += latitude;
+            lonSum += longitude;
+        });
+        let latCenter = latSum / stations.length;
+        let lonCenter = lonSum / stations.length;
+        return [lonCenter, latCenter];
+    }
+
+    getModeCenterOfLocation = (stations) => {
+        const latitudes = [];
+        const longitudes = [];
+        stations.forEach((station) => {
+            let { properties: {longitude, latitude} } = station;
+            latitudes.push(latitude);
+            longitudes.push(longitude);
+        });
+        latitudes.sort();
+        longitudes.sort();
+        const modeIdx = Math.floor(stations.length/2)
+        let latCenter = latitudes[modeIdx];
+        let lonCenter = longitudes[modeIdx];
+        return [lonCenter, latCenter];
+    }
+
+    getZoomLevel = (region, agency, stationCode) => {
+        if (this.props.zoomLevel) {
+            // zoom-level in queryParam has highest precedence
+            return this.props.zoomLevel;
+        }
+        if (stationCode) {
+            // station-code present in queryParam has second highest precedence
+            return 6;
+        }
+        if (agency && region) {
+            return 5;
+        }
+        if (agency === "nist" && !region) {
+            // nist is for conus region, so zoom more to conus
+            return 4;
+        }
+        return 2;
+    }
+
+    addMarker = (map, element, properties) => {
+        const {longitude, latitude} = properties;
         let marker = new mapboxgl.Marker(element)
-        .setLngLat([lon, lat])
-        // .setPopup(new mapboxgl.Popup({ offset: 25 })
-        // .setText(name)
+        .setLngLat([longitude, latitude])
         .addTo(map);
 
         const tooltipContent = this.getToolTipContent(properties);
-        const popup = new mapboxgl.Popup().setHTML(tooltipContent);
+        const popup = new mapboxgl.Popup({closeButton: false}).setHTML(tooltipContent);
         marker.setPopup(popup);
         marker.getElement().addEventListener("mouseenter", () => {
             popup.addTo(map);
@@ -84,27 +168,82 @@ export class MapBoxViewer extends Component {
     }
 
     getToolTipContent = (stationProperties) => {
-        let { siteCode, siteName, siteCountry, latitude, longitude,
-            elevation, elevationUnit, instrumentType } = stationProperties;
-        let siteNameAddOn = siteName ? ` : ${siteName}` : "";
-        let firstRow = `<strong>${siteCode.toUpperCase()}${siteNameAddOn}</strong><br>`;
-        let secondRow = siteCountry ? `<strong>${siteCountry}</strong><br>` : "";
-        let thirdRow = latitude ? `Latitude: ${Number(latitude).toFixed(2)}<br>` : "";
-        let fourthRow = longitude ? `Longitude: ${Number(longitude).toFixed(2)}<br>` : "";
-        let fifthRow = elevation ? `Elevation: ${Number(elevation).toFixed(2)} ${elevationUnit}<br>` : "";
-        let sixthRow = instrumentType ? `Instrument Type: ${instrumentType}<br>` : "";
-        let result = firstRow + secondRow + thirdRow + fourthRow + fifthRow + sixthRow;
+        const elevationUnit = "m";
+
+        let { city, country, elevation_m, instrument_type, latitude_nwse, longitude_nwse,
+              state, station_code, station_name, status, top_agl_m} = stationProperties;
+
+        if (top_agl_m.includes(",")) {
+            // there are multiple heights, so add unit to each height
+            let topAglArray = top_agl_m.replace(",", " m, ");
+            top_agl_m = topAglArray
+        }
+
+        // siteCode acornym and full name
+        let siteNameAddOn = station_name ? ` : ${station_name}` : "";
+        let siteNameRow = `<strong>${station_code.toUpperCase()}${siteNameAddOn}</strong><br>`;
+        // site region
+        let cityAddOn = city ? `${city},` : "";
+        let regionAddOn = state ? `${cityAddOn} ${state},` : "";
+        // siteCountry
+        let addressRow = country ? `<i>${regionAddOn} ${country}</i><br>` : "";
+        // longitude
+        let longRow = longitude_nwse ? `Longitude: ${longitude_nwse}<br>` : "";
+        // latitude
+        let latRow = latitude_nwse ? `Latitude: ${latitude_nwse}<br>` : "";
+        // elevation
+        // let fifthRow = elevation ? `Elevation: ${Number(elevation).toFixed(2)} ${elevationUnit}<br>` : "";
+        let elevationRow = elevation_m ? `Elevation: ${elevation_m} ${elevationUnit}<br>` : "";
+        // sampling height
+        let samplingHeightRow = top_agl_m ? `Sampling Height: ${top_agl_m} ${elevationUnit}<br>` : "";
+        // instrumentType
+        let instrumentRow = instrument_type ? `Instrument Type: ${instrument_type}<br>` : "";
+        // stationStatus
+        let stationStatusRow = status ? `Station Status: ${status}<br>` : "";
+        // combine all the rows
+        let result = siteNameRow + addressRow + "<hr>" + longRow + latRow + elevationRow + samplingHeightRow + instrumentRow + stationStatusRow;
         return result;
+    }
+
+    getMarkerStyle = (index) => {
+        // Index is unlimited but markerClasses array has limited items
+        let idx = index % this.state.markerClasses.length;
+        let markerClasses = this.state.markerClasses;
+        return markerClasses[idx];
+    }
+
+    getUniqueRegions = (stations) => {
+        // got through all station. scrape out the region name from id
+        // then make a hash of the unique regions.
+        let memo = {};
+        let idx = 0;
+        for (let i=0; i<stations.length; i++) {
+            let station = stations[i];
+            // <agency>_<data_category>_<region>_<sitecode>_<ghg>_<frequency>_concentrations
+            let regionName = this.getStationRegion(station.id);
+            let regionFullName = station.properties.region;
+            if (!(regionName in memo)) {
+                memo[regionName] = { index: idx, fullName: regionFullName };
+                idx++;
+            }
+        }
+        return memo;
+    }
+
+    getStationRegion = (stationId) => {
+        return stationId.split("_")[2];
     }
 
     render() {
         return (
-            <Box component="main" className="map-section fullSize" sx={{ flexGrow: 1 }}>
+            <Box component="main" className="map-section fullSize" sx={{ flexGrow: 1 }} style={this.props.style}>
                 <Grid container className="fullSize">
                     <Grid item xs={12} sx={{ position: "relative" }}>
+                        { this.props.stations.length < 1 && this.state.currentViewer && <LoadingSpinner /> }
                         <div id="mapbox-container" className='fullSize' style={{ position: "absolute" }}></div>
                     </Grid>
                 </Grid>
+                <MapRegionLegend regions={this.state.regions} markerStylesList={this.state.markerClasses}/>
             </Box>
         );    
     }
