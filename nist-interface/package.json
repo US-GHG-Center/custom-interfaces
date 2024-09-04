@@ -1,5 +1,6 @@
 {
   "name": "nist_visualization",
+  "homepage": "/ghgcenter/custom-interfaces/nist-interface",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
