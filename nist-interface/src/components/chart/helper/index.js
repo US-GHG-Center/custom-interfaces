@@ -54,6 +54,7 @@ export const plugin = {
 export const options = {
   responsive: true,
   maintainAspectRatio: false,
+  resizeDelay: 200,
   interaction: {
     intersect: false,
     mode: "nearest",
