@@ -18,7 +18,7 @@ jobs:
         id: define_environment
         run: |
           if [ "${{ github.ref }}" = "refs/heads/add/cicd-nist-urban" ]; then
-            echo "env_name=development" >> $GITHUB_OUTPUT
+            echo "env_name=staging" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
             echo "env_name=production" >> $GITHUB_OUTPUT
           fi
