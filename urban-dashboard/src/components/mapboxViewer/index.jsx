@@ -1,4 +1,4 @@
-import { Component, Fragment, useRef, useEffect } from 'react';
+import { Component } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -24,14 +24,18 @@ export class MapBoxViewer extends Component {
 
     plotMap() {
         mapboxgl.accessToken = accessToken;
-        let mapboxStyleUrl = 'mapbox://styles/mapbox/streets-v12';
-        if (mapboxStyleBaseUrl) {
-            let styleId = BASEMAP_STYLES.findIndex(style => style.id === BASEMAP_ID_DEFAULT);
-            mapboxStyleUrl = `${mapboxStyleBaseUrl}/${BASEMAP_STYLES[styleId].mapboxId}`;
-        }
+        let mapboxStyleUrl = 'mapbox://styles/mapbox/satellite-v9';
+
+        //TODO: Get custom basemap styles for the satellite-v9
+        // right now these use basemap styles for covid-nasa map 
+        // if (mapboxStyleBaseUrl) {
+        //     let styleId = BASEMAP_STYLES.findIndex(style => style.id === BASEMAP_ID_DEFAULT);
+        //     mapboxStyleUrl = `${mapboxStyleBaseUrl}/${BASEMAP_STYLES[styleId].mapboxId}`;
+        // }
 
         const map = new mapboxgl.Map({
             container: 'mapbox-container',
+            renderingMode: '2D',
             style: mapboxStyleUrl,
             center: [-99.676392, 39.106667], // Center of the USA
             zoom: 4.8, // Adjust zoom level to fit the USA
@@ -55,7 +59,7 @@ export class MapBoxViewer extends Component {
                 "tiles": [GRA2PES_RASTER_URL]
             })
 
-            if (this.props.dataset == "vulcan") {
+            if (this.props.dataset === "vulcan") {
                 map.addLayer({
                     "id": "raster-layer",
                     "type": "raster",
@@ -64,7 +68,7 @@ export class MapBoxViewer extends Component {
                         "raster-opacity": 0.7
                     }
                 })
-            } else if (this.props.dataset == "gra2pes") {
+            } else if (this.props.dataset === "gra2pes") {
                 map.addLayer({
                     "id": "raster-layer",
                     "type": "raster",
@@ -87,14 +91,14 @@ export class MapBoxViewer extends Component {
 
     // Trigger zoom out when zoomOut button is clicked.
     componentDidUpdate = (prevProps) => {
-        if (prevProps.zoomOut != this.props.zoomOut) {
+        if (prevProps.zoomOut !== this.props.zoomOut) {
             this.resetMapView();
         }
 
-        if (prevProps.urbanRegion != this.props.urbanRegion) {
+        if (prevProps.urbanRegion !== this.props.urbanRegion) {
             console.log("urban region changed to ", this.props.urbanRegion);
 
-            const urbanRegion = URBAN_REGIONS.filter(item => item.name == this.props.urbanRegion)[0];
+            const urbanRegion = URBAN_REGIONS.filter(item => item.name === this.props.urbanRegion)[0];
             if (urbanRegion) {
                 console.log("selected region is: ", urbanRegion);
                 const name = urbanRegion.center;

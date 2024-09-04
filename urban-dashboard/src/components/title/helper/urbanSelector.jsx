@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Select, MenuItem, Typography, Box } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-
+import { AVAILABLE_REGIONS } from '../../../assets/geojson';
 
 function DropdownIconComponent(props) {
   return (
@@ -21,7 +21,7 @@ function DropdownIconComponent(props) {
 export function UrbanSelector({ urbanRegion, setUrbanRegion }) {
   const [selectedRegion, setSelectedRegion] = useState(urbanRegion);
 
-  const urbanRegions = ["Los Angeles", "New York", "San Francisco", "Indianapolis", "Chicago", "Salt Lake City"]
+  const urbanRegions = AVAILABLE_REGIONS;
 
   //update the selector value based upon the changes in urbanRegion
   useEffect(() => {
