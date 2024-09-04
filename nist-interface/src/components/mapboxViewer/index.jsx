@@ -11,7 +11,7 @@ import { LoadingSpinner } from '../loading';
 import './index.css';
 
 import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT } from './config';
-import { getLocationToZoom, getZoomLevel, getMeanCenterOfLocation, getToolTipContent, getUniqueRegions, getStationRegion } from "./helper";
+import { getLocationToZoom, getZoomLevel, getMeanCenterOfLocation, getToolTipContent, getUniqueRegions, getStationRegion, getMarkerStyle } from "./helper";
 
 const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
@@ -24,12 +24,15 @@ export class MapBoxViewer extends Component {
             regions: {}
         }
         this.markerClasses = ["marker", "marker marker-blue", "marker marker-purple", "marker marker-pink", "marker marker-red" ];
+        this.stationMarkers = [];
+        // functions
         this.getLocationToZoom = getLocationToZoom;
         this.getMeanCenterOfLocation = getMeanCenterOfLocation;
         this.getToolTipContent = getToolTipContent;
         this.getUniqueRegions = getUniqueRegions;
         this.getStationRegion = getStationRegion;
         this.getZoomLevel = getZoomLevel;
+        this.getMarkerStyle = getMarkerStyle;
     }
 
     componentDidMount() {
@@ -61,10 +64,19 @@ export class MapBoxViewer extends Component {
         }
     }
 
+    componentWillUnmount() {
+        // clean all the event listeners
+        this.stationMarkers.forEach(marker => {
+            marker.getElement().removeEventListener("click");
+            marker.getElement().removeEventListener("mouseenter");
+            marker.getElement().removeEventListener("mouseleave");
+        });
+    }
+
     plotStations = (map, stations, region, agency, stationCode) => {
         let regions = this.getUniqueRegions(stations);
         this.setState({regions: regions});
-        stations.forEach(station => {
+        let stationMarkers = stations.map(station => {
             // get the station meta and show them
             const { id: stationId, properties } = station;
             const el = document.createElement('div');
@@ -78,7 +90,10 @@ export class MapBoxViewer extends Component {
                 this.props.setDisplayChart(true);
                 this.props.setSelection(stationId);
             });
+
+            return marker;
         });
+        this.stationMarkers = this.stationMarkers.concat(stationMarkers);
 
         // zoom to certian place, based on region and agency
         let zoomLocation = this.getLocationToZoom(stations, stationCode);
@@ -109,11 +124,7 @@ export class MapBoxViewer extends Component {
         return marker;
     }
 
-    getMarkerStyle = (index, markerClasses) => {
-        // Index is unlimited but markerClasses array has limited items
-        let idx = index % markerClasses.length;
-        return markerClasses[idx];
-    }
+
 
     render() {
         return (
