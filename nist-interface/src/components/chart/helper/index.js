@@ -114,11 +114,7 @@ export const options = {
         drag: {
           enabled: true,
         },
-        mode: "x",
-        onZoom: (zoom) => {
-          // Handle zoom event here
-          // isChartZoomed = zoom.scales.x > 1; // Check if x-scale zoomed
-        },
+        mode: "x"
       },
     },
     title: {

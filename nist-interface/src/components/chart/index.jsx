@@ -18,6 +18,7 @@ export class ConcentrationChart extends Component {
   constructor(props) {
     super(props);
     this.chart = null;
+    this.initialScaleLimits = {};
     this.state = {
       showChartInstructions: true,
       chartDataIsLoading: false,
@@ -74,6 +75,10 @@ export class ConcentrationChart extends Component {
     this.chart.options.plugins.zoom.zoom.onZoom = () => {
       this.setState({showChartInstructions: false});
     }
+    this.chart.options.plugins.zoom.zoom.onZoomComplete = () => {
+      // check if the zoom level of the chart is default and based on that enable or disable the tooltip
+      this.chart.options.plugins.tooltip.enabled = this.isChartZoomed(this.chart, this.initialScaleLimits);
+    }
 
     this.prepareChart();
   }
@@ -89,6 +94,7 @@ export class ConcentrationChart extends Component {
       // Post data fetch, check if the chart title needs to be modified (for race conditions when multiple stations are clicked).
       this.changeTitle(currentStationId);
       this.updateChart(concentration, time);
+      this.setInitialScaleLimits();
     });
   }
 
@@ -191,6 +197,33 @@ export class ConcentrationChart extends Component {
     return stationCode.toUpperCase();
   }
 
+  isChartZoomed = (chart, initialScaleLimits) => {
+    if (!chart || Object.keys(initialScaleLimits).length === 0) {
+      return false;
+    }
+    const xScale = chart.scales['x'];
+    const yScale = chart.scales['y'];
+    return (
+        xScale.min !== initialScaleLimits.x.min ||
+        xScale.max !== initialScaleLimits.x.max ||
+        yScale.min !== initialScaleLimits.y.min ||
+        yScale.max !== initialScaleLimits.y.max
+    );
+  }
+
+  setInitialScaleLimits = () => {
+    // Store initial scale limits
+    this.initialScaleLimits.x = {
+      min: this.chart.scales['x'].min,
+      max: this.chart.scales['x'].max
+    };
+
+    this.initialScaleLimits.y = {
+        min: this.chart.scales['y'].min,
+        max: this.chart.scales['y'].max
+    };
+  }
+
   // helpers end
 
   render() {
@@ -209,7 +242,8 @@ export class ConcentrationChart extends Component {
                     />
                     {this.state.showChartInstructions && <div id="chart-instructions">
                       <p>1. Click and drag, scroll or pinch on the chart to zoom in.</p>
-                      <p>2. Click on the rectangle boxes on the side to toggle chart.</p>
+                      <p>2. Hover over data points when zoomed in to see the values.</p>
+                      <p>3. Click on the rectangle boxes on the side to toggle chart.</p>
                     </div>
                     }
                   </div>
