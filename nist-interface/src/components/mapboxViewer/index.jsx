@@ -67,9 +67,9 @@ export class MapBoxViewer extends Component {
     componentWillUnmount() {
         // clean all the event listeners
         this.stationMarkers.forEach(marker => {
-            marker.getElement().removeEventListener("click");
-            marker.getElement().removeEventListener("mouseenter");
-            marker.getElement().removeEventListener("mouseleave");
+            let elem = marker.getElement();
+            // clone won't have the event listeners, so previous will be garbage collected
+            elem.replaceWith(elem.cloneNode(true));
         });
     }
 
