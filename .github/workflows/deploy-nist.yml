@@ -58,7 +58,7 @@ jobs:
           yarn
           yarn build
         env:
-          REACT_APP_PUBLIC_URL: ${{ vars.PUBLIC_URL_NIST }}
+          PUBLIC_URL: ${{ vars.PUBLIC_URL_NIST }}
       
       - name: Upload build folder
         uses: actions/upload-artifact@v4
