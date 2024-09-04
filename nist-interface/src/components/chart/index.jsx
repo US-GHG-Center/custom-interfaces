@@ -6,8 +6,8 @@ import { faXmark, faRotateLeft, faCircleInfo } from '@fortawesome/free-solid-svg
 import { LoadingSpinner } from '../loading';
 import { fetchAllFromFeaturesAPI } from "../../services/api";
 
-import { plugin, options } from './helper';
-
+import { plugin, options } from './config';
+import { dataPreprocess, getYAxisLabel, getChangedGHGStationId, getStationCode, isChartZoomed, setInitialScaleLimits } from "./helper";
 import './index.css';
 
 const collectionItemURL = (collectionId) => {
@@ -24,6 +24,11 @@ export class ConcentrationChart extends Component {
       chartDataIsLoading: false,
       dataAccessLink: "",
     };
+    this.dataPreprocess = dataPreprocess;
+    this.getYAxisLabel = getYAxisLabel;
+    this.getChangedGHGStationId = getChangedGHGStationId;
+    this.getStationCode = getStationCode;
+    this.isChartZoomed = isChartZoomed;
   }
 
   componentDidMount() {
@@ -154,79 +159,30 @@ export class ConcentrationChart extends Component {
     this.setState({dataAccessLink: dataLink});
   }
 
-  // helpers start
-
-  dataPreprocess = (features) => {
-    const time = [];
-    const concentration = [];
-    features.forEach((feature) => {
-      if (feature && feature.properties) {
-        time.push(feature.properties.datetime);
-        concentration.push(feature.properties.value);
-      }
-    });
-    return {time, concentration};
-  }
-
-  getYAxisLabel = (ghg) => {
-      let label = ghg === 'ch4' ? 'CH₄ Concentration (ppb)' : 'CO₂ Concentration (ppm)';
-      return label;
-  }
-
-  getChangedGHGStationId = (selectedStationId, changedGHG) => {
-    // stationId (collectionId) format: <agency>_<data_category>_<region>_<sitecode>_<ghg>_<frequency>_concentrations
-    let stationId = selectedStationId.split("_");
-    stationId[4] = changedGHG;
-    let changedStationId = stationId.join("_");
-    return changedStationId;
-  }
-
   handleRefresh = () => {
     if (this.chart) {
       this.chart.resetZoom();
       this.chart.options.plugins.tooltip.enabled = false;
     }
-  }
+  };
 
   handleClose = () => {
     this.handleRefresh(); // reset the zoom level else, next chart instance wont be able to.
     this.props.setDisplayChart(false);
-  }
-
-  getStationCode = (stationId) => {
-    let stationIdParts = stationId.split("_");
-    let stationCode = stationIdParts[3];
-    return stationCode.toUpperCase();
-  }
-
-  isChartZoomed = (chart, initialScaleLimits) => {
-    if (!chart || Object.keys(initialScaleLimits).length === 0) {
-      return false;
-    }
-    const xScale = chart.scales['x'];
-    const yScale = chart.scales['y'];
-    return (
-        xScale.min !== initialScaleLimits.x.min ||
-        xScale.max !== initialScaleLimits.x.max ||
-        yScale.min !== initialScaleLimits.y.min ||
-        yScale.max !== initialScaleLimits.y.max
-    );
-  }
+  };
 
   setInitialScaleLimits = () => {
     // Store initial scale limits
     this.initialScaleLimits.x = {
-      min: this.chart.scales['x'].min,
-      max: this.chart.scales['x'].max
+      min: this.chart.scales["x"].min,
+      max: this.chart.scales["x"].max,
     };
 
     this.initialScaleLimits.y = {
-        min: this.chart.scales['y'].min,
-        max: this.chart.scales['y'].max
+      min: this.chart.scales["y"].min,
+      max: this.chart.scales["y"].max,
     };
-  }
-
-  // helpers end
+  };
 
   render() {
     return (
