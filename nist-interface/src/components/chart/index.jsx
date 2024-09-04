@@ -102,6 +102,7 @@ export class ConcentrationChart extends Component {
     if (this.chart) {
       // first reset the zoom
       this.chart.resetZoom();
+      this.chart.options.plugins.tooltip.enabled = false;
 
       let labelY = this.getYAxisLabel(this.props.ghg);
       this.chart.data.datasets[0].label = labelY;
@@ -183,6 +184,7 @@ export class ConcentrationChart extends Component {
   handleRefresh = () => {
     if (this.chart) {
       this.chart.resetZoom();
+      this.chart.options.plugins.tooltip.enabled = false;
     }
   }
 
