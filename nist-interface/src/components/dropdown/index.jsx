@@ -29,7 +29,7 @@ export function SelectGHG({selectedGHG, setSelectedGHG, style}) {
           inputProps={{ 'aria-label': 'Without label' }}
         >
           { Object.keys(GHGs).map(ghg => (
-              <MenuItem value={ghg}>{GHGs[ghg]}</MenuItem>
+              <MenuItem key={ghg} value={ghg}>{GHGs[ghg]}</MenuItem>
             ))
           }
         </Select>
