@@ -39,6 +39,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
                               zoomLevel={zoomLevel}
                               setSelection={setSelectedStationId}
                               setDisplayChart={setDisplayChart}
+                              displayChart={displayChart}
                             />}
               { displayChart && <SelectGHG selectedGHG={ghg} setSelectedGHG={setSelectedGHG} /> }
             </div>

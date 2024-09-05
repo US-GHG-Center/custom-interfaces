@@ -48,7 +48,10 @@ export class MapBoxViewer extends Component {
             style: mapboxStyleUrl,
             center: [-98.585522, 1.8333333], // Centered on the US
             zoom: this.props.zoomLevel || 2,
-            projection: 'equirectangular'
+            projection: 'equirectangular',
+            options: {
+                trackResize: true
+            }
         });
         this.setState({currentViewer: map});
         
@@ -61,6 +64,10 @@ export class MapBoxViewer extends Component {
         if (this.props.stationCode !== prevProps.stationCode || this.props.agency !== prevProps.agency ||
             this.props.region !== prevProps.region || this.props.stations !== prevProps.stations) {
             this.plotStations(this.state.currentViewer, this.props.stations, this.props.region, this.props.agency, this.props.stationCode);
+        }
+        if (!this.props.displayChart && this.state.currentViewer) {
+            // when the chart panel is closed, resize the map to take full container space
+            this.state.currentViewer.resize();
         }
     }
 
@@ -130,7 +137,7 @@ export class MapBoxViewer extends Component {
         return (
             <Box component="main" className="map-section fullSize" sx={{ flexGrow: 1 }} style={this.props.style}>
                 <Grid container className="fullSize">
-                    <Grid item xs={12} sx={{ position: "relative" }}>
+                    <Grid item xs={12} sx={{ position: "relative" }} style={{height: "100%"}}>
                         { this.props.stations.length < 1 && this.state.currentViewer && <LoadingSpinner /> }
                         <div id="mapbox-container" className='fullSize' style={{ position: "absolute" }}></div>
                     </Grid>
