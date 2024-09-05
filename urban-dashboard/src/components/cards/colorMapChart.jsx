@@ -9,7 +9,7 @@ Chart.register(CategoryScale, LinearScale, BarElement, Title);
 export function ColorMapChart({ dataset }) {
     const title = (
         <>
-            {dataset == "vulcan" && "Total Fossil Fuel CO₂ Emissions (2021)"}
+            {dataset == "vulcan" && "2021 Total CO₂ Emissions"}
             {dataset == "gra2pes" && "2021"}
         </>
     )

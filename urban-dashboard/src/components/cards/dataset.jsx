@@ -20,7 +20,7 @@ export function Grap2pesDatasetCard() {
             <h2>{title}</h2>
             <p>
                 {description}
-                <a href="#"> Click here for more details.</a>
+                <a target="_blank" href="https://www.nist.gov/programs-projects/greenhouse-gas-and-air-pollutants-emissions-system-gra2pes"> Click here for more details.</a>
             </p>
         </div>
     )
@@ -35,7 +35,7 @@ export function VulcanDatasetCard() {
             <h2>{title}</h2>
             <p>
                 {description}
-                <a href="#"> Click here for more details.</a>
+                <a target="_blank" href="https://daac.ornl.gov/NACP/guides/Vulcan_V3_Annual_Emissions.html"> Click here for more details.</a>
             </p>
         </div>
     )

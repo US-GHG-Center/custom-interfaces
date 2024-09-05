@@ -250,7 +250,7 @@ export const StackedAreaChart = ({ selection }) => {
     };
 
     return (
-        <div style={{ height: '300px', width: '100%' }}>
+        <div style={{ height: '300', width: '100%' }}>
             <Line data={chartData} options={options} height={300} />
         </div>
     );
@@ -399,7 +399,7 @@ const GasEmissionsCard = () => {
 }
 
 const VulcanInsightsCard = ({ selection }) => {
-    const title = "CO₂ Emissions by Sector";
+    const title = "Urban CO₂ Emissions by Sector";
     const description = "Different industries emit different amount of CO₂ based on the types of fuel sources they use and how they burn that fuel. Industries also change in different ways over time!"
 
     return (

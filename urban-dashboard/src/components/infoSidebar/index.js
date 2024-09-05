@@ -17,7 +17,7 @@ export function InfoSidebar({
     const briefSnippet = "Cities shown on the map have been selected based on their innovative GHG measurements and geographic diversity."
 
     return (
-        <div>
+        <div className="info-sidebar-container">
             <div className="info-sidebar">
 
                 <Title
@@ -59,12 +59,10 @@ export function InfoSidebar({
                     </>
                 )}
 
-                <ColorMapChart dataset={dataset} />
 
             </div>
 
-
-
+            <ColorMapChart dataset={dataset} />
         </div>
     )
 }
