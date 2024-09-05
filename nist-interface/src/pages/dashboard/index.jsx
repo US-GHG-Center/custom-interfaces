@@ -6,7 +6,6 @@ import { MapBoxViewer } from '../../components/mapboxViewer';
 import { Title } from '../../components/title';
 import { ConcentrationChart } from '../../components/chart';
 import { SelectGHG } from '../../components/dropdown';
-import { MapRegionLegend } from '../../components/legend';
 
 import "./index.css";
 
