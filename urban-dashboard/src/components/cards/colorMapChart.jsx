@@ -32,7 +32,7 @@ export function ColorMapChart({ dataset }) {
             <div style={{ marginTop: 10 }}>
                 <GradientChart dataset={dataset} />
             </div>
-            <Typography style={{ fontSize: '12px', color: '#082A64', textAlign: "center" }}>
+            <Typography style={{ fontSize: '12px', textAlign: "center" }}>
                 {unit}
             </Typography>
         </div >
@@ -94,8 +94,8 @@ const GradientChart = ({ dataset }) => {
             .attr('y', height + 10)
             .attr('text-anchor', d => d.label === '0' ? 'start' : 'end')
             .text(d => d.label)
-            .style('font-size', '10px')
-            .style('fill', '#082A64');
+            .style('font-size', '10px');
+        // .style('fill', '#082A64');
     }, []);
 
     return (
