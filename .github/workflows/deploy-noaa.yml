@@ -1,4 +1,4 @@
-name: Deploy NOAA
+name: Deploy NOAA - test
 
 on:
   workflow_dispatch:
