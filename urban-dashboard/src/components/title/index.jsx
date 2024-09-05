@@ -1,5 +1,6 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
 import { UrbanSelector } from './helper/urbanSelector.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -27,11 +28,13 @@ export function Title({ children, selection, setSelection, handleZoomOut }) {
                         </div>
 
                         <div className="title-card-right">
-                            <FontAwesomeIcon
-                                onClick={handleZoomOut}
-                                icon={faArrowLeft}
-                                style={{ color: "#082A64", fontSize: 20, cursor: "pointer" }}
-                            />
+                            <Tooltip title="Reset">
+                                <FontAwesomeIcon
+                                    onClick={handleZoomOut}
+                                    icon={faArrowLeft}
+                                    style={{ color: "#082A64", fontSize: 20, cursor: "pointer" }}
+                                />
+                            </Tooltip>
                         </div>
 
                     </>

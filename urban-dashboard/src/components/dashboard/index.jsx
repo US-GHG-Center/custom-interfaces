@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { MapBoxViewer } from '../mapboxViewer';
-import { Title } from '../title';
-import { DetailAnalysis } from '../detailAnalysis';
 import { InfoSidebar } from '../infoSidebar';
 
 export function Dashboard({ dataset }) {

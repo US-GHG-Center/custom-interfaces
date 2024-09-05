@@ -17,6 +17,7 @@ export function PopulationCard({ selection }) {
   const [population, setPopulation] = useState("N/A");
   const [area, setArea] = useState("N/A");
 
+  //adds commas in population number 
   const formatNumberWithCommas = (number) => {
     return new Intl.NumberFormat().format(number);
   }
@@ -26,7 +27,7 @@ export function PopulationCard({ selection }) {
     if (geoJsonData) {
       const feature = geoJsonData.features[0];
       const populationValue = feature.properties.Total_Population
-      setPopulation(formatNumberWithCommas(populationValue) || "N/A"); //TODO: add commas in population display
+      setPopulation(formatNumberWithCommas(populationValue) || "N/A");
 
       const areaValue = (feature.properties.ALAND / 1000000) * 0.386102;
       setArea(areaValue.toFixed(2) || "N/A");

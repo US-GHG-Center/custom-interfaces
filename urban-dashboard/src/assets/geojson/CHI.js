@@ -1,4 +1,4 @@
-export const center = [-87.836723, 41.977226]
+export const center = [-87.6298, 41.8781]
 
 export const GeoJSON = {
     "type": "FeatureCollection",

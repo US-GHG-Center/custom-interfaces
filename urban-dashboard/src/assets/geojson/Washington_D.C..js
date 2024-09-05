@@ -1,6 +1,6 @@
 export const center = [
     -77.0369,
-    39.9072
+    38.9072
 ]
 
 export const GeoJSON = {
