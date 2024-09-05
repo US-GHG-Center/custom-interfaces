@@ -3,7 +3,7 @@ name: Deploy NOAA - test
 on:
   workflow_dispatch:
   push:
-    # branches: [ main, production ]
+    branches: [ add/cicd-nist-urban, production ]
     # paths:
     #   - noaa-cpfp-point/**
 
