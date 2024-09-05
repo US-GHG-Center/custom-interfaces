@@ -121,7 +121,6 @@ export class MapBoxViewer extends Component {
         const tooltipContent = this.getToolTipContent(properties);
         const popup = new mapboxgl.Popup({
             closeButton: false,
-            closeOnClick: false,
             offset: [0, -15],
             anchor: 'bottom'
         }).setHTML(tooltipContent);
