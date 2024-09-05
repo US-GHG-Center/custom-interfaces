@@ -119,7 +119,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: "NIST CO2", // Add your chart title here
+      text: "CO2 Concentration", // Add your chart title here
       padding: {
         top: 10,
         bottom: 20,

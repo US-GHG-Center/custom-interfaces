@@ -27,7 +27,7 @@ export const getZoomLevel = (region, agency, stationCode, zoomLevelInQueryParam)
       return 5;
   }
   if (agency === "nist" && !region) {
-      // nist is for conus region, so zoom more to conus
+      // NIST dataset is for CONUS region, so zoom more to CONUS
       return 4;
   }
   return 2;
