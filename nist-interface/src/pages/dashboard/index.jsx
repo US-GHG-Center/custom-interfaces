@@ -23,9 +23,12 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
         <Title ghg={ghg} agency={agency} region={region}/>
         <PanelGroup direction='vertical' className='panel-wrapper'>
           <Panel
+            id='map-panel'
             maxSize={100}
             defaultSize={100}
+            minSize={25}
             className='panel'
+            order={1}
           >
             <div id="dashboard-map-container">
               { stations && <MapBoxViewer
@@ -45,7 +48,13 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
                   <PanelResizeHandle className='resize-handle'>
                     <DragHandleIcon title="Resize"/>
                   </PanelResizeHandle>
-                  <Panel maxSize={75} minSize={40} defaultSize={40} className='panel panel-timeline'>
+                  <Panel
+                    id='chart-panel'
+                    maxSize={75}
+                    minSize={40}
+                    className='panel panel-timeline'
+                    order={2}
+                  >
                     <ConcentrationChart
                       selectedStationId={selectedStationId}
                       setSelectedStationId={setSelectedStationId}
