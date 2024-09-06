@@ -256,7 +256,7 @@ export const StackedAreaChart = ({ selection }) => {
     );
 };
 
-const GasEmissionsCard = () => {
+const GasEmissionsBySectorCard = ({ selection }) => {
     const [data, setData] = useState({
         labels: [],
         datasets: [{
@@ -272,28 +272,59 @@ const GasEmissionsCard = () => {
                 display: false, // hide legends
             },
             tooltip: {
-                enabled: true, // enable tooltips
+                // enabled: true, // enable tooltips
             },
         },
     };
 
+    const sectors = [
+        "Airports Mass",
+        "Residential Buildings Mass",
+        "Commercial Buildings Mass",
+        "Industrial Buildings Mass",
+        "Power Plants Mass",
+        "Onroad Gas Mass",
+        "Onroad Diesel Mass",
+        "Electricity Mass",
+    ]
+
+    const LegendItems = [
+        { color: 'rgb(255, 99, 132)', label: 'CO2' },
+        { color: 'rgb(54, 162, 235)', label: 'CO' },
+        { color: 'rgb(250, 192, 192)', label: 'NOx' },
+        { color: 'rgb(150, 192, 192)', label: 'SOx' },
+        { color: 'rgb(75, 192, 192)', label: 'PM2.5' },
+    ]
+
     useEffect(() => {
-        fetch("./data/gasEmissions.json")
-            .then(response => response.json())
-            .then(json => setData(json))
-            .catch(error => console.error("Error fetching emissions by gas data"))
-    }, []);
+        fetch(`./data/gra2pes/2021_${selection}_species_sector_totals.json`)
+            .then(resp => resp.json())
+            .then(json => {
+                const gases = json.map(entry => entry.Species);
+                const sectorsData = sectors.map(sector => {
+                    return {
+                        label: sector,
+                        data: json.map(entry => parseFloat(entry[sector])),
+                        backgroundColor: [
+                            'rgb(255, 99, 132)',   // Color for CO2
+                            'rgb(54, 162, 235)',   // Color for CO
+                            'rgb(75, 192, 192)',   // Color for NOX
+                            'rgb(250, 192, 192)',  // Color for SOX
+                            'rgb(150, 192, 192)',  // Color for PM2.5
+                        ]
+                    }
+                });
+
+                setData({
+                    labels: gases,
+                    datasets: sectorsData
+                });
+            })
+            .catch(error => console.error("error fetching emissions by sector for gra2pes", error));
+    }, [selection]);
 
 
     const Legend = () => {
-        const LegendItems = [
-            { color: 'rgb(255, 99, 132)', label: 'CO2' }, // Light blue for Carbon Dioxide
-            { color: 'rgb(54, 162, 235)', label: 'CO' },        // Red for Methane
-            { color: 'rgb(75, 192, 192)', label: 'PM2.5' },  // Dark blue for Nitrous Oxide
-            { color: 'rgb(250, 192, 192)', label: 'NOx' },
-            { color: 'rgb(150, 192, 192)', label: 'SOx' },
-        ]
-
         return (
             <Grid container direction="column" spacing={0.3}>
                 {LegendItems.map((item, index) => (
@@ -316,21 +347,6 @@ const GasEmissionsCard = () => {
     return (
         <>
             <Grid container alignItems="center" spacing={1.5}>
-
-                <Grid item xs={6}>
-                    <div className='pie-chart-container'>
-                        <div className='pie-chart'>
-                            <Pie data={data} options={options} />
-                        </div>
-                        <Typography sx={{
-                            fontSize: "12px",
-                            color: "#1B2631"
-                        }}>
-                            Energy Production
-                        </Typography>
-                    </div>
-                </Grid>
-
                 <Grid item xs={6}>
                     <Typography sx={{ fontSize: "12px", color: "#1B2631", marginBottom: "4px" }}>
                         Legend
@@ -338,7 +354,26 @@ const GasEmissionsCard = () => {
                     <Legend />
                 </Grid>
 
-                <Grid item xs={6}>
+                {data.datasets.map((item, idx) => (
+                    <Grid item xs={6} key={idx}>
+                        <div className='pie-chart-container'>
+                            <div className='pie-chart'>
+                                <Pie data={{
+                                    labels: data.labels,
+                                    datasets: [item]
+                                }} options={options} />
+                            </div>
+                            <Typography sx={{
+                                fontSize: "12px",
+                                color: "#1B2631"
+                            }}>
+                                {item.label}
+                            </Typography>
+                        </div>
+                    </Grid>
+                ))}
+
+                {/* <Grid item xs={6}>
                     <div className='pie-chart-container'>
                         <div className='pie-chart'>
                             <Pie data={data} options={options} />
@@ -364,8 +399,8 @@ const GasEmissionsCard = () => {
                             Transportation
                         </Typography>
                     </div>
-                </Grid>
-
+                </Grid> */}
+                {/* 
                 <Grid item xs={6}>
                     <div className='pie-chart-container'>
                         <div className='pie-chart'>
@@ -392,7 +427,7 @@ const GasEmissionsCard = () => {
                             Land Use
                         </Typography>
                     </div>
-                </Grid>
+                </Grid> */}
             </Grid>
         </>
     )
@@ -418,7 +453,7 @@ const VulcanInsightsCard = ({ selection }) => {
     )
 }
 
-const Gra2pesInsightsCard = () => {
+const Gra2pesInsightsCard = ({ selection }) => {
     const title = "Emissions by Sector";
     const description = "Different industries emit different greenhouse gases based on the types of fuel sources they use and how they burn that fuel."
 
@@ -431,7 +466,7 @@ const Gra2pesInsightsCard = () => {
                 </p>
             </div>
             <div>
-                <GasEmissionsCard />
+                <GasEmissionsBySectorCard selection={selection} />
             </div>
 
         </>
@@ -445,7 +480,7 @@ export function DataInsightsCard({ dataset, selection }) {
     return (
         <>
             {dataset == "vulcan" && <VulcanInsightsCard selection={selection} />}
-            {dataset == "gra2pes" && <Gra2pesInsightsCard />}
+            {dataset == "gra2pes" && <Gra2pesInsightsCard selection={selection} />}
         </>
     )
 }
