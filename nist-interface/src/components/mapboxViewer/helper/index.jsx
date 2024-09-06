@@ -47,12 +47,6 @@ export const getMeanCenterOfLocation = (stations) => {
   return [lonCenter, latCenter];
 }
 
-export const getMarkerStyle = (index, markerClasses) => {
-  // Index is unlimited but markerClasses array has limited items
-  let idx = index % markerClasses.length;
-  return markerClasses[idx];
-}
-
 export const getToolTipContent = (stationProperties) => {
   const elevationUnit = "m";
 

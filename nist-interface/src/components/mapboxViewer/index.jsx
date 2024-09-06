@@ -11,7 +11,8 @@ import { LoadingSpinner } from '../loading';
 import './index.css';
 
 import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT } from './config';
-import { getLocationToZoom, getZoomLevel, getMeanCenterOfLocation, getToolTipContent, getUniqueRegions, getStationRegion, getMarkerStyle } from "./helper";
+import { getLocationToZoom, getZoomLevel, getMeanCenterOfLocation, getToolTipContent, getUniqueRegions, getStationRegion } from "./helper";
+import {  getMarkerColor, getMarkerSVG } from "../../utils";
 
 const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
@@ -23,7 +24,6 @@ export class MapBoxViewer extends Component {
             currentViewer: null,
             regions: {}
         }
-        this.markerClasses = ["marker", "marker marker-blue", "marker marker-purple", "marker marker-pink", "marker marker-red" ];
         this.stationMarkers = [];
         // functions
         this.getLocationToZoom = getLocationToZoom;
@@ -32,7 +32,8 @@ export class MapBoxViewer extends Component {
         this.getUniqueRegions = getUniqueRegions;
         this.getStationRegion = getStationRegion;
         this.getZoomLevel = getZoomLevel;
-        this.getMarkerStyle = getMarkerStyle;
+        this.getMarkerColor = getMarkerColor;
+        this.getMarkerSVG = getMarkerSVG;
     }
 
     componentDidMount() {
@@ -89,8 +90,9 @@ export class MapBoxViewer extends Component {
             const el = document.createElement('div');
             let stationRegion = this.getStationRegion(stationId);
             const markerStyleIndex = regions[stationRegion].index;
-            el.className = this.getMarkerStyle(markerStyleIndex, this.markerClasses);
-
+            let markerColor = this.getMarkerColor(markerStyleIndex);
+            el.className = 'marker';
+            el.innerHTML = this.getMarkerSVG(markerColor);
             let marker = this.addMarker(map, el, properties);
 
             marker.getElement().addEventListener('click', () => {
@@ -121,7 +123,7 @@ export class MapBoxViewer extends Component {
         const tooltipContent = this.getToolTipContent(properties);
         const popup = new mapboxgl.Popup({
             closeButton: false,
-            offset: [0, -15],
+            offset: [-3, -15],
             anchor: 'bottom'
         }).setHTML(tooltipContent);
         marker.setPopup(popup);
@@ -135,8 +137,6 @@ export class MapBoxViewer extends Component {
         return marker;
     }
 
-
-
     render() {
         return (
             <Box component="main" className="map-section fullSize" sx={{ flexGrow: 1 }} style={this.props.style}>
@@ -146,7 +146,7 @@ export class MapBoxViewer extends Component {
                         <div id="mapbox-container" className='fullSize' style={{ position: "absolute" }}></div>
                     </Grid>
                 </Grid>
-                <MapRegionLegend regions={this.state.regions} markerStylesList={this.markerClasses}/>
+                <MapRegionLegend regions={this.state.regions}/>
             </Box>
         );    
     }
