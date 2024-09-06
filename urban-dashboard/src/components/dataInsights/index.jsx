@@ -293,7 +293,7 @@ const GasEmissionsBySectorCard = ({ selection }) => {
         { color: 'rgb(54, 162, 235)', label: 'CO' },
         { color: 'rgb(250, 192, 192)', label: 'NOx' },
         { color: 'rgb(150, 192, 192)', label: 'SOx' },
-        { color: 'rgb(75, 192, 192)', label: 'PM2.5' },
+        { color: 'rgb(155, 118, 83)', label: 'PM2.5' },
     ]
 
     useEffect(() => {
@@ -310,10 +310,13 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                             'rgb(54, 162, 235)',   // Color for CO
                             'rgb(75, 192, 192)',   // Color for NOX
                             'rgb(250, 192, 192)',  // Color for SOX
-                            'rgb(150, 192, 192)',  // Color for PM2.5
+                            'rgb(155, 118, 83)',  // Color for PM2.5
                         ]
                     }
                 });
+
+                console.log("the gases are: ", gases)
+                console.log("the datasets are: ", sectorsData)
 
                 setData({
                     labels: gases,

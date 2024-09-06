@@ -29,4 +29,4 @@ export const BASEMAP_STYLES = [
 export const BASEMAP_ID_DEFAULT = 'satellite';
 
 export const VULCAN_RASTER_URL = "https://dev.ghg.center/api/raster/searches/dc3da6e6c0b1a2e941713c1c5932cb84/tiles/WebMercatorQuad/{z}/{x}/{y}?assets=total-co2&colormap_name=spectral_r&rescale=0%2C150"
-export const GRA2PES_RASTER_URL = "https://dev.ghg.center/api/raster/searches/c0fcefe5eebd236e3d6716e12a395722/tiles/WebMercatorQuad/{z}/{x}/{y}?assets=co2&colormap_name=spectral_r&rescale=0%2C100";
+export const GRA2PES_RASTER_URL = "https://dev.ghg.center/api/raster/searches/b8a019b38f52d3e00253f9b29f1b77ff/tiles/WebMercatorQuad/{z}/{x}/{y}?assets=co2&colormap_name=spectral_r&rescale=0%2C100";
