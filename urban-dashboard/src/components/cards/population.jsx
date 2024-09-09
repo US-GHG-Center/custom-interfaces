@@ -13,7 +13,7 @@ import { URBAN_REGIONS } from "../../assets/geojson/index";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export function PopulationCard({ selection }) {
+export function PopulationCard({ selection, urbanRegions }) {
   const [population, setPopulation] = useState("N/A");
   const [area, setArea] = useState("N/A");
 
@@ -23,7 +23,7 @@ export function PopulationCard({ selection }) {
   }
 
   useEffect(() => {
-    const geoJsonData = URBAN_REGIONS.find(region => region.name == selection).geojson;
+    const geoJsonData = urbanRegions.find(region => region.name == selection).geojson;
     if (geoJsonData) {
       const feature = geoJsonData.features[0];
       const populationValue = feature.properties.Total_Population

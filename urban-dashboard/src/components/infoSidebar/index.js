@@ -9,6 +9,7 @@ import { Title } from '../title';
 import GradientChart, { ColorMapChart } from '../cards/colorMapChart';
 
 export function InfoSidebar({
+    urbanRegions,
     selection,
     setSelection,
     handleZoomOut,
@@ -38,7 +39,7 @@ export function InfoSidebar({
                 {selection && (
                     <>
                         {/* Population and Area Card */}
-                        <PopulationCard selection={selection} />
+                        <PopulationCard selection={selection} urbanRegions={urbanRegions} />
                     </>
                 )}
 
