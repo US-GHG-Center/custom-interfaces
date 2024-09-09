@@ -82,8 +82,9 @@ export class MapBoxViewer extends Component {
                 })
             }
 
-            map.moveLayer('country-label'); // Move city labels layer above
-            map.moveLayer('state-label'); // Move city labels layer above
+            // Move label layers above raster layers
+            map.moveLayer('country-label');
+            map.moveLayer('state-label');
             map.moveLayer('settlement-major-label');
             map.moveLayer('settlement-minor-label');
             map.moveLayer('admin-1-boundary');
