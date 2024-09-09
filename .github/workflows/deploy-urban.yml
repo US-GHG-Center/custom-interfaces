@@ -1,9 +1,9 @@
-name: Deploy urban - test
+name: Deploy Urban
 
 on:
   workflow_dispatch:
   push:
-    branches: [ add/cicd-nist-urban, production ]
+    branches: [ main, production ]
     paths:
       - urban-dashboard/**
 
@@ -17,7 +17,7 @@ jobs:
       - name: Set the environment based on the branch
         id: define_environment
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/add/cicd-nist-urban" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             echo "env_name=staging" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
             echo "env_name=production" >> $GITHUB_OUTPUT
@@ -49,11 +49,11 @@ jobs:
         run: npm install -g yarn
 
       - name: Build for production 🔧
-        working-directory: ./urban-dashboard
+        working-directory: ./nist-interface
         run: |
-          echo PUBLIC_URL="${{ vars.PUBLIC_URL_URBAN }}" >> .env
-          echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
-          echo CI=false >> .env  
+          echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> .env
+          echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> .env
+          echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> .env
           export CI=false
           yarn
           yarn build
@@ -71,7 +71,7 @@ jobs:
     needs:
       - build
       - define-environment
-    if: github.ref == 'refs/heads/add/cicd-nist-urban'
+    if: github.ref == 'refs/heads/main'
     environment: ${{ needs.define-environment.outputs.env_name }}
     
     permissions:
