@@ -3,7 +3,7 @@ name: Deploy Nist
 on:
   workflow_dispatch:
   push:
-    branches: [ main, production ]
+    branches: [ add/cicd-nist-urban, main, production ]
     paths:
       - nist-interface/**
 
@@ -17,7 +17,9 @@ jobs:
       - name: Set the environment based on the branch
         id: define_environment
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/add/cicd-nist-urban" ]; then
+            echo "env_name=development" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
             echo "env_name=staging" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
             echo "env_name=production" >> $GITHUB_OUTPUT
@@ -54,17 +56,61 @@ jobs:
           echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> .env
           echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> .env
           echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> .env
-          export CI=false
           yarn
           yarn build
         env:
           PUBLIC_URL: ${{ vars.PUBLIC_URL_NIST }}
-      
+      # unnecessary PUBLIC_URL?
       - name: Upload build folder
         uses: actions/upload-artifact@v4
         with:
           name: build_folder
           path: ./nist-interface/build
+
+  deploy-development:
+    needs:
+      - build
+      - define-environment
+    if: github.ref == 'refs/heads/add/cicd-nist-urban'
+    environment: ${{ needs.define-environment.outputs.env_name }}
+
+    permissions:
+      id-token: write
+      contents: read
+
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Download build folder
+        uses: actions/download-artifact@v4
+        with:
+          name: build_folder
+          path: ./nist-interface/build
+
+      - name: ConfigureAWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
+          role-session-name: ${{ github.repository_owner}}
+          aws-region: us-west-2
+
+      - name: Upload to S3
+        run: |
+          export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NIST }} | sed -E 's|^https?://[^/]+/||')
+          echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
+          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-develop/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+        env:
+          PUBLIC_URL: ${{ vars.PUBLIC_URL_NIST }}
+
+      - name: Request Invalidation to AWS Cloudfront
+        uses: oneyedev/aws-cloudfront-invalidation@v1
+        with:
+          distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
+          paths: |
+            /${{ env.PUBLIC_URL }}*
 
   deploy-staging:
     needs:

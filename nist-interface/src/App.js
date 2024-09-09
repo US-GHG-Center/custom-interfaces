@@ -1,7 +1,6 @@
 import { Fragment } from 'react';
 import {
-  // #createBrowserRouter,
-  createHashRouter,
+  createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
 
@@ -9,7 +8,7 @@ import './App.css';
 import CssBaseline from '@mui/material/CssBaseline';
 import { DashboardContainer } from './pages/dashboardContainer';
 
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <DashboardContainer />,
