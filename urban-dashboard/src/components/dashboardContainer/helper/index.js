@@ -22,7 +22,6 @@ export const generateUrbanRegions = async () => {
                     center: CITY_CENTERS[city]
                 })
             }).catch(err => console.log("error loading GEOJSON for ${city} : ", err));
-
     })
 
     await Promise.all(fetchPromises);

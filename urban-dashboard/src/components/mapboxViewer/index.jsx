@@ -37,7 +37,7 @@ export class MapBoxViewer extends Component {
             renderingMode: '2D',
             style: mapboxStyleUrl,
             center: [-99.676392, 39.106667], // Center of the USA
-            zoom: 4.8, // Adjust zoom level to fit the USA
+            zoom: 4, // Adjust zoom level to fit the USA
             zoomControl: true
         });
 

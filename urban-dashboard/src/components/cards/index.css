@@ -12,7 +12,7 @@
 
 /* Dataset Card Styles start Here */
 .dataset-card {
-    max-width: 329px;
+    /* max-width: 329px; */
 }
 
 .dataset-card h2 {
@@ -41,7 +41,7 @@
 /* Population Card Styles Start Here */
 .population-container {
     display: flex;
-    gap: 20px;
+    gap: 60px;
 }
 
 .population-item {
@@ -101,18 +101,18 @@
 
 /* Colormap chart */
 .colormap-chart {
-    position: fixed;
+    position: relative;
     z-index: 100;
-    left: 28px;
-    bottom: 40px;
-    width: 383px;
+    /* left: 28px; */
+    /* bottom: 40px; */
+    /* width: 383px; */
 
     padding: 10px;
 
-    background: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* background: white; */
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
     border-radius: 6px;
-    max-width: 90vw;
+    /* max-width: 90vw; */
 
     align-items: center;
     justify-content: center;

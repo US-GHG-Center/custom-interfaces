@@ -1,17 +1,17 @@
-.info-sidebar-container {
+/* .info-sidebar-container {
     display: flex;
     flex-direction: column;
-}
+} */
 
 .info-sidebar {
     position: fixed;
-    top: 35px;
-    left: 28px;
+    /* top: 35px; */
+    /* left: 28px; */
     max-width: 90vw;
-    max-height: 80vh;
+    max-height: 100vh;
     border-radius: 6px;
     /* bottom: 10%; */
-    width: 383px;
+    width: 30vw;
     background: white;
     padding: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
