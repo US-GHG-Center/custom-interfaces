@@ -7,7 +7,6 @@ import {
 
 import './App.css';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Dashboard } from './pages/dashboard';
 import { DashboardContainer } from './pages/dashboardContainer';
 
 const router = createHashRouter([

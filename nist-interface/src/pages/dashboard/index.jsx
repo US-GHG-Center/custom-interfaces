@@ -6,7 +6,6 @@ import { MapBoxViewer } from '../../components/mapboxViewer';
 import { Title } from '../../components/title';
 import { ConcentrationChart } from '../../components/chart';
 import { SelectGHG } from '../../components/dropdown';
-import { MapRegionLegend } from '../../components/legend';
 
 import "./index.css";
 
@@ -24,9 +23,12 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
         <Title ghg={ghg} agency={agency} region={region}/>
         <PanelGroup direction='vertical' className='panel-wrapper'>
           <Panel
+            id='map-panel'
             maxSize={100}
             defaultSize={100}
+            minSize={25}
             className='panel'
+            order={1}
           >
             <div id="dashboard-map-container">
               { stations && <MapBoxViewer
@@ -37,6 +39,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
                               zoomLevel={zoomLevel}
                               setSelection={setSelectedStationId}
                               setDisplayChart={setDisplayChart}
+                              displayChart={displayChart}
                             />}
               { displayChart && <SelectGHG selectedGHG={ghg} setSelectedGHG={setSelectedGHG} /> }
             </div>
@@ -46,7 +49,13 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
                   <PanelResizeHandle className='resize-handle'>
                     <DragHandleIcon title="Resize"/>
                   </PanelResizeHandle>
-                  <Panel maxSize={75} minSize={40} defaultSize={40} className='panel panel-timeline'>
+                  <Panel
+                    id='chart-panel'
+                    maxSize={75}
+                    minSize={40}
+                    className='panel panel-timeline'
+                    order={2}
+                  >
                     <ConcentrationChart
                       selectedStationId={selectedStationId}
                       setSelectedStationId={setSelectedStationId}

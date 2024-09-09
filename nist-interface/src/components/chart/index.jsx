@@ -6,8 +6,8 @@ import { faXmark, faRotateLeft, faCircleInfo } from '@fortawesome/free-solid-svg
 import { LoadingSpinner } from '../loading';
 import { fetchAllFromFeaturesAPI } from "../../services/api";
 
-import { plugin, options } from './helper';
-
+import { plugin, options } from './config';
+import { dataPreprocess, getYAxisLabel, getChangedGHGStationId, getStationCode, isChartZoomed, setInitialScaleLimits } from "./helper";
 import './index.css';
 
 const collectionItemURL = (collectionId) => {
@@ -18,11 +18,17 @@ export class ConcentrationChart extends Component {
   constructor(props) {
     super(props);
     this.chart = null;
+    this.initialScaleLimits = {};
     this.state = {
       showChartInstructions: true,
       chartDataIsLoading: false,
       dataAccessLink: "",
     };
+    this.dataPreprocess = dataPreprocess;
+    this.getYAxisLabel = getYAxisLabel;
+    this.getChangedGHGStationId = getChangedGHGStationId;
+    this.getStationCode = getStationCode;
+    this.isChartZoomed = isChartZoomed;
   }
 
   componentDidMount() {
@@ -74,6 +80,10 @@ export class ConcentrationChart extends Component {
     this.chart.options.plugins.zoom.zoom.onZoom = () => {
       this.setState({showChartInstructions: false});
     }
+    this.chart.options.plugins.zoom.zoom.onZoomComplete = () => {
+      // check if the zoom level of the chart is default and based on that enable or disable the tooltip
+      this.chart.options.plugins.tooltip.enabled = this.isChartZoomed(this.chart, this.initialScaleLimits);
+    }
 
     this.prepareChart();
   }
@@ -89,6 +99,7 @@ export class ConcentrationChart extends Component {
       // Post data fetch, check if the chart title needs to be modified (for race conditions when multiple stations are clicked).
       this.changeTitle(currentStationId);
       this.updateChart(concentration, time);
+      this.setInitialScaleLimits();
     });
   }
 
@@ -96,6 +107,7 @@ export class ConcentrationChart extends Component {
     if (this.chart) {
       // first reset the zoom
       this.chart.resetZoom();
+      this.chart.options.plugins.tooltip.enabled = false;
 
       let labelY = this.getYAxisLabel(this.props.ghg);
       this.chart.data.datasets[0].label = labelY;
@@ -147,51 +159,30 @@ export class ConcentrationChart extends Component {
     this.setState({dataAccessLink: dataLink});
   }
 
-  // helpers start
-
-  dataPreprocess = (features) => {
-    const time = [];
-    const concentration = [];
-    features.forEach((feature) => {
-      if (feature && feature.properties) {
-        time.push(feature.properties.datetime);
-        concentration.push(feature.properties.value);
-      }
-    });
-    return {time, concentration};
-  }
-
-  getYAxisLabel = (ghg) => {
-      let label = ghg === 'ch4' ? 'CH₄ Concentration (ppb)' : 'CO₂ Concentration (ppm)';
-      return label;
-  }
-
-  getChangedGHGStationId = (selectedStationId, changedGHG) => {
-    // stationId (collectionId) format: <agency>_<data_category>_<region>_<sitecode>_<ghg>_<frequency>_concentrations
-    let stationId = selectedStationId.split("_");
-    stationId[4] = changedGHG;
-    let changedStationId = stationId.join("_");
-    return changedStationId;
-  }
-
   handleRefresh = () => {
     if (this.chart) {
       this.chart.resetZoom();
+      this.chart.options.plugins.tooltip.enabled = false;
     }
-  }
+  };
 
   handleClose = () => {
     this.handleRefresh(); // reset the zoom level else, next chart instance wont be able to.
     this.props.setDisplayChart(false);
-  }
+  };
 
-  getStationCode = (stationId) => {
-    let stationIdParts = stationId.split("_");
-    let stationCode = stationIdParts[3];
-    return stationCode.toUpperCase();
-  }
+  setInitialScaleLimits = () => {
+    // Store initial scale limits
+    this.initialScaleLimits.x = {
+      min: this.chart.scales["x"].min,
+      max: this.chart.scales["x"].max,
+    };
 
-  // helpers end
+    this.initialScaleLimits.y = {
+      min: this.chart.scales["y"].min,
+      max: this.chart.scales["y"].max,
+    };
+  };
 
   render() {
     return (
@@ -209,7 +200,8 @@ export class ConcentrationChart extends Component {
                     />
                     {this.state.showChartInstructions && <div id="chart-instructions">
                       <p>1. Click and drag, scroll or pinch on the chart to zoom in.</p>
-                      <p>2. Click on the rectangle boxes on the side to toggle chart.</p>
+                      <p>2. Hover over data points when zoomed in to see the values.</p>
+                      <p>3. Click on the rectangle boxes on the side to toggle chart.</p>
                     </div>
                     }
                   </div>
