@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [ add/cicd-nist-urban, main, production ]
-    paths:
-      - nist-interface/**
+    # paths:
+      # - nist-interface/**
 
 jobs:
   define-environment:
@@ -56,6 +56,7 @@ jobs:
           echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> .env
           echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> .env
           echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> .env
+          export CI=false
           yarn
           yarn build
         env:
