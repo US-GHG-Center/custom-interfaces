@@ -6,6 +6,8 @@ on:
     paths:
       - 'emit-ch4plume-v1/**'
       - 'noaa-cpfp-point/**'
+      - 'urban-dashboard/**'
+      - 'nist-interface/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -99,7 +101,9 @@ jobs:
             
             elif [ "$WEBSITE" == "urban-dashboard" ]; then
               echo PUBLIC_URL="${{ vars.PUBLIC_URL_URBAN }}/${{ env.PR_STRING }}" >> ./urban-dashboard/.env
-              echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./urban-dashboard/.env
+              echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ./urban-dashboard/.env
+              echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./urban-dashboard/.env
+              echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./urban-dashboard/.env
               cd ./urban-dashboard
               npm install
               PUBLIC_URL="${{ vars.PUBLIC_URL_URBAN }}/${{ env.PR_STRING }}" npm run production
@@ -111,7 +115,9 @@ jobs:
             
             elif [ "$WEBSITE" == "nist-interface" ]; then
               echo PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" >> ./nist-interface/.env
-              echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./nist-interface/.env
+              echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ./nist-interface/.env
+              echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
+              echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
               cd ./nist-interface
               npm install
               PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" npm run production
