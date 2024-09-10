@@ -237,6 +237,10 @@ export const StackedAreaChart = ({ selection }) => {
                 ticks: {
                     stepSize: 5000,
                 },
+                title: {
+                    display: true,
+                    text: "metric tons of CO₂"
+                }
 
             },
             x: {

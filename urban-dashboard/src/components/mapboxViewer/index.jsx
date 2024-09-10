@@ -7,9 +7,8 @@ import Box from '@mui/material/Box';
 
 import './index.css';
 
-import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT, VULCAN_RASTER_URL, GRA2PES_RASTER_URL } from './helper';
-
 import { URBAN_REGIONS } from '../../assets/geojson';
+import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT, VULCAN_RASTER_URL, GRA2PES_RASTER_URL } from './helper';
 
 const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
@@ -91,7 +90,7 @@ export class MapBoxViewer extends Component {
         })
 
         // show the whole map of usa and show all the urban areas
-        this.plotUrbanRegions(map, URBAN_REGIONS);
+        this.plotUrbanRegions(map, this.props.urbanRegions);
     }
 
     componentDidMount() {
@@ -104,10 +103,14 @@ export class MapBoxViewer extends Component {
             this.resetMapView();
         }
 
+        if (prevProps.urbanRegions != this.props.urbanRegions) {
+            this.plotMap();
+        }
+
         if (prevProps.urbanRegion !== this.props.urbanRegion) {
             console.log("urban region changed to ", this.props.urbanRegion);
 
-            const urbanRegion = URBAN_REGIONS.filter(item => item.name === this.props.urbanRegion)[0];
+            const urbanRegion = this.props.urbanRegions.filter(item => item.name === this.props.urbanRegion)[0];
             if (urbanRegion) {
                 console.log("selected region is: ", urbanRegion);
                 const name = urbanRegion.center;
@@ -140,6 +143,7 @@ export class MapBoxViewer extends Component {
     }
 
     plotUrbanRegions = (map, urbanRegions) => {
+        console.log("urban regions: : plot::", urbanRegions)
         urbanRegions.forEach(urbanRegion => {
             const { name, center, geojson } = urbanRegion;
             const [lon, lat] = center;

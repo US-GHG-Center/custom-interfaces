@@ -9,6 +9,7 @@ import { Title } from '../title';
 import GradientChart, { ColorMapChart } from '../cards/colorMapChart';
 
 export function InfoSidebar({
+    urbanRegions,
     selection,
     setSelection,
     handleZoomOut,
@@ -17,7 +18,7 @@ export function InfoSidebar({
     const briefSnippet = "Cities shown on the map have been selected based on their innovative GHG measurements and geographic diversity."
 
     return (
-        <div className="info-sidebar-container">
+        <div>
             <div className="info-sidebar">
 
                 <Title
@@ -38,7 +39,7 @@ export function InfoSidebar({
                 {selection && (
                     <>
                         {/* Population and Area Card */}
-                        <PopulationCard selection={selection} />
+                        <PopulationCard selection={selection} urbanRegions={urbanRegions} />
                     </>
                 )}
 
@@ -59,10 +60,16 @@ export function InfoSidebar({
                     </>
                 )}
 
+                {/* Map Lenged goes here */}
+                <div className="info-border-secondary" />
+                <Typography style={{ fontSize: "14px", fontWeight: "400", lineHeight: "16.94px" }}>
+                    Map Legend
+                </Typography>
+                <ColorMapChart dataset={dataset} />
 
             </div>
 
-            <ColorMapChart dataset={dataset} />
+
         </div>
     )
 }

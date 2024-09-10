@@ -41,7 +41,7 @@ export function ColorMapChart({ dataset }) {
 
 const GradientChart = ({ dataset }) => {
     const svgRef = useRef(null);
-    const width = 383;
+    const width = 524;
     const height = 10;
 
     const colors = [
