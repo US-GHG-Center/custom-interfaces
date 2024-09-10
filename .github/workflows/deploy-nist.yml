@@ -3,9 +3,9 @@ name: Deploy Nist
 on:
   workflow_dispatch:
   push:
-    branches: [ add/cicd-nist-urban, production ]
-    # paths:
-    #   - nist-interface/**
+    branches: [ main, production ]
+    paths:
+      - nist-interface/**
 
 jobs:
   define-environment:
@@ -17,7 +17,7 @@ jobs:
       - name: Set the environment based on the branch
         id: define_environment
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/add/cicd-nist-urban" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             echo "env_name=staging" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
             echo "env_name=production" >> $GITHUB_OUTPUT
@@ -55,7 +55,6 @@ jobs:
           echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> .env
           echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> .env
           echo "REACT_APP_PUBLIC_URL=$(echo "${{ vars.PUBLIC_URL_NIST }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')" >> .env
-          grep "REACT_APP_PUBLIC_URL" .env
           yarn
           yarn build
 
@@ -69,7 +68,7 @@ jobs:
     needs:
       - build
       - define-environment
-    if: github.ref == 'refs/heads/add/cicd-nist-urban'
+    if: github.ref == 'refs/heads/main'
     environment: ${{ needs.define-environment.outputs.env_name }}
     
     permissions:
