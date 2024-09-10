@@ -24,15 +24,15 @@ export const plugin = {
   },
   afterEvent: (chart, args) => {
     const { inChartArea } = args;
-    const { type, x, y } = args.event;
+    const { x, y } = args.event;
 
     chart.corsair = { x, y, draw: inChartArea };
     chart.draw();
   },
   beforeDatasetsDraw: (chart, args, opts) => {
     const { ctx } = chart;
-    const { top, bottom, left, right } = chart.chartArea;
-    const { x, y, draw } = chart.corsair;
+    const { top, bottom } = chart.chartArea;
+    const { x, draw } = chart.corsair;
     if (!draw) return;
 
     ctx.save();

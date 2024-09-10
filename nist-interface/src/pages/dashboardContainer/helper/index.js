@@ -13,6 +13,7 @@ export const extractStationCollections = (collections, metadataDict, agency, ghg
         collection["properties"] = { ...metadataDict[stationId] };
         return collection;
     }
+    return null;
     }).filter(elem => elem);
     return filteredCollection;
 }
@@ -24,6 +25,7 @@ export const extractMetaData = async (collections) => {
         if (collection && collection.id && collection.id.includes("metadata")) {
             return collection;
         }
+        return null;
     }).filter(elem => elem);
     let resultPromise = metaCollection.map(collection => {
         let url = `${process.env.REACT_APP_FEATURES_API_URL}/collections/${collection.id}/items`;
