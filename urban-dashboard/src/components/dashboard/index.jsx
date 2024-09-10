@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
+
 import { MapBoxViewer } from '../mapboxViewer';
 import { InfoSidebar } from '../infoSidebar';
 

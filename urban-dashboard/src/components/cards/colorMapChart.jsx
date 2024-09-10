@@ -9,17 +9,17 @@ Chart.register(CategoryScale, LinearScale, BarElement, Title);
 export function ColorMapChart({ dataset }) {
     const title = (
         <>
-            {dataset == "vulcan" && "2021 Total CO₂ Emissions"}
-            {dataset == "gra2pes" && "2021"}
+            {dataset === "vulcan" && "2021 Total CO₂ Emissions"}
+            {dataset === "gra2pes" && "2021"}
         </>
     )
     const unit = (
         <>
-            {dataset == "vulcan" &&
+            {dataset === "vulcan" &&
                 "tonne CO₂ / km² / year"
             }
             {
-                dataset == "gra2pes" && "tonne CO₂ / km² / month"
+                dataset === "gra2pes" && "tonne CO₂ / km² / month"
             }
         </>
     )
@@ -44,7 +44,7 @@ export function ColorMapChart({ dataset }) {
 
 const GradientChart = ({ dataset }) => {
     const svgRef = useRef(null);
-    const width = 524;
+    const width = 320;
     const height = 10;
 
     const colors = [

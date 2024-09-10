@@ -25,25 +25,18 @@ export const StackedAreaChart = ({ selection }) => {
     //function to format filepath according to city selection
     const formatFilePath = (city) => {
         const formattedCity = city.replace(/\s+/g, '_');
-        return `./data/vulcan/${formattedCity}_PLACE_AllSectors_2013_2021.json`;
+        return `./data/vulcan/${formattedCity}_PLACE_AggregatedSectors_2013_2021.json`;
     }
 
     const colorMap = {
-        "Airport": { borderColor: 'purple', backgroundColor: 'rgba(128, 0, 128, 0.5)' },
-        "Cement": { borderColor: 'gray', backgroundColor: 'rgba(169, 169, 169, 0.5)' },
-        "Commercial Marine Vessels": { borderColor: 'teal', backgroundColor: 'rgba(0, 128, 128, 0.5)' },
-        "Electricity": { borderColor: 'blue', backgroundColor: 'rgba(0, 0, 255, 0.5)' },
-        "Nonroad": { borderColor: 'cyan', backgroundColor: 'rgba(0, 255, 255, 0.5)' },
-        "Onroad Gas": { borderColor: 'green', backgroundColor: 'rgba(0, 255, 0, 0.5)' },
-        "Onroad Diesel": { borderColor: 'red', backgroundColor: 'rgba(255, 0, 0, 0.5)' },
-        "Residential Buildings": { borderColor: 'orange', backgroundColor: 'rgba(255, 165, 0, 0.5)' },
-        "Railroad": { borderColor: 'darkblue', backgroundColor: 'rgba(0, 0, 139, 0.5)' },
-        "Commercial Buildings": { borderColor: 'yellow', backgroundColor: 'rgba(255, 255, 0, 0.5)' },
-        "Commercial Point Sources": { borderColor: 'lightgreen', backgroundColor: 'rgba(144, 238, 144, 0.5)' },
-        "Industrial Buildings": { borderColor: 'brown', backgroundColor: 'rgba(165, 42, 42, 0.5)' },
-        "Industrial Point Sources": { borderColor: 'darkred', backgroundColor: 'rgba(139, 0, 0, 0.5)' }
+        "Aviation": { borderColor: '#E4440A', backgroundColor: 'rgb(228, 68, 10)' },
+        "Industry": { borderColor: '#0E0E0E', backgroundColor: 'rgb(14, 14,14)' },
+        "Commercial": { borderColor: '#4685FA', backgroundColor: 'rgb(70,133,250)' },
+        "Power": { borderColor: '#FABA39', backgroundColor: 'rgb(250,186,57)' },
+        "Onroad": { borderColor: '#1ae4b6', backgroundColor: 'rgb(26, 228, 182)' },
+        "Residential": { borderColor: '#7A0403', backgroundColor: 'rgb(122, 4, 3)' },
+        "Railroad": { borderColor: '#A4FC3D', backgroundColor: 'rgb(164, 252, 61)' },
     };
-
 
     const Legend = () => {
         return (
@@ -82,59 +75,45 @@ export const StackedAreaChart = ({ selection }) => {
                 // Define the datasets for each category
                 const datasets = [
                     {
-                        label: 'Airport',
-                        data: jsonData.map(item => item['Airport']),
-                        borderColor: colorMap["Airport"].borderColor,
-                        backgroundColor: colorMap["Airport"].backgroundColor,
+                        label: 'Aviation',
+                        data: jsonData.map(item => item['Aviation']),
+                        borderColor: colorMap["Aviation"].borderColor,
+                        backgroundColor: colorMap["Aviation"].backgroundColor,
                         fill: true,
                     },
                     {
-                        label: 'Cement',
-                        data: jsonData.map(item => item['Cement']),
-                        borderColor: colorMap["Cement"].borderColor,
-                        backgroundColor: colorMap["Cement"].backgroundColor,
+                        label: 'Industry',
+                        data: jsonData.map(item => item['Industry']),
+                        borderColor: colorMap["Industry"].borderColor,
+                        backgroundColor: colorMap["Industry"].backgroundColor,
                         fill: true,
                     },
                     {
-                        label: 'Commercial Marine Vessels',
-                        data: jsonData.map(item => item['Commercial Marine Vessels']),
-                        borderColor: colorMap["Commercial Marine Vessels"].borderColor,
-                        backgroundColor: colorMap["Commercial Marine Vessels"].backgroundColor,
+                        label: 'Commercial',
+                        data: jsonData.map(item => item['Commercial']),
+                        borderColor: colorMap["Commercial"].borderColor,
+                        backgroundColor: colorMap["Commercial"].backgroundColor,
                         fill: true,
                     },
                     {
-                        label: 'Electricity',
-                        data: jsonData.map(item => item['Electricity']),
-                        borderColor: colorMap["Electricity"].borderColor,
-                        backgroundColor: colorMap["Electricity"].backgroundColor,
+                        label: 'Power',
+                        data: jsonData.map(item => item['Power']),
+                        borderColor: colorMap["Power"].borderColor,
+                        backgroundColor: colorMap["Power"].backgroundColor,
                         fill: true,
                     },
                     {
-                        label: 'Nonroad',
-                        data: jsonData.map(item => item['Nonroad']),
-                        borderColor: colorMap["Nonroad"].borderColor,
-                        backgroundColor: colorMap["Nonroad"].backgroundColor,
+                        label: 'Onroad',
+                        data: jsonData.map(item => item['Onroad']),
+                        borderColor: colorMap["Onroad"].borderColor,
+                        backgroundColor: colorMap["Onroad"].backgroundColor,
                         fill: true,
                     },
                     {
-                        label: 'Onroad Gas',
-                        data: jsonData.map(item => item['Onroad Gas']),
-                        borderColor: colorMap["Onroad Gas"].borderColor,
-                        backgroundColor: colorMap["Onroad Gas"].backgroundColor,
-                        fill: true,
-                    },
-                    {
-                        label: 'Onroad Diesel',
-                        data: jsonData.map(item => item['Onroad Diesel']),
-                        borderColor: colorMap["Onroad Diesel"].borderColor,
-                        backgroundColor: colorMap["Onroad Diesel"].backgroundColor,
-                        fill: true,
-                    },
-                    {
-                        label: 'Residential Buildings',
-                        data: jsonData.map(item => item['Residential Buildings']),
-                        borderColor: colorMap["Residential Buildings"].borderColor,
-                        backgroundColor: colorMap["Residential Buildings"].backgroundColor,
+                        label: 'Residential',
+                        data: jsonData.map(item => item['Residential']),
+                        borderColor: colorMap["Residential"].borderColor,
+                        backgroundColor: colorMap["Residential"].backgroundColor,
                         fill: true,
                     },
                     {
@@ -144,36 +123,7 @@ export const StackedAreaChart = ({ selection }) => {
                         backgroundColor: colorMap["Railroad"].backgroundColor,
                         fill: true,
                     },
-                    {
-                        label: 'Commercial Buildings',
-                        data: jsonData.map(item => item['Commercial Buildings']),
-                        borderColor: colorMap["Commercial Buildings"].borderColor,
-                        backgroundColor: colorMap["Commercial Buildings"].backgroundColor,
-                        fill: true,
-                    },
-                    {
-                        label: 'Commercial Point Sources',
-                        data: jsonData.map(item => item['Commercial Point Sources']),
-                        borderColor: colorMap["Commercial Point Sources"].borderColor,
-                        backgroundColor: colorMap["Commercial Point Sources"].backgroundColor,
-                        fill: true,
-                    },
-                    {
-                        label: 'Industrial Buildings',
-                        data: jsonData.map(item => item['Industrial Buildings']),
-                        borderColor: colorMap["Industrial Buildings"].borderColor,
-                        backgroundColor: colorMap["Industrial Buildings"].backgroundColor,
-                        fill: true,
-                    },
-                    {
-                        label: 'Industrial Point Sources',
-                        data: jsonData.map(item => item['Industrial Point Sources']),
-                        borderColor: colorMap["Industrial Point Sources"].borderColor,
-                        backgroundColor: colorMap["Industrial Point Sources"].backgroundColor,
-                        fill: true,
-                    }
                 ];
-
 
                 setChartData({
                     labels: years,
@@ -228,6 +178,7 @@ export const StackedAreaChart = ({ selection }) => {
     );
 };
 
+// GRA2PES Emissions by Sector 
 const GasEmissionsBySectorCard = ({ selection }) => {
     const [data, setData] = useState({
         labels: [],
@@ -258,6 +209,7 @@ const GasEmissionsBySectorCard = ({ selection }) => {
         },
     };
 
+    // const gases = ["CO2", "CO", "NOX", "SOX", "PM2.5"]
     const sectors = [
         "Airports Mass",
         "Residential Buildings Mass",
@@ -265,42 +217,39 @@ const GasEmissionsBySectorCard = ({ selection }) => {
         "Industrial Buildings Mass",
         "Power Plants Mass",
         "Onroad Gas Mass",
-        "Onroad Diesel Mass",
-        "Electricity Mass",
     ]
 
     const LegendItems = [
-        { color: 'rgb(255, 99, 132)', label: 'CO2' },
-        { color: 'rgb(54, 162, 235)', label: 'CO' },
-        { color: 'rgb(250, 192, 192)', label: 'NOx' },
-        { color: 'rgb(150, 192, 192)', label: 'SOx' },
-        { color: 'rgb(155, 118, 83)', label: 'PM2.5' },
+        { color: 'rgb(255, 99, 132)', label: 'Airport Mass' },
+        { color: 'rgb(54, 162, 235)', label: 'Residential Buildings Mass' },
+        { color: 'rgb(250, 192, 192)', label: 'Commerical Buildings Mass' },
+        { color: 'rgb(150, 192, 192)', label: 'Industrial Buildings Mass' },
+        { color: 'rgb(153, 102, 255)', label: 'Power Plants Mass' },
+        { color: 'rgb(155, 118, 83)', label: 'Onroad Gas Mass' },
     ]
 
     useEffect(() => {
         fetch(`./data/gra2pes/2021_${selection}_species_sector_totals.json`)
             .then(resp => resp.json())
             .then(json => {
-                const gases = json.map(entry => entry.Species);
-                const sectorsData = sectors.map(sector => {
+                // const gases = json.map(entry => entry.Species);
+                const sectorsData = json.map(entry => {
                     return {
-                        label: sector,
-                        data: json.map(entry => parseFloat(entry[sector])),
+                        label: entry.Species,
+                        data: sectors.map(sector => parseFloat(entry[sector])),
                         backgroundColor: [
-                            'rgb(255, 99, 132)',   // Color for CO2
-                            'rgb(54, 162, 235)',   // Color for CO
-                            'rgb(250, 192, 192)',   // Color for NOX
-                            'rgb(150, 192, 192)',  // Color for SOX
-                            'rgb(155, 118, 83)',  // Color for PM2.5
-                        ]
+                            'rgb(255, 99, 132)',  // Color for "Airports Mass"
+                            'rgb(54, 162, 235)',  // Color for "Residential Buildings Mass"
+                            'rgb(250, 192, 192)',  // Color for "Commercial Buildings Mass"
+                            'rgb(150, 192, 192)',  // Color for "Industrial Buildings Mass"
+                            'rgb(153, 102, 255)', // Color for "Power Plants Mass"
+                            'rgb(155, 118, 83)'   // Color for "Onroad Gas Mass"
+                        ],
                     }
                 });
 
-                console.log("the gases are: ", gases)
-                console.log("the datasets are: ", sectorsData)
-
                 setData({
-                    labels: gases,
+                    labels: sectors,
                     datasets: sectorsData
                 });
             })
@@ -321,7 +270,13 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                                 marginRight: 1,
                             }}
                         />
-                        <Typography sx={{ fontSize: "12px", color: "#1B2631" }}>{item.label}</Typography>
+                        <Typography sx={{
+                            fontSize: "12px",
+                            color: "#1B2631",
+                            whiteSpace: "normal",
+                            overflowWrap: "break-word",
+                            maxWidth: "88px"
+                        }}>{item.label}</Typography>
                     </Grid>
                 ))}
             </Grid>
@@ -409,8 +364,8 @@ const Gra2pesInsightsCard = ({ selection }) => {
 export function DataInsightsCard({ dataset, selection }) {
     return (
         <>
-            {dataset == "vulcan" && <VulcanInsightsCard selection={selection} />}
-            {dataset == "gra2pes" && <Gra2pesInsightsCard selection={selection} />}
+            {dataset === "vulcan" && <VulcanInsightsCard selection={selection} />}
+            {dataset === "gra2pes" && <Gra2pesInsightsCard selection={selection} />}
         </>
     )
 }

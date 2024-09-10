@@ -5,13 +5,15 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
-import './index.css';
-
 import { URBAN_REGIONS } from '../../assets/geojson';
 import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT, VULCAN_RASTER_URL, GRA2PES_RASTER_URL } from './helper';
 
+import './index.css';
+
 const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
+const mapCenter = [-99.676392, 39.106667];
+
 export class MapBoxViewer extends Component {
     constructor(props) {
         super(props);
@@ -25,18 +27,11 @@ export class MapBoxViewer extends Component {
         mapboxgl.accessToken = accessToken;
         let mapboxStyleUrl = 'mapbox://styles/covid-nasa/cldu1cb8f00ds01p6gi583w1m';
 
-        //TODO: Get custom basemap styles for the satellite-v9
-        // right now these use basemap styles for covid-nasa map 
-        // if (mapboxStyleBaseUrl) {
-        //     let styleId = BASEMAP_STYLES.findIndex(style => style.id === BASEMAP_ID_DEFAULT);
-        //     mapboxStyleUrl = `${mapboxStyleBaseUrl}/${BASEMAP_STYLES[styleId].mapboxId}`;
-        // }
-
         const map = new mapboxgl.Map({
             container: 'mapbox-container',
             projection: "mercator",
             style: mapboxStyleUrl,
-            center: [-99.676392, 39.106667], // Center of the USA
+            center: mapCenter, // Center of the USA
             zoom: 4, // Adjust zoom level to fit the USA
             zoomControl: true,
             pitchWithRotate: false,
@@ -103,7 +98,7 @@ export class MapBoxViewer extends Component {
             this.resetMapView();
         }
 
-        if (prevProps.urbanRegions != this.props.urbanRegions) {
+        if (prevProps.urbanRegions !== this.props.urbanRegions) {
             this.plotMap();
         }
 
@@ -136,7 +131,21 @@ export class MapBoxViewer extends Component {
         if (currentViewer) {
             this.props.setSelection("");
             this.state.selectedUrbanRegion = false; //giving this incorrect state will force it to reset
-            this.plotMap();
+
+            // Zoom out and fly back to center and remove all the geoJSON layers
+            const currentMap = this.state.currentViewer;
+            currentMap.flyTo({
+                center: mapCenter,
+                zoom: 4,
+                speed: 1.2,
+                curve: 1.42
+            })
+
+            if (currentMap.getLayer('boundary-fill')) currentMap.removeLayer('boundary-fill');
+            if (currentMap.getLayer('boundary-outline')) currentMap.removeLayer('boundary-outline');
+            if (currentMap.getSource("urban-boundary")) currentMap.removeSource("urban-boundary");
+
+
         } else {
             console.log("Map instance not initialized yet...")
         }
@@ -153,7 +162,6 @@ export class MapBoxViewer extends Component {
             let marker = this.addMarker(map, el, name, lon, lat);
 
             // when clicked on a urban region, focus on it
-            // this.focusSelectedUrbanRegion(map, center, GeoJSON);
             marker.getElement().addEventListener('click', () => {
                 this.setState({ selectedUrbanRegion: name });
                 this.props.setSelection(name);

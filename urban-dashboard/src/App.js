@@ -1,45 +1,27 @@
 import { Fragment } from 'react';
 import {
-  createBrowserRouter,
-  RouterProvider,
-  useRouteError,
+  BrowserRouter,
+  Routes,
+  Route
 } from "react-router-dom";
 
+import { DashboardContainer } from './components/dashboardContainer';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import './App.css';
-import { DashboardContainer } from './components/dashboardContainer';
 
-const ErrorPage = () => {
-  const error = useRouteError();
-
-  console.error(error);
-
-  return (
-    <div>
-      <h1>Oops!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
-      <p>
-        <i>{error.statusText || error.message}</i>
-      </p>
-    </div>
-  );
-}
-
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <DashboardContainer />,
-    errorElement: <ErrorPage />
-  },
-]);
+const PUBLIC_URL = process.env.REACT_APP_PUBLIC_URL;
 
 function App() {
   return (
     <Fragment>
       <CssBaseline />
-      <RouterProvider router={router} />
+      <BrowserRouter basename={PUBLIC_URL}>
+        <Routes>
+          <Route path="/" element={<DashboardContainer />}>
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </Fragment>
   );
 }
