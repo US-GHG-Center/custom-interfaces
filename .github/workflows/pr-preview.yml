@@ -6,7 +6,6 @@ on:
     paths:
       - 'emit-ch4plume-v1/**'
       - 'noaa-cpfp-point/**'
-      - 'urban-dashboard/**'
       - 'nist-interface/**'
 
 concurrency:
@@ -53,9 +52,6 @@ jobs:
           if grep -q 'noaa-cpfp-point/' changed_files.txt; then
             CHANGED_WEBSITES+=('noaa-cpfp-point')
           fi
-          if grep -q 'urban-dashboard/' changed_files.txt; then
-            CHANGED_WEBSITES+=('urban-dashboard')
-          fi
           if grep -q 'nist-interface/' changed_files.txt; then
             CHANGED_WEBSITES+=('nist-interface')
           fi
@@ -98,21 +94,6 @@ jobs:
               aws s3 sync noaa-cpfp-point/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/data/
 
               COMMENT+="- 🗼 noaa-cpfp-point: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/index.html"
-            
-            elif [ "$WEBSITE" == "urban-dashboard" ]; then
-              echo PUBLIC_URL="${{ vars.PUBLIC_URL_URBAN }}/${{ env.PR_STRING }}" >> ./urban-dashboard/.env
-              echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ./urban-dashboard/.env
-              echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./urban-dashboard/.env
-              echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./urban-dashboard/.env
-              cd ./urban-dashboard
-              npm install
-              PUBLIC_URL="${{ vars.PUBLIC_URL_URBAN }}/${{ env.PR_STRING }}" npm run production
-              cd ..
-              aws s3 sync urban-dashboard/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_URBAN }}/${{ env.PR_STRING }}/
-              aws s3 sync urban-dashboard/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_URBAN}}/${{ env.PR_STRING }}/data/
-
-              COMMENT+="- 🗼 urban-dashboard: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_URBAN }}/${{ env.PR_STRING }}/index.html"
-            
             elif [ "$WEBSITE" == "nist-interface" ]; then
               echo PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" >> ./nist-interface/.env
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ./nist-interface/.env
@@ -168,7 +149,6 @@ jobs:
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ --recursive
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/ --recursive
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_URBAN }}/${{ env.PR_STRING }}/ --recursive
-          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/ --recursive
 
       - name: Remove PR comment
         run: |
