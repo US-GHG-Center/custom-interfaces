@@ -98,7 +98,7 @@ jobs:
 
               COMMENT+="- 🗼 noaa-cpfp-point: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/index.html"
             elif [ "$WEBSITE" == "nist-interface" ]; then
-              PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|' 
+              PUBLIC_URL=$(echo "${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
               echo "hello ${PUBLIC_URL}"
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ./nist-interface/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
