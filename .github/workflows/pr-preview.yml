@@ -98,20 +98,24 @@ jobs:
 
               COMMENT+="- 🗼 noaa-cpfp-point: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/index.html"
             elif [ "$WEBSITE" == "nist-interface" ]; then
-              PUBLIC_URL=$(echo "${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
-              echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ./nist-interface/.env
+
+              NIST_PATH=$(echo "${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
+
+              echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./nist-interface/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
-              echo REACT_APP_PUBLIC_URL="${PUBLIC_URL}" >> ./nist-interface/.env
+              echo REACT_APP_PUBLIC_URL="${NIST_PATH}" >> ./nist-interface/.env
+
               URL_VALUE=$(grep "REACT_APP_PUBLIC_URL" ./nist-interface/.env)
               echo "The value of REACT_APP_PUBLIC_URL is: ${URL_VALUE}"
+
               cd ./nist-interface
               yarn
               yarn build
               cd ..
-              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
+              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${NIST_PATH}
 
-              COMMENT+="- 🗼 nist-interface: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${PUBLIC_URL}index.html"
+              COMMENT+="- 🗼 nist-interface: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${NIST_PATH}index.html"
             fi
             echo "COMMENT=${COMMENT}" >> $GITHUB_ENV
           done
