@@ -104,7 +104,7 @@ jobs:
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ./nist-interface/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
-              echo "REACT_APP_PUBLIC_URL="${NIST_PATH}${{ env.PR_STRING }}" >> ./nist-interface/.env
+              echo REACT_APP_PUBLIC_URL="${NIST_PATH}${{ env.PR_STRING }}" >> ./nist-interface/.env
               echo ${NIST_PATH}${{ env.PR_STRING }}
               cd ./nist-interface
               yarn
