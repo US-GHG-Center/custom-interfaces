@@ -148,7 +148,7 @@ jobs:
         run: |
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ --recursive
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/ --recursive
-          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_URBAN }}/${{ env.PR_STRING }}/ --recursive
+          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/ --recursive
 
       - name: Remove PR comment
         run: |
