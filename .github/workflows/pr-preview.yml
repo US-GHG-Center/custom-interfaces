@@ -108,9 +108,9 @@ jobs:
               yarn
               yarn build
               cd ..
-              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}/${PUBLIC_URL}
+              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
 
-              COMMENT+="- 🗼 nist-interface: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${NIST_PATH}${{ env.PR_STRING }}/index.html"
+              COMMENT+="- 🗼 nist-interface: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${PUBLIC_URL}index.html"
             fi
             echo "COMMENT=${COMMENT}" >> $GITHUB_ENV
           done
