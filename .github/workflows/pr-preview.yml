@@ -35,6 +35,9 @@ jobs:
         with:
           node-version: 'v20.12.2'
 
+      - name: Install Yarn
+        run: npm install -g yarn
+
       - name: Determine changed files
         id: changes
         run: |
@@ -101,8 +104,8 @@ jobs:
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
               echo "REACT_APP_PUBLIC_URL=$(echo "${{ vars.PUBLIC_URL_NIST }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')" >> ./nist-interface/.env
               cd ./nist-interface
-              npm install
-              PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" npm run production
+              yarn
+              PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" yarn build
               cd ..
               aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/
 

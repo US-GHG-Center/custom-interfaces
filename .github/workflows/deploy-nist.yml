@@ -64,6 +64,7 @@ jobs:
         with:
           name: build_folder
           path: ./nist-interface/build
+
   deploy-staging:
     needs:
       - build
