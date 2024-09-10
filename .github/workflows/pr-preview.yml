@@ -99,14 +99,14 @@ jobs:
               COMMENT+="- 🗼 noaa-cpfp-point: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/index.html"
             elif [ "$WEBSITE" == "nist-interface" ]; then
               PUBLIC_URL=$(echo "${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
-              FULL_S3_URL="https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${PUBLIC_URL}"
+              #FULL_S3_URL="https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${PUBLIC_URL}"
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ./nist-interface/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
               echo REACT_APP_PUBLIC_URL="${PUBLIC_URL}" >> ./nist-interface/.env
               cd ./nist-interface
               yarn
-              PUBLIC_URL=${FULL_S3_URL} yarn build
+              yarn build
               cd ..
               aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
 
