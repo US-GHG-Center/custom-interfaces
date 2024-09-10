@@ -13,7 +13,7 @@ export function DatasetCard({ dataset }) {
 
 export function Grap2pesDatasetCard() {
     const title = "GRA2PES";
-    const description = "Monthly emission rates of greenhouse gases for ten different sectors, regridded to 0.1 x 0.1 degree resolution."
+    const description = "GRA2PES expands upon existing datasets to model and map greenhouse gases (Carbon Dioxide, Carbon Monoxide, Nitrous Oxides) and hazardous air pollutants (Sulphur Dioxide, Particulate Matter) together, offering fine-resolution information about monthly emissions for multiple sectors."
 
     return (
         <div className="dataset-card">
@@ -28,7 +28,7 @@ export function Grap2pesDatasetCard() {
 
 export function VulcanDatasetCard() {
     const title = "Vulcan v4.0"
-    const description = "Provides annual CO2 emissions estimates for ten different sectors at 1km resolution. It is designed to be used as emission estimates in atmospheric transport modeling, policy, mapping, and other data analyses and applications."
+    const description = "Providing annual carbon dioxide (CO2) emissions estimates per one square mile for ten different sectors, the Vulcan dataset enables researchers to estimate fossil fuel use and understand greenhouse gas emissions at neighborhood scale."
 
     return (
         <div className="dataset-card">
