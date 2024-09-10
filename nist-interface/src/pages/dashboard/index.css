@@ -25,3 +25,17 @@
     z-index: 1;
     cursor: ns-resize;
 }
+
+.logo {
+    position: fixed;
+    top: 1%;
+    right: 1%;
+    width: 300px;
+    height: auto;
+    padding: 10px 24px;
+    color: #082A63;
+    background-color: rgba(255, 255, 255);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 1000;
+}
