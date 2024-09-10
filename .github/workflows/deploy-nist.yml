@@ -18,7 +18,7 @@ jobs:
         id: define_environment
         run: |
           if [ "${{ github.ref }}" = "refs/heads/add/cicd-nist-urban" ]; then
-            echo "env_name=staging" >> $GITHUB_OUTPUT
+            echo "env_name=development" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
             echo "env_name=production" >> $GITHUB_OUTPUT
           fi
@@ -54,7 +54,7 @@ jobs:
           echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> .env
           echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> .env
           echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> .env
-          export REACT_APP_PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NIST }}  | sed -E 's|^https?://[^/]+||; s|/*$|/|')
+          echo "REACT_APP_PUBLIC_URL=$(echo "${{ vars.PUBLIC_URL_NIST }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')" >> .env
           export CI=false
           yarn
           yarn build
@@ -98,7 +98,7 @@ jobs:
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NIST }} | sed -E 's|^https?://[^/]+/||')
           echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
-          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-develop/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
         env:
           PUBLIC_URL: ${{ vars.PUBLIC_URL_NIST }}
 
