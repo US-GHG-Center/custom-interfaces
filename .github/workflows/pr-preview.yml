@@ -104,8 +104,7 @@ jobs:
               npm install
               PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" npm run production
               cd ..
-              aws s3 sync nist-interface/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/
-              aws s3 sync nist-interface/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/data/
+              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/
 
               COMMENT+="- 🗼 nist-interface: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/index.html"
             fi
