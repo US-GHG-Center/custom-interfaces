@@ -105,7 +105,7 @@ jobs:
               echo REACT_APP_PUBLIC_URL="${PUBLIC_URL}" >> ./nist-interface/.env
               cd ./nist-interface
               yarn
-              yarn build
+              PUBLIC_URL=${PUBLIC_URL} yarn build
               cd ..
               aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
 
