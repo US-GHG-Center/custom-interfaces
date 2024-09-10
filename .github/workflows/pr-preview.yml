@@ -104,10 +104,10 @@ jobs:
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
               echo "REACT_APP_PUBLIC_URL=$(echo "${{ vars.PUBLIC_URL }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')" >> ./nist-interface/.env
-              echo "${{ vars.PUBLIC_URL }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|'
+              echo "${PUBLIC_URL}" | sed -E 's|^https?://[^/]+||; s|/*$|/|'
               cd ./nist-interface
               yarn
-              PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" yarn build
+              yarn build
               cd ..
               aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/
 
