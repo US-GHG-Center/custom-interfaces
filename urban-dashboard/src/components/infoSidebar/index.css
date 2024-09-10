@@ -8,19 +8,21 @@
     /* top: 35px; */
     /* left: 28px; */
     /* max-width: 90vw; */
+    top: 0;
+    left: 0;
+    width: 30vw;
     max-height: 100vh;
     border-radius: 6px;
-    /* bottom: 10%; */
-    width: 30vw;
-    background: white;
+
     padding: 20px;
+    background: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     z-index: 10;
     overflow-y: auto;
 
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
 }
 
 .info-border-primary {

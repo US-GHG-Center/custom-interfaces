@@ -7,74 +7,6 @@ import "./index.css";
 
 ChartJS.register(LineElement, PointElement, LinearScale, Title, Tooltip, Legend, Filler, ArcElement);
 
-// const EmissionsBySectorCard = () => {
-//     const [data, setData] = useState({
-//         labels: [],
-//         datasets: [{
-//             data: [],
-//             backgroundColor: [
-
-//             ],
-//             borderColor: [
-
-//             ],
-//         }]
-//     });
-
-//     useEffect(() => {
-//         fetch("./data/sectoralEmissions.json")
-//             .then(response => response.json())
-//             .then(json => setData(json))
-//             .catch(error => console.error("Error fetching sectoral emissions data"))
-//     })
-
-//     const options = {
-//         plugins: {
-//             title: {
-//                 display: true,
-//                 text: 'Emissions by Sector',
-//             },
-//             legend: {
-//                 display: false,
-//                 position: 'bottom',
-//             },
-//             tooltip: {
-//                 mode: 'index',
-//                 intersect: false,
-//             },
-//         },
-//         responsive: true,
-//         maintainAspectRation: false,
-//         scales: {
-//             x: {
-//                 stacked: true,
-//                 title: {
-//                     display: true,
-//                     text: "Year"
-//                 }
-//             },
-//             y: {
-//                 stacked: true,
-//                 min: -2000,
-//                 max: 8000,
-//                 title: {
-//                     display: true,
-//                     text: "Emissions (metric tons)"
-//                 },
-//                 ticks: {
-//                     stepSize: 1000,
-//                 }
-//             },
-//         },
-//     };
-
-//     return (
-//         <div>
-//             <Line data={data} options={options} height={-400} />
-//         </div>
-//     )
-// }
-
 //For VULCAN sectoral stack plot
 export const StackedAreaChart = ({ selection }) => {
     const [chartData, setChartData] = useState({
@@ -111,6 +43,33 @@ export const StackedAreaChart = ({ selection }) => {
         "Industrial Buildings": { borderColor: 'brown', backgroundColor: 'rgba(165, 42, 42, 0.5)' },
         "Industrial Point Sources": { borderColor: 'darkred', backgroundColor: 'rgba(139, 0, 0, 0.5)' }
     };
+
+
+    const Legend = () => {
+        return (
+            <Grid container spacing={0.3}>
+                {Object.entries(colorMap).map(([label, colors], index) => (
+                    <Grid item xs={4} key={index} container direction="row" alignItems="center">
+                        <Box
+                            sx={{
+                                width: 21,
+                                height: 21,
+                                backgroundColor: colors.backgroundColor,
+                                marginRight: 0.5,
+                            }}
+                        />
+                        <Typography sx={{
+                            fontSize: "12px",
+                            color: "#1B2631",
+                            whiteSpace: "normal",
+                            overflowWrap: "break-word",
+                            maxWidth: "88px"
+                        }}>{label}</Typography>
+                    </Grid>
+                ))}
+            </Grid>
+        )
+    }
 
     useEffect(() => {
         fetch(formatFilePath(selection))
@@ -254,9 +213,18 @@ export const StackedAreaChart = ({ selection }) => {
     };
 
     return (
-        <div style={{ height: '300', width: '100%' }}>
-            <Line data={chartData} options={options} height={300} />
-        </div>
+        <>
+            <div style={{ marginBottom: 30 }}>
+                <Typography sx={{ fontSize: "13px", color: "#082A64", marginBottom: "10px", fontWeight: "400" }}>
+                    Legend
+                </Typography>
+                <Legend />
+            </div>
+            <div style={{ height: '220', width: '100%' }}>
+                <Line data={chartData} options={options} height={220} />
+            </div>
+        </>
+
     );
 };
 
@@ -264,7 +232,6 @@ const GasEmissionsBySectorCard = ({ selection }) => {
     const [data, setData] = useState({
         labels: [],
         datasets: [{
-            // label: "Emissions by Gas",
             data: [],
             backgroundColor: [],
         }]
@@ -276,7 +243,17 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                 display: false, // hide legends
             },
             tooltip: {
-                // enabled: true, // enable tooltips
+                enabled: true, // enable tooltips
+                // display percentage in the tooltip
+                callbacks: {
+                    label: function (tooltipItem) {
+                        const dataset = tooltipItem.dataset;
+                        const currentValue = dataset.data[tooltipItem.dataIndex];
+                        const total = dataset.data.reduce((acc, value) => acc + value, 0);
+                        const percentage = ((currentValue / total) * 100).toFixed(2);
+                        return `${percentage}%`;
+                    }
+                }
             },
         },
     };
@@ -312,8 +289,8 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                         backgroundColor: [
                             'rgb(255, 99, 132)',   // Color for CO2
                             'rgb(54, 162, 235)',   // Color for CO
-                            'rgb(75, 192, 192)',   // Color for NOX
-                            'rgb(250, 192, 192)',  // Color for SOX
+                            'rgb(250, 192, 192)',   // Color for NOX
+                            'rgb(150, 192, 192)',  // Color for SOX
                             'rgb(155, 118, 83)',  // Color for PM2.5
                         ]
                     }
@@ -333,9 +310,9 @@ const GasEmissionsBySectorCard = ({ selection }) => {
 
     const Legend = () => {
         return (
-            <Grid container direction="column" spacing={0.3}>
+            <Grid container spacing={0.3}>
                 {LegendItems.map((item, index) => (
-                    <Grid item key={index} container direction="row" alignItems="center">
+                    <Grid item xs={4} key={index} container direction="row" alignItems="center">
                         <Box
                             sx={{
                                 width: 21,
@@ -353,89 +330,35 @@ const GasEmissionsBySectorCard = ({ selection }) => {
 
     return (
         <>
-            <Grid container alignItems="center" spacing={1.5}>
-                <Grid item xs={6}>
-                    <Typography sx={{ fontSize: "12px", color: "#1B2631", marginBottom: "4px" }}>
-                        Legend
-                    </Typography>
-                    <Legend />
-                </Grid>
-
-                {data.datasets.map((item, idx) => (
-                    <Grid item xs={6} key={idx}>
-                        <div className='pie-chart-container'>
-                            <div className='pie-chart'>
-                                <Pie data={{
-                                    labels: data.labels,
-                                    datasets: [item]
-                                }} options={options} />
+            <div style={{ marginBottom: 30 }}>
+                <Typography sx={{ fontSize: "13px", color: "#082A64", marginBottom: "10px", fontWeight: "400" }}>
+                    Legend
+                </Typography>
+                <Legend />
+            </div>
+            <div>
+                <Grid container alignItems="center" spacing={1.5}>
+                    {data.datasets.map((item, idx) => (
+                        <Grid item xs={6} key={idx}>
+                            <div className='pie-chart-container'>
+                                <div className='pie-chart'>
+                                    <Pie data={{
+                                        labels: data.labels,
+                                        datasets: [item]
+                                    }} options={options} />
+                                </div>
+                                <Typography sx={{
+                                    fontSize: "12px",
+                                    color: "#1B2631"
+                                }}>
+                                    {item.label}
+                                </Typography>
                             </div>
-                            <Typography sx={{
-                                fontSize: "12px",
-                                color: "#1B2631"
-                            }}>
-                                {item.label}
-                            </Typography>
-                        </div>
-                    </Grid>
-                ))}
+                        </Grid>
+                    ))}
 
-                {/* <Grid item xs={6}>
-                    <div className='pie-chart-container'>
-                        <div className='pie-chart'>
-                            <Pie data={data} options={options} />
-                        </div>
-                        <Typography sx={{
-                            fontSize: "12px",
-                            color: "#1B2631"
-                        }}>
-                            Manufacturing
-                        </Typography>
-                    </div>
                 </Grid>
-
-                <Grid item xs={6}>
-                    <div className='pie-chart-container'>
-                        <div className='pie-chart'>
-                            <Pie data={data} options={options} />
-                        </div>
-                        <Typography sx={{
-                            fontSize: "12px",
-                            color: "#1B2631"
-                        }}>
-                            Transportation
-                        </Typography>
-                    </div>
-                </Grid> */}
-                {/* 
-                <Grid item xs={6}>
-                    <div className='pie-chart-container'>
-                        <div className='pie-chart'>
-                            <Pie data={data} options={options} />
-                        </div>
-                        <Typography sx={{
-                            fontSize: "12px",
-                            color: "#1B2631"
-                        }}>
-                            Agriculture
-                        </Typography>
-                    </div>
-                </Grid>
-
-                <Grid item xs={6}>
-                    <div className='pie-chart-container'>
-                        <div className='pie-chart'>
-                            <Pie data={data} options={options} />
-                        </div>
-                        <Typography sx={{
-                            fontSize: "12px",
-                            color: "#1B2631"
-                        }}>
-                            Land Use
-                        </Typography>
-                    </div>
-                </Grid> */}
-            </Grid>
+            </div>
         </>
     )
 }
