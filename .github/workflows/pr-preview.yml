@@ -103,6 +103,8 @@ jobs:
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
               echo REACT_APP_PUBLIC_URL="${PUBLIC_URL}" >> ./nist-interface/.env
+              URL_VALUE=$(grep "REACT_APP_PUBLIC_URL" ./nist-interface/.env)
+              echo "The value of REACT_APP_PUBLIC_URL is: ${URL_VALUE}"
               cd ./nist-interface
               yarn
               yarn build
