@@ -55,6 +55,7 @@ jobs:
           echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> .env
           echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> .env
           echo "REACT_APP_PUBLIC_URL=$(echo "${{ vars.PUBLIC_URL_NIST }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')" >> .env
+          grep "REACT_APP_PUBLIC_URL" .env
           yarn
           yarn build
 
