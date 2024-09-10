@@ -12,7 +12,12 @@ function DropdownIconComponent(props) {
       <FontAwesomeIcon
         icon={faChevronDown}
         {...props}
-        style={{ color: "#082A64", fontSize: 20, cursor: "pointer" }} />
+        style={{
+          color: "#082A64",
+          fontSize: 20,
+          cursor: "pointer",
+          verticalAlign: "middle"
+        }} />
     </>
   )
 }
@@ -43,17 +48,23 @@ export function UrbanSelector({ urbanRegion, setUrbanRegion }) {
         disableUnderline={true}
         onChange={handleSelect}
         IconComponent={(props) => (<DropdownIconComponent {...props} />)}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
       >
         {urbanRegions.map((region) => (
           <MenuItem
             value={region}
+            key={region}
           >
             <Box display="flex" alignItems="center">
               <Typography sx={{
                 // width: "170px",
                 mr: 3,
+                paddingTop: 0.4,
                 color: "#082A64",
-                fontSize: "16px",
+                fontSize: "20px",
                 lineHeight: "24.2px",
                 cursor: "pointer"
               }}>{region}</Typography>

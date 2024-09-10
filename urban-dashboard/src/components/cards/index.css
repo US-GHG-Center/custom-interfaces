@@ -52,7 +52,7 @@
 .population-icon {
     background-color: #082A64;
     border-radius: 6px;
-    padding: 8px;
+    padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -71,7 +71,7 @@
 
 .population-label {
     color: #0098D7;
-    font-size: 10px;
+    font-size: 12px;
     margin: 0;
     line-height: 12.1px;
 }
@@ -101,16 +101,16 @@
 
 /* Colormap chart */
 .colormap-chart {
-    position: relative;
+    position: fixed;
     z-index: 100;
-    /* left: 28px; */
-    /* bottom: 40px; */
-    /* width: 383px; */
+    right: 1px;
+    bottom: 40px;
+    width: 400px;
 
     padding: 10px;
 
-    /* background: white; */
-    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 6px;
     /* max-width: 90vw; */
 

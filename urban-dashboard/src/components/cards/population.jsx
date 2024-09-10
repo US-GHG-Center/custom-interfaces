@@ -40,7 +40,7 @@ export function PopulationCard({ selection, urbanRegions }) {
         <div className="population-icon">
           <FontAwesomeIcon
             icon={faUsers}
-            style={{ color: "white", fontSize: 17 }}
+            style={{ color: "white", fontSize: 20 }}
           />
         </div>
         <div className="population-info">
@@ -52,7 +52,7 @@ export function PopulationCard({ selection, urbanRegions }) {
         <div className="population-icon">
           <FontAwesomeIcon
             icon={faMapLocation}
-            style={{ color: "white", fontSize: 17 }}
+            style={{ color: "white", fontSize: 20 }}
           />
         </div>
         <div className="population-info">

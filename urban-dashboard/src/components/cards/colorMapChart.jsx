@@ -26,13 +26,16 @@ export function ColorMapChart({ dataset }) {
 
     return (
         <div className="colormap-chart">
+            <Typography style={{ fontSize: "14px", fontWeight: "400", lineHeight: "16.94px" }}>
+                Map Legend
+            </Typography>
             <Typography style={{ fontSize: '12px', color: '#082A64', textAlign: "center", fontWeight: "bold" }}>
                 {title}
             </Typography>
             <div style={{ marginTop: 10 }}>
                 <GradientChart dataset={dataset} />
             </div>
-            <Typography style={{ fontSize: '12px', textAlign: "center" }}>
+            <Typography style={{ fontSize: '10px', textAlign: "center" }}>
                 {unit}
             </Typography>
         </div >

@@ -27,32 +27,35 @@ export function InfoSidebar({
                     handleZoomOut={handleZoomOut}
                 />
 
+                {/* Data Snippet Card */}
+
                 {!selection && (
                     <>
-                        {/* Data Snippet Card */}
                         <Typography style={{ fontSize: '12px', color: '#1E1E1E' }}>
                             {briefSnippet}
                         </Typography>
                     </>
                 )}
 
+                {/* Population and Area Card */}
                 {selection && (
                     <>
-                        {/* Population and Area Card */}
                         <PopulationCard selection={selection} urbanRegions={urbanRegions} />
                     </>
                 )}
 
                 {/* Primary separator line */}
                 <div className="info-border-primary" />
+
                 {/* Dataset Card */}
                 <DatasetCard dataset={dataset} />
+
+                {/* Dataset Insights Card */}
 
                 {selection && (
                     <>
                         {/* Secondary separator line */}
                         <div className="info-border-secondary" />
-                        {/* Dataset Insights Card */}
                         <DataInsightsCard
                             dataset={dataset}
                             selection={selection}
@@ -60,14 +63,11 @@ export function InfoSidebar({
                     </>
                 )}
 
-                {/* Map Lenged goes here */}
-                <div className="info-border-secondary" />
-                <Typography style={{ fontSize: "14px", fontWeight: "400", lineHeight: "16.94px" }}>
-                    Map Legend
-                </Typography>
-                <ColorMapChart dataset={dataset} />
+
 
             </div>
+
+            <ColorMapChart dataset={dataset} />
 
 
         </div>
