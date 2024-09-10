@@ -56,7 +56,7 @@ const GradientChart = ({ dataset }) => {
 
     const labels_vulcan = [
         { label: '0', value: 0 },
-        { label: '500', value: width - 22 }
+        { label: '4000', value: width - 22 }
     ];
 
     useEffect(() => {

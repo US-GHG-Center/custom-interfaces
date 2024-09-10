@@ -23,7 +23,7 @@ export class MapBoxViewer extends Component {
 
     plotMap() {
         mapboxgl.accessToken = accessToken;
-        let mapboxStyleUrl = 'mapbox://styles/mapbox/satellite-v9';
+        let mapboxStyleUrl = 'mapbox://styles/covid-nasa/cldu1cb8f00ds01p6gi583w1m';
 
         //TODO: Get custom basemap styles for the satellite-v9
         // right now these use basemap styles for covid-nasa map 
@@ -34,11 +34,14 @@ export class MapBoxViewer extends Component {
 
         const map = new mapboxgl.Map({
             container: 'mapbox-container',
-            renderingMode: '2D',
+            projection: "mercator",
             style: mapboxStyleUrl,
             center: [-99.676392, 39.106667], // Center of the USA
             zoom: 4, // Adjust zoom level to fit the USA
-            zoomControl: true
+            zoomControl: true,
+            pitchWithRotate: false,
+            dragRotate: false,
+            touchZoomRotate: false
         });
 
         this.setState({ currentViewer: map });
@@ -64,7 +67,7 @@ export class MapBoxViewer extends Component {
                     "type": "raster",
                     "source": "raster-tiles-vulcan",
                     "paint": {
-                        "raster-opacity": 0.7
+                        "raster-opacity": 0.8
                     }
                 })
             } else if (this.props.dataset === "gra2pes") {
@@ -73,11 +76,17 @@ export class MapBoxViewer extends Component {
                     "type": "raster",
                     "source": "raster-tiles-gra2pes",
                     "paint": {
-                        "raster-opacity": 0.7
+                        "raster-opacity": 0.8
                     }
                 })
             }
 
+            // Move label layers above raster layers
+            map.moveLayer('country-label');
+            map.moveLayer('state-label');
+            map.moveLayer('settlement-major-label');
+            map.moveLayer('settlement-minor-label');
+            map.moveLayer('admin-1-boundary');
         })
 
         // show the whole map of usa and show all the urban areas
@@ -200,8 +209,8 @@ export class MapBoxViewer extends Component {
             'source': sourceName,
             'layout': {},
             'paint': {
-                'fill-color': '#888888',
-                'fill-opacity': 0.4
+                'fill-color': '#FFFFFF',
+                'fill-opacity': 0.1,
             }
         });
 
@@ -211,8 +220,8 @@ export class MapBoxViewer extends Component {
             'source': sourceName,
             'layout': {},
             'paint': {
-                'line-color': '#fee2b3',
-                'line-width': 2
+                'line-color': "#082A63",
+                'line-width': 3
             }
         });
     }
