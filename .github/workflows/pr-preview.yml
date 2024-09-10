@@ -105,12 +105,12 @@ jobs:
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
               echo REACT_APP_PUBLIC_URL="${NIST_PATH}${{ env.PR_STRING }}" >> ./nist-interface/.env
-              echo ${NIST_PATH}${{ env.PR_STRING }}
+              echo "${NIST_PATH}${{ env.PR_STRING }}"
               cd ./nist-interface
               yarn
               yarn build
               cd ..
-              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${NIST_PATH}${{ env.PR_STRING }}
+              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}/${NIST_PATH}${{ env.PR_STRING }}
 
               COMMENT+="- 🗼 nist-interface: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${NIST_PATH}${{ env.PR_STRING }}/index.html"
             fi
