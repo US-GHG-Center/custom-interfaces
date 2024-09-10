@@ -29,13 +29,13 @@ export const StackedAreaChart = ({ selection }) => {
     }
 
     const colorMap = {
-        "Aviation": { borderColor: '#E4440A', backgroundColor: 'rgb(228, 68, 10)' },
-        "Industry": { borderColor: '#0E0E0E', backgroundColor: 'rgb(14, 14,14)' },
-        "Commercial": { borderColor: '#4685FA', backgroundColor: 'rgb(70,133,250)' },
-        "Power": { borderColor: '#FABA39', backgroundColor: 'rgb(250,186,57)' },
-        "Onroad": { borderColor: '#1ae4b6', backgroundColor: 'rgb(26, 228, 182)' },
-        "Residential": { borderColor: '#7A0403', backgroundColor: 'rgb(122, 4, 3)' },
-        "Railroad": { borderColor: '#A4FC3D', backgroundColor: 'rgb(164, 252, 61)' },
+        "Aviation": { borderColor: 'purple', backgroundColor: 'rgba(128, 0, 128, 0.5)' },
+        "Industry": { borderColor: 'brown', backgroundColor: 'rgba(165, 42, 42, 0.5)' },
+        "Commercial": { borderColor: 'yellow', backgroundColor: 'rgba(255, 255, 0, 0.5)' },
+        "Power": { borderColor: 'blue', backgroundColor: 'rgba(0, 0, 255, 0.5)' },
+        "Onroad": { borderColor: 'green', backgroundColor: 'rgba(0, 255, 0, 0.5)' },
+        "Residential": { borderColor: 'orange', backgroundColor: 'rgba(255, 165, 0, 0.5)' },
+        "Railroad": { borderColor: 'darkblue', backgroundColor: 'rgba(0, 0, 139, 0.5)' },
     };
 
     const Legend = () => {
@@ -165,9 +165,6 @@ export const StackedAreaChart = ({ selection }) => {
     return (
         <>
             <div style={{ marginBottom: 30 }}>
-                <Typography sx={{ fontSize: "13px", color: "#082A64", marginBottom: "10px", fontWeight: "400" }}>
-                    Legend
-                </Typography>
                 <Legend />
             </div>
             <div style={{ height: '220', width: '100%' }}>
@@ -286,9 +283,6 @@ const GasEmissionsBySectorCard = ({ selection }) => {
     return (
         <>
             <div style={{ marginBottom: 30 }}>
-                <Typography sx={{ fontSize: "13px", color: "#082A64", marginBottom: "10px", fontWeight: "400" }}>
-                    Legend
-                </Typography>
                 <Legend />
             </div>
             <div>
