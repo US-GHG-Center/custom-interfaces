@@ -1,17 +1,34 @@
-import { Component, createRef } from 'react';
+import { Component } from 'react';
 import Chart from 'chart.js/auto';
 import Box from '@mui/material/Box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import faRotateLeft from '@fortawesome/free-solid-svg-icons/faRotateLeft';
+import { faXmark, faRotateLeft, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { LoadingSpinner } from '../loading';
+import { fetchAllFromFeaturesAPI } from "../../services/api";
 
-import { plugin, options } from './helper';
-
+import { plugin, options } from './config';
+import { dataPreprocess, getYAxisLabel, getChangedGHGStationId, getStationCode, isChartZoomed } from "./helper";
 import './index.css';
+
+const collectionItemURL = (collectionId) => {
+  return `${process.env.REACT_APP_FEATURES_API_URL}/collections/${collectionId}/items?is_max_height_data=True`;
+}
 
 export class ConcentrationChart extends Component {
   constructor(props) {
     super(props);
     this.chart = null;
+    this.initialScaleLimits = {};
+    this.state = {
+      showChartInstructions: true,
+      chartDataIsLoading: false,
+      dataAccessLink: "",
+    };
+    this.dataPreprocess = dataPreprocess;
+    this.getYAxisLabel = getYAxisLabel;
+    this.getChangedGHGStationId = getChangedGHGStationId;
+    this.getStationCode = getStationCode;
+    this.isChartZoomed = isChartZoomed;
   }
 
   componentDidMount() {
@@ -19,34 +36,32 @@ export class ConcentrationChart extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // when new props is received, initialize the chart with data.
-    if (this.props.selectedStationId !== prevProps.selectedStationId) {
-      // fetch the data from the api and then initialize the chart.
-      this.fetchStationData(this.props.selectedStationId).then(data => {
-        const { time, concentration, stationName } = data;
-        this.updateChart(concentration, time, stationName);
-      });
+    if (this.props.selectedStationId !== prevProps.selectedStationId || this.props.ghg !== prevProps.ghg) {
+      // clean previous chart data
+      if (this.chart) {
+        this.chart.data.labels = [];
+        this.chart.data.datasets[0].data = [];
+        this.chart.update();
+      }
+
+      this.prepareChart();
     }
   }
 
   initializeChart = () => {
     if (this.chart) {
+      // a fresh start
       this.chart.destroy();
     }
-    // fetch the data from the api and then initialize the chart.
-    this.fetchStationData(this.props.selectedStationId).then(data => {
-      const { time, concentration, stationName } = data;
-      this.populateChart(this.chartCanvas, concentration, time, stationName);
-    });
-  }
 
-  populateChart = (chartDOMRef, data=[], labels=[], stationName="") => {
+    // TODO: take the ghg label and unit from the collection item properties instead.
+    let dataPointLabel = this.getYAxisLabel(this.props.ghg);
     let dataset = {
-      labels: labels,
+      labels: [],
       datasets: [
         {
-          label: 'CO2 Concentration (ppm)',
-          data: data,
+          label: dataPointLabel,
+          data: [],
           borderColor: "#ff6384",
           yAxisID: 'y',
           showLine: false
@@ -54,30 +69,53 @@ export class ConcentrationChart extends Component {
       ]
     };
 
-    if (stationName) {
-      options.plugins.title.text = ` NIST CO2 (${stationName})`;
-    }
-
-    this.chart = new Chart(chartDOMRef, {
+    this.chart = new Chart(this.chartCanvas, {
       type: 'line',
       data: dataset,
       options: options,
       plugins: [plugin]
     });
+
+    this.chart.options.scales.y.title.text = dataPointLabel;
+    this.chart.options.plugins.zoom.zoom.onZoom = () => {
+      this.setState({showChartInstructions: false});
+    }
+    this.chart.options.plugins.zoom.zoom.onZoomComplete = () => {
+      // check if the zoom level of the chart is default and based on that enable or disable the tooltip
+      this.chart.options.plugins.tooltip.enabled = this.isChartZoomed(this.chart, this.initialScaleLimits);
+    }
+
+    this.prepareChart();
   }
 
-  updateChart = (data, label, stationName) => {
+  prepareChart = () => {
+    let currentStationId = this.getChangedGHGStationId(this.props.selectedStationId, this.props.ghg);
+    this.setDataAccessLink(currentStationId);
+    // Pre data fetch, change the title of the chart
+    this.changeTitle(currentStationId);
+    // fetch the data from the api and then initialize the chart.
+    this.fetchStationData(currentStationId).then(data => {
+      const { time, concentration } = data;
+      // Post data fetch, check if the chart title needs to be modified (for race conditions when multiple stations are clicked).
+      this.changeTitle(currentStationId);
+      this.updateChart(concentration, time);
+      this.setInitialScaleLimits();
+    });
+  }
+
+  updateChart = (data, label) => {
     if (this.chart) {
       // first reset the zoom
       this.chart.resetZoom();
+      this.chart.options.plugins.tooltip.enabled = false;
+
+      let labelY = this.getYAxisLabel(this.props.ghg);
+      this.chart.data.datasets[0].label = labelY;
+      this.chart.options.scales.y.title.text = labelY;
 
       // update that value in the chart.
       this.chart.data.labels = label;
       this.chart.data.datasets[0].data = data;
-
-      if (stationName) {
-        this.chart.options.plugins.title.text = ` NIST CO2 (${stationName})`;
-      }
 
       // update the chart
       this.chart.update();
@@ -86,59 +124,106 @@ export class ConcentrationChart extends Component {
 
   fetchStationData = async (stationId) => {
     try {
-      // fetch in the collection from the features api
-      const response = await fetch(`https://dev.ghg.center/api/features/collections/${stationId}/items?limit=10000`);
-      if (!response.ok) {
-        throw new Error('Error in Network');
-      }
-      const result = await response.json();
-      const { title, features } = result;
-      const stationName = this.getStationName(title);
-      const { time, concentration } = this.dataPreprocess(features);
-      return { time, concentration, stationName };
+      let url = collectionItemURL(stationId);
+      this.setState({chartDataIsLoading: true});
+      let result = await fetchAllFromFeaturesAPI(url);
+      const { time, concentration } = this.dataPreprocess(result);
+      this.setState({chartDataIsLoading: false});
+      return { time, concentration };
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   }
 
-  // helpers start
+  changeTitle = (stationId) => {
+    const stationCode = this.getStationCode(stationId);
+    const stationProperties = this.props.stationMetadata[stationCode];
+    let { station_name: stationName, city, state } = stationProperties;
 
-  dataPreprocess = (features) => {
-    const time = [];
-    const concentration = [];
-    features.forEach((feature) => {
-      if (feature && feature.properties) {
-        time.push(feature.properties.datetime);
-        concentration.push(feature.properties.co2_ppm);
-      }
-    });
-    return {time, concentration};
+    if (stationName && stationName.includes(city)) {
+      this.chart.options.plugins.title.text = ` ${stationName}, ${state} (${stationCode})`;
+      this.chart.update();
+      return;
+    }
+    if (stationName) {
+      this.chart.options.plugins.title.text = ` ${stationName}, ${city}, ${state} (${stationCode})`;
+      this.chart.update();
+      return;
+    }
   }
 
-  getStationName = (title) => {
-    let titleParts = title.split("_");
-    let stationName = titleParts[titleParts.length - 2];
-    let ghg = titleParts[titleParts.length - 1];
-    return stationName.toUpperCase();
+  setDataAccessLink = (stationId) => {
+    const stationCode = this.getStationCode(stationId);
+    const stationProperties = this.props.stationMetadata[stationCode];
+    const { data_link: dataLink } = stationProperties;
+    this.setState({dataAccessLink: dataLink});
   }
 
-  // helpers end
+  handleRefresh = () => {
+    if (this.chart) {
+      this.chart.resetZoom();
+      this.chart.options.plugins.tooltip.enabled = false;
+    }
+  };
+
+  handleClose = () => {
+    this.handleRefresh(); // reset the zoom level else, next chart instance wont be able to.
+    this.props.setDisplayChart(false);
+  };
+
+  setInitialScaleLimits = () => {
+    // Store initial scale limits
+    this.initialScaleLimits.x = {
+      min: this.chart.scales["x"].min,
+      max: this.chart.scales["x"].max,
+    };
+
+    this.initialScaleLimits.y = {
+      min: this.chart.scales["y"].min,
+      max: this.chart.scales["y"].max,
+    };
+  };
 
   render() {
     return (
-      <Box sx={{height: "30em"}} id="chart-box">
-          <div id="chart-container" className='fullSize'>
+      <Box id="chart-box" style={this.props.style}>
+          <div id="chart-container" style={{width: "100%", height:"100%"}}>
+            <div id="chart-tools">
+              <div id="chart-tools-left">
+                <div id="chart-instructions-container">
+                  <div className="icon-and-instructions">
+                    <FontAwesomeIcon
+                      icon={faCircleInfo}
+                      // style={{margin: "12px"}}
+                      onMouseEnter={() => this.setState({showChartInstructions: true})}
+                      onMouseLeave={() => this.setState({showChartInstructions: false})}
+                    />
+                    {this.state.showChartInstructions && <div id="chart-instructions">
+                      <p>1. Click and drag, scroll or pinch on the chart to zoom in.</p>
+                      <p>2. Hover over data points when zoomed in to see the values.</p>
+                      <p>3. Click on the rectangle boxes on the side to toggle chart.</p>
+                    </div>
+                    }
+                  </div>
+                </div>
+              </div>
+              <div id="chart-tools-right">
+                { this.state.dataAccessLink && <a id="data-access-link" href={this.state.dataAccessLink} target="_blank" rel='noreferrer'>Data Access Link ↗</a> }
+                <div id="chart-controls">
+                  <FontAwesomeIcon id="zoom-reset-button" icon={faRotateLeft} title="Reset Zoom" onClick={this.handleRefresh}/>
+                  <FontAwesomeIcon id="chart-close-button" icon={faXmark} title="Close" onClick={this.handleClose}/>
+                </div>
+              </div>
+            </div>
+            {
+              this.state.chartDataIsLoading && <LoadingSpinner />
+            }
             <canvas
               id = "chart"
               className='fullWidth'
               style={{width: "100%", height: "100%"}}
               ref={chartCanvas => (this.chartCanvas = chartCanvas)}
             />
-            <div id="chart-controls">
-              <FontAwesomeIcon icon="fa-solid fa-xmark" />
-              {/* <FontAwesomeIcon id="zoom-reset-button" icon={["fa", "fa-solid", "fa-undo"]} title="Reset Zoom" style="font-size: 19px" />
-              <FontAwesomeIcon id="chart-close-button" icon={["fa", "fa-solid", "fa-xmark"]} title="Close" /> */}
-            </div>
           </div>
       </Box>
     );

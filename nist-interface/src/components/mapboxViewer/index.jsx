@@ -1,13 +1,18 @@
-import { Component, Fragment } from 'react';
+import { Component } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
+import { MapRegionLegend } from '../legend';
+import { LoadingSpinner } from '../loading';
+
 import './index.css';
 
-import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT } from './helper';
+import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT } from './config';
+import { getLocationToZoom, getZoomLevel, getMeanCenterOfLocation, getToolTipContent, getUniqueRegions, getStationRegion } from "./helper";
+import {  getMarkerColor, getMarkerSVG } from "../../utils";
 
 const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
@@ -16,8 +21,19 @@ export class MapBoxViewer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentViewer: null
+            currentViewer: null,
+            regions: {}
         }
+        this.stationMarkers = [];
+        // functions
+        this.getLocationToZoom = getLocationToZoom;
+        this.getMeanCenterOfLocation = getMeanCenterOfLocation;
+        this.getToolTipContent = getToolTipContent;
+        this.getUniqueRegions = getUniqueRegions;
+        this.getStationRegion = getStationRegion;
+        this.getZoomLevel = getZoomLevel;
+        this.getMarkerColor = getMarkerColor;
+        this.getMarkerSVG = getMarkerSVG;
     }
 
     componentDidMount() {
@@ -32,44 +48,84 @@ export class MapBoxViewer extends Component {
             container: 'mapbox-container',
             style: mapboxStyleUrl,
             center: [-98.585522, 1.8333333], // Centered on the US
-            zoom: 2,
-            projection: 'equirectangular'
+            zoom: this.props.zoomLevel || 2,
+            projection: 'equirectangular',
+            options: {
+                trackResize: true
+            }
         });
         this.setState({currentViewer: map});
         
-        // show the whole map of usa and show all the NIST stations
-        this.plotStations(map, this.props.stations);
+        // show the world map and show all the stations
+        this.plotStations(map, this.props.stations, this.props.region, this.props.agency, this.props.stationCode);
     }
 
     componentDidUpdate(prevProps, prevState) {
-        // on page refresh, show the whole map of usa and show all the NIST stations
-        this.plotStations(this.state.currentViewer, this.props.stations);
+        // on page refresh, show the whole map of usa and show all the stations
+        if (this.props.stationCode !== prevProps.stationCode || this.props.agency !== prevProps.agency ||
+            this.props.region !== prevProps.region || this.props.stations !== prevProps.stations) {
+            this.plotStations(this.state.currentViewer, this.props.stations, this.props.region, this.props.agency, this.props.stationCode);
+        }
+        if (!this.props.displayChart && this.state.currentViewer) {
+            // when the chart panel is closed, resize the map to take full container space
+            this.state.currentViewer.resize();
+        }
     }
 
-    plotStations = (map, stations) => {
-        stations.forEach(station => {
-            const { id, title: name, location } = station;
-            const [lon,  lat] = location;
-            const el = document.createElement('div');
-            el.className = 'marker';
-            
-            let marker = this.addMarker(map, el, name, lon, lat);
-
-            marker.getElement().addEventListener('click', () => {
-                this.props.setSelection(id);
-            });
+    componentWillUnmount() {
+        // clean all the event listeners
+        this.stationMarkers.forEach(marker => {
+            let elem = marker.getElement();
+            // clone won't have the event listeners, so previous will be garbage collected
+            elem.replaceWith(elem.cloneNode(true));
         });
     }
 
-    addMarker = (map, element, name, lon, lat) => {
+    plotStations = (map, stations, region, agency, stationCode) => {
+        let regions = this.getUniqueRegions(stations);
+        this.setState({regions: regions});
+        let stationMarkers = stations.map(station => {
+            // get the station meta and show them
+            const { id: stationId, properties } = station;
+            const el = document.createElement('div');
+            let stationRegion = this.getStationRegion(stationId);
+            const markerStyleIndex = regions[stationRegion].index;
+            let markerColor = this.getMarkerColor(markerStyleIndex);
+            el.className = 'marker';
+            el.innerHTML = this.getMarkerSVG(markerColor);
+            let marker = this.addMarker(map, el, properties);
+
+            marker.getElement().addEventListener('click', () => {
+                this.props.setDisplayChart(true);
+                this.props.setSelection(stationId);
+            });
+
+            return marker;
+        });
+        this.stationMarkers = this.stationMarkers.concat(stationMarkers);
+
+        // zoom to certian place, based on region and agency
+        let zoomLocation = this.getLocationToZoom(stations, stationCode);
+        let zoomLevel = this.getZoomLevel(region, agency, stationCode, this.props.zoomLevel);
+        if (zoomLocation) {
+            map.flyTo({ center: zoomLocation, zoom: zoomLevel });
+        }
+    }
+
+    // utils
+
+    addMarker = (map, element, properties) => {
+        const {longitude, latitude} = properties;
         let marker = new mapboxgl.Marker(element)
-        .setLngLat([lon, lat])
-        // .setPopup(new mapboxgl.Popup({ offset: 25 })
-        // .setText(name)
+        .setLngLat([longitude, latitude])
         .addTo(map);
 
-        const tooltipContent = `<strong>${name}<strong>`;
-        const popup = new mapboxgl.Popup().setHTML(tooltipContent);
+        const tooltipContent = this.getToolTipContent(properties);
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            offset: [-3, -15],
+            anchor: 'bottom'
+        }).setHTML(tooltipContent);
         marker.setPopup(popup);
         marker.getElement().addEventListener("mouseenter", () => {
             popup.addTo(map);
@@ -83,12 +139,14 @@ export class MapBoxViewer extends Component {
 
     render() {
         return (
-            <Box component="main" className="map-section fullSize" sx={{ flexGrow: 1 }}>
+            <Box component="main" className="map-section fullSize" sx={{ flexGrow: 1 }} style={this.props.style}>
                 <Grid container className="fullSize">
-                    <Grid item xs={12} sx={{ position: "relative" }}>
+                    <Grid item xs={12} sx={{ position: "relative" }} style={{height: "100%"}}>
+                        { this.props.stations.length < 1 && this.state.currentViewer && <LoadingSpinner /> }
                         <div id="mapbox-container" className='fullSize' style={{ position: "absolute" }}></div>
                     </Grid>
                 </Grid>
+                <MapRegionLegend regions={this.state.regions}/>
             </Box>
         );    
     }
