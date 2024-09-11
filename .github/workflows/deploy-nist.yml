@@ -142,16 +142,15 @@ jobs:
       
       - name: Upload to S3
         run: |
-          export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NIST }} | sed -E 's|^https?://[^/]+/||')
-          echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
-          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
-          
+          export BASE_PATH=${{ vars.REACT_APP_BASE_PATH_NIST }}
+          echo "BASE_PATH=${BASE_PATH}" >> $GITHUB_ENV
+          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-production/${BASE_PATH}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
         env:
-          PUBLIC_URL: ${{ vars.PUBLIC_URL_NIST }}
+          BASE_PATH: ${{ vars.REACT_APP_BASE_PATH_NIST }}
 
       - name: Request Invalidation to AWS Cloudfront
         uses: oneyedev/aws-cloudfront-invalidation@v1
         with:
           distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
           paths: |
-            /${{ env.PUBLIC_URL }}*
+            /${{ env.BASE_PATH }}*
