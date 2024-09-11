@@ -3,7 +3,7 @@ name: Deploy Urban
 on:
   workflow_dispatch:
   push:
-    branches: [ main, production ]
+    branches: [ add/urban-workflow, production ]
     # paths:
     #   - urban-dashboard/**
 
@@ -17,7 +17,7 @@ jobs:
       - name: Set the environment based on the branch
         id: define_environment
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/add/urban-workflow" ]; then
             echo "env_name=staging" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
             echo "env_name=production" >> $GITHUB_OUTPUT
@@ -71,7 +71,7 @@ jobs:
     needs:
       - build
       - define-environment
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/add/urban-workflow'
     environment: ${{ needs.define-environment.outputs.env_name }}
     
     permissions:
