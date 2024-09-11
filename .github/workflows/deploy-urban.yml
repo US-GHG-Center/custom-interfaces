@@ -58,6 +58,7 @@ jobs:
           echo "REACT_APP_PUBLIC_URL=$(echo "${{ vars.PUBLIC_URL_URBAN }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')" >> .env
           echo "Checking the REACT_APP_FEATURES_API_URL value in the .env file:"
           grep 'REACT_APP_FEATURES_API_URL' .env
+          export CI=false
           yarn
           yarn build
 
