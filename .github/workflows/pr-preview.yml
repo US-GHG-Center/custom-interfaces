@@ -6,6 +6,7 @@ on:
     paths:
       - 'emit-ch4plume-v1/**'
       - 'noaa-cpfp-point/**'
+      - 'nist-interface/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -34,6 +35,9 @@ jobs:
         with:
           node-version: 'v20.9.0'
 
+      - name: Install Yarn
+        run: npm install -g yarn
+
       - name: Determine changed files
         id: changes
         run: |
@@ -50,6 +54,9 @@ jobs:
           fi
           if grep -q 'noaa-cpfp-point/' changed_files.txt; then
             CHANGED_WEBSITES+=('noaa-cpfp-point')
+          fi
+          if grep -q 'nist-interface/' changed_files.txt; then
+            CHANGED_WEBSITES+=('nist-interface')
           fi
           # Convert array to comma-separated string and set it as an environment variable
           CHANGED_WEBSITES_STRING=$(IFS=, ; echo "${CHANGED_WEBSITES[*]}")
@@ -90,6 +97,25 @@ jobs:
               aws s3 sync noaa-cpfp-point/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/data/
 
               COMMENT+="- 🗼 noaa-cpfp-point: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/index.html"
+            elif [ "$WEBSITE" == "nist-interface" ]; then
+
+              NIST_PATH=$(echo "${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
+
+              echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./nist-interface/.env
+              echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
+              echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
+              echo REACT_APP_PUBLIC_URL="${NIST_PATH}" >> ./nist-interface/.env
+
+              URL_VALUE=$(grep "REACT_APP_PUBLIC_URL" ./nist-interface/.env)
+              echo "The value of REACT_APP_PUBLIC_URL is: ${URL_VALUE}"
+
+              cd ./nist-interface
+              yarn
+              yarn build
+              cd ..
+              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${NIST_PATH}
+
+              COMMENT+="- 🗼 nist-interface: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${NIST_PATH}index.html"
             fi
             echo "COMMENT=${COMMENT}" >> $GITHUB_ENV
           done
@@ -130,6 +156,7 @@ jobs:
         run: |
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ --recursive
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/ --recursive
+          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/ --recursive
 
       - name: Remove PR comment
         run: |

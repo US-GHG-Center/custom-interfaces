@@ -10,7 +10,7 @@ run `yarn`
 
 ## Run application
 
-- create `.env` with the appropriate tokens
+- create `.env.local` with the appropriate tokens
 - run `yarn start`
 
 ## Bundle using webpack
