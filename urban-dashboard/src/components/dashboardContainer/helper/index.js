@@ -19,6 +19,5 @@ export const generateUrbanRegions = async () => {
     })
 
     await Promise.all(fetchPromises);
-    console.log("the urban regions are: ", URBAN_REGIONS_ARR)
     return URBAN_REGIONS_ARR;
 };
