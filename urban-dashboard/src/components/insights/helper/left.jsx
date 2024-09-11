@@ -9,9 +9,17 @@ export function LeftInsights(props) {
     );
 }
 
+export function BottomLeftInsights(props) {
+    return (
+        <div className="insights-bottom-left">
+            {props.children}
+        </div>
+    );
+}
+
 LeftInsights.propTypes = {
     children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.element), 
-      PropTypes.element.isRequired
+        PropTypes.arrayOf(PropTypes.element),
+        PropTypes.element.isRequired
     ])
 }

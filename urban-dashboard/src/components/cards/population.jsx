@@ -1,59 +1,58 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUsers, faMapLocation } from '@fortawesome/free-solid-svg-icons';
 
-import { RootCard } from "./root";
-import { OutlinedCard } from "./outlinedCard";
-
-import { meta } from "../../assets/data/metadata";
-const { populationData } = meta;
-const { total: totalPopulation, urban: urbanPopulation, rural: ruralPopulation } = populationData;
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export function PopulationCard () {
-    const data = {
-        labels: ['Population'],
-        datasets: [
-          {
-            label: 'Urban',
-            data: [urbanPopulation],
-            backgroundColor: 'lightskyblue',
-          },
-          {
-            label: 'Rural',
-            data: [ruralPopulation],
-            backgroundColor: 'lightcoral',
-          },
-        ],
-      };
+export function PopulationCard({ selection, urbanRegions }) {
+  const [population, setPopulation] = useState("N/A");
+  const [area, setArea] = useState("N/A");
 
-      const options = {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-          },
-        },
-        scales: {
-          x: {
-            stacked: true,
-          },
-          y: {
-            stacked: true,
-            beginAtZero: true,
-            max: 100,
-          },
-        },
-      };
+  //adds commas in population number 
+  const formatNumberWithCommas = (number) => {
+    return new Intl.NumberFormat().format(number);
+  }
 
-    const description = "The population of the world has been increasing at a rapid rate. The urban population has been increasing at a faster rate than the rural population. The urban population is expected to increase to 56% by 2025."
+  useEffect(() => {
+    const geoJsonData = urbanRegions.find(region => region.name === selection).geojson;
+    if (geoJsonData) {
+      const feature = geoJsonData.features[0];
+      const populationValue = feature.properties.Total_Population
+      setPopulation(formatNumberWithCommas(populationValue) || "N/A");
 
-    return (
-        <OutlinedCard>
-            <RootCard title="Population" description={description} subDescription={`Total population is: ${totalPopulation}`} className="card">
-                <Bar data={data} options={options} />
-            </RootCard>
-        </OutlinedCard>
-    );
+      const areaValue = (feature.properties.ALAND / 1000000) * 0.386102;
+      setArea(areaValue.toFixed(2) || "N/A");
+    }
+  }, [selection, urbanRegions]);
+
+  return (
+    <div className="population-container">
+      <div className="population-item">
+        <div className="population-icon">
+          <FontAwesomeIcon
+            icon={faUsers}
+            style={{ color: "white", fontSize: 20 }}
+          />
+        </div>
+        <div className="population-info">
+          <p className="population-label">Population</p>
+          <p className="population-value">{population}</p>
+        </div>
+      </div>
+      <div className="population-item">
+        <div className="population-icon">
+          <FontAwesomeIcon
+            icon={faMapLocation}
+            style={{ color: "white", fontSize: 20 }}
+          />
+        </div>
+        <div className="population-info">
+          <p className="population-label">Area</p>
+          <p className="population-value">{area} mi²</p>
+        </div>
+      </div>
+    </div>
+  );
 }

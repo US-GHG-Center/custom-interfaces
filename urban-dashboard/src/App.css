@@ -32,6 +32,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -39,8 +40,11 @@
 
 /* Height 100% fix */
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
+  font-family: 'Inter', 'sans-seriff';
 }
 
 .fullSize {

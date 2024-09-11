@@ -35,4 +35,7 @@ export let meta = {
         co2: 344,
         ch4: 455
     },
+    emissionsData: {
+
+    }
 }
