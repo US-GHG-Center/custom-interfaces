@@ -18,13 +18,24 @@ function getTitle(agency, ghg, region) {
         CH4: 'Methane'
     };
 
+    const REGION_FULL_NAME = {
+        NEC: "Northeast Corridor",
+        LAM: "Los Angeles Megacity",
+        IN: "Indianapolis"
+    };
+
     let GHG = ghg.toUpperCase();
     let GHGFullName = GHG;
     if (GHG in GHG_FULL_NAME) {
         GHGFullName = GHG_FULL_NAME[GHG];
     }
 
-    let regionPhrase = region ? `${region.toUpperCase()}:` : '';
+    let regionPhrase = ""
+    if (region && region.toUpperCase() in REGION_FULL_NAME) {
+        regionPhrase = `${REGION_FULL_NAME[region.toUpperCase()]} `;
+    } else {
+        regionPhrase = `${region.toUpperCase()}`;
+    }
 
     let formedTitle = `${agency.toUpperCase()}: ${regionPhrase} ${GHGFullName} Concentration Measurements`;
     return formedTitle;
