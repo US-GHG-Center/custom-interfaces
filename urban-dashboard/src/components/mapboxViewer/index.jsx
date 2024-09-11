@@ -5,13 +5,12 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
-import { URBAN_REGIONS } from '../../assets/geojson';
-import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT, VULCAN_RASTER_URL, GRA2PES_RASTER_URL } from './helper';
+import { VULCAN_RASTER_URL, GRA2PES_RASTER_URL } from './helper';
 
 import './index.css';
 
 const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
-const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
+// const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
 const mapCenter = [-99.676392, 39.106667];
 
 export class MapBoxViewer extends Component {
@@ -108,7 +107,7 @@ export class MapBoxViewer extends Component {
             const urbanRegion = this.props.urbanRegions.filter(item => item.name === this.props.urbanRegion)[0];
             if (urbanRegion) {
                 console.log("selected region is: ", urbanRegion);
-                const name = urbanRegion.center;
+                // const name = urbanRegion.center;
                 const center = urbanRegion.center;
                 const geojson = urbanRegion.geojson;
 
@@ -130,7 +129,9 @@ export class MapBoxViewer extends Component {
         const { currentViewer } = this.state;
         if (currentViewer) {
             this.props.setSelection("");
-            this.state.selectedUrbanRegion = false; //giving this incorrect state will force it to reset
+            this.setState({
+                selectedUrbanRegion: false, //giving this incorrect state will force it to reset
+            })
 
             // Zoom out and fly back to center and remove all the geoJSON layers
             const currentMap = this.state.currentViewer;
@@ -242,13 +243,6 @@ export class MapBoxViewer extends Component {
                         <div id="mapbox-container" className='fullSize' style={{ position: "absolute" }}></div>
                     </Grid>
                 </Grid>
-                {/* {this.state.selectedUrbanRegion
-                    &&
-                    <Insights
-                        urbanRegion={this.props.urbanRegion}
-                        dataset={this.props.dataset}
-                    />
-                } */}
             </Box>
         );
     }

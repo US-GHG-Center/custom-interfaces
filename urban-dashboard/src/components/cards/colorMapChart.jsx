@@ -4,6 +4,8 @@ import { Chart, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import * as d3 from 'd3';
 import { Typography } from '@mui/material';
 
+import "./index.css";
+
 Chart.register(CategoryScale, LinearScale, BarElement, Title);
 
 export function ColorMapChart({ dataset }) {
@@ -64,7 +66,7 @@ const GradientChart = ({ dataset }) => {
 
     useEffect(() => {
         const svg = d3.select(svgRef.current);
-        const labels = (dataset == "vulcan" ? labels_vulcan : labels_gra2pes);
+        const labels = (dataset === "vulcan" ? labels_vulcan : labels_gra2pes);
 
         // Define the gradient
         const gradient = svg.append('defs')
@@ -99,7 +101,7 @@ const GradientChart = ({ dataset }) => {
             .text(d => d.label)
             .style('font-size', '10px');
         // .style('fill', '#082A64');
-    }, []);
+    });
 
     return (
         <svg ref={svgRef} height={20} width={'100%'}>

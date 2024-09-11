@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faMapLocation } from '@fortawesome/free-solid-svg-icons';
-
-import { URBAN_REGIONS } from "../../assets/geojson/index";
-
-// const { urbanRegions } = 
-// const { total: totalPopulation, urban: urbanPopulation, rural: ruralPopulation } = populationData;
-
 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -23,7 +16,7 @@ export function PopulationCard({ selection, urbanRegions }) {
   }
 
   useEffect(() => {
-    const geoJsonData = urbanRegions.find(region => region.name == selection).geojson;
+    const geoJsonData = urbanRegions.find(region => region.name === selection).geojson;
     if (geoJsonData) {
       const feature = geoJsonData.features[0];
       const populationValue = feature.properties.Total_Population
@@ -32,7 +25,7 @@ export function PopulationCard({ selection, urbanRegions }) {
       const areaValue = (feature.properties.ALAND / 1000000) * 0.386102;
       setArea(areaValue.toFixed(2) || "N/A");
     }
-  }, [selection]);
+  }, [selection, urbanRegions]);
 
   return (
     <div className="population-container">
