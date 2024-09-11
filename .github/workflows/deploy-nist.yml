@@ -51,10 +51,13 @@ jobs:
       - name: Build for production 🔧
         working-directory: ./nist-interface
         run: |
+          FEATURES_API_URL=$(grep '^FEATURES_API_URL=' ../.env | cut -d '=' -f 2)
           echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> .env
           echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> .env
-          echo REACT_APP_FEATURES_API_URL="${{ secrets.FEATURES_API_URL_PROD }}" >> .env
+          echo REACT_APP_FEATURES_API_URL="${FEATURES_API_URL}" >> .env
           echo "REACT_APP_PUBLIC_URL=$(echo "${{ vars.PUBLIC_URL_NIST }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')" >> .env
+          echo "Checking the REACT_APP_FEATURES_API_URL value in the .env file:"
+          grep 'REACT_APP_FEATURES_API_URL' .env
           yarn
           yarn build
 
