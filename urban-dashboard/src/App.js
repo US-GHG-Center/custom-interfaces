@@ -10,13 +10,13 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import './App.css';
 
-const PUBLIC_URL = process.env.REACT_APP_PUBLIC_URL;
+const BASE_PATH = process.env.REACT_APP_BASE_PATH;
 
 function App() {
   return (
     <Fragment>
       <CssBaseline />
-      <BrowserRouter basename={PUBLIC_URL}>
+      <BrowserRouter basename={BASE_PATH}>
         <Routes>
           <Route path="/" element={<DashboardContainer />}>
           </Route>
