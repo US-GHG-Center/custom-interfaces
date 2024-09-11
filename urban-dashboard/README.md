@@ -2,15 +2,15 @@
 
 - Install node
 - use latest node version
-    - if using nvm, run `nvm use`  
+  - if using nvm, run `nvm use`  
 
 ## Install dependency
 
 run `yarn`
 
-## Run application
+## Run application in Local
 
-- create `.env` with the appropriate tokens
+- create `.env.local` a replica of `.env.local-sample` with the appropriate tokens
 - run `yarn start`
 
 ## Bundle using webpack

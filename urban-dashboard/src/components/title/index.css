@@ -1,17 +1,24 @@
-#title {
-    text-align: center;
-    width: 345px;
-    min-width: 275px;
-    max-width: 345px;
-    position: absolute;
-    font-size: 1rem;
-    top: 1%;
-    left: 1%;
-    padding: 10px 24px;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    z-index: 1000;
-    /* Ensure it's above other elements */
-    background-color: rgba(255, 255, 255, 0.9);
-  }
+.title-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-card-title {
+  flex-grow: 1;
+  display: flex;
+  justify-content: left;
+  color: #082A64;
+}
+
+.title-card-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title-card-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

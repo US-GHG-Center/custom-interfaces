@@ -21,7 +21,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
   return (
     <Box className="fullSize">
         <Title ghg={ghg} agency={agency} region={region}/>
-        {/* <img src="nist.png" alt="NIST" className='logo'/> */}
+        <img src={process.env.PUBLIC_URL + "/nist.png"} alt="NIST" className='logo'/>
         <PanelGroup direction='vertical' className='panel-wrapper'>
           <Panel
             id='map-panel'

@@ -1,5 +1,6 @@
 .card {
     padding: 5px 15px;
+    margin-top: 5px;
 }
 
 .explore-more-card {
@@ -7,4 +8,112 @@
     text-decoration: none !important;
     margin-right: 10px;
     justify-content: space-between;
+}
+
+/* Dataset Card Styles start Here */
+.dataset-card {
+    /* max-width: 329px; */
+}
+
+.dataset-card h2 {
+    color: #082A64;
+    font-size: 16px;
+    margin: 0 0 8px 0;
+}
+
+.dataset-card p {
+    color: #1E1E1E;
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.dataset-card a {
+    color: #0098D7;
+    text-decoration: none;
+    /* font-weight: bold; */
+}
+
+.dataset-card a:hover {
+    text-decoration: underline;
+}
+
+/* Population Card Styles Start Here */
+.population-container {
+    display: flex;
+    gap: 60px;
+}
+
+.population-item {
+    display: flex;
+    align-items: center;
+}
+
+.population-icon {
+    background-color: #082A64;
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.population-icon img {
+    width: 24px;
+    height: 24px;
+}
+
+.population-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.population-label {
+    color: #0098D7;
+    font-size: 12px;
+    margin: 0;
+    line-height: 12.1px;
+}
+
+.population-value {
+    color: #082A64;
+    font-size: 16px;
+    margin: 0;
+    line-height: 19.36px;
+}
+
+/* Population Card Styles End Here */
+
+/* Pie chart */
+.pie-chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.pie-chart {
+    width: 105px;
+    height: 105px;
+    margin: 0 auto;
+}
+
+/* Colormap chart */
+.colormap-chart {
+    position: fixed;
+    z-index: 100;
+    right: 10px;
+    bottom: 40px;
+    width: 320px;
+
+    padding: 10px;
+
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    /* max-width: 90vw; */
+
+    align-items: center;
+    justify-content: center;
 }

@@ -1,35 +1,27 @@
 import { Fragment } from 'react';
 import {
-  createBrowserRouter,
-  RouterProvider,
+  BrowserRouter,
+  Routes,
+  Route
 } from "react-router-dom";
 
-import './App.css';
+import { DashboardContainer } from './components/dashboardContainer';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Dashboard } from './components/dashboard';
-import { ExploreTowerData } from './components/exploreData/exploreTowerData';
-import { ExploreAirborneData } from './components/exploreData/exploreAirborneData';
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Dashboard />,
-  },
-  {
-    path: "/explore/tower",
-    element: <ExploreTowerData />,
-  },
-  {
-    path: "/explore/airborne",
-    element: <ExploreAirborneData />,
-  },
-]);
+import './App.css';
+
+const BASE_PATH = process.env.REACT_APP_BASE_PATH;
 
 function App() {
   return (
     <Fragment>
       <CssBaseline />
-      <RouterProvider router={router} />
+      <BrowserRouter basename={BASE_PATH}>
+        <Routes>
+          <Route path="/" element={<DashboardContainer />}>
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </Fragment>
   );
 }
