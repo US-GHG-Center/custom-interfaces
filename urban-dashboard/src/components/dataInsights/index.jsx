@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Tooltip, Legend, Filler, ArcElement } from 'chart.js';
 
 import { Line, Pie } from 'react-chartjs-2';
@@ -28,7 +28,7 @@ export const StackedAreaChart = ({ selection }) => {
         return `./data/vulcan/${formattedCity}_PLACE_AggregatedSectors_2013_2021.json`;
     }
 
-    const colorMap = {
+    const colorMap = useMemo(() => ({
         "Aviation": { borderColor: 'purple', backgroundColor: 'rgba(128, 0, 128, 0.5)' },
         "Industry": { borderColor: 'brown', backgroundColor: 'rgba(165, 42, 42, 0.5)' },
         "Commercial": { borderColor: 'yellow', backgroundColor: 'rgba(255, 255, 0, 0.5)' },
@@ -36,7 +36,7 @@ export const StackedAreaChart = ({ selection }) => {
         "Onroad": { borderColor: 'green', backgroundColor: 'rgba(0, 255, 0, 0.5)' },
         "Residential": { borderColor: 'orange', backgroundColor: 'rgba(255, 165, 0, 0.5)' },
         "Railroad": { borderColor: 'darkblue', backgroundColor: 'rgba(0, 0, 139, 0.5)' },
-    };
+    }), []);
 
     const Legend = () => {
         return (
@@ -131,7 +131,7 @@ export const StackedAreaChart = ({ selection }) => {
                 });
             })
             .catch(error => console.error("error reading emissions data", error));
-    }, [selection]);
+    }, [selection, colorMap]);
 
     const options = {
         plugins: {
@@ -207,14 +207,14 @@ const GasEmissionsBySectorCard = ({ selection }) => {
     };
 
     // const gases = ["CO2", "CO", "NOX", "SOX", "PM2.5"]
-    const sectors = [
+    const sectors = useMemo(() => ([
         "Airports Mass",
         "Residential Buildings Mass",
         "Commercial Buildings Mass",
         "Industrial Buildings Mass",
         "Power Plants Mass",
         "Onroad Gas Mass",
-    ]
+    ]), []);
 
     const LegendItems = [
         { color: 'rgb(255, 99, 132)', label: 'Airport Mass' },
@@ -251,7 +251,7 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                 });
             })
             .catch(error => console.error("error fetching emissions by sector for gra2pes", error));
-    }, [selection]);
+    }, [selection, sectors]);
 
 
     const Legend = () => {

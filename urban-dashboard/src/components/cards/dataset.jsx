@@ -1,6 +1,4 @@
-import { CardContent, Typography } from "@mui/material";
-import { OutlinedCard } from "./outlinedCard";
-import { RootCard } from "./root";
+import "./index.css";
 
 export function DatasetCard({ dataset }) {
     return (
@@ -20,7 +18,7 @@ export function Grap2pesDatasetCard() {
             <h2>{title}</h2>
             <p>
                 {description}
-                <a target="_blank" href="https://earth.gov/ghgcenter/data-catalog/gra2pes-co2-monthgrid-v1"> Click here for more details.</a>
+                <a target="opener" href="https://earth.gov/ghgcenter/data-catalog/gra2pes-co2-monthgrid-v1"> Click here for more details.</a>
             </p>
         </div>
     )
@@ -35,7 +33,7 @@ export function VulcanDatasetCard() {
             <h2>{title}</h2>
             <p>
                 {description}
-                <a target="_blank" href="https://earth.gov/ghgcenter/data-catalog/vulcan-ffco2-yeargrid-v4"> Click here for more details.</a>
+                <a target="opener" href="https://earth.gov/ghgcenter/data-catalog/vulcan-ffco2-yeargrid-v4"> Click here for more details.</a>
             </p>
         </div>
     )

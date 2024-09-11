@@ -1,11 +1,11 @@
 import React from 'react';
 import { Typography } from '@mui/material';
 
-import { DatasetCard, Grap2pesDatasetCard, VulcanDatasetCard } from '../cards/dataset';
+import { DatasetCard } from '../cards/dataset';
 import { PopulationCard } from '../cards/population';
 import { DataInsightsCard } from '../dataInsights';
 import { Title } from '../title';
-import GradientChart, { ColorMapChart } from '../cards/colorMapChart';
+import { ColorMapChart } from '../cards/colorMapChart';
 
 import "./index.css";
 
