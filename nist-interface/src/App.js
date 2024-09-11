@@ -1,25 +1,21 @@
 import { Fragment } from 'react';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CssBaseline from '@mui/material/CssBaseline';
 import { DashboardContainer } from './pages/dashboardContainer';
+import './App.css';
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <DashboardContainer />,
-  }
-]);
+const BASE_PATH = process.env.REACT_APP_BASE_PATH;
 
 function App() {
   return (
     <Fragment>
       <CssBaseline />
-      <RouterProvider router={router} />
+      <BrowserRouter basename={BASE_PATH}>
+        <Routes>
+          <Route path="/" element={<DashboardContainer />}>
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </Fragment>
   );
 }

@@ -7,7 +7,7 @@ import { LoadingSpinner } from '../loading';
 import { fetchAllFromFeaturesAPI } from "../../services/api";
 
 import { plugin, options } from './config';
-import { dataPreprocess, getYAxisLabel, getChangedGHGStationId, getStationCode, isChartZoomed, setInitialScaleLimits } from "./helper";
+import { dataPreprocess, getYAxisLabel, getChangedGHGStationId, getStationCode, isChartZoomed } from "./helper";
 import './index.css';
 
 const collectionItemURL = (collectionId) => {
