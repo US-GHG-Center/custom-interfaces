@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [ main, production ]
-    paths:
-      - urban-dashboard/**
+    # paths:
+    #   - urban-dashboard/**
 
 jobs:
   define-environment:
