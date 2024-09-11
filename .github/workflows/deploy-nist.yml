@@ -53,7 +53,7 @@ jobs:
         run: |
           echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> .env
           echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> .env
-          echo "REACT_APP_BASE_PATH=${{ vars.REACT_APP_BASE_PATH_NIST }} >> .env
+          echo REACT_APP_BASE_PATH="${{ vars.REACT_APP_BASE_PATH_NIST }}" >> .env
           yarn
           yarn build
 
@@ -97,7 +97,7 @@ jobs:
         run: |
           export BASE_PATH=${{ vars.REACT_APP_BASE_PATH_NIST }}
           echo "BASE_PATH=${BASE_PATH}" >> $GITHUB_ENV
-          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-staging/${BASE_PATH}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-staging${BASE_PATH}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
         env:
           BASE_PATH: ${{ vars.REACT_APP_BASE_PATH_NIST }}
 
@@ -106,7 +106,7 @@ jobs:
         with:
           distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
           paths: |
-            /${{ env.BASE_PATH }}*
+            ${{ env.BASE_PATH }}*
 
   deploy-production:
     needs:
@@ -142,7 +142,7 @@ jobs:
         run: |
           export BASE_PATH=${{ vars.REACT_APP_BASE_PATH_NIST }}
           echo "BASE_PATH=${BASE_PATH}" >> $GITHUB_ENV
-          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-production/${BASE_PATH}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-production${BASE_PATH}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
         env:
           BASE_PATH: ${{ vars.REACT_APP_BASE_PATH_NIST }}
 
@@ -151,4 +151,4 @@ jobs:
         with:
           distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
           paths: |
-            /${{ env.BASE_PATH }}*
+            ${{ env.BASE_PATH }}*
