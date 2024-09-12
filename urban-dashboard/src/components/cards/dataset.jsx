@@ -10,8 +10,8 @@ export function DatasetCard({ dataset }) {
 }
 
 export function Grap2pesDatasetCard() {
-    const title = "GRA2PES";
-    const description = "GRA2PES expands upon existing datasets to model and map greenhouse gases (Carbon Dioxide, Carbon Monoxide, Nitrous Oxides) and hazardous air pollutants (Sulphur Dioxide, Particulate Matter) together, offering fine-resolution information about monthly emissions for multiple sectors."
+    const title = "GRA²PES";
+    const description = "GRA²PES expands upon existing datasets to model and map greenhouse gases (Carbon Dioxide, Carbon Monoxide, Nitrous Oxides) and hazardous air pollutants (Sulphur Dioxide, Particulate Matter) together, offering fine-resolution information about monthly emissions for multiple sectors."
 
     return (
         <div className="dataset-card">
