@@ -39,7 +39,7 @@ export function InfoSidebar({
 
                 {!selection && (
                     <>
-                        <Typography style={{ fontSize: '12px', color: '#1E1E1E' }}>
+                        <Typography style={{ fontSize: '12px', color: '#1E1E1E', fontFamily: 'Inter' }}>
                             {briefSnippet}
                         </Typography>
                     </>
