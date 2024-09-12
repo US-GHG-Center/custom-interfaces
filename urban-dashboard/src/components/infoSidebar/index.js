@@ -27,7 +27,7 @@ export function InfoSidebar({
 
     return (
         <div>
-            <div className="info-sidebar">
+            <div className={"info-sidebar " + (selection ? 'info-sidebar-full-height' : '')}>
 
                 <Title
                     selection={selection}

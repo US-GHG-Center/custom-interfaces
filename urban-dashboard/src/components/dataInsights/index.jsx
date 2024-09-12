@@ -24,7 +24,7 @@ export const StackedAreaChart = ({ selection }) => {
 
     //function to format filepath according to city selection
     const formatFilePath = (city) => {
-        const formattedCity = city.replace(/\s+/g, '_');
+        const formattedCity = city.replace('/', '-').replace(/\s+/g, '_');
         return `./data/vulcan/${formattedCity}_PLACE_AggregatedSectors_2013_2021.json`;
     }
 
@@ -206,27 +206,32 @@ const GasEmissionsBySectorCard = ({ selection }) => {
         },
     };
 
-    // const gases = ["CO2", "CO", "NOX", "SOX", "PM2.5"]
     const sectors = useMemo(() => ([
-        "Airports Mass",
-        "Residential Buildings Mass",
-        "Commercial Buildings Mass",
-        "Industrial Buildings Mass",
-        "Power Plants Mass",
-        "Onroad Gas Mass",
+        "Industrial",
+        "Onroad Transportation",
+        "Power",
+        "Nonroad Transportation",
+        "Other",
+        "Residential + Commercial",
     ]), []);
 
     const LegendItems = [
-        { color: 'rgb(255, 99, 132)', label: 'Airport Mass' },
-        { color: 'rgb(54, 162, 235)', label: 'Residential Buildings Mass' },
-        { color: 'rgb(250, 192, 192)', label: 'Commerical Buildings Mass' },
-        { color: 'rgb(150, 192, 192)', label: 'Industrial Buildings Mass' },
-        { color: 'rgb(153, 102, 255)', label: 'Power Plants Mass' },
-        { color: 'rgb(155, 118, 83)', label: 'Onroad Gas Mass' },
+        { color: 'rgb(255, 99, 132)', label: 'Industrial' },
+        { color: 'rgb(54, 162, 235)', label: 'Onroad Transportation' },
+        { color: 'rgb(250, 192, 192)', label: 'Power' },
+        { color: 'rgb(150, 192, 192)', label: 'Nonroad Transportation' },
+        { color: 'rgb(153, 102, 255)', label: 'Other' },
+        { color: 'rgb(155, 118, 83)', label: 'Residential + Commercial' },
     ]
 
+    //function to format filepath according to city selection
+    const formatFilePath = (city) => {
+        const formattedCity = city.replace('/', '-').replace(/\s+/g, '_');
+        return `./data/gra2pes/${formattedCity}_2021_Month07_species_sectoral_breakdown_conservative.json`;
+    }
+
     useEffect(() => {
-        fetch(`./data/gra2pes/2021_${selection}_species_sector_totals.json`)
+        fetch(formatFilePath(selection))
             .then(resp => resp.json())
             .then(json => {
                 // const gases = json.map(entry => entry.Species);
@@ -235,12 +240,12 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                         label: entry.Species,
                         data: sectors.map(sector => parseFloat(entry[sector])),
                         backgroundColor: [
-                            'rgb(255, 99, 132)',  // Color for "Airports Mass"
-                            'rgb(54, 162, 235)',  // Color for "Residential Buildings Mass"
-                            'rgb(250, 192, 192)',  // Color for "Commercial Buildings Mass"
-                            'rgb(150, 192, 192)',  // Color for "Industrial Buildings Mass"
-                            'rgb(153, 102, 255)', // Color for "Power Plants Mass"
-                            'rgb(155, 118, 83)'   // Color for "Onroad Gas Mass"
+                            'rgb(255, 99, 132)',  // Color for "Industrial"
+                            'rgb(54, 162, 235)',  // Color for "Onroad Transportation"
+                            'rgb(250, 192, 192)',  // Color for "Power"
+                            'rgb(150, 192, 192)',  // Color for "Nonroad Transportation"
+                            'rgb(153, 102, 255)', // Color for "Other"
+                            'rgb(155, 118, 83)'   // Color for "Residential + Commercial"
                         ],
                     }
                 });
@@ -314,7 +319,7 @@ const GasEmissionsBySectorCard = ({ selection }) => {
 
 const VulcanInsightsCard = ({ selection }) => {
     const title = "Urban CO₂ Emissions by Sector";
-    const description = "Different industries emit different amounts of CO₂ based on fossil fuel type and use. Long-term data offers a view of how industries change over time."
+    const description = "Different sectors emit different amounts of CO₂ based on fossil fuel type and use. Long-term data offers a view of how sectors change over time."
 
     return (
         <>

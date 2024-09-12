@@ -26,7 +26,7 @@ export function Grap2pesDatasetCard() {
 
 export function VulcanDatasetCard() {
     const title = "Vulcan v4.0"
-    const description = "Providing annual carbon dioxide (CO2) emissions estimates per one square mile for ten different sectors, the Vulcan dataset enables researchers to estimate fossil fuel use and understand greenhouse gas emissions at neighborhood scale."
+    const description = "Providing annual carbon dioxide (CO2) emissions estimates per one square kilometer for ten different sectors, the Vulcan dataset provides estimates of fossil fuel use and greenhouse gas emissions at the neighborhood scale."
 
     return (
         <div className="dataset-card">
