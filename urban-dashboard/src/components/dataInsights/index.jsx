@@ -76,49 +76,49 @@ export const StackedAreaChart = ({ selection }) => {
                 const datasets = [
                     {
                         label: 'Aviation',
-                        data: jsonData.map(item => item['Aviation']),
+                        data: jsonData.map(item => item['Aviation'] / 1000),
                         borderColor: colorMap["Aviation"].borderColor,
                         backgroundColor: colorMap["Aviation"].backgroundColor,
                         fill: true,
                     },
                     {
                         label: 'Industry',
-                        data: jsonData.map(item => item['Industry']),
+                        data: jsonData.map(item => item['Industry'] / 1000),
                         borderColor: colorMap["Industry"].borderColor,
                         backgroundColor: colorMap["Industry"].backgroundColor,
                         fill: true,
                     },
                     {
                         label: 'Commercial',
-                        data: jsonData.map(item => item['Commercial']),
+                        data: jsonData.map(item => item['Commercial'] / 1000),
                         borderColor: colorMap["Commercial"].borderColor,
                         backgroundColor: colorMap["Commercial"].backgroundColor,
                         fill: true,
                     },
                     {
                         label: 'Power',
-                        data: jsonData.map(item => item['Power']),
+                        data: jsonData.map(item => item['Power'] / 1000),
                         borderColor: colorMap["Power"].borderColor,
                         backgroundColor: colorMap["Power"].backgroundColor,
                         fill: true,
                     },
                     {
                         label: 'Onroad',
-                        data: jsonData.map(item => item['Onroad']),
+                        data: jsonData.map(item => item['Onroad'] / 1000),
                         borderColor: colorMap["Onroad"].borderColor,
                         backgroundColor: colorMap["Onroad"].backgroundColor,
                         fill: true,
                     },
                     {
                         label: 'Residential',
-                        data: jsonData.map(item => item['Residential']),
+                        data: jsonData.map(item => item['Residential'] / 1000),
                         borderColor: colorMap["Residential"].borderColor,
                         backgroundColor: colorMap["Residential"].backgroundColor,
                         fill: true,
                     },
                     {
                         label: 'Railroad',
-                        data: jsonData.map(item => item['Railroad']),
+                        data: jsonData.map(item => item['Railroad'] / 1000),
                         borderColor: colorMap["Railroad"].borderColor,
                         backgroundColor: colorMap["Railroad"].backgroundColor,
                         fill: true,
@@ -148,7 +148,7 @@ export const StackedAreaChart = ({ selection }) => {
                 },
                 title: {
                     display: true,
-                    text: "metric tons of CO₂"
+                    text: "kilo tons of CO₂"
                 }
 
             },
