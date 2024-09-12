@@ -29,13 +29,13 @@ export const StackedAreaChart = ({ selection }) => {
     }
 
     const colorMap = useMemo(() => ({
-        "Aviation": { borderColor: 'purple', backgroundColor: 'rgba(128, 0, 128, 0.5)' },
-        "Industry": { borderColor: 'brown', backgroundColor: 'rgba(165, 42, 42, 0.5)' },
-        "Commercial": { borderColor: 'yellow', backgroundColor: 'rgba(255, 255, 0, 0.5)' },
-        "Power": { borderColor: 'blue', backgroundColor: 'rgba(0, 0, 255, 0.5)' },
-        "Onroad": { borderColor: 'green', backgroundColor: 'rgba(0, 255, 0, 0.5)' },
-        "Residential": { borderColor: 'orange', backgroundColor: 'rgba(255, 165, 0, 0.5)' },
-        "Railroad": { borderColor: 'darkblue', backgroundColor: 'rgba(0, 0, 139, 0.5)' },
+        "Aviation": { borderColor: 'rgb(61, 193, 211)', backgroundColor: 'rgb(99, 205, 218)' },
+        "Industry": { borderColor: 'rgb(245, 205, 121)', backgroundColor: 'rgb(247, 215, 148)' },
+        "Commercial": { borderColor: 'rgb(84, 109, 229)', backgroundColor: 'rgb(119, 139, 235)' },
+        "Power": { borderColor: 'rgb(225, 95, 65)', backgroundColor: 'rgb(231, 127, 103)' },
+        "Onroad": { borderColor: 'rgb(196, 69, 105)', backgroundColor: 'rgb(207, 106, 135)' },
+        "Residential": { borderColor: 'rgb(87, 75, 144)', backgroundColor: 'rgb(120, 111, 166)' },
+        "Railroad": { borderColor: 'rgb(48, 57, 82)', backgroundColor: 'rgb(89, 98, 117)' },
     }), []);
 
     const Legend = () => {
