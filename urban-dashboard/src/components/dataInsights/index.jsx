@@ -319,7 +319,7 @@ const GasEmissionsBySectorCard = ({ selection }) => {
 
 const VulcanInsightsCard = ({ selection }) => {
     const title = "Urban CO₂ Emissions by Sector";
-    const description = "Different industries emit different amounts of CO₂ based on fossil fuel type and use. Long-term data offers a view of how industries change over time."
+    const description = "Different sectors emit different amounts of CO₂ based on fossil fuel type and use. Long-term data offers a view of how sectors change over time."
 
     return (
         <>
