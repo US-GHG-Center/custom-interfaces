@@ -227,7 +227,7 @@ const GasEmissionsBySectorCard = ({ selection }) => {
     //function to format filepath according to city selection
     const formatFilePath = (city) => {
         const formattedCity = city.replace('/', '-').replace(/\s+/g, '_');
-        return `./data/gra2pes-monthly/${formattedCity}_2021_Month07_species_sectoral_breakdown.json`;
+        return `./data/gra2pes/${formattedCity}_2021_Month07_species_sectoral_breakdown_conservative.json`;
     }
 
     useEffect(() => {
