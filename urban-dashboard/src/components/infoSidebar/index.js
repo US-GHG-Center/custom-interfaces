@@ -18,11 +18,11 @@ export function InfoSidebar({
     dataset
 }) {
 
-    let briefSnippet = "data is available for the contiguous United States. Locations indicated are for representative purposes only, based on the top 30 U.S. cities by population size, according the 2021 U.S. Census Bureau figures and city “Place” boundaries.";
+    let briefSnippet = "data is available for the contiguous United States. Locations indicated are for representative purposes only, based on the top 30 U.S. cities by population size, according to the 2021 U.S. Census Bureau figures and city “Place” boundaries.";
     if (dataset === "vulcan") {
         briefSnippet = `Vulcan ${briefSnippet}`
     } else if (dataset === "gra2pes") {
-        briefSnippet = `GRA2PES ${briefSnippet}`
+        briefSnippet = `GRA²PES ${briefSnippet}`
     }
 
     return (
@@ -40,7 +40,7 @@ export function InfoSidebar({
                 {!selection && (
                     <>
                         <Typography style={{ fontSize: '12px', color: '#1E1E1E' }}>
-                            {briefSnippet}
+                            <p>{briefSnippet}</p>
                         </Typography>
                     </>
                 )}
