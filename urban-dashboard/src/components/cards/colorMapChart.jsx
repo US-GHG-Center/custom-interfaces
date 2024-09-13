@@ -12,7 +12,7 @@ export function ColorMapChart({ dataset }) {
     const title = (
         <>
             {dataset === "vulcan" && "2021 Total CO₂ Emissions"}
-            {dataset === "gra2pes" && "2021 Total CO₂ Emissions"}
+            {dataset === "gra2pes" && "July 2021 Total CO₂ Emissions"}
         </>
     )
     const unit = (
