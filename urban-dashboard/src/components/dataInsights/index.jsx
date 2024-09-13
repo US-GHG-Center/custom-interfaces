@@ -24,18 +24,18 @@ export const StackedAreaChart = ({ selection }) => {
 
     //function to format filepath according to city selection
     const formatFilePath = (city) => {
-        const formattedCity = city.replace(/\s+/g, '_');
+        const formattedCity = city.replace('/', '-').replace(/\s+/g, '_');
         return `./data/vulcan/${formattedCity}_PLACE_AggregatedSectors_2013_2021.json`;
     }
 
     const colorMap = useMemo(() => ({
-        "Aviation": { borderColor: 'purple', backgroundColor: 'rgba(128, 0, 128, 0.5)' },
-        "Industry": { borderColor: 'brown', backgroundColor: 'rgba(165, 42, 42, 0.5)' },
-        "Commercial": { borderColor: 'yellow', backgroundColor: 'rgba(255, 255, 0, 0.5)' },
-        "Power": { borderColor: 'blue', backgroundColor: 'rgba(0, 0, 255, 0.5)' },
-        "Onroad": { borderColor: 'green', backgroundColor: 'rgba(0, 255, 0, 0.5)' },
-        "Residential": { borderColor: 'orange', backgroundColor: 'rgba(255, 165, 0, 0.5)' },
-        "Railroad": { borderColor: 'darkblue', backgroundColor: 'rgba(0, 0, 139, 0.5)' },
+        "Aviation": { borderColor: 'rgb(61, 193, 211)', backgroundColor: 'rgb(99, 205, 218)' },
+        "Industry": { borderColor: 'rgb(245, 205, 121)', backgroundColor: 'rgb(247, 215, 148)' },
+        "Commercial": { borderColor: 'rgb(84, 109, 229)', backgroundColor: 'rgb(119, 139, 235)' },
+        "Power": { borderColor: 'rgb(225, 95, 65)', backgroundColor: 'rgb(231, 127, 103)' },
+        "Onroad": { borderColor: 'rgb(196, 69, 105)', backgroundColor: 'rgb(207, 106, 135)' },
+        "Residential": { borderColor: 'rgb(87, 75, 144)', backgroundColor: 'rgb(120, 111, 166)' },
+        "Railroad": { borderColor: 'rgb(48, 57, 82)', backgroundColor: 'rgb(89, 98, 117)' },
     }), []);
 
     const Legend = () => {
@@ -76,49 +76,49 @@ export const StackedAreaChart = ({ selection }) => {
                 const datasets = [
                     {
                         label: 'Aviation',
-                        data: jsonData.map(item => item['Aviation']),
+                        data: jsonData.map(item => item['Aviation'] / 1000),
                         borderColor: colorMap["Aviation"].borderColor,
                         backgroundColor: colorMap["Aviation"].backgroundColor,
                         fill: true,
                     },
                     {
                         label: 'Industry',
-                        data: jsonData.map(item => item['Industry']),
+                        data: jsonData.map(item => item['Industry'] / 1000),
                         borderColor: colorMap["Industry"].borderColor,
                         backgroundColor: colorMap["Industry"].backgroundColor,
                         fill: true,
                     },
                     {
                         label: 'Commercial',
-                        data: jsonData.map(item => item['Commercial']),
+                        data: jsonData.map(item => item['Commercial'] / 1000),
                         borderColor: colorMap["Commercial"].borderColor,
                         backgroundColor: colorMap["Commercial"].backgroundColor,
                         fill: true,
                     },
                     {
                         label: 'Power',
-                        data: jsonData.map(item => item['Power']),
+                        data: jsonData.map(item => item['Power'] / 1000),
                         borderColor: colorMap["Power"].borderColor,
                         backgroundColor: colorMap["Power"].backgroundColor,
                         fill: true,
                     },
                     {
                         label: 'Onroad',
-                        data: jsonData.map(item => item['Onroad']),
+                        data: jsonData.map(item => item['Onroad'] / 1000),
                         borderColor: colorMap["Onroad"].borderColor,
                         backgroundColor: colorMap["Onroad"].backgroundColor,
                         fill: true,
                     },
                     {
                         label: 'Residential',
-                        data: jsonData.map(item => item['Residential']),
+                        data: jsonData.map(item => item['Residential'] / 1000),
                         borderColor: colorMap["Residential"].borderColor,
                         backgroundColor: colorMap["Residential"].backgroundColor,
                         fill: true,
                     },
                     {
                         label: 'Railroad',
-                        data: jsonData.map(item => item['Railroad']),
+                        data: jsonData.map(item => item['Railroad'] / 1000),
                         borderColor: colorMap["Railroad"].borderColor,
                         backgroundColor: colorMap["Railroad"].backgroundColor,
                         fill: true,
@@ -148,7 +148,7 @@ export const StackedAreaChart = ({ selection }) => {
                 },
                 title: {
                     display: true,
-                    text: "metric tons of CO₂"
+                    text: "kilo tons of CO₂"
                 }
 
             },
@@ -206,27 +206,32 @@ const GasEmissionsBySectorCard = ({ selection }) => {
         },
     };
 
-    // const gases = ["CO2", "CO", "NOX", "SOX", "PM2.5"]
     const sectors = useMemo(() => ([
-        "Airports Mass",
-        "Residential Buildings Mass",
-        "Commercial Buildings Mass",
-        "Industrial Buildings Mass",
-        "Power Plants Mass",
-        "Onroad Gas Mass",
+        "Industrial",
+        "Onroad Transportation",
+        "Power",
+        "Nonroad Transportation",
+        "Other",
+        "Residential + Commercial",
     ]), []);
 
     const LegendItems = [
-        { color: 'rgb(255, 99, 132)', label: 'Airport Mass' },
-        { color: 'rgb(54, 162, 235)', label: 'Residential Buildings Mass' },
-        { color: 'rgb(250, 192, 192)', label: 'Commerical Buildings Mass' },
-        { color: 'rgb(150, 192, 192)', label: 'Industrial Buildings Mass' },
-        { color: 'rgb(153, 102, 255)', label: 'Power Plants Mass' },
-        { color: 'rgb(155, 118, 83)', label: 'Onroad Gas Mass' },
+        { color: 'rgb(255, 99, 132)', label: 'Industrial' },
+        { color: 'rgb(54, 162, 235)', label: 'Onroad Transportation' },
+        { color: 'rgb(250, 192, 192)', label: 'Power' },
+        { color: 'rgb(150, 192, 192)', label: 'Nonroad Transportation' },
+        { color: 'rgb(153, 102, 255)', label: 'Other' },
+        { color: 'rgb(155, 118, 83)', label: 'Residential + Commercial' },
     ]
 
+    //function to format filepath according to city selection
+    const formatFilePath = (city) => {
+        const formattedCity = city.replace('/', '-').replace(/\s+/g, '_');
+        return `./data/gra2pes/${formattedCity}_2021_Month07_species_sectoral_breakdown_conservative.json`;
+    }
+
     useEffect(() => {
-        fetch(`./data/gra2pes/2021_${selection}_species_sector_totals.json`)
+        fetch(formatFilePath(selection))
             .then(resp => resp.json())
             .then(json => {
                 // const gases = json.map(entry => entry.Species);
@@ -235,12 +240,12 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                         label: entry.Species,
                         data: sectors.map(sector => parseFloat(entry[sector])),
                         backgroundColor: [
-                            'rgb(255, 99, 132)',  // Color for "Airports Mass"
-                            'rgb(54, 162, 235)',  // Color for "Residential Buildings Mass"
-                            'rgb(250, 192, 192)',  // Color for "Commercial Buildings Mass"
-                            'rgb(150, 192, 192)',  // Color for "Industrial Buildings Mass"
-                            'rgb(153, 102, 255)', // Color for "Power Plants Mass"
-                            'rgb(155, 118, 83)'   // Color for "Onroad Gas Mass"
+                            'rgb(255, 99, 132)',  // Color for "Industrial"
+                            'rgb(54, 162, 235)',  // Color for "Onroad Transportation"
+                            'rgb(250, 192, 192)',  // Color for "Power"
+                            'rgb(150, 192, 192)',  // Color for "Nonroad Transportation"
+                            'rgb(153, 102, 255)', // Color for "Other"
+                            'rgb(155, 118, 83)'   // Color for "Residential + Commercial"
                         ],
                     }
                 });
@@ -314,7 +319,7 @@ const GasEmissionsBySectorCard = ({ selection }) => {
 
 const VulcanInsightsCard = ({ selection }) => {
     const title = "Urban CO₂ Emissions by Sector";
-    const description = "Different industries emit different amounts of CO₂ based on fossil fuel type and use. Long-term data offers a view of how industries change over time."
+    const description = "Different sectors emit different amounts of CO₂ based on fossil fuel type and use. Long-term data offers a view of how sectors change over time."
 
     return (
         <>
