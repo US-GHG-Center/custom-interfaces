@@ -56,7 +56,7 @@ const GradientChart = ({ dataset }) => {
 
     const labels_gra2pes = [
         { label: '0', value: 0 },
-        { label: '100', value: width - 20 }
+        { label: '2000', value: width - 20 }
     ];
 
     const labels_vulcan = [
