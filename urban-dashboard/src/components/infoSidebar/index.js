@@ -28,32 +28,37 @@ export function InfoSidebar({
     return (
         <div>
             <div className={"info-sidebar " + (selection ? 'info-sidebar-full-height' : '')}>
+                <div>
+                    <Title
+                        selection={selection}
+                        setSelection={setSelection}
+                        handleZoomOut={handleZoomOut}
+                    />
 
-                <Title
-                    selection={selection}
-                    setSelection={setSelection}
-                    handleZoomOut={handleZoomOut}
-                />
+                    {/* Data Snippet Card */}
 
-                {/* Data Snippet Card */}
+                    {!selection && (
+                        <>
+                            <Typography style={{ fontSize: '12px', color: '#1E1E1E', fontFamily: "Inter", marginTop: "5px" }}>
+                                {briefSnippet}
+                            </Typography>
+                        </>
+                    )}
 
-                {!selection && (
-                    <>
-                        <Typography style={{ fontSize: '12px', color: '#1E1E1E' }}>
-                            {briefSnippet}
-                        </Typography>
-                    </>
-                )}
+                    {/* Population and Area Card */}
+                    {selection && (
+                        <>
+                            <PopulationCard selection={selection} urbanRegions={urbanRegions} />
+                        </>
+                    )}
+                </div>
 
-                {/* Population and Area Card */}
-                {selection && (
-                    <>
-                        <PopulationCard selection={selection} urbanRegions={urbanRegions} />
-                    </>
-                )}
+
+
 
                 {/* Primary separator line */}
                 <div className="info-border-primary" />
+
 
                 {/* Dataset Card */}
                 <DatasetCard dataset={dataset} />
@@ -70,8 +75,6 @@ export function InfoSidebar({
                         />
                     </>
                 )}
-
-
 
             </div>
 

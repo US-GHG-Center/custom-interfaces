@@ -48,9 +48,26 @@ export function UrbanSelector({ urbanRegion, setUrbanRegion }) {
         disableUnderline={true}
         onChange={handleSelect}
         IconComponent={(props) => (<DropdownIconComponent {...props} />)}
+        renderValue={(selected) => (
+          <Typography sx={{
+            fontSize: "20px",
+            marginRight: 3
+          }}>
+            {selected}
+          </Typography>
+        )}
         sx={{
           display: 'flex',
           alignItems: 'center',
+          maxHeight: '80vh'
+        }}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              maxHeight: "50vh",
+              padding: 0,
+            }
+          }
         }}
       >
         {urbanRegions.map((region) => (
@@ -60,12 +77,9 @@ export function UrbanSelector({ urbanRegion, setUrbanRegion }) {
           >
             <Box display="flex" alignItems="center">
               <Typography sx={{
-                // width: "170px",
                 mr: 3,
-                paddingTop: 0.4,
                 color: "#082A64",
-                fontSize: "20px",
-                lineHeight: "24.2px",
+                fontSize: "12px",
                 cursor: "pointer"
               }}>{region}</Typography>
             </Box>
