@@ -193,6 +193,12 @@ const GasEmissionsBySectorCard = ({ selection }) => {
             },
             tooltip: {
                 enabled: true, // enable tooltips
+                titleFont: {
+                    size: 9,
+                },
+                bodyFont: {
+                    size: 9,
+                },
                 // display percentage in the tooltip
                 callbacks: {
                     label: function (tooltipItem) {

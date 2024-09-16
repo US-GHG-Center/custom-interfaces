@@ -53,9 +53,6 @@ export function InfoSidebar({
                     )}
                 </div>
 
-
-
-
                 {/* Primary separator line */}
                 <div className="info-border-primary" />
 
