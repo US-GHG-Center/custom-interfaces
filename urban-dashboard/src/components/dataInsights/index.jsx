@@ -56,7 +56,8 @@ export const StackedAreaChart = ({ selection }) => {
                             color: "#1B2631",
                             whiteSpace: "normal",
                             overflowWrap: "break-word",
-                            maxWidth: "88px"
+                            maxWidth: "88px",
+                            fontFamily: "Inter"
                         }}>{label}</Typography>
                     </Grid>
                 ))}
@@ -148,7 +149,7 @@ export const StackedAreaChart = ({ selection }) => {
                 },
                 title: {
                     display: true,
-                    text: "kilo tons of CO₂"
+                    text: "kilo tons of CO₂",
                 }
 
             },
@@ -192,6 +193,12 @@ const GasEmissionsBySectorCard = ({ selection }) => {
             },
             tooltip: {
                 enabled: true, // enable tooltips
+                titleFont: {
+                    size: 9,
+                },
+                bodyFont: {
+                    size: 9,
+                },
                 // display percentage in the tooltip
                 callbacks: {
                     label: function (tooltipItem) {
@@ -216,12 +223,12 @@ const GasEmissionsBySectorCard = ({ selection }) => {
     ]), []);
 
     const LegendItems = [
-        { color: 'rgb(255, 99, 132)', label: 'Industrial' },
-        { color: 'rgb(54, 162, 235)', label: 'Onroad Transportation' },
-        { color: 'rgb(250, 192, 192)', label: 'Power' },
-        { color: 'rgb(150, 192, 192)', label: 'Nonroad Transportation' },
-        { color: 'rgb(153, 102, 255)', label: 'Other' },
-        { color: 'rgb(155, 118, 83)', label: 'Residential + Commercial' },
+        { color: 'rgb(99, 205, 218)', label: 'Industrial' },
+        { color: 'rgb(247, 215, 148)', label: 'Onroad Transportation' },
+        { color: 'rgb(119, 139, 235)', label: 'Power' },
+        { color: 'rgb(231, 127, 103)', label: 'Nonroad Transportation' },
+        { color: 'rgb(207, 106, 135)', label: 'Other' },
+        { color: 'rgb(120, 111, 166)', label: 'Residential + Commercial' },
     ]
 
     //function to format filepath according to city selection
@@ -240,12 +247,12 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                         label: entry.Species,
                         data: sectors.map(sector => parseFloat(entry[sector])),
                         backgroundColor: [
-                            'rgb(255, 99, 132)',  // Color for "Industrial"
-                            'rgb(54, 162, 235)',  // Color for "Onroad Transportation"
-                            'rgb(250, 192, 192)',  // Color for "Power"
-                            'rgb(150, 192, 192)',  // Color for "Nonroad Transportation"
-                            'rgb(153, 102, 255)', // Color for "Other"
-                            'rgb(155, 118, 83)'   // Color for "Residential + Commercial"
+                            'rgb(99, 205, 218)',  // Color for "Industrial"
+                            'rgb(247, 215, 148)',  // Color for "Onroad Transportation"
+                            'rgb(119, 139, 235)',  // Color for "Power"
+                            'rgb(231, 127, 103)',  // Color for "Nonroad Transportation"
+                            'rgb(207, 106, 135)',  // Color for "Other"
+                            'rgb(120, 111, 166)'   // Color for "Residential + Commercial"
                         ],
                     }
                 });
@@ -273,11 +280,12 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                             }}
                         />
                         <Typography sx={{
-                            fontSize: "12px",
+                            fontSize: "11px",
                             color: "#1B2631",
                             whiteSpace: "normal",
                             overflowWrap: "break-word",
-                            maxWidth: "88px"
+                            maxWidth: "88px",
+                            fontFamily: "Inter"
                         }}>{item.label}</Typography>
                     </Grid>
                 ))}
@@ -302,8 +310,11 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                                     }} options={options} />
                                 </div>
                                 <Typography sx={{
-                                    fontSize: "12px",
-                                    color: "#1B2631"
+                                    fontSize: "11px",
+                                    color: "#1B2631",
+                                    fontFamily: "Inter",
+                                    margin: "5px 0 5px 0",
+                                    // marginBottom: "5px"
                                 }}>
                                     {item.label}
                                 </Typography>

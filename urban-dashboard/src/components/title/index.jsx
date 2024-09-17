@@ -13,7 +13,7 @@ export function Title({ children, selection, setSelection, handleZoomOut }) {
             {!selection && (
                 <>
                     <div className="title-card-title">
-                        <Typography variant='h5'>
+                        <Typography variant='h5' sx={{ fontFamily: "Inter" }}>
                             <span>Urban Dashboard</span>
                         </Typography>
                     </div>
