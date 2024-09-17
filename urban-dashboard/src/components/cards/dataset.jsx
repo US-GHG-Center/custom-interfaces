@@ -18,7 +18,7 @@ export function Grap2pesDatasetCard() {
             <h2>{title}</h2>
             <p>
                 {description}
-                <a target="opener" href="https://earth.gov/ghgcenter/data-catalog/gra2pes-co2-monthgrid-v1"> Click here for more details.</a>
+                <a target="opener" href="https://earth.gov/ghgcenter/data-catalog/gra2pes-ghg-monthgrid-v1"> Click here for more details.</a>
             </p>
         </div>
     )
