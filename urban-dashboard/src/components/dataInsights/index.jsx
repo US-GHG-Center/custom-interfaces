@@ -149,7 +149,7 @@ export const StackedAreaChart = ({ selection }) => {
                 },
                 title: {
                     display: true,
-                    text: "kilo tons of CO₂",
+                    text: "metric kilotons of CO₂",
                 }
 
             },
