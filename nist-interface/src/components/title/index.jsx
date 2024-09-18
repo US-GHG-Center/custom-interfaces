@@ -14,9 +14,13 @@ export function Title ({ ghg, agency, region, style }) {
 
 function getTitle(agency, ghg, region) {
     const GHG_FULL_NAME = {
-        CO2: 'Carbon Dioxide',
-        CH4: 'Methane'
+        CO2: 'CO₂',
+        CH4: 'CH₄'
     };
+
+    const REGION_ADDITIONAL_PREFIX = {
+        IN: " - Penn State University"
+    }
 
     const REGION_FULL_NAME = {
         NEC: "Northeast Corridor",
@@ -37,6 +41,11 @@ function getTitle(agency, ghg, region) {
         regionPhrase = `${region.toUpperCase()}`;
     }
 
-    let formedTitle = `${agency.toUpperCase()}: ${regionPhrase} ${GHGFullName} Concentration Measurements`;
+    let regionPrefix = ""
+    if (region && region.toUpperCase() in REGION_ADDITIONAL_PREFIX) {
+        regionPrefix = `${REGION_ADDITIONAL_PREFIX[region.toUpperCase()]}`
+    }
+
+    let formedTitle = `${agency.toUpperCase()}${regionPrefix}: ${regionPhrase} ${GHGFullName} Concentration Measurements`;
     return formedTitle;
 }
