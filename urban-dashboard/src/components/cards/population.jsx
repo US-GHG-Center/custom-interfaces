@@ -22,7 +22,7 @@ export function PopulationCard({ selection, urbanRegions }) {
       const populationValue = feature.properties.Total_Population
       setPopulation(formatNumberWithCommas(populationValue) || "N/A");
 
-      const areaValue = (feature.properties.ALAND / 1000000) * 0.386102;
+      const areaValue = (feature.properties.ALAND / 1000000);
       setArea(areaValue.toFixed(2) || "N/A");
     }
   }, [selection, urbanRegions]);
@@ -50,7 +50,7 @@ export function PopulationCard({ selection, urbanRegions }) {
         </div>
         <div className="population-info">
           <p className="population-label">Area</p>
-          <p className="population-value">{area} mi²</p>
+          <p className="population-value">{area} km²</p>
         </div>
       </div>
     </div>
