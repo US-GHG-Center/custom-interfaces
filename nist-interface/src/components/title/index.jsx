@@ -21,7 +21,7 @@ function getTitle(agency, ghg, region) {
     const REGION_FULL_NAME = {
         NEC: "Northeast Corridor",
         LAM: "Los Angeles Megacity",
-        IN: "Indianapolis"
+        IN: "Penn State University Indianapolis"
     };
 
     let GHG = ghg.toUpperCase();
