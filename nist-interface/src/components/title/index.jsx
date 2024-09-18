@@ -14,8 +14,8 @@ export function Title ({ ghg, agency, region, style }) {
 
 function getTitle(agency, ghg, region) {
     const GHG_FULL_NAME = {
-        CO2: 'Carbon Dioxide',
-        CH4: 'Methane'
+        CO2: 'CO₂',
+        CH4: 'CH₄'
     };
 
     const REGION_ADDITIONAL_PREFIX = {
