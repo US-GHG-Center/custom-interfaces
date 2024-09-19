@@ -30,7 +30,7 @@ export const AVAILABLE_REGIONS = [
     'Chicago',
     'Los Angeles',
     'New York'
-]
+].sort();
 
 export const CITY_CENTERS = {
     'Baltimore': [-76.61219, 39.29038],
