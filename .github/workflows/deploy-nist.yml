@@ -145,7 +145,7 @@ jobs:
         run: |
           export BASE_PATH=${{ vars.REACT_APP_BASE_PATH_NIST }}
           echo "BASE_PATH=${BASE_PATH}" >> $GITHUB_ENV
-          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-staging${BASE_PATH}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-develop${BASE_PATH}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
         env:
           BASE_PATH: ${{ vars.REACT_APP_BASE_PATH_NIST }}
 
