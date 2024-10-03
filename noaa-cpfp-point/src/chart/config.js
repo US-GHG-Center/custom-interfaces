@@ -160,7 +160,7 @@ export const getOptions = (station, selectedGhg)=> ({
                 },
             title: function (context) {
                 let dateTime = context[0].label;
-                return `${dateTime} (UTC)`
+                return `${dateTime} (UTC)`;
             }
             },
         mode: "nearest",
