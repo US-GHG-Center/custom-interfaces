@@ -72,7 +72,7 @@ export const getOptions = (station, selectedGhg)=> ({
         x: {
         title: {
             display: true,
-            text: "Observation Date/Time",
+            text: "Observation Date/Time (UTC)",
             },
         grid: {
             display: false,
@@ -86,6 +86,11 @@ export const getOptions = (station, selectedGhg)=> ({
                 //   return "fadhsdsf"
                 // }
             },
+        adapters: {
+            date: {
+                zone: "utc"
+            }
+        }
         },
         y: {
         title: {
