@@ -10,7 +10,7 @@ function App() {
   return (
     <Fragment>
       <CssBaseline />
-      <BrowserRouter basename={BASE_PATH}>
+      <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<DashboardContainer />}>
           </Route>
