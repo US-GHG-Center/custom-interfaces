@@ -12,10 +12,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 <script src="https://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
   </head>
   <body>
     <div id='map'></div>
+      <div id="distance-measure"></div>
       <div id="plume-id-search-box" class="autocomplete-search-box">
         <input id="plume-id-search-input" type="text" class="search-box" placeholder="Search by Plume ID and/or Location" />
         <ul id="plume-id-search-list" class="search-result"></ul>
@@ -23,9 +25,10 @@
 
 
     <div class="marker"></div>
+   
     <div id="lds-roller-id" class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
 
-
+ 
     <!-- <script src="./index.js">
 
 

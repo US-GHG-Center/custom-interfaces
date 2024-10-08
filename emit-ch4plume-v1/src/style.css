@@ -108,10 +108,18 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
 
 .ui-slider .ui-slider-handle {
   position: absolute;
-  z-index: 2;
+  z-index: 99;
   width: 1.2em;
   height: 1.2em;
   cursor: col-resize;
+}
+
+#distance-measure {
+ position: absolute;
+ z-index: 2;
+ padding: 10px 10px 10px 10px;
+ background-color:#ffff;
+  
 }
 
 .lds-roller {

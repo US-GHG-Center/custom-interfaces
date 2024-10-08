@@ -40,6 +40,26 @@ map.dragRotate.disable();
 // disable map rotation using touch rotation gesture
 map.touchZoomRotate.disableRotation();
 
+
+const distanceContainer = document.getElementById("distance-measure");
+
+// GeoJSON object to hold our measurement features
+const distancePoints = {
+  type: "FeatureCollection",
+  features: [],
+};
+
+// Used to draw a line between points
+const linestring = {
+  type: "Feature",
+  geometry: {
+    type: "LineString",
+    coordinates: [],
+  },
+};
+
+
+
 class HomeButtonControl {
     onClick() {
         // Set the map's center and zoom to the desired location
@@ -308,241 +328,343 @@ document.addEventListener("click", function(e) {
 async function main() {
 
     map.on("load", async () => {
+      map.addSource("distancePoints", {
+        type: "geojson",
+        data: distancePoints,
+      });
 
-        const methanMetadata = await (
-            await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
-        ).json();
-        itemIds = await (
-            await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
-        ).json();
-        const features = methanMetadata.features;
+      const methanMetadata = await (
+        await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
+      ).json();
+      itemIds = await (
+        await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
+      ).json();
+      const features = methanMetadata.features;
 
-        $("#lds-roller-id").css({
-            'display': 'none'
+      $("#lds-roller-id").css({
+        display: "none",
+      });
+
+      polygons = features
+        .filter((f) => f.geometry.type === "Polygon")
+        .map((f, i) => ({
+          id: i,
+          feature: f,
+        }));
+      const points = features
+        .filter((f) => f.geometry.type === "Point")
+        .map((f, i) => ({
+          id: i,
+          feature: f,
+        }))
+        .sort((prev, next) => {
+          const prev_date = new Date(
+            prev.feature.properties["UTC Time Observed"]
+          ).getTime();
+          const next_date = new Date(
+            next.feature.properties["UTC Time Observed"]
+          ).getTime();
+          return prev_date - next_date;
         });
 
-        polygons = features
-            .filter((f) => f.geometry.type === "Polygon")
-            .map((f, i) => ({
-                id: i,
-                feature: f
-            }));
-        const points = features
-            .filter((f) => f.geometry.type === "Point")
-            .map((f, i) => ({
-                id: i,
-                feature: f
-            }))
-            .sort((prev, next) => {
-                const prev_date = new Date(prev.feature.properties["UTC Time Observed"]).getTime();
-                const next_date = new Date(next.feature.properties["UTC Time Observed"]).getTime();
-                return prev_date - next_date
-            });
+      // console.log({points})
+      createColorbar(VMIN, VMAX);
 
-        createColorbar(VMIN, VMAX);
+      // Filter and set IDs for points
+      features
+        .filter((f) => f.geometry.type === "Point")
+        .map((f, i) => {
+          f.id = i;
+          return f;
+        });
+      //   console.log({features})
+      // Add styles to the map
+      map.addLayer({
+        id: "measure-points",
+        type: "circle",
+        source: "distancePoints",
+        paint: {
+          "circle-radius": 5,
+          "circle-color": "#000",
+        },
+        filter: ["in", "$type", "Point"],
+      });
+      map.addLayer({
+        id: "measure-lines",
+        type: "line",
+        source: "distancePoints",
+        layout: {
+          "line-cap": "round",
+          "line-join": "round",
+        },
+        paint: {
+          "line-color": "#000",
+          "line-width": 2.5,
+        },
+        filter: ["in", "$type", "LineString"],
+      });
 
-        // Filter and set IDs for points
-        features
-            .filter((f) => f.geometry.type === "Point")
-            .map((f, i) => {
-                f.id = i;
-                return f;
-            })
+      points.forEach(function (point) {
+        const itemName = path.basename(
+          point.feature.properties["Data Download"]
+        );
+        const coords = point.feature.geometry.coordinates;
+        const markerEl = document.createElement("div");
+        markerEl.className = "marker";
+        markerEl.id = `marker-${point.id}`;
+        const marker = new mapboxgl.Marker(markerEl)
+          .setLngLat([coords[0], coords[1]])
+          .addTo(map);
 
-        points.forEach(function(point) {
-            const itemName = path.basename(point.feature.properties["Data Download"]);
-            const coords = point.feature.geometry.coordinates
-            const markerEl = document.createElement("div");
-            markerEl.className = "marker";
-            markerEl.id = `marker-${point.id}`;
-            const marker = new mapboxgl.Marker(markerEl)
-                .setLngLat([coords[0], coords[1]])
-                .addTo(map);
+        MARKERS_ON_MAP.add(point);
 
-            MARKERS_ON_MAP.add(point);
+        const localProps = point.feature.properties;
 
-            const localProps = point.feature.properties
-
-            const tooltipContent = `
-        <strong> Max Methane Enh: <span style="color: red">${localProps["Max Plume Concentration (ppm m)"]} (ppm m)</span></strong><br>
+        const tooltipContent = `
+        <strong> Max Methane Enh: <span style="color: red">${
+          localProps["Max Plume Concentration (ppm m)"]
+        } (ppm m)</span></strong><br>
         Latitude (max conc): ${coords[1].toFixed(3)}<br>
         Longitude (max conc): ${coords[0].toFixed(3)}<br>
         Time Observed: ${localProps["UTC Time Observed"]}
         `;
 
-            const popup = new mapboxgl.Popup().setHTML(tooltipContent);
-            const polygon = polygons[point.id];
-            const polygonSourceId = "polygon-source-" + polygon.id;
-            const polygonLayerId = "polygon-layer-" + polygon.id
+        const popup = new mapboxgl.Popup().setHTML(tooltipContent);
+        const polygon = polygons[point.id];
+        const polygonSourceId = "polygon-source-" + polygon.id;
+        const polygonLayerId = "polygon-layer-" + polygon.id;
 
-            marker.setPopup(popup);
+        marker.setPopup(popup);
 
-            marker.getElement().addEventListener("mouseenter", () => {
-                popup.addTo(map);
-            });
-
-            marker.getElement().addEventListener("mouseleave", () => {
-                popup.remove();
-            });
-
-            markerProps["point-layer-" + point.id] = marker;
-
-            map.on('mouseenter', polygonLayerId, () => {
-                map.getCanvas().style.cursor = 'pointer';
-                popup.addTo(map);
-            });
-
-            map.on('mouseleave', polygonLayerId, () => {
-                map.getCanvas().style.cursor = '';
-                popup.remove();
-            });
-
-            map.on('click', polygonLayerId, () => {
-                addPolygon(
-                    polygonSourceId,
-                    polygonLayerId,
-                    polygon.feature
-
-                );
-
-                if (map.getSource("raster-source-" + point.feature.id)) {
-                    removeLayers(
-                        "raster-source-" + point.feature.id,
-                        ["raster-layer-" + point.feature.id]
-
-                    )
-                    RASTER_IDS_ON_MAP.delete(point.feature);
-                    IDS_ON_MAP.delete(point.feature.id)
-                } else {
-                    addRaster(
-                        itemIds[itemName],
-                        point.feature,
-                        polygonLayerId,
-                        true
-                    );
-
-                }
-
-            });
-
-            marker.getElement().addEventListener("click", (e) => {
-
-                counter_clicks_marker += 1
-
-                if (counter_clicks_marker % 2 == 0) {
-                    markerClickTracker[0] = e.target
-                    markerClickTracker[0].style.visibility = "hidden"
-                    if (markerClickTracker[1]) {
-                        markerClickTracker[1].style.visibility = "visible"
-                    }
-
-                } else {
-                    markerClickTracker[1] = e.target
-                    markerClickTracker[1].style.visibility = "hidden"
-                    if (markerClickTracker[0]) {
-                        markerClickTracker[0].style.visibility = "visible"
-                    }
-                }
-
-                addPolygon(
-                    polygonSourceId,
-                    polygonLayerId,
-                    polygon.feature
-                )
-
-                addRaster(
-                    itemIds[itemName],
-                    point.feature,
-                    polygonLayerId
-                );
-
-            });
-
-        })
-
-        $(function() {
-            //
-
-            const firstPoint = points[0].feature.properties["UTC Time Observed"];
-            const lastPoint = points[points.length - 1].feature.properties["UTC Time Observed"];
-
-            var minStartDate = new Date(firstPoint)
-            minStartDate.setUTCHours(0, 0, 0, 0)
-            var maxStopDate = new Date(lastPoint)
-            maxStopDate.setUTCHours(23, 59, 59, 0)
-
-            $("#slider-range").slider({
-                range: true,
-                min: minStartDate.getTime() / 1000,
-                max: maxStopDate.getTime() / 1000,
-                step: 86400,
-                values: [
-                    minStartDate.getTime() / 1000,
-                    maxStopDate.getTime() / 1000,
-                ],
-                slide: function(event, ui) {
-
-                    let startDate = new Date(ui.values[0] * 1000);
-                    let stopDate = new Date(ui.values[1] * 1000);
-                    startDate.setUTCHours(0, 0, 0, 0)
-                    stopDate.setUTCHours(23, 59, 59, 0)
-
-                    for (const point of points) {
-                        // let polygon_visiblity = 'visible'
-                        let layerID = "point-layer-" + point.id;
-                        // let polygonID = "polygon-layer-" + point.id
-                        let point_date = new Date(
-                            point.feature.properties["UTC Time Observed"]
-                        );
-
-                        if (point_date >= startDate && point_date <= stopDate) {
-
-                            markerProps[layerID].addTo(map);
-                            showHideLayers([`polygon-layer-${point.id}`, `outline-polygon-layer-${point.id}`], true)
-                            MARKERS_ON_MAP.add(point);
-
-                        } else {
-                            markerProps[layerID].remove();
-                            showHideLayers([`polygon-layer-${point.id}`, `outline-polygon-layer-${point.id}`], false)
-
-                            MARKERS_ON_MAP.delete(point);
-
-                        }
-
-                    }
-
-                    for (const feature of RASTER_IDS_ON_MAP) {
-                        let layerID = "raster-layer-" + feature.id;
-                        let point_date = new Date(feature.properties["UTC Time Observed"]);
-                        let boolDisplay = layerToggled && point_date >= startDate && point_date <= stopDate;
-                        showHideLayers([layerID], boolDisplay)
-                        $("#display_props").css({
-                            "visibility": boolDisplay ? "visible" : "hidden"
-                        });
-
-                    }
-
-                    $("#amount").val(
-                        startDate.toUTCString().slice(0, -13) + " - " + stopDate.toUTCString().slice(0, -13)
-                    );
-                },
-            });
-            var startDate = new Date($("#slider-range").slider("values", 0) * 1000);
-            var stopDate = new Date($("#slider-range").slider("values", 1) * 1000);
-            $("#amount").val(
-                startDate.toUTCString().slice(0, -13) + " - " + stopDate.toUTCString().slice(0, -13)
-            );
+        marker.getElement().addEventListener("mouseenter", () => {
+          popup.addTo(map);
         });
 
-        let typingTimeout = null;
-        clearTimeout(typingTimeout);
-        typingTimeout = setTimeout(() => {
-            $('.search-box').keyup((e) => {
-                const copy_procedures = handleSearch($(e.target).val())
-                drawplume_idList(copy_procedures);
-            })
-        }, 500);
+        marker.getElement().addEventListener("mouseleave", () => {
+          popup.remove();
+        });
 
+        markerProps["point-layer-" + point.id] = marker;
+
+        map.on("mouseenter", polygonLayerId, () => {
+          map.getCanvas().style.cursor = "pointer";
+          popup.addTo(map);
+        });
+
+        map.on("mouseleave", polygonLayerId, () => {
+          map.getCanvas().style.cursor = "";
+          popup.remove();
+        });
+
+        map.on("click", polygonLayerId, () => {
+          addPolygon(polygonSourceId, polygonLayerId, polygon.feature);
+
+          if (map.getSource("raster-source-" + point.feature.id)) {
+            removeLayers("raster-source-" + point.feature.id, [
+              "raster-layer-" + point.feature.id,
+            ]);
+            RASTER_IDS_ON_MAP.delete(point.feature);
+            IDS_ON_MAP.delete(point.feature.id);
+          } else {
+            addRaster(itemIds[itemName], point.feature, polygonLayerId, true);
+          }
+        });
+        // map.on("click",(e)=>{
+        // const layer =  map.getLayer('measure-points')
+        // console.log({layer})
+        // })
+
+        marker.getElement().addEventListener("click", (e) => {
+          counter_clicks_marker += 1;
+
+          if (counter_clicks_marker % 2 == 0) {
+            markerClickTracker[0] = e.target;
+            markerClickTracker[0].style.visibility = "hidden";
+            if (markerClickTracker[1]) {
+              markerClickTracker[1].style.visibility = "visible";
+            }
+          } else {
+            markerClickTracker[1] = e.target;
+            markerClickTracker[1].style.visibility = "hidden";
+            if (markerClickTracker[0]) {
+              markerClickTracker[0].style.visibility = "visible";
+            }
+          }
+
+          addPolygon(polygonSourceId, polygonLayerId, polygon.feature);
+
+          addRaster(itemIds[itemName], point.feature, polygonLayerId);
+        });
+      });
+
+      map.on("click", (e) => {
+        const features = map.queryRenderedFeatures(e.point, {
+          layers: ["measure-points"],
+        });
+        console.log({ distancePoints });
+        // Remove the linestring from the group
+        // so we can redraw it based on the points collection.
+        if (distancePoints.features.length > 1) distancePoints.features.pop();
+
+        // Clear the distance container to populate it with a new value.
+        distanceContainer.innerHTML = "";
+
+        const totalPoints = distancePoints.features.filter(
+          (f) => f.geometry.type === "Point"
+        );
+        console.log({ totalPoints });
+
+        // If a feature was clicked, remove it from the map.
+        if (features.length) {
+          const id = features[0].properties.id;
+          distancePoints.features = distancePoints.features.filter(
+            (point) => point.properties.id !== id
+          );
+        } else {
+          if (totalPoints.length < 2) {
+            const point = {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [e.lngLat.lng, e.lngLat.lat],
+              },
+              properties: {
+                id: String(new Date().getTime()),
+              },
+            };
+            console.log("Clicked and pushing");
+            distancePoints.features.push(point);
+            //   console.log({ totalFeatures: distancePoints.features });
+          }
+        }
+
+        if (distancePoints.features.length > 1) {
+          linestring.geometry.coordinates = distancePoints.features.map(
+            (point) => point.geometry.coordinates
+          );
+
+          distancePoints.features.push(linestring);
+
+          // Populate the distanceContainer with total distance
+          const value = document.createElement("pre");
+          const distance = turf.length(linestring);
+          value.textContent = `Total distance: ${distance.toLocaleString()}km`;
+          distanceContainer.appendChild(value);
+        }
+
+        map.getSource("distancePoints").setData(distancePoints);
+      });
+      map.on("mousemove", (e) => {
+        const features = map.queryRenderedFeatures(e.point, {
+          layers: ["measure-points"],
+        });
+        const totalPoints = distancePoints.features.filter(
+          (f) => f.geometry.type === "Point"
+        );
+        // Change the cursor to a pointer when hovering over a point on the map.
+        // Otherwise cursor is a crosshair.
+        if (totalPoints < 2) {
+          map.getCanvas().style.cursor = features.length
+            ? "pointer"
+            : "crosshair";
+        }
+      });
+
+      $(function () {
+        //
+
+        const firstPoint = points[0].feature.properties["UTC Time Observed"];
+        const lastPoint =
+          points[points.length - 1].feature.properties["UTC Time Observed"];
+
+        var minStartDate = new Date(firstPoint);
+        minStartDate.setUTCHours(0, 0, 0, 0);
+        var maxStopDate = new Date(lastPoint);
+        maxStopDate.setUTCHours(23, 59, 59, 0);
+
+        $("#slider-range").slider({
+          range: true,
+          min: minStartDate.getTime() / 1000,
+          max: maxStopDate.getTime() / 1000,
+          step: 86400,
+          values: [minStartDate.getTime() / 1000, maxStopDate.getTime() / 1000],
+          slide: function (event, ui) {
+            let startDate = new Date(ui.values[0] * 1000);
+            let stopDate = new Date(ui.values[1] * 1000);
+            startDate.setUTCHours(0, 0, 0, 0);
+            stopDate.setUTCHours(23, 59, 59, 0);
+
+            for (const point of points) {
+              // let polygon_visiblity = 'visible'
+              let layerID = "point-layer-" + point.id;
+              // let polygonID = "polygon-layer-" + point.id
+              let point_date = new Date(
+                point.feature.properties["UTC Time Observed"]
+              );
+
+              if (point_date >= startDate && point_date <= stopDate) {
+                markerProps[layerID].addTo(map);
+                showHideLayers(
+                  [
+                    `polygon-layer-${point.id}`,
+                    `outline-polygon-layer-${point.id}`,
+                  ],
+                  true
+                );
+                MARKERS_ON_MAP.add(point);
+              } else {
+                markerProps[layerID].remove();
+                showHideLayers(
+                  [
+                    `polygon-layer-${point.id}`,
+                    `outline-polygon-layer-${point.id}`,
+                  ],
+                  false
+                );
+
+                MARKERS_ON_MAP.delete(point);
+              }
+            }
+
+            for (const feature of RASTER_IDS_ON_MAP) {
+              let layerID = "raster-layer-" + feature.id;
+              let point_date = new Date(
+                feature.properties["UTC Time Observed"]
+              );
+              let boolDisplay =
+                layerToggled &&
+                point_date >= startDate &&
+                point_date <= stopDate;
+              showHideLayers([layerID], boolDisplay);
+              $("#display_props").css({
+                visibility: boolDisplay ? "visible" : "hidden",
+              });
+            }
+
+            $("#amount").val(
+              startDate.toUTCString().slice(0, -13) +
+                " - " +
+                stopDate.toUTCString().slice(0, -13)
+            );
+          },
+        });
+        var startDate = new Date($("#slider-range").slider("values", 0) * 1000);
+        var stopDate = new Date($("#slider-range").slider("values", 1) * 1000);
+        $("#amount").val(
+          startDate.toUTCString().slice(0, -13) +
+            " - " +
+            stopDate.toUTCString().slice(0, -13)
+        );
+      });
+
+      let typingTimeout = null;
+      clearTimeout(typingTimeout);
+      typingTimeout = setTimeout(() => {
+        $(".search-box").keyup((e) => {
+          const copy_procedures = handleSearch($(e.target).val());
+          drawplume_idList(copy_procedures);
+        });
+      }, 500);
     });
 }
 
