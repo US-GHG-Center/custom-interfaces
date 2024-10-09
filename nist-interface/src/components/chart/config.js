@@ -141,6 +141,10 @@ export const options = {
           let splitText = label.split(":");
           return `${context.parsed.y} : ${splitText[splitText.length - 1]}`;
         },
+        title: function (context) {
+          let dateTime = context[0].label;
+          return `${dateTime} (UTC)`;
+        }
       },
       mode: "nearest",
       intersect: false,
