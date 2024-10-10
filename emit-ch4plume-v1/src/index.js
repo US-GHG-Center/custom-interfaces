@@ -42,7 +42,6 @@ map.dragRotate.disable();
 // disable map rotation using touch rotation gesture
 map.touchZoomRotate.disableRotation();
 
-const distanceContainer = document.getElementById("measure-distance");
 
 // GeoJSON object to hold  measurement features
 const distancePoints = {
@@ -586,10 +585,6 @@ async function main() {
       if (distancePoints.features.length > 1) distancePoints.features.pop();
       if (distancePoints.features.length > 1) distanceLabel.features.pop();
 
-      // Clear the distance container to populate it with a new value.
-      distanceContainer.innerHTML = "";
-      distanceContainer.style.display = "none";
-
       const totalPoints = distancePoints.features.filter(
         (f) => f.geometry.type === "Point"
       );
@@ -635,12 +630,6 @@ async function main() {
           2
         )} miles`;
         distanceLabel.features.push(distanceLabelAnchor);
-
-        value.textContent = `Distance: ${distance
-          .toFixed(2)
-          .toLocaleString()}miles`;
-        distanceContainer.style.display = "block";
-        distanceContainer.appendChild(value);
       }
 
       map.getSource("distancePoints").setData(distancePoints);
