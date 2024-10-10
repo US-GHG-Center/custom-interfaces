@@ -44,8 +44,14 @@ map.touchZoomRotate.disableRotation();
 
 const distanceContainer = document.getElementById("measure-distance");
 
-// GeoJSON object to hold our measurement features
+// GeoJSON object to hold  measurement features
 const distancePoints = {
+  type: "FeatureCollection",
+  features: [],
+};
+
+//GeoJson object to hold distance label
+const distanceLabel = {
   type: "FeatureCollection",
   features: [],
 };
@@ -53,6 +59,18 @@ const distancePoints = {
 // Used to draw a line between points
 const linestring = {
   type: "Feature",
+  geometry: {
+    type: "LineString",
+    coordinates: [],
+  },
+};
+
+//distance label Symbol
+const distanceLabelAnchor = {
+  type: "Feature",
+  properties: {
+    description: "",
+  },
   geometry: {
     type: "LineString",
     coordinates: [],
@@ -361,6 +379,10 @@ async function main() {
       type: "geojson",
       data: distancePoints,
     });
+    map.addSource("distanceLabel", {
+      type: "geojson",
+      data: distanceLabel,
+    });
 
     const methanMetadata = await (
       await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
@@ -418,6 +440,22 @@ async function main() {
       filter: ["in", "$type", "Point"],
     });
     map.addLayer({
+      id: "anchor",
+      type: "symbol",
+      source: "distanceLabel",
+      paint: {
+        "text-color": "#00BFFF",
+      },
+      layout: {
+        "text-field": ["get", "description"],
+        "text-justify": "center",
+        "text-size": 16,
+        "symbol-placement": "line-center",
+        "symbol-spacing": 1000,
+        "text-anchor": "bottom",
+      },
+    });
+    map.addLayer({
       id: "measure-lines",
       type: "line",
       source: "distancePoints",
@@ -446,7 +484,9 @@ async function main() {
 
       const localProps = point.feature.properties;
 
-      const tooltipContent = `
+      let tooltipContent = ``;
+      if (!measureToggled) {
+        tooltipContent = `
         <strong> Max Methane Enh: <span style="color: red">${
           localProps["Max Plume Concentration (ppm m)"]
         } (ppm m)</span></strong><br>
@@ -454,7 +494,7 @@ async function main() {
         Longitude (max conc): ${coords[0].toFixed(3)}<br>
         Time Observed: ${localProps["UTC Time Observed"]}
         `;
-
+      }
       const popup = new mapboxgl.Popup().setHTML(tooltipContent);
       const polygon = polygons[point.id];
       const polygonSourceId = "polygon-source-" + polygon.id;
@@ -544,9 +584,11 @@ async function main() {
       // Remove the linestring from the group
       // so we can redraw it based on the points collection.
       if (distancePoints.features.length > 1) distancePoints.features.pop();
+      if (distancePoints.features.length > 1) distanceLabel.features.pop();
 
       // Clear the distance container to populate it with a new value.
       distanceContainer.innerHTML = "";
+      distanceContainer.style.display = "none";
 
       const totalPoints = distancePoints.features.filter(
         (f) => f.geometry.type === "Point"
@@ -581,18 +623,28 @@ async function main() {
         linestring.geometry.coordinates = distancePoints.features.map(
           (point) => point.geometry.coordinates
         );
-
         distancePoints.features.push(linestring);
 
-        // Populate the distanceContainer with total distance
-        const value = document.createElement("pre");
+        distanceLabelAnchor.geometry.coordinates =
+          linestring.geometry.coordinates;
+
+        // const value = document.createElement("pre");
         const distance = turf.length(linestring, { units: "miles" });
-        value.textContent = `Distance: ${distance.toLocaleString()}miles`;
+
+        distanceLabelAnchor.properties.description = `${distance.toFixed(
+          2
+        )} miles`;
+        distanceLabel.features.push(distanceLabelAnchor);
+
+        value.textContent = `Distance: ${distance
+          .toFixed(2)
+          .toLocaleString()}miles`;
         distanceContainer.style.display = "block";
         distanceContainer.appendChild(value);
       }
 
       map.getSource("distancePoints").setData(distancePoints);
+      map.getSource("distanceLabel").setData(distanceLabel);
       map.moveLayer("measure-lines");
       map.moveLayer("measure-points");
     });
