@@ -114,12 +114,29 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   cursor: col-resize;
 }
 
-#distance-measure {
+#measure-distance {
  position: absolute;
  z-index: 2;
- padding: 10px 10px 10px 10px;
+ display:none;
+ padding: 5px 5px 5px 5px;
+ border-radius:10px;
  background-color:#ffff;
-  
+}
+
+#measure-distance pre {
+color:#000000;
+opacity:1;
+margin:3px;
+font-size:medium;
+font-weight:600;
+}
+
+.mapboxgl-ctrl-icon.measure-icon-clicked {
+ background-color:#2B4B92 !important;
+}
+
+#measure-icon {
+
 }
 
 .lds-roller {
