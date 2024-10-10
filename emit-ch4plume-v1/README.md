@@ -5,6 +5,7 @@ The steps below will walk you through setting up your own instance of the projec
 To set up the development environment for this website, you'll need to install the following on your system:
 
 - [Node](http://nodejs.org/) v20 (To manage multiple node versions we recommend [nvm](https://github.com/creationix/nvm))
+- [npm](https://www.npmjs.com/) Package manager
 - [Yarn](https://yarnpkg.com/) Package manager
 
 ## Install Application Dependencies
@@ -16,6 +17,8 @@ If you use [`nvm`](https://github.com/creationix/nvm), activate the desired Node
 Install Node modules:
 
 `yarn install`
+OR 
+`npm install`
 
 This command  will install all the dependencies and devtools needed for local development. 
  
@@ -42,19 +45,16 @@ Run `update_data.js` to get the data using node
 ` node update_data.js `
 
 After updating the data remove the `export` from each line of `.env` files
-### Deploy 
-Deploy the project using 
+### Serve 
+Serve the project using 
 
-` yarn deploy ` 
+` yarn serve` 
+    OR 
+` npm serve` 
 
-### Serve
-Serve using python
+This will serve in the default port `port 3000`
 
-`python -m http.server`
-
-This will serve in the default port `port 8000`
-
-See the app in `http://localhost:8000/dist/`
+See the app in `http://localhost:3000/dist/`
 
 
 # Interactive Emission Plumes
