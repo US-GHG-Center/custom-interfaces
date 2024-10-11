@@ -153,7 +153,34 @@ function removeLayers(sourceId, layersIds) {
     }
 }
 
-function addPolygon(polygonSourceId, polygonLayerId, polygonFeature) {
+function addCoverage(map, geojsonData, layerId, startDate, endDate) {
+    // Convert startDate and endDate to Date objects for comparison
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    console.log(start, end);
+
+    // Filter features within the date range
+    const filteredFeatures = geojsonData.features.filter(feature => {
+        const featureStartTime = new Date(feature.properties.start_time);
+        const featureEndTime = new Date(feature.properties.end_time);
+        
+        // Check if the feature's time range overlaps with the given date range
+        return (featureStartTime >= start && featureEndTime <= end);
+    });
+
+    // Create a new GeoJSON object with the filtered features
+    const filteredGeoJSON = {
+        ...geojsonData,
+        features: filteredFeatures
+    };
+
+    console.log('Filtered GeoJSON:', JSON.stringify(filteredGeoJSON, null, 2));
+    console.log('GeoJSON:', JSON.stringify(geojsonData, null, 2));
+    addPolygon(layerId, layerId,filteredGeoJSON,"#1E90FF","rgba(173, 216, 230, 0.6)","transparent",0 )
+}
+
+
+function addPolygon(polygonSourceId, polygonLayerId, polygonFeature, fillOutlineColor, fillColor, lineColor, lineWidth) {
 
     if (!map.getSource(polygonSourceId)) {
 
@@ -170,8 +197,8 @@ function addPolygon(polygonSourceId, polygonLayerId, polygonFeature) {
 
             layout: {},
             paint: {
-                "fill-outline-color": "#20B2AA",
-                'fill-color': 'transparent'
+                "fill-outline-color": fillOutlineColor,
+                'fill-color': fillColor
             },
         });
 
@@ -182,8 +209,8 @@ function addPolygon(polygonSourceId, polygonLayerId, polygonFeature) {
             'source': polygonSourceId,
             'layout': {},
             'paint': {
-                'line-color': "#20B2AA",
-                'line-width': 3
+                'line-color':lineColor,
+                'line-width': lineWidth
             }
         });
 
@@ -290,8 +317,11 @@ document.addEventListener("click", function(e) {
                 addPolygon(
                     "polygon-source-" + marker.id,
                     "polygon-layer-" + marker.id,
-                    mark_polygon.feature
-
+                    mark_polygon.feature,
+                    "#20B2AA",
+                    "transparent",
+                    "#20B2AA",
+                    3
                 )
                 addRaster(itemIds[plumeName], marker.feature, "polygon-layer-" + marker.id, false)
 
@@ -305,10 +335,15 @@ document.addEventListener("click", function(e) {
     }
 });
 
+
+
+
 async function main() {
 
     map.on("load", async () => {
-
+        const covearageData = await (
+            await fetch(`${PUBLIC_URL}/data/coverage.geojson`)
+        ).json();
         const methanMetadata = await (
             await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
         ).json();
@@ -340,6 +375,20 @@ async function main() {
             });
 
         createColorbar(VMIN, VMAX);
+        document.getElementById('toggleCoverage').addEventListener('change', function() {
+            if (this.checked) {
+              console.log('Coverage layer enabled');
+              // TODO: take the start and end dates from the date slider
+              addCoverage(map, covearageData, "coverage-layer", "2022-08-10T03:47:12Z","2024-09-10T06:44:12Z")
+              // Add your code to show the coverage layer
+            } else {
+              console.log('Coverage layer disabled');
+              removeLayers("coverage-layer",["coverage-layer"]);
+
+              // Add your code to hide the coverage layer
+            }
+          });
+
 
         // Filter and set IDs for points
         features
@@ -401,8 +450,11 @@ async function main() {
                 addPolygon(
                     polygonSourceId,
                     polygonLayerId,
-                    polygon.feature
-
+                    polygon.feature,
+                    "#20B2AA",
+                    "transparent",
+                    "#20B2AA",
+                    3
                 );
 
                 if (map.getSource("raster-source-" + point.feature.id)) {
@@ -447,7 +499,11 @@ async function main() {
                 addPolygon(
                     polygonSourceId,
                     polygonLayerId,
-                    polygon.feature
+                    polygon.feature,
+                    "#20B2AA",
+                    "transparent",
+                    "#20B2AA",
+                    3
                 )
 
                 addRaster(
@@ -566,8 +622,11 @@ map.on('zoomend', () => {
                 addPolygon(
                     `polygon-source-${polygon.id}`,
                     `polygon-layer-${polygon.id}`,
-                    polygon.feature
-
+                    polygon.feature,
+                    "#20B2AA",
+                    "transparent",
+                    "#20B2AA",
+                    3
                 );
                 POLYGON_ADDED.add(polygon);
             }
