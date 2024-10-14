@@ -35,6 +35,15 @@ body {
     background-color: #082A63;
     color: white
 }
+.mapboxgl-ctrl-icon.measure-icon-clicked {
+ background-color:#2B4B92 !important;
+}
+#clear-icon-main{
+  display:none;
+}
+#clear-icon-main.clicked{
+  display:block;
+}
 
 .colorbar {
   border-radius: 10px;

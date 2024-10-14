@@ -2,9 +2,9 @@ const mapboxgl = require("mapbox-gl");
 const path = require('path');
 import "./style.css";
 const {
-    createColorbar,
-    displayPropertiesWithD3,
-    dragElement
+  createColorbar,
+  displayPropertiesWithD3,
+  dragElement,
 } = require("./helper");
 
 const VMIN = 0;
@@ -41,7 +41,6 @@ map.dragRotate.disable();
 
 // disable map rotation using touch rotation gesture
 map.touchZoomRotate.disableRotation();
-
 
 // GeoJSON object to hold  measurement features
 const distancePoints = {
@@ -187,12 +186,42 @@ class MeasureDistance {
     this.map = undefined;
   }
 }
+class ClearDistancePoints {
+  onClick() {
+    distancePoints.features.splice(0, distancePoints.features.length);
+    distanceLabel.features.splice(0, distanceLabel.features.length);
+    map.getSource("distanceLabel").setData(distanceLabel);
+    map.getSource("distancePoints").setData(distancePoints);
+    $("#clear-icon-main").removeClass("clicked");
+  }
+  onAdd(map) {
+    this.map = map;
+    this.container = document.createElement("div");
+    this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
+    this.container.addEventListener("contextmenu", (e) => e.preventDefault());
+    this.container.addEventListener("click", (e) => this.onClick());
+    this.container.innerHTML =
+      '<div id="clear-icon-main">' +
+      "<button>" +
+      '<span id="clear-icon" class="mapboxgl-ctrl-icon" aria-hidden="true" title="Measure Tool">' +
+      '<i class="fa-solid fa-eraser"></i>' +
+      "</span>" +
+      "</button>" +
+      "</div>";
+    return this.container;
+  }
+  onRemove() {
+    this.container.parentNode.removeChild(this.container);
+    this.map = undefined;
+  }
+}
 
 map.addControl(new HomeButtonControl());
 map.addControl(new mapboxgl.NavigationControl());
 map.addControl(new mapboxgl.ScaleControl());
 map.addControl(new LayerButtonControl());
 map.addControl(new MeasureDistance());
+map.addControl(new ClearDistancePoints());
 
 function showHideLayers(layersIds, show) {
   layersIds.forEach((layerId) => {
@@ -247,7 +276,7 @@ function addPolygon(polygonSourceId, polygonLayerId, polygonFeature) {
   }
 }
 
-function addRaster(itemProps, feature, polygonId, fromZoom, measuring = false) {
+function addRaster(itemProps, feature, polygonId, fromZoom) {
   var props = feature.properties;
   const collection = "emit-ch4plume-v1";
   const assets = "ch4-plume-emissions";
@@ -271,14 +300,14 @@ function addRaster(itemProps, feature, polygonId, fromZoom, measuring = false) {
       bounds: itemProps.bbox,
     });
     const layer_id = "raster-layer-" + feature.id;
-    if (!measuring) {
-      map.addLayer({
-        id: layer_id,
-        type: "raster",
-        source: "raster-source-" + feature.id,
-        paint: {},
-      });
-    }
+
+    map.addLayer({
+      id: layer_id,
+      type: "raster",
+      source: "raster-source-" + feature.id,
+      paint: {},
+    });
+
     // Check if the eye is open, if so add the layer
     showHideLayers([layer_id], layerToggled);
 
@@ -439,7 +468,7 @@ async function main() {
       filter: ["in", "$type", "Point"],
     });
     map.addLayer({
-      id: "anchor",
+      id: "measure-label",
       type: "symbol",
       source: "distanceLabel",
       paint: {
@@ -540,13 +569,7 @@ async function main() {
           RASTER_IDS_ON_MAP.delete(point.feature);
           IDS_ON_MAP.delete(point.feature.id);
         } else {
-          addRaster(
-            itemIds[itemName],
-            point.feature,
-            polygonLayerId,
-            true,
-            measureToggled
-          );
+          addRaster(itemIds[itemName], point.feature, polygonLayerId);
         }
       });
 
@@ -567,13 +590,7 @@ async function main() {
           }
         }
         addPolygon(polygonSourceId, polygonLayerId, polygon.feature);
-        addRaster(
-          itemIds[itemName],
-          point.feature,
-          polygonLayerId,
-          false,
-          measureToggled
-        );
+        addRaster(itemIds[itemName], point.feature, polygonLayerId, false);
       });
     });
     map.on("click", (e) => {
@@ -614,6 +631,13 @@ async function main() {
         };
         distancePoints.features.push(point);
       }
+      if (distancePoints.features.length > 0) {
+        $("#clear-icon-main").addClass("clicked");
+      }
+      if (distancePoints.features.length == 0) {
+        $("#clear-icon-main").removeClass("clicked");
+      }
+
       if (distancePoints.features.length > 1) {
         linestring.geometry.coordinates = distancePoints.features.map(
           (point) => point.geometry.coordinates
@@ -634,6 +658,7 @@ async function main() {
 
       map.getSource("distancePoints").setData(distancePoints);
       map.getSource("distanceLabel").setData(distanceLabel);
+      map.moveLayer("measure-label");
       map.moveLayer("measure-lines");
       map.moveLayer("measure-points");
     });
