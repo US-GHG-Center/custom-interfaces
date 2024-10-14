@@ -375,19 +375,25 @@ async function main() {
             });
 
         createColorbar(VMIN, VMAX);
+        // Event listener for the toggle button
         document.getElementById('toggleCoverage').addEventListener('change', function() {
-            if (this.checked) {
-              console.log('Coverage layer enabled');
-              // TODO: take the start and end dates from the date slider
-              addCoverage(map, covearageData, "coverage-layer", "2022-08-10T03:47:12Z","2024-09-10T06:44:12Z")
-              // Add your code to show the coverage layer
-            } else {
-              console.log('Coverage layer disabled');
-              removeLayers("coverage-layer",["coverage-layer"]);
+            // Get the current values from the slider
+            let sliderValues = $("#slider-range").slider("values");
+            let startDate = new Date(sliderValues[0] * 1000);
+            let stopDate = new Date(sliderValues[1] * 1000);
+            startDate.setUTCHours(0, 0, 0, 0);
+            stopDate.setUTCHours(23, 59, 59, 0);
 
-              // Add your code to hide the coverage layer
+            if (this.checked) {
+                console.log('Coverage layer enabled');
+                removeLayers("coverage-layer", ['coverage-layer']);
+                addCoverage(map, covearageData, "coverage-layer", startDate, stopDate);
+            } else {
+                console.log('Coverage layer disabled');
+                removeLayers("coverage-layer", ["coverage-layer", "outline-coverage-layer"]);
             }
-          });
+        });
+
 
 
         // Filter and set IDs for points
@@ -542,6 +548,13 @@ async function main() {
                     let stopDate = new Date(ui.values[1] * 1000);
                     startDate.setUTCHours(0, 0, 0, 0)
                     stopDate.setUTCHours(23, 59, 59, 0)
+                    if ($('#toggleCoverage').is(':checked')){
+                        removeLayers("coverage-layer", ['coverage-layer','outline-coverage-layer'])
+                        addCoverage(map, covearageData, "coverage-layer", startDate,stopDate)
+                    }
+                    else {
+                        removeLayers("coverage-layer", ['coverage-layer','outline-coverage-layer'])
+                    }
 
                     for (const point of points) {
                         // let polygon_visiblity = 'visible'
