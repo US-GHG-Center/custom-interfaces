@@ -157,7 +157,6 @@ function addCoverage(map, geojsonData, layerId, startDate, endDate) {
     // Convert startDate and endDate to Date objects for comparison
     const start = new Date(startDate);
     const end = new Date(endDate);
-    console.log(start, end);
 
     // Filter features within the date range
     const filteredFeatures = geojsonData.features.filter(feature => {
@@ -174,8 +173,6 @@ function addCoverage(map, geojsonData, layerId, startDate, endDate) {
         features: filteredFeatures
     };
 
-    console.log('Filtered GeoJSON:', JSON.stringify(filteredGeoJSON, null, 2));
-    console.log('GeoJSON:', JSON.stringify(geojsonData, null, 2));
     addPolygon(layerId, layerId,filteredGeoJSON,"#1E90FF","rgba(173, 216, 230, 0.6)","transparent",0 )
 }
 
