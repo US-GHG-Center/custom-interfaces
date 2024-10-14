@@ -5,7 +5,7 @@ import {
   Route
 } from "react-router-dom";
 
-import { DashboardContainer } from './components/dashboardContainer';
+import { DashboardContainer } from './pages/dashboardContainer';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import './App.css';

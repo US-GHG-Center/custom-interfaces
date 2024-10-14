@@ -1,10 +1,12 @@
+import { DATASETS } from "../../constants";
+
 import "./index.css";
 
 export function DatasetCard({ dataset }) {
     return (
         <>
-            {dataset === "vulcan" && <VulcanDatasetCard />}
-            {dataset === "gra2pes" && <Grap2pesDatasetCard />}
+            {dataset === DATASETS.VULCAN && <VulcanDatasetCard />}
+            {dataset === DATASETS.GRA2PES && <Grap2pesDatasetCard />}
         </>
     )
 }

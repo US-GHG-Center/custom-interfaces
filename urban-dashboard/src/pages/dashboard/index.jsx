@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 
-import { MapBoxViewer } from '../mapboxViewer';
-import { InfoSidebar } from '../infoSidebar';
+import { MapBoxViewer } from '../../components/mapboxViewer';
+import { InfoSidebar } from '../../components/infoSidebar';
 
 export function Dashboard({ dataset, urbanRegions }) {
   const [urbanRegion, setUrbanRegion] = useState("");
