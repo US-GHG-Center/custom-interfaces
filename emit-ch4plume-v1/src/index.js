@@ -1,6 +1,7 @@
 const mapboxgl = require("mapbox-gl");
 const path = require('path');
 import "./style.css";
+import { addCoverageToggleListener, checkToggle } from './coverage.js';
 const {
     createColorbar,
     displayPropertiesWithD3,
@@ -142,7 +143,7 @@ function showHideLayers(layersIds, show) {
 
 }
 
-function removeLayers(sourceId, layersIds) {
+export function removeLayers(sourceId, layersIds) {
     if (map.getSource(sourceId)) {
         layersIds.forEach(layerId => {
             if (map.getLayer(layerId)) {
@@ -153,7 +154,7 @@ function removeLayers(sourceId, layersIds) {
     }
 }
 
-function addPolygon(polygonSourceId, polygonLayerId, polygonFeature) {
+ export function addPolygon(polygonSourceId, polygonLayerId, polygonFeature, fillOutlineColor, fillColor, lineColor, lineWidth) {
 
     if (!map.getSource(polygonSourceId)) {
 
@@ -170,8 +171,8 @@ function addPolygon(polygonSourceId, polygonLayerId, polygonFeature) {
 
             layout: {},
             paint: {
-                "fill-outline-color": "#20B2AA",
-                'fill-color': 'transparent'
+                "fill-outline-color": fillOutlineColor,
+                'fill-color': fillColor
             },
         });
 
@@ -182,8 +183,8 @@ function addPolygon(polygonSourceId, polygonLayerId, polygonFeature) {
             'source': polygonSourceId,
             'layout': {},
             'paint': {
-                'line-color': "#20B2AA",
-                'line-width': 3
+                'line-color':lineColor,
+                'line-width': lineWidth
             }
         });
 
@@ -290,8 +291,11 @@ document.addEventListener("click", function(e) {
                 addPolygon(
                     "polygon-source-" + marker.id,
                     "polygon-layer-" + marker.id,
-                    mark_polygon.feature
-
+                    mark_polygon.feature,
+                    "#20B2AA",
+                    "transparent",
+                    "#20B2AA",
+                    3
                 )
                 addRaster(itemIds[plumeName], marker.feature, "polygon-layer-" + marker.id, false)
 
@@ -305,10 +309,15 @@ document.addEventListener("click", function(e) {
     }
 });
 
+
+
+
 async function main() {
 
     map.on("load", async () => {
-
+        const coverageData = await (
+            await fetch(`${PUBLIC_URL}/data/coverage.geojson`)
+        ).json();
         const methanMetadata = await (
             await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
         ).json();
@@ -338,8 +347,10 @@ async function main() {
                 const next_date = new Date(next.feature.properties["UTC Time Observed"]).getTime();
                 return prev_date - next_date
             });
-
         createColorbar(VMIN, VMAX);
+
+        // Event listener for the toggle button - execute this after all DOM elements are created by the previous function createColorbar
+        addCoverageToggleListener(map, coverageData)
 
         // Filter and set IDs for points
         features
@@ -401,8 +412,11 @@ async function main() {
                 addPolygon(
                     polygonSourceId,
                     polygonLayerId,
-                    polygon.feature
-
+                    polygon.feature,
+                    "#20B2AA",
+                    "transparent",
+                    "#20B2AA",
+                    3
                 );
 
                 if (map.getSource("raster-source-" + point.feature.id)) {
@@ -447,7 +461,11 @@ async function main() {
                 addPolygon(
                     polygonSourceId,
                     polygonLayerId,
-                    polygon.feature
+                    polygon.feature,
+                    "#20B2AA",
+                    "transparent",
+                    "#20B2AA",
+                    3
                 )
 
                 addRaster(
@@ -486,6 +504,8 @@ async function main() {
                     let stopDate = new Date(ui.values[1] * 1000);
                     startDate.setUTCHours(0, 0, 0, 0)
                     stopDate.setUTCHours(23, 59, 59, 0)
+                    // Sync the coverage toggle with the date range
+                    checkToggle(map, coverageData, startDate, stopDate)
 
                     for (const point of points) {
                         // let polygon_visiblity = 'visible'
@@ -566,8 +586,11 @@ map.on('zoomend', () => {
                 addPolygon(
                     `polygon-source-${polygon.id}`,
                     `polygon-layer-${polygon.id}`,
-                    polygon.feature
-
+                    polygon.feature,
+                    "#20B2AA",
+                    "transparent",
+                    "#20B2AA",
+                    3
                 );
                 POLYGON_ADDED.add(polygon);
             }

@@ -134,6 +134,78 @@ function createColorbar(VMIN, VMAX) {
     .style("top", "60px") // Adjust the top position as needed
     .style("left", "50px") // Adjust the left position as needed
     .style("background-color", "white");
+
+  const toggleContainer = dateRange.append("div")
+  .attr("class", "toggle-container")
+  .style("margin-top", "20px") // Add margin for spacing
+  .style("display", "flex")
+  .style("align-items", "center");
+  
+  // Add "Coverage" label for the toggle
+  toggleContainer.append("span")
+    .attr("class", "toggle-text")
+    .text("Coverage")
+    .style("color", 'black') // Color for the text
+    .style("font-weight", "medium")
+  
+  // Toggle switch for enabling/disabling date coverage
+  toggleContainer.append("input")
+    .attr("type", "checkbox")
+    .attr("id", "toggleCoverage")
+    .attr("class", "toggle-input");
+  
+  toggleContainer.append("label")
+    .attr("for", "toggleCoverage")
+    .attr("class", "toggle-label");
+  
+  // Style for toggle switch
+  toggleContainer
+    .style("margin-top", "10px");
+  
+  // Add CSS for toggle switch
+  d3.select("head").append("style").text(`
+    .toggle-container {
+      display: flex;
+      align-items: center;
+    }
+  
+    .toggle-input {
+      display: none;
+    }
+  
+    .toggle-label {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+      margin-left: 5px; /* Space between label and toggle */
+      cursor: pointer;
+      background-color: rgba(8, 42, 99, 0.3); /* Light background color */
+      border-radius: 24px; /* Rounded background */
+      transition: background-color 0.4s;
+    }
+  
+    .toggle-label::before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: transform 0.1s;
+      border-radius: 50%;
+    }
+  
+    .toggle-input:checked + .toggle-label {
+      background-color: #082a63; 
+    }
+  
+    .toggle-input:checked + .toggle-label::before {
+      transform: translateX(26px);
+    }
+  `);
+
 }
 
 const getFilename = function (pathStr) {
