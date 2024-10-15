@@ -47,7 +47,10 @@ const distancePoints = {
   type: "FeatureCollection",
   features: [],
 };
-
+const measureLine = {
+  type: "FeatureCollection",
+  features: [],
+};
 //GeoJson object to hold distance label
 const distanceLabel = {
   type: "FeatureCollection",
@@ -164,6 +167,7 @@ class MeasureDistance {
   onClick() {
     $("#measure-icon").toggleClass("measure-icon-clicked");
     measureToggled = !measureToggled;
+    $("#display_props").toggleClass("hidden");
   }
   onAdd(map) {
     this.map = map;
@@ -313,7 +317,6 @@ function addRaster(itemProps, feature, polygonId, fromZoom) {
 
     map.moveLayer(polygonId);
     RASTER_IDS_ON_MAP.add(feature);
-
     IDS_ON_MAP.add(feature.id);
   }
   // If not coming from map zoom fly to position
@@ -407,6 +410,10 @@ async function main() {
       type: "geojson",
       data: distancePoints,
     });
+    map.addSource("measureLine", {
+      type: "geojson",
+      data: measureLine,
+    });
     map.addSource("distanceLabel", {
       type: "geojson",
       data: distanceLabel,
@@ -484,9 +491,9 @@ async function main() {
       },
     });
     map.addLayer({
-      id: "measure-lines",
+      id: "measure-line",
       type: "line",
-      source: "distancePoints",
+      source: "measureLine",
       layout: {
         "line-cap": "round",
         "line-join": "round",
@@ -512,9 +519,7 @@ async function main() {
 
       const localProps = point.feature.properties;
 
-      let tooltipContent = ``;
-      if (!measureToggled) {
-        tooltipContent = `
+      const tooltipContent = `
         <strong> Max Methane Enh: <span style="color: red">${
           localProps["Max Plume Concentration (ppm m)"]
         } (ppm m)</span></strong><br>
@@ -522,26 +527,19 @@ async function main() {
         Longitude (max conc): ${coords[0].toFixed(3)}<br>
         Time Observed: ${localProps["UTC Time Observed"]}
         `;
-      }
       const popup = new mapboxgl.Popup().setHTML(tooltipContent);
       const polygon = polygons[point.id];
       const polygonSourceId = "polygon-source-" + polygon.id;
       const polygonLayerId = "polygon-layer-" + polygon.id;
 
-      if (!measureToggled) {
-        marker.setPopup(popup);
-      }
+      marker.setPopup(popup);
 
       marker.getElement().addEventListener("mouseenter", () => {
-        if (!measureToggled) {
-          popup.addTo(map);
-        }
+        popup.addTo(map);
       });
 
       marker.getElement().addEventListener("mouseleave", () => {
-        if (!measureToggled) {
-          popup.remove();
-        }
+        popup.remove();
       });
 
       markerProps["point-layer-" + point.id] = marker;
@@ -562,14 +560,17 @@ async function main() {
 
       map.on("click", polygonLayerId, () => {
         addPolygon(polygonSourceId, polygonLayerId, polygon.feature);
-        if (map.getSource("raster-source-" + point.feature.id)) {
+        if (
+          map.getSource("raster-source-" + point.feature.id) &&
+          !measureToggled
+        ) {
           removeLayers("raster-source-" + point.feature.id, [
             "raster-layer-" + point.feature.id,
           ]);
           RASTER_IDS_ON_MAP.delete(point.feature);
           IDS_ON_MAP.delete(point.feature.id);
         } else {
-          addRaster(itemIds[itemName], point.feature, polygonLayerId);
+          addRaster(itemIds[itemName], point.feature, polygonLayerId, true);
         }
       });
 
@@ -597,10 +598,6 @@ async function main() {
       const features = map.queryRenderedFeatures(e.point, {
         layers: ["measure-points"],
       });
-      // Remove the linestring from the group
-      // so we can redraw it based on the points collection.
-      if (distancePoints.features.length > 1) distancePoints.features.pop();
-      if (distancePoints.features.length > 1) distanceLabel.features.pop();
 
       const totalPoints = distancePoints.features.filter(
         (f) => f.geometry.type === "Point"
@@ -612,9 +609,20 @@ async function main() {
         distancePoints.features = distancePoints.features.filter(
           (point) => point.properties.id !== id
         );
+        measureLine.features.splice(0, measureLine.features.length);
       }
       if (
-        totalPoints.length < 2 &&
+        totalPoints.length == 1 &&
+        measureToggled &&
+        !markerClicked &&
+        features.length == 0
+      ) {
+        distancePoints.features.splice(0, distancePoints.features.length);
+        measureLine.features.splice(0, measureLine.features.length);
+        distanceLabel.features.splice(0, distanceLabel.features.length);
+      }
+      if (
+        totalPoints.length == 0 &&
         measureToggled &&
         !markerClicked &&
         features.length == 0
@@ -631,18 +639,26 @@ async function main() {
         };
         distancePoints.features.push(point);
       }
+
       if (distancePoints.features.length > 0) {
         $("#clear-icon-main").addClass("clicked");
       }
       if (distancePoints.features.length == 0) {
         $("#clear-icon-main").removeClass("clicked");
       }
+      map.getSource("distanceLabel").setData(distanceLabel);
+      map.getSource("distancePoints").setData(distancePoints);
+      map.getSource("measureLine").setData(measureLine);
+      map.moveLayer("measure-points");
+    });
 
-      if (distancePoints.features.length > 1) {
-        linestring.geometry.coordinates = distancePoints.features.map(
-          (point) => point.geometry.coordinates
-        );
-        distancePoints.features.push(linestring);
+    map.on("mousemove", (e) => {
+      if (distancePoints.features.length > 0 && measureToggled) {
+        measureLine.features.pop();
+        const anchorPoint = distancePoints.features[0];
+        const startCoordinates = anchorPoint.geometry.coordinates;
+        const endCoordinates = [e.lngLat.lng, e.lngLat.lat];
+        linestring.geometry.coordinates = [startCoordinates, endCoordinates];
 
         distanceLabelAnchor.geometry.coordinates =
           linestring.geometry.coordinates;
@@ -653,14 +669,13 @@ async function main() {
         distanceLabelAnchor.properties.description = `${distance.toFixed(
           2
         )} miles`;
+        measureLine.features.push(linestring);
         distanceLabel.features.push(distanceLabelAnchor);
+        map.getSource("measureLine").setData(measureLine);
+        map.getSource("distanceLabel").setData(distanceLabel);
+        map.moveLayer("measure-label");
+        map.moveLayer("measure-line");
       }
-
-      map.getSource("distancePoints").setData(distancePoints);
-      map.getSource("distanceLabel").setData(distanceLabel);
-      map.moveLayer("measure-label");
-      map.moveLayer("measure-lines");
-      map.moveLayer("measure-points");
     });
     map.on("mousemove", (e) => {
       const totalPoints = distancePoints.features.filter(
@@ -668,8 +683,8 @@ async function main() {
       );
       // Change the cursor to a pointer when hovering over a point on the map.
       // Otherwise cursor is a crosshair.
-      map.getCanvas().style.cursor =
-        totalPoints < 2 && measureToggled ? "crosshair" : "pointer";
+      const crosshair = totalPoints.length < 2 && measureToggled;
+      map.getCanvas().style.cursor = crosshair ? "crosshair" : "pointer";
     });
 
     map.on("moveend", function () {
