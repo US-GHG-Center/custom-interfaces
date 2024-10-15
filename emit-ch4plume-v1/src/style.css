@@ -37,23 +37,25 @@ body {
 }
 
 .colorbar {
-  border-radius: 10px;
+  border-radius: 5px;
   font-size: 12px;
 }
 
 .date-range {
-  border-radius: 10px;
+  border-radius: 5px;
   padding: 12px 20px;
   font-size: 14px;
 }
 
 #display_props {
+  position: absolute;
+  border-radius: 5px;
+  padding: 20px 10px ; /* Padding around the box */
+  width: 450px; /* Adjust width as needed */
   font-size: 14px;
-  border-radius: 10px;
-  bottom: 10%;
+  bottom: 8%;
   left: 50px;
   background-color: white;
-  padding: "12px";
   height: fit-content;
   cursor: move;
   z-index: 999;
@@ -232,12 +234,10 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
 }
 
 .autocomplete-search-box {
-  position: absolute;
-  width: 22%;
-  margin-left: 40%;
-  margin-top: 10px;
+  position: relative;
+  width: 100%;
   box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
+  border-radius: 5px;
   overflow:  hidden;
   z-index: 1;
 }
@@ -273,4 +273,55 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   background-color: white;
   max-height: 200px;
   overflow: auto;
+}
+
+
+
+/* Main display box styles */
+
+
+/* Header styles */
+.display-header {
+  padding: 10px; /* Padding inside header */
+}
+
+.display-header h2 {
+  margin-bottom: 2px;
+  margin-top:0px;
+}
+
+.display-header .datetime {
+  margin: 0; /* Remove margin for datetime */
+}
+
+/* Download link styles */
+.download-link {
+  padding-left: 10px; /* Space to the left */
+  font-size: 0.85em; /* Smaller font size for download link */
+}
+
+.download-link a {
+  text-decoration: none; /* Remove underline */
+  color: #007bff; /* Link color */
+}
+
+/* Horizontal line styles */
+hr {
+  margin-left: 10px; /* Align with content */
+  margin-right: 10px; /* Align with content */
+}
+
+/* Table styles */
+table {
+  border-spacing: 0; /* Remove default spacing */
+  padding-left: 10px; /* Space on the left side */
+  width:100%
+}
+
+table td {
+  padding-bottom: 5px; /* Space between rows */
+}
+
+.toolbar {
+  width:450px;
 }

@@ -112,50 +112,192 @@ function createColorbar(VMIN, VMAX) {
     .style("display", "flex")
     .style("justify-content", "space-between")
     .style("margin-bottom", "12px"); // Adjust margin as needed
-  const dateRange = d3.select("body").append("div").attr("class", "date-range");
+}
+function createToolbar() {
+  // Create the main toolbar container
+  const toolbar = d3.select("body").append("div").attr("class", "toolbar");
+
+  // Heading
+  toolbar.append("h1")
+    .attr("class", "toolbar-heading")
+    .text("Methane Plume - Data Portal");
+
+  // Horizontal line
+  toolbar.append("hr").attr("class", "toolbar-line")
+  .style("border-top-color", "black");
+
+  // Search box (added exactly as you provided)
+  const searchBox = toolbar.append("div").attr("id", "plume-id-search-box").attr("class", "autocomplete-search-box");
+  searchBox.append("input")
+    .attr("id", "plume-id-search-input")
+    .attr("type", "text")
+    .attr("class", "search-box")
+    .attr("placeholder", "Search by Plume ID and/or Location");
+  // Add search icon SVG
+  searchBox.append("svg")
+  .attr("class", "search-icon")
+  .attr("viewBox", "0 0 24 24") // Adjust viewBox as needed
+  .attr("width", "24px") // Set width for the icon
+  .attr("height", "24px") // Set height for the icon
+  .style("position", "absolute")
+  .style("right", "10px") // Position to the right
+  .style("top", "50%") // Vertically center it
+  .style("transform", "translateY(-50%)") // Adjust vertical position
+  .html(`
+    <path fill="black" d="M23.707 22.293l-5.387-5.387A9.928 9.928 0 0 0 20 11c0-5.513-4.487-10-10-10S0 5.487 0 11s4.487 10 10 10c2.471 0 4.73-.901 6.463-2.386l5.387 5.387a1 1 0 0 0 1.414-1.414zM2 11c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8-8-3.582-8-8z"/>
+  `);
+  searchBox.append("ul")
+    .attr("id", "plume-id-search-list")
+    .attr("class", "search-result");
+
+
+
+  // Date range
+  const dateRange = toolbar.append("div").attr("class", "date-range");
 
   const dateRangeContainer = dateRange
     .append("p")
     .attr("class", "scale-label-container");
   dateRangeContainer.append("label").attr("for", "amount").text("Date range:");
-  dateRangeContainer
-    .append("input")
+
+  dateRange.append("input")
     .attr("type", "text")
     .attr("id", "amount")
     .style("border", "0")
     .style("color", "#C85964")
     .style("font-weight", "bold")
-    .style("size", "100")
     .style("width", "240px");
   dateRange.append("div").attr("id", "slider-range");
 
-  dateRange
-    .style("position", "absolute")
-    .style("top", "60px") // Adjust the top position as needed
-    .style("left", "50px") // Adjust the left position as needed
-    .style("background-color", "white");
+  // Toggle container
+  const toggleContainer = toolbar.append("div")
+    .attr("class", "toggle-container")
+    .style("margin-top", "20px") // Add margin for spacing
+    .style("display", "flex")
+    .style("align-items", "center");
+  
+  // Add "Coverage" label for the toggle
+  toggleContainer.append("span")
+    .attr("class", "toggle-text")
+    .text("Coverage")
+    .style("color", 'black') // Color for the text
+    .style("font-weight", "medium");
+
+  // Toggle switch for enabling/disabling date coverage
+  toggleContainer.append("input")
+    .attr("type", "checkbox")
+    .attr("id", "toggleCoverage")
+    .attr("class", "toggle-input");
+
+  toggleContainer.append("label")
+    .attr("for", "toggleCoverage")
+    .attr("class", "toggle-label");
+
+  // Add CSS for toggle switch
+  d3.select("head").append("style").text(`
+    .toolbar {
+      position: absolute;
+      top: 60px; /* Adjust the top position as needed */
+      left: 50px; /* Adjust the left position as needed */
+      background-color: white;
+      padding: 15px; /* Add padding to the toolbar */
+      border: 1px solid #ccc; /* Optional: border around toolbar */
+      border-radius: 8px; /* Optional: rounded corners */
+    }
+
+    .toolbar-heading {
+      font-size: 24px; /* Bigger font for the heading */
+      margin: 0; /* Remove default margin */
+      margin-bottom: 10px; /* Space below heading */
+      color: black; /* Heading color set to black */
+    }
+
+    .toolbar-line {
+      border: none; /* Remove default border */
+      border-top: 2px solid #C85964; /* Line color and thickness */
+      margin: 10px 0; /* Space around the line */
+    }
+
+    .search-container {
+      margin: 10px 0; /* Space around the search box */
+    }
+
+    .date-range {
+      margin: 10px 0; /* Space around the date range */
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .toggle-input {
+      display: none;
+    }
+
+    .toggle-label {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+      margin-left: 5px; /* Space between label and toggle */
+      cursor: pointer;
+      background-color: rgba(8, 42, 99, 0.3); /* Light background color */
+      border-radius: 24px; /* Rounded background */
+      transition: background-color 0.4s;
+    }
+
+    .toggle-label::before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: transform 0.1s;
+      border-radius: 50%;
+    }
+
+    .toggle-input:checked + .toggle-label {
+      background-color: #082a63; 
+    }
+
+    .toggle-input:checked + .toggle-label::before {
+      transform: translateX(26px);
+    }
+  `);
 }
+
 
 const getFilename = function (pathStr) {
   return pathStr.substring(pathStr.lastIndexOf("/") + 1);
 };
 
 function displayPropertiesWithD3(properties) {
-
-  const important_keys = [
-    "Max Plume Concentration (ppm m)"
-  ]
-
-
+  const important_keys = ["Max Plume Concentration (ppm m)"];
   const combinedList = important_keys.concat(Object.keys(properties));
-
   const new_sorted_properties = [...new Set(combinedList)];
-  // Create a display_div element
 
   // Create an HTML string to display the properties
-  let html =
-    "<span id=\"close\" onclick=\"document.getElementById('display_props').style.display='none'\" >x</span><table>";
-  
+  let html = `
+  <span id=\"close\" onclick=\"document.getElementById('display_props').style.display='none'\" >x</span><table>
+    <div class="display-header">
+      <h2>${properties['Location']}</h2>
+      <p class="datetime">${properties['UTC Time Observed']}</p>
+    </div>
+    <div class="download-link">
+      <a href="${properties['Data Download']}" target="_blank">
+        ${getFilename(properties['Data Download'])} 
+        <svg width="12" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" class="download-icon">
+          <path d="M.5 9.9a.5.5 0 0 1 .5.5V14a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.6a.5.5 0 1 1 1 0V14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V10.4a.5.5 0 0 1 .5-.5zm7.5-7.9a.5.5 0 0 1 .5.5v7.5l2.15-2.15a.5.5 0 1 1 .7.7l-3 3a.5.5 0 0 1-.7 0l-3-3a.5.5 0 0 1 .7-.7L8 10V2.5a.5.5 0 0 1 .5-.5z"/>
+        </svg>
+      </a>
+    </div>
+    
+    <hr />
+    <table>
+  `;
 
   const keys_to_exclude = [
     "id",
@@ -166,36 +308,39 @@ function displayPropertiesWithD3(properties) {
     "DCID",
     "DAAC Scene Numbers",
     "plume_complex_count",
+    "Data Download",
+    "Location",
+    "UTC Time Observed"
   ];
 
-   // Iterate through the properties and create list items
+  // Iterate through the properties and create table rows
   new_sorted_properties.forEach(key => {
     if (!keys_to_exclude.includes(key)) {
-
-      value = properties[key];
+      let value = properties[key];
       if (value.toString().startsWith("https://")) {
-        value = `<a href="${value}" target="_blank" >${getFilename(value)} <svg width="12" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 16 16" aria-hidden="true" class="expand-top-right__CollecticonExpandTopRight-sc-1bjhv94-0"><title>expand top right icon</title><path d="M3,5h4V3H1v12h12V9h-2v4H3V5z M16,8V0L8,0v2h4.587L6.294,8.294l1.413,1.413L14,3.413V8H16z"></path></svg></a>`;
+        value = `<a href="${value}" target="_blank">${getFilename(value)} 
+        <svg width="12" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 16 16" aria-hidden="true" class="expand-top-right__CollecticonExpandTopRight-sc-1bjhv94-0">
+          <title>expand top right icon</title>
+          <path d="M3,5h4V3H1v12h12V9h-2v4H3V5z M16,8V0L8,0v2h4.587L6.294,8.294l1.413,1.413L14,3.413V8H16z"></path>
+        </svg></a>`;
       }
-      html += `<tr><td><strong>${key}:</strong></td><td>${value}</td></tr>`;
-
+      html += `<tr><td>${key}</td><td>${value}</td></tr>`;
     }
-  })
+  });
   html += "</table>";
 
   d3.select("body").select("#display_props").remove();
-
   const display_div = d3
     .select("body")
     .append("div")
     .attr("id", "display_props")
+    .attr("class", "display-props")
     .html(html);
-
-  // Add CSS styles to position and style the display_div
-  display_div.style("position", "absolute");
 }
 
 module.exports = {
   createColorbar: createColorbar,
   displayPropertiesWithD3: displayPropertiesWithD3,
-  dragElement: dragElement
+  dragElement: dragElement,
+  createToolbar: createToolbar
 };
