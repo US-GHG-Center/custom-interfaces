@@ -1,6 +1,7 @@
 const mapboxgl = require("mapbox-gl");
 const path = require('path');
 import "./style.css";
+import { addCoverageToggleListener, checkToggle } from './coverage.js';
 const {
     createColorbar,
     displayPropertiesWithD3,
@@ -142,7 +143,7 @@ function showHideLayers(layersIds, show) {
 
 }
 
-function removeLayers(sourceId, layersIds) {
+export function removeLayers(sourceId, layersIds) {
     if (map.getSource(sourceId)) {
         layersIds.forEach(layerId => {
             if (map.getLayer(layerId)) {
@@ -153,31 +154,7 @@ function removeLayers(sourceId, layersIds) {
     }
 }
 
-function addCoverage(map, geojsonData, layerId, startDate, endDate) {
-    // Convert startDate and endDate to Date objects for comparison
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    // Filter features within the date range
-    const filteredFeatures = geojsonData.features.filter(feature => {
-        const featureStartTime = new Date(feature.properties.start_time);
-        const featureEndTime = new Date(feature.properties.end_time);
-        
-        // Check if the feature's time range overlaps with the given date range
-        return (featureStartTime >= start && featureEndTime <= end);
-    });
-
-    // Create a new GeoJSON object with the filtered features
-    const filteredGeoJSON = {
-        ...geojsonData,
-        features: filteredFeatures
-    };
-
-    addPolygon(layerId, layerId,filteredGeoJSON,"#1E90FF","rgba(173, 216, 230, 0.6)","transparent",0 )
-}
-
-
-function addPolygon(polygonSourceId, polygonLayerId, polygonFeature, fillOutlineColor, fillColor, lineColor, lineWidth) {
+ export function addPolygon(polygonSourceId, polygonLayerId, polygonFeature, fillOutlineColor, fillColor, lineColor, lineWidth) {
 
     if (!map.getSource(polygonSourceId)) {
 
@@ -338,7 +315,7 @@ document.addEventListener("click", function(e) {
 async function main() {
 
     map.on("load", async () => {
-        const covearageData = await (
+        const coverageData = await (
             await fetch(`${PUBLIC_URL}/data/coverage.geojson`)
         ).json();
         const methanMetadata = await (
@@ -370,28 +347,10 @@ async function main() {
                 const next_date = new Date(next.feature.properties["UTC Time Observed"]).getTime();
                 return prev_date - next_date
             });
-
         createColorbar(VMIN, VMAX);
-        // Event listener for the toggle button
-        document.getElementById('toggleCoverage').addEventListener('change', function() {
-            // Get the current values from the slider
-            let sliderValues = $("#slider-range").slider("values");
-            let startDate = new Date(sliderValues[0] * 1000);
-            let stopDate = new Date(sliderValues[1] * 1000);
-            startDate.setUTCHours(0, 0, 0, 0);
-            stopDate.setUTCHours(23, 59, 59, 0);
 
-            if (this.checked) {
-                console.log('Coverage layer enabled');
-                removeLayers("coverage-layer", ['coverage-layer']);
-                addCoverage(map, covearageData, "coverage-layer", startDate, stopDate);
-            } else {
-                console.log('Coverage layer disabled');
-                removeLayers("coverage-layer", ["coverage-layer", "outline-coverage-layer"]);
-            }
-        });
-
-
+        // Event listener for the toggle button - execute this after all DOM elements are created by the previous function createColorbar
+        addCoverageToggleListener(map, coverageData)
 
         // Filter and set IDs for points
         features
@@ -545,13 +504,8 @@ async function main() {
                     let stopDate = new Date(ui.values[1] * 1000);
                     startDate.setUTCHours(0, 0, 0, 0)
                     stopDate.setUTCHours(23, 59, 59, 0)
-                    if ($('#toggleCoverage').is(':checked')){
-                        removeLayers("coverage-layer", ['coverage-layer','outline-coverage-layer'])
-                        addCoverage(map, covearageData, "coverage-layer", startDate,stopDate)
-                    }
-                    else {
-                        removeLayers("coverage-layer", ['coverage-layer','outline-coverage-layer'])
-                    }
+                    // Sync the coverage toggle with the date range
+                    checkToggle(map, coverageData, startDate, stopDate)
 
                     for (const point of points) {
                         // let polygon_visiblity = 'visible'
