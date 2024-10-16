@@ -47,7 +47,6 @@ function dragElement(elmnt) {
   }
 }
 
-
 function createColorbar(VMIN, VMAX) {
 
   // Create a color scale using D3
@@ -113,6 +112,7 @@ function createColorbar(VMIN, VMAX) {
     .style("justify-content", "space-between")
     .style("margin-bottom", "12px"); // Adjust margin as needed
 }
+
 function createToolbar() {
   // Create the main toolbar container
   const toolbar = d3.select("body").append("div").attr("class", "toolbar");
@@ -120,19 +120,23 @@ function createToolbar() {
   // Heading
   toolbar.append("h1")
     .attr("class", "toolbar-heading")
-    .text("Methane Plume - Data Portal");
+    .text("Methane Plumes Portal");
 
   // Horizontal line
   toolbar.append("hr").attr("class", "toolbar-line")
   .style("border-top-color", "black");
 
   // Search box (added exactly as you provided)
-  const searchBox = toolbar.append("div").attr("id", "plume-id-search-box").attr("class", "autocomplete-search-box");
+  const searchBox = toolbar.append("div")
+    .attr("id", "plume-id-search-box")
+    .attr("class", "autocomplete-search-box");
+
   searchBox.append("input")
     .attr("id", "plume-id-search-input")
     .attr("type", "text")
     .attr("class", "search-box")
     .attr("placeholder", "Search by Plume ID and/or Location");
+
   // Add search icon SVG
   searchBox.append("svg")
   .attr("class", "search-icon")
@@ -150,38 +154,57 @@ function createToolbar() {
     .attr("id", "plume-id-search-list")
     .attr("class", "search-result");
 
-
-
   // Date range
   const dateRange = toolbar.append("div").attr("class", "date-range");
-
-  const dateRangeContainer = dateRange
-    .append("p")
-    .attr("class", "scale-label-container");
-  dateRangeContainer.append("label").attr("for", "amount").text("Date range:");
 
   dateRange.append("input")
     .attr("type", "text")
     .attr("id", "amount")
     .style("border", "0")
-    .style("color", "#C85964")
-    .style("font-weight", "bold")
-    .style("width", "240px");
-  dateRange.append("div").attr("id", "slider-range");
+    .style("color", "#36454F")
+    .style("width", "100%")
+    //.style("padding-left","100px")
+    .style("text-align", "center"); ;
+    dateRange.append("div").attr("id", "slider-range");
+
+    const labelContainer = dateRange.append("div").attr("class", "label-container")
+    .style("display", "flex") // Use flexbox for layout
+    .style("justify-content", "space-between") // Space between labels
+    .style("align-items", "center") // Center labels vertically
+    .style("margin-bottom", "10px"); // Space below labels
+  
+  // Add "Start Date" label
+  labelContainer.append("span")
+    .style("font-size", "10px")
+    .style("font-weight", "normal")
+    .style("color", "#333") 
+    .style("margin",'5px')// Darker color for label
+    .text("Start Date");
+  
+  // Add "End Date" label
+  labelContainer.append("span")
+    .style("font-size", "10px")
+    .style("font-weight", "normal")
+    .style("color", "#333")
+    .style("margin",'5px') // Darker color for label
+    .text("End Date");
+  
 
   // Toggle container
-  const toggleContainer = toolbar.append("div")
+  const toggleContainer = dateRange.append("div")
     .attr("class", "toggle-container")
     .style("margin-top", "20px") // Add margin for spacing
     .style("display", "flex")
-    .style("align-items", "center");
+    .style("align-items", "center")
+    .style('justify-content','space-between')
+    .style('width','100%');
   
   // Add "Coverage" label for the toggle
   toggleContainer.append("span")
     .attr("class", "toggle-text")
-    .text("Coverage")
-    .style("color", 'black') // Color for the text
-    .style("font-weight", "medium");
+    .text("Show Coverage")
+    .style("color", '#333') // Color for the text
+    .style("font-weight", "bold");
 
   // Toggle switch for enabling/disabling date coverage
   toggleContainer.append("input")
@@ -191,8 +214,13 @@ function createToolbar() {
 
   toggleContainer.append("label")
     .attr("for", "toggleCoverage")
-    .attr("class", "toggle-label");
-
+    .attr("class", "toggle-label")
+    .text("No");
+  d3.select("#toggleCoverage").on("change", function() {
+      const isChecked = this.checked;
+      d3.select(".toggle-label").text(isChecked ? "Yes" : "No"); // Update text based on toggle state
+    });
+    
   // Add CSS for toggle switch
   d3.select("head").append("style").text(`
     .toolbar {
@@ -238,25 +266,28 @@ function createToolbar() {
     .toggle-label {
       position: relative;
       display: inline-block;
-      width: 50px;
-      height: 24px;
-      margin-left: 5px; /* Space between label and toggle */
+      width: 80px; /* Width of the toggle switch */
+      height: 24px; /* Height of the toggle switch */
       cursor: pointer;
-      background-color: rgba(8, 42, 99, 0.3); /* Light background color */
-      border-radius: 24px; /* Rounded background */
+      background-color: rgba(8, 42, 99, 0.5); /* Light background color for the toggle */
+      border-radius: 5px; /* Rounded corners for the toggle */
       transition: background-color 0.4s;
+      display: flex;
+      justify-content: center; /* Center text horizontally */
+      align-items: center; /* Center text vertically */
+      color: white; /* Text color */
+      font-weight: bold; /* Font weight for text */
     }
 
     .toggle-label::before {
       position: absolute;
-      content: "";
-      height: 20px;
-      width: 20px;
-      left: 2px;
+      height: 24px;
+      width: 40px;
       bottom: 2px;
+      left: 2px;
       background-color: white;
       transition: transform 0.1s;
-      border-radius: 50%;
+      border-radius: 2px;
     }
 
     .toggle-input:checked + .toggle-label {

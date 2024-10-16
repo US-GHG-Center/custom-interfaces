@@ -271,7 +271,7 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
 
 .autocomplete-search-box .search-result {
   background-color: white;
-  max-height: 200px;
+  max-height: 150px;
   overflow: auto;
 }
 
@@ -323,5 +323,5 @@ table td {
 }
 
 .toolbar {
-  width:450px;
+  width:350px;
 }
