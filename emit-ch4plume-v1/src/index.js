@@ -4,7 +4,7 @@ import "./style.css";
 const {
     createColorbar,
     displayPropertiesWithD3,
-    dragElement
+    dragElement,
 } = require("./helper");
 
 const VMIN = 0;
