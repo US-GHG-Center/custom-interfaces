@@ -193,8 +193,10 @@ class MeasureDistance {
 class ClearDistancePoints {
   onClick() {
     distancePoints.features.splice(0, distancePoints.features.length);
-    distanceLabel.features.splice(0, distanceLabel.features.length);
-    map.getSource("distanceLabel").setData(distanceLabel);
+     measureLine.features.splice(0, measureLine.features.length);
+     distanceLabel.features.splice(0, distanceLabel.features.length);
+     map.getSource("distanceLabel").setData(distanceLabel);
+     map.getSource("measureLine").setData(distanceLabel);
     map.getSource("distancePoints").setData(distancePoints);
     $("#clear-icon-main").removeClass("clicked");
   }
