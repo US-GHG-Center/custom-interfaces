@@ -480,16 +480,20 @@ async function main() {
       id: "measure-label",
       type: "symbol",
       source: "distanceLabel",
-      paint: {
-        "text-color": "#00BFFF",
-      },
       layout: {
         "text-field": ["get", "description"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 13,
+        "text-letter-spacing": 0.1,
         "text-justify": "center",
-        "text-size": 16,
-        "symbol-placement": "line-center",
         "symbol-spacing": 1000,
+        "text-offset": [0, 1.5],
         "text-anchor": "bottom",
+      },
+      paint: {
+        "text-color": "#fff",
+        "text-halo-color": "#000",
+        "text-halo-width": 2,
       },
     });
     map.addLayer({
@@ -652,6 +656,7 @@ async function main() {
       map.getSource("distancePoints").setData(distancePoints);
       map.getSource("measureLine").setData(measureLine);
       map.moveLayer("measure-points");
+      map.moveLayer("measure-label");
     });
 
     map.on("mousemove", (e) => {
@@ -661,22 +666,23 @@ async function main() {
         const startCoordinates = anchorPoint.geometry.coordinates;
         const endCoordinates = [e.lngLat.lng, e.lngLat.lat];
         linestring.geometry.coordinates = [startCoordinates, endCoordinates];
-
-        distanceLabelAnchor.geometry.coordinates =
-          linestring.geometry.coordinates;
-
+        distanceLabelAnchor.geometry.coordinates = [
+          endCoordinates,
+          startCoordinates,
+        ];
         // const value = document.createElement("pre");
         const distance = turf.length(linestring, { units: "miles" });
 
         distanceLabelAnchor.properties.description = `${distance.toFixed(
           2
         )} miles`;
+        distanceLabelAnchor.properties.icon = `${distance.toFixed(2)} miles`;
         measureLine.features.push(linestring);
         distanceLabel.features.push(distanceLabelAnchor);
         map.getSource("measureLine").setData(measureLine);
         map.getSource("distanceLabel").setData(distanceLabel);
-        map.moveLayer("measure-label");
         map.moveLayer("measure-line");
+        map.moveLayer("measure-label");
       }
     });
     map.on("mousemove", (e) => {
