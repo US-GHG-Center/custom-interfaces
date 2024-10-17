@@ -58,6 +58,17 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   display: none !important;
 }
 
+ /* marker related styling goes here */ 
+ .marker {
+  background-image: url("./marker-sdf-2.png");
+  background-size: cover;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  /* box-shadow: 1px 1px white; */
+}
+
 /* commenting this out and its corresponding element in html
 .lds-roller {
   display: inline-block;
@@ -163,6 +174,7 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   outline: none;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display:flex;
 }
 
 .autocomplete-search-box .search-result {
@@ -189,9 +201,6 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   overflow: auto;
 }
 
-.search-container {
-  margin: 10px 0; /* Space around the search box */
-}
 
  /* the date slider related styling goes here */ 
  .ui-widget-header { 
@@ -206,17 +215,6 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   cursor: col-resize;
 }
 
- /* marker related styling goes here */ 
-.marker {
-  background-image: url("./marker-sdf-2.png");
-  background-size: cover;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  cursor: pointer;
-  /* box-shadow: 1px 1px white; */
-}
-
  /* the toolbar related styling goes here */ 
 
 .toolbar {
@@ -225,7 +223,7 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   left: 20px; 
   background-color: white;
   padding: 10px; 
-  width: 350px;
+  width: 300px;
   font-size: 14px;
 }
 
@@ -271,56 +269,67 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   width: 100%
 }
 
-.toggle-input {
-  display: none;
-}
-
-.toggle-label {
+/* Toggle switch container */
+.toggle-switch {
   position: relative;
   display: inline-block;
-  width: 80px; /* Width of the toggle switch */
-  height: 24px; /* Height of the toggle switch */
-  cursor: pointer;
-  background-color: rgba(8, 42, 99, 0.5); /* Light background color for the toggle */
-  border-radius: 5px; /* Rounded corners for the toggle */
-  transition: background-color 0.4s;
-  display: flex;
-  justify-content: center; /* Center text horizontally */
-  align-items: center; /* Center text vertically */
-  color: white; /* Text color */
-  font-weight: bold; /* Font weight for text */
-}
-
-.toggle-label::before {
-  position: absolute;
+  width: 50px;
   height: 24px;
-  width: 40px;
-  bottom: 2px;
-  left: 2px;
+}
+
+/* Hide default checkbox */
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider background */
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 24px;
+  transition: .4s;
+}
+
+/* Slider round circle */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
   background-color: white;
-  transition: transform 0.1s;
-  border-radius: 2px;
+  bottom: 3px;
+  left: 4px;
+  transition: .4s;
 }
 
-.toggle-input:checked + .toggle-label {
-  background-color: #082a63; 
+/* When checked, move the slider */
+input:checked + .slider {
+  background-color: #082A63;
 }
 
-.toggle-input:checked + .toggle-label::before {
+/* When checked, move the circle to the right */
+input:checked + .slider:before {
   transform: translateX(26px);
 }
 
 /* styling for display of plumes list */
 #display_props {
   position: absolute;
-  width: 350px; /* Adjust width as needed */
+  width: 300px; /* Adjust width as needed */
   bottom : 8%;
   left: 20px;
   background-color: white;
   cursor: move;
   z-index: 999;
   padding: 10px; 
-  font-size: 14px;
+  font-size: 12px;
 }
 
 #close {

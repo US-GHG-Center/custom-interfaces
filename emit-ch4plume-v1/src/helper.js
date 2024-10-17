@@ -59,7 +59,7 @@ function createColorbar(VMIN, VMAX) {
 
   colorbar
     .append("svg")
-    .attr("width", 350) // Adjust the width as needed
+    .attr("width", 300) // Adjust the width as needed
     .attr("height", 12) // Adjust the height as needed
     .attr("rx", 10)
     .append("g")
