@@ -5,7 +5,6 @@ const {
     createColorbar,
     displayPropertiesWithD3,
     dragElement,
-    createToolbar
 } = require("./helper");
 
 const VMIN = 0;
@@ -341,7 +340,6 @@ async function main() {
             });
 
         createColorbar(VMIN, VMAX);
-        createToolbar();
 
         // Filter and set IDs for points
         features

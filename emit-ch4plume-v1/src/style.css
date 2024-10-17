@@ -1,12 +1,19 @@
+/* General element styling */
 body { 
     margin: 0; 
     padding: 0; 
     color: rgb(27, 38, 49);
-    
     font-family: 'Inter', sans-serif;
     
   }
 
+span{
+    padding: 5px;
+    color: #333;
+    font-weight: normal;
+  }
+
+ /* mapbox related styling goes here */ 
   #map canvas {
     cursor: default;
     }
@@ -18,12 +25,6 @@ body {
     width: 100%; 
   }
 
-  table {
-    border-spacing: 13px;
-  }
- 
-.ui-widget-header { background: #082A63; }
-
 .mapboxgl-ctrl  button .mapboxgl-ctrl-icon {
     display: block;
     width: 100%;
@@ -34,57 +35,6 @@ body {
     padding-top: 20%;
     background-color: #082A63;
     color: white
-}
-
-.colorbar {
-  border-radius: 5px;
-  font-size: 12px;
-}
-
-.date-range {
-  border-radius: 5px;
-  padding: 12px 20px;
-  font-size: 14px;
-}
-
-#display_props {
-  position: absolute;
-  border-radius: 5px;
-  padding: 20px 10px ; /* Padding around the box */
-  width: 450px; /* Adjust width as needed */
-  font-size: 14px;
-  bottom: 8%;
-  left: 50px;
-  background-color: white;
-  height: fit-content;
-  cursor: move;
-  z-index: 999;
-}
-
-#close {
-  float:right;
-  display:inline-block;
-  padding:2px 5px;
-  background:#ccc;
-}
-
-#close:hover {
-  float:right;
-  display:inline-block;
-  padding:2px 5px;
-  background:#ccc;
-  color:#fff;
-  cursor: pointer;
-}
-
-.marker {
-  background-image: url("./marker-sdf-2.png");
-  background-size: cover;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  cursor: pointer;
-  /* box-shadow: 1px 1px white; */
 }
 
 .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon {
@@ -108,14 +58,7 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   display: none !important;
 }
 
-.ui-slider .ui-slider-handle {
-  position: absolute;
-  z-index: 2;
-  width: 1.2em;
-  height: 1.2em;
-  cursor: col-resize;
-}
-
+/* commenting this out and its corresponding element in html
 .lds-roller {
   display: inline-block;
   position: absolute;
@@ -202,37 +145,8 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
     transform: rotate(360deg);
   }
 }
-
-.filter-ctrl {
-  position: absolute;
-  z-index: 1;
-  top: 12px; /* Position it at the top */
-  left: 50%; /* Position it 50% from the left */
-  transform: translateX(-50%); /* Center it horizontally */
-  box-shadow: 0 0 0 2px rgba(14, 3, 79, 0.1);
-}
-
-/* .filter-ctrl input[type='text'] {
-  font:
-      12px/20px 'Helvetica Neue',
-      Arial,
-      Helvetica,
-      sans-serif;
-  width: 100%;
-  border: 0;
-  background-color: #fff;
-  margin: 0;
-  color: rgba(0, 0, 0, 0.5);
-  padding: 10px;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-  border-radius: 3px;
-  width: 180px;
-} */
-
-* {
-  box-sizing: border-box;
-}
-
+*/
+ /* searching related styling goes here */ 
 .autocomplete-search-box {
   position: relative;
   width: 100%;
@@ -243,8 +157,8 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
 }
 
 .autocomplete-search-box .search-box {
-  width: 100%;
-  height: 40px;
+  width: 80%;
+  height: 12px;
   padding: 10px 10px;
   outline: none;
   border: none;
@@ -275,14 +189,156 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   overflow: auto;
 }
 
+.search-container {
+  margin: 10px 0; /* Space around the search box */
+}
+
+ /* the date slider related styling goes here */ 
+ .ui-widget-header { 
+  background: #082A63;
+}
+
+.ui-slider .ui-slider-handle {
+  position: absolute;
+  z-index: 2;
+  width: 1.2em;
+  height: 1.2em;
+  cursor: col-resize;
+}
+
+ /* marker related styling goes here */ 
+.marker {
+  background-image: url("./marker-sdf-2.png");
+  background-size: cover;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  /* box-shadow: 1px 1px white; */
+}
+
+ /* the toolbar related styling goes here */ 
+
+.toolbar {
+  position: absolute;
+  top: 20px; 
+  left: 20px; 
+  background-color: white;
+  padding: 10px; 
+  width: 350px;
+  font-size: 14px;
+}
+
+.toolbar-heading {
+  font-size: 20px;
+  color: #333; 
+}
+
+.toolbar-line {
+  border: none; 
+  border-top: 2px solid #333;
+  margin: 10px 0; 
+}
+
+/* selecting date related styling goes here */ 
+.date-range {
+  padding: 12px 20px;
+}
+
+.amount {
+  color: #36454f;
+  width: 100%;
+  text-align: center;
+  border: 0;
+  margin-top: 10px;
+
+}
+
+.label-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
 
 
-/* Main display box styles */
+/* coverage toggle related styling goes here */ 
+.toggle-container {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  justify-content: space-between;
+  width: 100%
+}
 
+.toggle-input {
+  display: none;
+}
 
-/* Header styles */
+.toggle-label {
+  position: relative;
+  display: inline-block;
+  width: 80px; /* Width of the toggle switch */
+  height: 24px; /* Height of the toggle switch */
+  cursor: pointer;
+  background-color: rgba(8, 42, 99, 0.5); /* Light background color for the toggle */
+  border-radius: 5px; /* Rounded corners for the toggle */
+  transition: background-color 0.4s;
+  display: flex;
+  justify-content: center; /* Center text horizontally */
+  align-items: center; /* Center text vertically */
+  color: white; /* Text color */
+  font-weight: bold; /* Font weight for text */
+}
+
+.toggle-label::before {
+  position: absolute;
+  height: 24px;
+  width: 40px;
+  bottom: 2px;
+  left: 2px;
+  background-color: white;
+  transition: transform 0.1s;
+  border-radius: 2px;
+}
+
+.toggle-input:checked + .toggle-label {
+  background-color: #082a63; 
+}
+
+.toggle-input:checked + .toggle-label::before {
+  transform: translateX(26px);
+}
+
+/* styling for display of plumes list */
+#display_props {
+  position: absolute;
+  width: 350px; /* Adjust width as needed */
+  bottom : 8%;
+  left: 20px;
+  background-color: white;
+  cursor: move;
+  z-index: 999;
+  padding: 10px; 
+  font-size: 14px;
+}
+
+#close {
+  display:inline-block;
+  padding:1px 5px;
+  background:#ccc;
+}
+
+#close:hover {
+  display:inline-block;
+  padding:1px 5px;
+  background:#ccc;
+  color:#fff;
+  cursor: pointer;
+}
+
 .display-header {
-  padding: 10px; /* Padding inside header */
+  padding: 10px; 
 }
 
 .display-header h2 {
@@ -291,37 +347,26 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
 }
 
 .display-header .datetime {
-  margin: 0; /* Remove margin for datetime */
+  margin: 0; 
 }
 
-/* Download link styles */
 .download-link {
-  padding-left: 10px; /* Space to the left */
-  font-size: 0.85em; /* Smaller font size for download link */
+  padding-left: 10px; 
+  font-size: 0.85em; 
 }
 
 .download-link a {
-  text-decoration: none; /* Remove underline */
-  color: #007bff; /* Link color */
-}
-
-/* Horizontal line styles */
-hr {
-  margin-left: 10px; /* Align with content */
-  margin-right: 10px; /* Align with content */
+  text-decoration: none; 
+  color: #007bff; 
 }
 
 /* Table styles */
 table {
-  border-spacing: 0; /* Remove default spacing */
-  padding-left: 10px; /* Space on the left side */
+  border-spacing: 0; 
+  padding-left: 10px; 
   width:100%
 }
 
 table td {
-  padding-bottom: 5px; /* Space between rows */
-}
-
-.toolbar {
-  width:350px;
+  padding-bottom: 5px; 
 }

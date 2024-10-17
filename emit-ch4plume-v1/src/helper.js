@@ -59,7 +59,7 @@ function createColorbar(VMIN, VMAX) {
 
   colorbar
     .append("svg")
-    .attr("width", 300) // Adjust the width as needed
+    .attr("width", 350) // Adjust the width as needed
     .attr("height", 12) // Adjust the height as needed
     .attr("rx", 10)
     .append("g")
@@ -113,199 +113,13 @@ function createColorbar(VMIN, VMAX) {
     .style("margin-bottom", "12px"); // Adjust margin as needed
 }
 
-function createToolbar() {
-  // Create the main toolbar container
-  const toolbar = d3.select("body").append("div").attr("class", "toolbar");
-
-  // Heading
-  toolbar.append("h1")
-    .attr("class", "toolbar-heading")
-    .text("Methane Plumes Portal");
-
-  // Horizontal line
-  toolbar.append("hr").attr("class", "toolbar-line")
-  .style("border-top-color", "black");
-
-  // Search box (added exactly as you provided)
-  const searchBox = toolbar.append("div")
-    .attr("id", "plume-id-search-box")
-    .attr("class", "autocomplete-search-box");
-
-  searchBox.append("input")
-    .attr("id", "plume-id-search-input")
-    .attr("type", "text")
-    .attr("class", "search-box")
-    .attr("placeholder", "Search by Plume ID and/or Location");
-
-  // Add search icon SVG
-  searchBox.append("svg")
-  .attr("class", "search-icon")
-  .attr("viewBox", "0 0 24 24") // Adjust viewBox as needed
-  .attr("width", "24px") // Set width for the icon
-  .attr("height", "24px") // Set height for the icon
-  .style("position", "absolute")
-  .style("right", "10px") // Position to the right
-  .style("top", "50%") // Vertically center it
-  .style("transform", "translateY(-50%)") // Adjust vertical position
-  .html(`
-    <path fill="black" d="M23.707 22.293l-5.387-5.387A9.928 9.928 0 0 0 20 11c0-5.513-4.487-10-10-10S0 5.487 0 11s4.487 10 10 10c2.471 0 4.73-.901 6.463-2.386l5.387 5.387a1 1 0 0 0 1.414-1.414zM2 11c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8-8-3.582-8-8z"/>
-  `);
-  searchBox.append("ul")
-    .attr("id", "plume-id-search-list")
-    .attr("class", "search-result");
-
-  // Date range
-  const dateRange = toolbar.append("div").attr("class", "date-range");
-
-  dateRange.append("input")
-    .attr("type", "text")
-    .attr("id", "amount")
-    .style("border", "0")
-    .style("color", "#36454F")
-    .style("width", "100%")
-    //.style("padding-left","100px")
-    .style("text-align", "center"); ;
-    dateRange.append("div").attr("id", "slider-range");
-
-    const labelContainer = dateRange.append("div").attr("class", "label-container")
-    .style("display", "flex") // Use flexbox for layout
-    .style("justify-content", "space-between") // Space between labels
-    .style("align-items", "center") // Center labels vertically
-    .style("margin-bottom", "10px"); // Space below labels
-  
-  // Add "Start Date" label
-  labelContainer.append("span")
-    .style("font-size", "10px")
-    .style("font-weight", "normal")
-    .style("color", "#333") 
-    .style("margin",'5px')// Darker color for label
-    .text("Start Date");
-  
-  // Add "End Date" label
-  labelContainer.append("span")
-    .style("font-size", "10px")
-    .style("font-weight", "normal")
-    .style("color", "#333")
-    .style("margin",'5px') // Darker color for label
-    .text("End Date");
-  
-
-  // Toggle container
-  const toggleContainer = dateRange.append("div")
-    .attr("class", "toggle-container")
-    .style("margin-top", "20px") // Add margin for spacing
-    .style("display", "flex")
-    .style("align-items", "center")
-    .style('justify-content','space-between')
-    .style('width','100%');
-  
-  // Add "Coverage" label for the toggle
-  toggleContainer.append("span")
-    .attr("class", "toggle-text")
-    .text("Show Coverage")
-    .style("color", '#333') // Color for the text
-    .style("font-weight", "bold");
-
-  // Toggle switch for enabling/disabling date coverage
-  toggleContainer.append("input")
-    .attr("type", "checkbox")
-    .attr("id", "toggleCoverage")
-    .attr("class", "toggle-input");
-
-  toggleContainer.append("label")
-    .attr("for", "toggleCoverage")
-    .attr("class", "toggle-label")
-    .text("No");
-  d3.select("#toggleCoverage").on("change", function() {
-      const isChecked = this.checked;
-      d3.select(".toggle-label").text(isChecked ? "Yes" : "No"); // Update text based on toggle state
-    });
-    
-  // Add CSS for toggle switch
-  d3.select("head").append("style").text(`
-    .toolbar {
-      position: absolute;
-      top: 60px; /* Adjust the top position as needed */
-      left: 50px; /* Adjust the left position as needed */
-      background-color: white;
-      padding: 15px; /* Add padding to the toolbar */
-      border: 1px solid #ccc; /* Optional: border around toolbar */
-      border-radius: 8px; /* Optional: rounded corners */
-    }
-
-    .toolbar-heading {
-      font-size: 24px; /* Bigger font for the heading */
-      margin: 0; /* Remove default margin */
-      margin-bottom: 10px; /* Space below heading */
-      color: black; /* Heading color set to black */
-    }
-
-    .toolbar-line {
-      border: none; /* Remove default border */
-      border-top: 2px solid #C85964; /* Line color and thickness */
-      margin: 10px 0; /* Space around the line */
-    }
-
-    .search-container {
-      margin: 10px 0; /* Space around the search box */
-    }
-
-    .date-range {
-      margin: 10px 0; /* Space around the date range */
-    }
-
-    .toggle-container {
-      display: flex;
-      align-items: center;
-    }
-
-    .toggle-input {
-      display: none;
-    }
-
-    .toggle-label {
-      position: relative;
-      display: inline-block;
-      width: 80px; /* Width of the toggle switch */
-      height: 24px; /* Height of the toggle switch */
-      cursor: pointer;
-      background-color: rgba(8, 42, 99, 0.5); /* Light background color for the toggle */
-      border-radius: 5px; /* Rounded corners for the toggle */
-      transition: background-color 0.4s;
-      display: flex;
-      justify-content: center; /* Center text horizontally */
-      align-items: center; /* Center text vertically */
-      color: white; /* Text color */
-      font-weight: bold; /* Font weight for text */
-    }
-
-    .toggle-label::before {
-      position: absolute;
-      height: 24px;
-      width: 40px;
-      bottom: 2px;
-      left: 2px;
-      background-color: white;
-      transition: transform 0.1s;
-      border-radius: 2px;
-    }
-
-    .toggle-input:checked + .toggle-label {
-      background-color: #082a63; 
-    }
-
-    .toggle-input:checked + .toggle-label::before {
-      transform: translateX(26px);
-    }
-  `);
-}
-
 
 const getFilename = function (pathStr) {
   return pathStr.substring(pathStr.lastIndexOf("/") + 1);
 };
 
 function displayPropertiesWithD3(properties) {
+  console.log("hi")
   const important_keys = ["Max Plume Concentration (ppm m)"];
   const combinedList = important_keys.concat(Object.keys(properties));
   const new_sorted_properties = [...new Set(combinedList)];
@@ -372,6 +186,5 @@ function displayPropertiesWithD3(properties) {
 module.exports = {
   createColorbar: createColorbar,
   displayPropertiesWithD3: displayPropertiesWithD3,
-  dragElement: dragElement,
-  createToolbar: createToolbar
+  dragElement: dragElement
 };
