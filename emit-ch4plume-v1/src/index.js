@@ -78,7 +78,14 @@ const distanceLabelAnchor = {
   },
 };
 
-class HomeButtonControl {
+class MapControls {
+  onRemove() {
+    this.container.parentNode.removeChild(this.container);
+    this.map = undefined;
+  }
+}
+
+class HomeButtonControl extends MapControls {
   onClick() {
     // Set the map's center and zoom to the desired location
     map.flyTo({
@@ -108,13 +115,9 @@ class HomeButtonControl {
       "</div>";
     return this.container;
   }
-  onRemove() {
-    this.container.parentNode.removeChild(this.container);
-    this.map = undefined;
-  }
 }
 
-class LayerButtonControl {
+class LayerButtonControl extends MapControls {
   onClick() {
     $("#layer-eye").toggleClass("fa-eye fa-eye-slash");
     // Toggle layer visibility
@@ -157,13 +160,9 @@ class LayerButtonControl {
       "</div>";
     return this.container;
   }
-  onRemove() {
-    this.container.parentNode.removeChild(this.container);
-    this.map = undefined;
-  }
 }
 
-class MeasureDistance {
+class MeasureDistance extends MapControls {
   onClick() {
     $("#measure-icon").toggleClass("measure-icon-clicked");
     measureToggled = !measureToggled;
@@ -185,18 +184,14 @@ class MeasureDistance {
       "</div>";
     return this.container;
   }
-  onRemove() {
-    this.container.parentNode.removeChild(this.container);
-    this.map = undefined;
-  }
 }
-class ClearDistancePoints {
+class ClearDistancePoints extends MapControls {
   onClick() {
     distancePoints.features.splice(0, distancePoints.features.length);
-     measureLine.features.splice(0, measureLine.features.length);
-     distanceLabel.features.splice(0, distanceLabel.features.length);
-     map.getSource("distanceLabel").setData(distanceLabel);
-     map.getSource("measureLine").setData(distanceLabel);
+    measureLine.features.splice(0, measureLine.features.length);
+    distanceLabel.features.splice(0, distanceLabel.features.length);
+    map.getSource("distanceLabel").setData(distanceLabel);
+    map.getSource("measureLine").setData(distanceLabel);
     map.getSource("distancePoints").setData(distancePoints);
     $("#clear-icon-main").removeClass("clicked");
   }
@@ -215,10 +210,6 @@ class ClearDistancePoints {
       "</button>" +
       "</div>";
     return this.container;
-  }
-  onRemove() {
-    this.container.parentNode.removeChild(this.container);
-    this.map = undefined;
   }
 }
 
