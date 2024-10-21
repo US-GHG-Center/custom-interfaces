@@ -27,6 +27,8 @@ var counter_clicks_marker = 0;
 var layerToggled = true;
 var measureToggled = false;
 var markerClicked = false;
+let scale = "miles";
+const scaleText = scale === "miles" ? "mi" : scale;
 var polygons;
 var itemIds;
 
@@ -212,12 +214,57 @@ class ClearDistancePoints extends MapControls {
     return this.container;
   }
 }
+class ChangeUnitsOfMeasurement extends MapControls {
+  onClick() {
+    if (scale === "km") {
+      scale = "miles";
+    } else {
+      scale = "km";
+    }
+    const mapScaleUnit = scale === "miles" ? "imperial" : "metric";
+    mapScale.setUnit(mapScaleUnit);
+
+    const scaleText = scale === "miles" ? "mi" : scale;
+    console.log({ scaleText });
+    this.container.innerHTML = ` <div id="units-icon">
+      <button>
+      <span   class="mapboxgl-ctrl-icon" aria-hidden="true " title="Miles/Km">
+      <i id="unit-icon-text" class=" " >
+      ${scaleText}
+       </i>
+      </span>
+      </button>
+      </div>`;
+  }
+  onAdd(map) {
+    this.map = map;
+    this.container = document.createElement("div");
+    this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
+    this.container.addEventListener("contextmenu", (e) => e.preventDefault());
+    this.container.addEventListener("click", (e) => this.onClick());
+    this.container.innerHTML = ` <div id="units-icon">
+      <button>
+      <span   class="mapboxgl-ctrl-icon" aria-hidden="true " title="Miles/Km">
+      <i id="unit-icon-text" class=""  style="text-transform: none;" >
+      ${scaleText}
+       </i>
+      </span>
+      </button>
+      </div>`;
+
+    return this.container;
+  }
+}
 
 map.addControl(new HomeButtonControl());
 map.addControl(new mapboxgl.NavigationControl());
-map.addControl(new mapboxgl.ScaleControl());
+const mapScale = new mapboxgl.ScaleControl({
+  unit: scale === "miles" ? "imperial" : "metric",
+});
+map.addControl(mapScale);
 map.addControl(new LayerButtonControl());
 map.addControl(new MeasureDistance());
+map.addControl(new ChangeUnitsOfMeasurement());
 map.addControl(new ClearDistancePoints());
 
 function showHideLayers(layersIds, show) {
@@ -662,12 +709,17 @@ async function main() {
           startCoordinates,
         ];
         // const value = document.createElement("pre");
-        const distance = turf.length(linestring, { units: "miles" });
-
+        const turfUnits = scale === "miles" ? "miles" : "kilometers";
+        const distance = turf.length(linestring, {
+          units: turfUnits,
+        });
+        const labelUnit = scale === "miles" ? " miles" : " km";
         distanceLabelAnchor.properties.description = `${distance.toFixed(
           2
-        )} miles`;
-        distanceLabelAnchor.properties.icon = `${distance.toFixed(2)} miles`;
+        )} ${labelUnit}`;
+        distanceLabelAnchor.properties.icon = `${distance.toFixed(
+          2
+        )} ${labelUnit}`;
         measureLine.features.push(linestring);
         distanceLabel.features.push(distanceLabelAnchor);
         map.getSource("measureLine").setData(measureLine);
