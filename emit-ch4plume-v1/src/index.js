@@ -166,7 +166,7 @@ class LayerButtonControl extends MapControls {
 
 class MeasureDistance extends MapControls {
   onClick() {
-    $("#measure-icon").toggleClass("measure-icon-clicked");
+    toggleMeasureIcon(measureToggled);
     measureToggled = !measureToggled;
     $("#display_props").toggleClass("hidden");
     $("#plume-id-search-box").toggleClass("disabled");
@@ -184,7 +184,7 @@ class MeasureDistance extends MapControls {
       '<div id="measure-icon-main">' +
       "<button>" +
       '<span id="measure-icon" class="mapboxgl-ctrl-icon" aria-hidden="true" title="Measure Tool">' +
-      '<i class="fa-solid fa-ruler-horizontal"></i>' +
+      '<i class="fa-solid fa-arrows-left-right-to-line"></i>' +
       "</span>" +
       "</button>" +
       "</div>";
@@ -231,9 +231,7 @@ class ChangeUnitsOfMeasurement extends MapControls {
     }
     const mapScaleUnit = scale === "miles" ? "imperial" : "metric";
     mapScale.setUnit(mapScaleUnit);
-
     const scaleText = scale === "miles" ? "mi" : scale;
-    console.log({ scaleText });
     this.container.innerHTML = ` <div id="units-icon">
       <button>
       <span   class="mapboxgl-ctrl-icon" aria-hidden="true " title="Miles/Km">
@@ -274,6 +272,18 @@ map.addControl(new LayerButtonControl());
 map.addControl(new MeasureDistance());
 map.addControl(new ChangeUnitsOfMeasurement());
 map.addControl(new ClearDistancePoints());
+
+function toggleMeasureIcon(measureToggled) {
+  if (measureToggled) {
+    $("#measure-icon i")
+      .removeClass("fa-ruler-horizontal")
+      .addClass("fa-arrows-left-right-to-line");
+  } else {
+    $("#measure-icon i")
+      .removeClass("fa-arrows-left-right-to-line")
+      .addClass("fa-ruler-horizontal");
+  }
+}
 
 function showHideLayers(layersIds, show) {
   layersIds.forEach((layerId) => {
@@ -659,8 +669,8 @@ async function main() {
 
     map.on("dblclick", (e) => {
       if (measureToggled) {
+        toggleMeasureIcon(measureToggled);
         onClearDistanceClick();
-        $("#measure-icon").removeClass("measure-icon-clicked");
         $("#display_props").removeClass("hidden");
         $("#plume-id-search-box").removeClass("disabled");
         $(".date-range").removeClass("disabled");
