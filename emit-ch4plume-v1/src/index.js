@@ -169,6 +169,8 @@ class MeasureDistance extends MapControls {
     $("#measure-icon").toggleClass("measure-icon-clicked");
     measureToggled = !measureToggled;
     $("#display_props").toggleClass("hidden");
+    $("#plume-id-search-box").toggleClass("disabled");
+    $(".date-range").toggleClass("disabled");
     changeCursor();
     map.doubleClickZoom.disable();
   }
@@ -660,6 +662,8 @@ async function main() {
         onClearDistanceClick();
         $("#measure-icon").removeClass("measure-icon-clicked");
         $("#display_props").removeClass("hidden");
+        $("#plume-id-search-box").removeClass("disabled");
+        $(".date-range").removeClass("disabled");
         measureToggled = !measureToggled;
         changeCursor();
       } else {

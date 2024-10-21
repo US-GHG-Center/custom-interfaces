@@ -72,6 +72,10 @@ body {
   z-index: 999;
 }
 
+#unit-icon-text { 
+  text-transform:lowercase;
+}
+
 #close {
   float:right;
   display:inline-block;
@@ -287,4 +291,12 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   background-color: white;
   max-height: 200px;
   overflow: auto;
+}
+
+#plume-id-search-box.disabled {
+  display:none;
+}
+
+.date-range.disabled {
+  display:none;
 }
