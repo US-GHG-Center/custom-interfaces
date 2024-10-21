@@ -14,11 +14,15 @@ If you use [`nvm`](https://github.com/creationix/nvm), activate the desired Node
 
 `nvm install`
 
+The desired node version is defined in `.nvmrc` file.
+To install and switch to the desired node version:
+```nvm use```
+
 Install Node modules:
 
-`yarn install`
+```yarn install```
 OR 
-`npm install`
+```npm install```
 
 This command  will install all the dependencies and devtools needed for local development. 
  
