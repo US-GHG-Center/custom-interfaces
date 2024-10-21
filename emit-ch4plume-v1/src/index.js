@@ -169,6 +169,8 @@ class MeasureDistance extends MapControls {
     $("#measure-icon").toggleClass("measure-icon-clicked");
     measureToggled = !measureToggled;
     $("#display_props").toggleClass("hidden");
+    changeCursor();
+    map.doubleClickZoom.disable();
   }
   onAdd(map) {
     this.map = map;
@@ -187,15 +189,19 @@ class MeasureDistance extends MapControls {
     return this.container;
   }
 }
+
+const onClearDistanceClick = () => {
+  distancePoints.features.length = 0;
+  measureLine.features.length = 0;
+  distanceLabel.features.length = 0;
+  map.getSource("distanceLabel").setData(distanceLabel);
+  map.getSource("measureLine").setData(distanceLabel);
+  map.getSource("distancePoints").setData(distancePoints);
+  $("#clear-icon-main").removeClass("clicked");
+};
 class ClearDistancePoints extends MapControls {
   onClick() {
-    distancePoints.features.splice(0, distancePoints.features.length);
-    measureLine.features.splice(0, measureLine.features.length);
-    distanceLabel.features.splice(0, distanceLabel.features.length);
-    map.getSource("distanceLabel").setData(distanceLabel);
-    map.getSource("measureLine").setData(distanceLabel);
-    map.getSource("distancePoints").setData(distancePoints);
-    $("#clear-icon-main").removeClass("clicked");
+    onClearDistanceClick();
   }
   onAdd(map) {
     this.map = map;
@@ -444,6 +450,16 @@ document.addEventListener("click", function (e) {
   }
 });
 
+function changeCursor() {
+  const totalPoints = distancePoints.features.filter(
+    (f) => f.geometry.type === "Point"
+  );
+  // Change the cursor to a pointer when hovering over a point on the map.
+  // Otherwise cursor is a crosshair.
+  const crosshair = totalPoints.length < 2 && measureToggled;
+  map.getCanvas().style.cursor = crosshair ? "crosshair" : "pointer";
+}
+
 async function main() {
   map.on("load", async () => {
     map.addSource("distancePoints", {
@@ -638,6 +654,18 @@ async function main() {
         addRaster(itemIds[itemName], point.feature, polygonLayerId, false);
       });
     });
+
+    map.on("dblclick", (e) => {
+      if (measureToggled) {
+        onClearDistanceClick();
+        $("#measure-icon").removeClass("measure-icon-clicked");
+        $("#display_props").removeClass("hidden");
+        measureToggled = !measureToggled;
+        changeCursor();
+      } else {
+        map.doubleClickZoom.enable();
+      }
+    });
     map.on("click", (e) => {
       const features = map.queryRenderedFeatures(e.point, {
         layers: ["measure-points"],
@@ -653,7 +681,7 @@ async function main() {
         distancePoints.features = distancePoints.features.filter(
           (point) => point.properties.id !== id
         );
-        measureLine.features.splice(0, measureLine.features.length);
+        measureLine.features.length = 0;
       }
       if (
         totalPoints.length == 1 &&
@@ -661,9 +689,9 @@ async function main() {
         !markerClicked &&
         features.length == 0
       ) {
-        distancePoints.features.splice(0, distancePoints.features.length);
-        measureLine.features.splice(0, measureLine.features.length);
-        distanceLabel.features.splice(0, distanceLabel.features.length);
+        distancePoints.features.length = 0;
+        measureLine.features.length = 0;
+        distanceLabel.features.length = 0;
       }
       if (
         totalPoints.length == 0 &&
@@ -729,13 +757,7 @@ async function main() {
       }
     });
     map.on("mousemove", (e) => {
-      const totalPoints = distancePoints.features.filter(
-        (f) => f.geometry.type === "Point"
-      );
-      // Change the cursor to a pointer when hovering over a point on the map.
-      // Otherwise cursor is a crosshair.
-      const crosshair = totalPoints.length < 2 && measureToggled;
-      map.getCanvas().style.cursor = crosshair ? "crosshair" : "pointer";
+      changeCursor();
     });
 
     map.on("moveend", function () {
