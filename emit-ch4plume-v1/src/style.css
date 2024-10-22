@@ -36,6 +36,19 @@ body {
     color: white
 }
 
+#display_props.hidden{
+  display:none;
+}
+.mapboxgl-ctrl-icon.measure-icon-clicked {
+ background-color:#2B4B92 !important;
+}
+#clear-icon-main{
+  display:none;
+}
+#clear-icon-main.clicked{
+  display:block;
+}
+
 .colorbar {
   border-radius: 10px;
   font-size: 12px;
@@ -57,6 +70,10 @@ body {
   height: fit-content;
   cursor: move;
   z-index: 999;
+}
+
+#unit-icon-text { 
+  text-transform:lowercase;
 }
 
 #close {
@@ -108,11 +125,12 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
 
 .ui-slider .ui-slider-handle {
   position: absolute;
-  z-index: 2;
+  z-index: 99;
   width: 1.2em;
   height: 1.2em;
   cursor: col-resize;
 }
+
 
 .lds-roller {
   display: inline-block;
@@ -273,4 +291,12 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
   background-color: white;
   max-height: 200px;
   overflow: auto;
+}
+
+#plume-id-search-box.disabled {
+  display:none;
+}
+
+.date-range.disabled {
+  display:none;
 }
