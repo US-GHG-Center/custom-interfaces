@@ -39,16 +39,10 @@ Replace `xxxxxxx` with keys and token.
 
 ### Get Data
 
-To set the environment variables from the `.env` file, add export in front of each variable. 
-For example:
+Run `update_data.js` to get the data using node
 
-`export MAP_STYLE=“xxxxxxxxxxxx”`
- 
-Run `update_data.js` to get the data using node 
+`node --env-file .env update_data.js`
 
-` node update_data.js `
-
-After updating the data remove the `export` from each line of `.env` files
 ### Serve 
 Serve the project using 
 
