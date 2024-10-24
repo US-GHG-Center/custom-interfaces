@@ -28,7 +28,7 @@
         </svg>
         <ul id="plume-id-search-list" class="search-result"></ul>
       </div>
-
+      <!--
       <div class="date-range">
         <input id="amount" class="amount" type="text">
         <div id="slider-range"></div>
@@ -36,16 +36,48 @@
           <span> Start Date</span>
           <span> End Date</span>
         </div>
+      -->
+      <div class="dates">
+        <div class="label-container">
+          <span> Start Date</span>
+          <span> End Date</span>
+        </div>
+        <div class="label-container">
+          <input type="datetime-local" value="2019-01-01T00:00:00"
+               id="start_date">
+          <input type="datetime-local" value="2024-12-31T00:00:00"
+               id="end_date">
+        </div>
+      </div>
         <div class="toggle-container">
           <span class="toggle-text"> Show Coverage</span>
           <label class="toggle-switch">
-            <input type="checkbox" class="toggle-input">
+            <input type="checkbox" class="toggle-input" id="showCoverage">
             <span class="slider"></span>
           </label>
-        
+        </div>
+        <div class="toggle-container">
+          <span class="toggle-text"> View All</span>
+          <label class="toggle-switch">
+            <input type="checkbox" class="toggle-input" id="viewAll">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="toggle-container">
+          <span class="toggle-text"> Playback</span>
+          <label class="toggle-switch">
+            <input type="checkbox" class="toggle-input" id="doAnimation">
+            <span class="slider"></span>
+          </label>
         </div>
       </div>
     </div>
+    <div class="plegend-container", id="plegend-container" style="display:none;" >
+      <div class="plumes-legend" id="plegend" >
+
+      </div>
+  </div>
+  
 
     <!-- Dont know abou the funtionality of this so commenting it out
       <div id="lds-roller-id" class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
