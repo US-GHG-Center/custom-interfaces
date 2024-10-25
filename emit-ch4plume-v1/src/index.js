@@ -6,7 +6,6 @@ const {
     displayPropertiesWithD3,
     dragElement,
 } = require("./helper");
-const {displayProps} = require("./addPlumesList")
 
 const VMIN = 0;
 const VMAX = 1500;
@@ -14,7 +13,7 @@ const VMAX = 1500;
 
 const MAP_STYLE = process.env.MAP_STYLE;
 const PUBLIC_URL = process.env.PUBLIC_URL || ".";
-const ZOOM_THRESHOLD = 8;
+const ZOOM_THRESHOLD = 10;
 mapboxgl.accessToken = process.env.MAP_ACCESS_TOKEN;
 
 // Styling for coverage
@@ -38,7 +37,6 @@ const coverageData = await (
 
 let MARKERS_ON_VIEWPORT = Array();
 let MARKERS_ON_MAP = Array();
-let RASTER_IDS_ON_MAP = Array();
 let CURRENTCOVERAGE;
 
 
@@ -192,11 +190,9 @@ function addRaster(itemId, feature, polygonId, fromZoom) {
     // If not coming from map zoom fly to position
     if (!fromZoom) {
         console.log("not from zoom or drag")
-
     }
 
 }
-
 
 function filterByDates(data, sDate, eDate, type) {
 
@@ -265,8 +261,6 @@ function removeAllPlumeLayers() {
     });
 }
 
-
-
 function zoomedOrDraggedToThreshold(){
     const currentZoom = map.getZoom();
     if (currentZoom >= ZOOM_THRESHOLD){
@@ -275,10 +269,6 @@ function zoomedOrDraggedToThreshold(){
             const lngLat = new mapboxgl.LngLat(coords[0], coords[1]);
             return  map.getBounds().contains(lngLat); 
         });
-        console.log("after zoom funct and enough zoom",MARKERS_ON_VIEWPORT );
-        console.log("on map (start date vitra parne)",MARKERS_ON_MAP );
-        console.log("start end date)",startDate,endDate );
-
         //createPlumesList()
         const legendOuter = document.getElementById("plegend-container");
         legendOuter.style.display ='';
@@ -333,7 +323,6 @@ function zoomedOrDraggedToThreshold(){
     };
 
 }
-
 
 async function main() {
 
@@ -404,7 +393,6 @@ function addPointsOnMap(p){
     });
     
 };
-
 
 map.on('drag', () => {
     zoomedOrDraggedToThreshold();
