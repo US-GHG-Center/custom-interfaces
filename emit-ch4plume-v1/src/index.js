@@ -13,7 +13,7 @@ const VMAX = 1500;
 
 const MAP_STYLE = process.env.MAP_STYLE;
 const PUBLIC_URL = process.env.PUBLIC_URL || ".";
-const ZOOM_THRESHOLD = 10;
+const ZOOM_THRESHOLD = 12;
 mapboxgl.accessToken = process.env.MAP_ACCESS_TOKEN;
 
 // Styling for coverage
@@ -35,6 +35,7 @@ const coverageData = await (
     await fetch(`${PUBLIC_URL}/data/coverage.geojson`)
 ).json();
 
+let ALLPOLYGONS = Array();
 let MARKERS_ON_VIEWPORT = Array();
 let MARKERS_ON_MAP = Array();
 let CURRENTCOVERAGE;
@@ -80,21 +81,23 @@ map.touchZoomRotate.disableRotation();
 // }
 
 export function removeLayers(sourceId, layersIds) {
+    layersIds.forEach(layerId => {
+        if (map.getLayer(layerId)) {
+            map.removeLayer(layerId)
+        }
+    });
     if (map.getSource(sourceId)) {
-        layersIds.forEach(layerId => {
-            if (map.getLayer(layerId)) {
-                map.removeLayer(layerId)
-            }
-        });
         map.removeSource(sourceId);
     }
 }
 
 export function addPolygon(polygonSourceId, polygonLayerId, polygonFeature, fillOutlineColor, fillColor, lineColor, lineWidth) {
+    if (!map.getSource(polygonSourceId)){
     map.addSource(polygonSourceId, {
         type: "geojson",
         data: polygonFeature,
     });
+}
     map.addLayer({
         id: polygonLayerId,
         type: "fill",
@@ -160,7 +163,7 @@ function addRaster(itemId, feature, polygonId, fromZoom) {
     const collection = "emit-ch4plume-v1";
     const assets = "ch4-plume-emissions";
     const bbox = itemIds[itemId +".tif"]["bbox"];
-    console.log("adding..","raster-layer-"+itemId )
+    
     const TILE_URL =
         `https://earth.gov/ghgcenter/api/raster/collections/${collection}/tiles/WebMercatorQuad/{z}/{x}/{y}@1x` +
         "?item=" +
@@ -180,6 +183,7 @@ function addRaster(itemId, feature, polygonId, fromZoom) {
         bounds: bbox,
     });
     const layer_id = "raster-" + itemId
+    console.log("adding..",layer_id );
     map.addLayer({
         id: layer_id,
         type: "raster",
@@ -261,6 +265,50 @@ function removeAllPlumeLayers() {
     });
 }
 
+function addRasterHoverListener() {
+    // adding listener to raster layer didnt work so i will try putting listener on the marker
+    // MARKERS_ON_VIEWPORT.forEach(item => {
+    //     const itemId = item.feature.properties['Data Download'].split('/').pop().split('.')[0];
+    //     const polygonFeature = ALLPOLYGONS.filter((item) => item.id === itemId)[0];
+    //     console.log("adding listeners ", itemId,ALLPOLYGONS, polygonFeature);
+    //     console.log("look here",map.getStyle().layers.map(layer => layer.id).includes("raster-" + itemId)); // says true
+    //     //check if "raster-"+itemId is in the list of all layers
+    //     map.on('click', "raster-"+itemId, () => addPolygon("polygon-source-" + itemId, "polygon-layer-" +itemId, polygonFeature, "black", "transparent", "black", 2));
+    //     map.on('mouseleave', "raster-"+itemId, () => removeLayers("polygon-source-" + itemId,["polygon-layer-" +itemId]));
+    // });
+    MARKERS_ON_VIEWPORT.forEach(marker => {
+        const itemId = marker.feature.properties['Data Download'].split('/').pop().split('.')[0];
+        const polygonFeature = ALLPOLYGONS.filter((item) => item.id === itemId)[0];
+        if (map.getZoom()>= ZOOM_THRESHOLD){
+        document.getElementById(`marker-${marker.id}`).addEventListener("mouseenter", () => {
+            addPolygon("polygon-source-" + itemId, "polygon-layer-" +itemId, polygonFeature.feature, "orange", "transparent", "orange", 2);
+            const selectedItem = document.getElementById("itemDiv-"+itemId);
+            selectedItem.style.border = "2px solid orange";
+            selectedItem.scrollIntoView({
+                behavior: "smooth", // Smooth scroll effect
+                block: "center",   // Aligns the elementin center to the visible part of the container as possible
+                inline: "center"     // Optionally align horizontally if the container is also scrollable horizontally
+            });
+        });
+        document.getElementById(`marker-${marker.id}`).addEventListener("mouseleave", () => {
+            removeLayers("",["polygon-layer-" +itemId, "outline-polygon-layer-" +itemId]);
+            const selectedItem = document.getElementById("itemDiv-"+itemId);
+            selectedItem.style.border = "1px solid black";
+        });
+        document.getElementById("itemDiv-"+itemId).addEventListener("mouseenter", () => {
+            addPolygon("polygon-source-" + itemId, "polygon-layer-" +itemId, polygonFeature.feature, "orange", "transparent", "orange", 2);
+            const selectedItem = document.getElementById("itemDiv-"+itemId);
+            selectedItem.style.border = "2px solid orange";
+        });
+        document.getElementById("itemDiv-"+itemId).addEventListener("mouseleave", () => {
+            removeLayers("",["polygon-layer-" +itemId, "outline-polygon-layer-" +itemId]);
+            const selectedItem = document.getElementById("itemDiv-"+itemId);
+            selectedItem.style.border = "1px solid black";
+        });
+    }
+    });
+  }
+
 function zoomedOrDraggedToThreshold(){
     const currentZoom = map.getZoom();
     if (currentZoom >= ZOOM_THRESHOLD){
@@ -269,24 +317,23 @@ function zoomedOrDraggedToThreshold(){
             const lngLat = new mapboxgl.LngLat(coords[0], coords[1]);
             return  map.getBounds().contains(lngLat); 
         });
+
         //createPlumesList()
         const legendOuter = document.getElementById("plegend-container");
         legendOuter.style.display ='';
 
+        // Create a container for the heading and additional text
+        const headerContainer = document.getElementById("header-container");
+
+        // Create the additional text
+        const additionalText = document.getElementById('num-plumes');
+        additionalText.innerText = `${MARKERS_ON_VIEWPORT.length} Plumes`; 
+
         const legendContainer = document.getElementById("plegend");
         legendContainer.innerHTML = ''; // Clear previous entries
 
-        // Add heading and horizontal line
-        const heading = document.createElement('h1');
-        heading.className = 'toolbar-heading'; // Add class for styling if needed
-        heading.innerText = 'Plumes List';
-        
-        const hr = document.createElement('hr');
-        hr.className = 'toolbar-line'; // Add class for styling if needed
-
-        // Append heading and line to the legend container
-        legendContainer.appendChild(heading);
-        legendContainer.appendChild(hr);
+        // // Append heading and line to the legend container
+        // legendContainer.appendChild(heading);
         removeAllPlumeLayers();
         MARKERS_ON_VIEWPORT.forEach(marker => {
             const properties = marker.feature.properties; // Access properties of the marker
@@ -311,9 +358,8 @@ function zoomedOrDraggedToThreshold(){
 
             //now add the rasters
             addRaster(itemId, marker.feature, itemId, true);
-            
-            
         });
+        addRasterHoverListener();
 
     }
     else{
@@ -331,20 +377,29 @@ async function main() {
         let startDate = document.getElementById("start_date").value;
         let endDate = document.getElementById("end_date").value;
     
+        
+        const polygons = methanMetadata.features
+        .filter((f) => f.geometry.type === "Polygon")
+        .map((f) => {
+            const id = f.properties["Data Download"].split('/').pop().split('.')[0]; // Extract "abc" from "http://.../abc.tif"
+            return {
+                id: id,     
+                feature: f
+            };
+        })
         // Filter the data by dates and select only points
         const points = filterByDates(methanMetadata,startDate, endDate, "plumes" ).features
             .filter((f) => f.geometry.type === "Point")
-            .map((f, i) => ({
-                id: i,
-                feature: f
-            }))
-            .sort((prev, next) => {
-                const prev_date = new Date(prev.feature.properties["UTC Time Observed"]).getTime();
-                const next_date = new Date(next.feature.properties["UTC Time Observed"]).getTime();
-                return prev_date - next_date
-            });
+            .map((f) => {
+                const id = f.properties["Data Download"].split('/').pop().split('.')[0]; // Extract "abc" from "http://.../abc.tif"
+                return {
+                    id: id,     
+                    feature: f
+                };
+            })
 
         // Set the global vars when the map loads
+        ALLPOLYGONS = polygons;
         MARKERS_ON_VIEWPORT = points;
         MARKERS_ON_MAP = points;
         CURRENTCOVERAGE = coverageData;

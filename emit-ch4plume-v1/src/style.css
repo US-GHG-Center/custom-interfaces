@@ -385,22 +385,37 @@ table td {
   position: fixed;           /* Make it fixed to the viewport */
   top: 20px;                /* Distance from the top */
   right: 50px;              /* Distance from the right */
-  z-index: 1000;            /* Ensure it's above other content */
+  z-index: 1000;  
+  background-color: #f0f0f0;   
+  padding : 10px;   
+  width : 300px; 
 }
 
 
 .plumes-legend {
   background-color: #f0f0f0; /* Light background */
-  border: 1px solid #ccc;    /* Border */
-  padding: 10px;             /* Padding */
-  margin-top: 5px;           /* Margin above the legend */
   max-height: 600px;         /* Limit height */
   overflow-y: auto;          /* Enable scrolling if needed */
-  width: 300px;
+
 }
 
 .itemDiv {
   border: 1px solid black;    /* Border */
   margin:10px;
   padding:10px;
+  font-size: 10px;
+}
+
+.header-container{
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+}
+
+.num-plumes {
+  background-color: lightgray; 
+  border-radius: 8px;          
+  display: flex;                
+  align-items: center;          
+  justify-content: center;     
 }
