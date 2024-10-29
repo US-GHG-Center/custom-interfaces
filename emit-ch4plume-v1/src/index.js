@@ -1,12 +1,11 @@
 const mapboxgl = require("mapbox-gl");
+import TimelineControl from 'mapboxgl-timeline';
+import 'mapboxgl-timeline/dist/style.css';
+const {
+    createColorbar
+} = require("./helper");
 const path = require('path');
 import "./style.css";
-const {
-    createColorbar,
-    displayPropertiesWithD3,
-    dragElement,
-} = require("./helper");
-
 const VMIN = 0;
 const VMAX = 1500;
 
@@ -62,7 +61,6 @@ map.dragRotate.disable();
 // disable map rotation using touch rotation gesture
 map.touchZoomRotate.disableRotation();
 
-// createColorbar(VMIN, VMAX);
 
 // function showHideLayers(layersIds, show) {
 
@@ -373,6 +371,7 @@ function zoomedOrDraggedToThreshold(){
 async function main() {
 
     map.on("load", async () => {  
+        createColorbar(VMIN, VMAX);
         // Get the start and end date filters - global vars
         let startDate = document.getElementById("start_date").value;
         let endDate = document.getElementById("end_date").value;
@@ -456,5 +455,64 @@ map.on('drag', () => {
 map.on('zoomend', () => {
     zoomedOrDraggedToThreshold();
 })
+
+// WIP for animation
+const isAnimation = document.getElementById("doAnimation");
+let timeline;
+isAnimation.addEventListener("change", (event) => {
+    if (event.target.checked) {
+        // Check if the zoom level is sufficient before adding the control
+        if (map.getZoom() >= ZOOM_THRESHOLD) {
+            console.log("do animation");
+            map.dragPan.disable();
+            map.scrollZoom.disable();
+            map.boxZoom.disable();
+
+            timeline = new TimelineControl({
+                placeholder: 'Plumes',
+                start: startDate,
+                end: endDate,
+                step: 100 * 3600 * 24,
+                onChange: date => {
+                    endDate = date
+                    startDate = date -1
+                    console.log("enddate:", date, "startdate", startDate);
+                    removeAllPlumeLayers()
+
+
+                    // const start = new Date(startDate);
+                    // const end = new Date(endDate);
+                    // let currentDate = new Date(start);
+                    // const list_of_dates = MARKERS_ON_VIEWPORT.features.properties['UTC Time Observed']
+                    // console.log("eta",list_of_dates)
+
+                    updateDatesandData();
+                    zoomedOrDraggedToThreshold
+
+                    
+
+                    
+                },
+            });
+            map.addControl(timeline, 'bottom-left');
+        } else {
+            alert("Please zoom more");
+            map.dragPan.enable();
+            map.scrollZoom.enable();
+            map.boxZoom.enable();
+            isAnimation.checked = false; 
+        }
+    } else {
+        // Remove the timeline control when animation is stopped
+        console.log("stop animation");
+        map.dragPan.enable();
+        map.scrollZoom.enable();
+        map.boxZoom.enable();
+        if (timeline) {
+            map.removeControl(timeline);
+            timeline = null; // Reset timeline to allow recreation
+        }
+    }
+});
 
 main();

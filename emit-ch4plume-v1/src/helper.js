@@ -9,44 +9,6 @@ function generateScale(min, max, step) {
   return numbers;
 }
 
-
-function dragElement(elmnt) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-
-  elmnt.onmousedown = dragMouseDown;
-
-
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
-
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-}
-
 function createColorbar(VMIN, VMAX) {
 
   // Create a color scale using D3
@@ -113,78 +75,6 @@ function createColorbar(VMIN, VMAX) {
     .style("margin-bottom", "12px"); // Adjust margin as needed
 }
 
-
-const getFilename = function (pathStr) {
-  return pathStr.substring(pathStr.lastIndexOf("/") + 1);
-};
-
-function displayPropertiesWithD3(properties) {
-  console.log("hi")
-  const important_keys = ["Max Plume Concentration (ppm m)"];
-  const combinedList = important_keys.concat(Object.keys(properties));
-  const new_sorted_properties = [...new Set(combinedList)];
-
-  // Create an HTML string to display the properties
-  let html = `
-  <span id=\"close\" onclick=\"document.getElementById('display_props').style.display='none'\" >x</span><table>
-    <div class="display-header">
-      <h2>${properties['Location']}</h2>
-      <p class="datetime">${properties['UTC Time Observed']}</p>
-    </div>
-    <div class="download-link">
-      <a href="${properties['Data Download']}" target="_blank">
-        ${getFilename(properties['Data Download'])} 
-        <svg width="12" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" class="download-icon">
-          <path d="M.5 9.9a.5.5 0 0 1 .5.5V14a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.6a.5.5 0 1 1 1 0V14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V10.4a.5.5 0 0 1 .5-.5zm7.5-7.9a.5.5 0 0 1 .5.5v7.5l2.15-2.15a.5.5 0 1 1 .7.7l-3 3a.5.5 0 0 1-.7 0l-3-3a.5.5 0 0 1 .7-.7L8 10V2.5a.5.5 0 0 1 .5-.5z"/>
-        </svg>
-      </a>
-    </div>
-    
-    <hr />
-    <table>
-  `;
-
-  const keys_to_exclude = [
-    "id",
-    "SceneFID",
-    "map_endtime",
-    "Scene FIDs",
-    "style",
-    "DCID",
-    "DAAC Scene Numbers",
-    "plume_complex_count",
-    "Data Download",
-    "Location",
-    "UTC Time Observed"
-  ];
-
-  // Iterate through the properties and create table rows
-  new_sorted_properties.forEach(key => {
-    if (!keys_to_exclude.includes(key)) {
-      let value = properties[key];
-      if (value.toString().startsWith("https://")) {
-        value = `<a href="${value}" target="_blank">${getFilename(value)} 
-        <svg width="12" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 16 16" aria-hidden="true" class="expand-top-right__CollecticonExpandTopRight-sc-1bjhv94-0">
-          <title>expand top right icon</title>
-          <path d="M3,5h4V3H1v12h12V9h-2v4H3V5z M16,8V0L8,0v2h4.587L6.294,8.294l1.413,1.413L14,3.413V8H16z"></path>
-        </svg></a>`;
-      }
-      html += `<tr><td>${key}</td><td>${value}</td></tr>`;
-    }
-  });
-  html += "</table>";
-
-  d3.select("body").select("#display_props").remove();
-  const display_div = d3
-    .select("body")
-    .append("div")
-    .attr("id", "display_props")
-    .attr("class", "display-props")
-    .html(html);
-}
-
 module.exports = {
-  createColorbar: createColorbar,
-  displayPropertiesWithD3: displayPropertiesWithD3,
-  dragElement: dragElement
+  createColorbar: createColorbar
 };
