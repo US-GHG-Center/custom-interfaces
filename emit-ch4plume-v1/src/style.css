@@ -394,7 +394,7 @@ table td {
 
 .plumes-legend {
   background-color: #f0f0f0; /* Light background */
-  max-height: 600px;         /* Limit height */
+  max-height: 550px;         /* Limit height */
   overflow-y: auto;          /* Enable scrolling if needed */
 
 }

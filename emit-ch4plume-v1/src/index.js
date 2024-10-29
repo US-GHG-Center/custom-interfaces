@@ -12,7 +12,7 @@ const VMAX = 1500;
 
 const MAP_STYLE = process.env.MAP_STYLE;
 const PUBLIC_URL = process.env.PUBLIC_URL || ".";
-const ZOOM_THRESHOLD = 12;
+const ZOOM_THRESHOLD = 10;
 mapboxgl.accessToken = process.env.MAP_ACCESS_TOKEN;
 
 // Styling for coverage
@@ -138,6 +138,7 @@ function addCoverage(){
 function updateDatesandData(){
     startDate =  document.getElementById("start_date").value;
     endDate = document.getElementById("end_date").value;
+    console.log("in updateDatesand Data", endDate);
     CURRENTCOVERAGE = filterByDates(coverageData,startDate, endDate, "coverage");
     const points = filterByDates(methanMetadata,startDate, endDate, "plumes" ).features
             .filter((f) => f.geometry.type === "Point")
@@ -467,36 +468,24 @@ isAnimation.addEventListener("change", (event) => {
             map.dragPan.disable();
             map.scrollZoom.disable();
             map.boxZoom.disable();
+            removeAllPlumeLayers();
+            const legendOuter = document.getElementById("plegend-container");
+            legendOuter.style.display ='none';
 
             timeline = new TimelineControl({
                 placeholder: 'Plumes',
                 start: startDate,
                 end: endDate,
-                step: 100 * 3600 * 24,
+                step: 1000 * 3600 * 24,
                 onChange: date => {
-                    endDate = date
-                    startDate = date -1
-                    console.log("enddate:", date, "startdate", startDate);
-                    removeAllPlumeLayers()
-
-
-                    // const start = new Date(startDate);
-                    // const end = new Date(endDate);
-                    // let currentDate = new Date(start);
-                    // const list_of_dates = MARKERS_ON_VIEWPORT.features.properties['UTC Time Observed']
-                    // console.log("eta",list_of_dates)
-
-                    updateDatesandData();
-                    zoomedOrDraggedToThreshold
-
-                    
-
-                    
+                    endDate = new Date(date).toISOString().slice(0, 16);
+                    document.getElementById("end_date").value = endDate;
+                    updateDatesandData(); 
                 },
             });
             map.addControl(timeline, 'bottom-left');
         } else {
-            alert("Please zoom more");
+            alert("Please zoom into an area you want to animate!!");
             map.dragPan.enable();
             map.scrollZoom.enable();
             map.boxZoom.enable();
