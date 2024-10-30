@@ -1,20 +1,19 @@
 const mapboxgl = require("mapbox-gl");
 const path = require('path');
 import {
-  scale,
-  scaleText,
-  measureToggled,
-  toggleMeasureIcon,
-  measureLine,
-  distanceLabel,
-  linestring,
+  //variables
   distancePoints,
-  distanceLabelAnchor,
-  onClearDistanceClick,
-  changeCursor,
-  labelLayer,
-  pointLayer,
-  lineLayer,
+  measureVariables,
+  //functions
+  addMeasurementAnchor,
+  disableMeasurementMode,
+  createMeasuringLine,
+  addMeasurementSource,
+  addMeasurementLayer,
+  addMeasurementControls,
+  addClearControl,
+  //classes
+  MapControls,
 } from "./measure-tool-helper";
 import "./style.css";
 const {
@@ -46,7 +45,6 @@ var markerClicked = false;
 
 var polygons;
 var itemIds;
-
 const map = new mapboxgl.Map({
   container: "map",
   style: MAP_STYLE, // You can choose any Mapbox style
@@ -59,12 +57,6 @@ map.dragRotate.disable();
 // disable map rotation using touch rotation gesture
 map.touchZoomRotate.disableRotation();
 
-class MapControls {
-  onRemove() {
-    this.container.parentNode.removeChild(this.container);
-    this.map = undefined;
-  }
-}
 class HomeButtonControl extends MapControls {
   onClick() {
     // Set the map's center and zoom to the desired location
@@ -141,70 +133,26 @@ class LayerButtonControl extends MapControls {
     return this.container;
   }
 }
-
-class MeasureDistance extends MapControls {
-  onClick() {
-    toggleMeasureIcon(measureToggled);
-    measureToggled = !measureToggled;
-    $("#display_props").toggleClass("hidden");
-    $("#plume-id-search-box").toggleClass("disabled");
-    $(".date-range").toggleClass("disabled");
-    changeCursor(map);
-    map.doubleClickZoom.disable();
-  }
-  onAdd(map) {
-    this.map = map;
-    this.container = document.createElement("div");
-    this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
-    this.container.addEventListener("contextmenu", (e) => e.preventDefault());
-    this.container.addEventListener("click", (e) => this.onClick());
-    this.container.innerHTML =
-      '<div id="measure-icon-main">' +
-      "<button>" +
-      '<span id="measure-icon" class="mapboxgl-ctrl-icon" aria-hidden="true" title="Measure Tool">' +
-      '<i class="fa-solid fa-arrows-left-right-to-line"></i>' +
-      "</span>" +
-      "</button>" +
-      "</div>";
-    return this.container;
-  }
+function changeUnit() {
+  const mapScaleUnit =
+    measureVariables.scale === "miles" ? "imperial" : "metric";
+  mapScale.setUnit(mapScaleUnit);
 }
-class ClearDistancePoints extends MapControls {
+class ChangeMapUnit extends MapControls {
   onClick() {
-    onClearDistanceClick(map);
-  }
-  onAdd(map) {
-    this.map = map;
-    this.container = document.createElement("div");
-    this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
-    this.container.addEventListener("contextmenu", (e) => e.preventDefault());
-    this.container.addEventListener("click", (e) => this.onClick());
-    this.container.innerHTML =
-      '<div id="clear-icon-main">' +
-      "<button>" +
-      '<span id="clear-icon" class="mapboxgl-ctrl-icon" aria-hidden="true" title="Measure Tool">' +
-      '<i class="fa-solid fa-eraser"></i>' +
-      "</span>" +
-      "</button>" +
-      "</div>";
-    return this.container;
-  }
-}
-class ChangeUnitsOfMeasurement extends MapControls {
-  onClick() {
-    if (scale === "km") {
-      scale = "miles";
+    if (measureVariables.scale === "km") {
+      measureVariables.scale = "miles";
     } else {
-      scale = "km";
+      measureVariables.scale = "km";
     }
-    const mapScaleUnit = scale === "miles" ? "imperial" : "metric";
-    mapScale.setUnit(mapScaleUnit);
-    const scaleText = scale === "miles" ? "mi" : scale;
+    measureVariables.scaleText =
+      measureVariables.scale === "miles" ? "mi" : "km";
+    changeUnit();
     this.container.innerHTML = ` <div id="units-icon">
       <button>
       <span   class="mapboxgl-ctrl-icon" aria-hidden="true " title="Miles/Km">
       <i id="unit-icon-text" class=" " >
-      ${scaleText}
+      ${measureVariables.scaleText}
        </i>
       </span>
       </button>
@@ -220,26 +168,25 @@ class ChangeUnitsOfMeasurement extends MapControls {
       <button>
       <span   class="mapboxgl-ctrl-icon" aria-hidden="true " title="Miles/Km">
       <i id="unit-icon-text" class=""  style="text-transform: none;" >
-      ${scaleText}
+      ${measureVariables.scaleText}
        </i>
       </span>
       </button>
       </div>`;
-
     return this.container;
   }
 }
 
 map.addControl(new HomeButtonControl());
 map.addControl(new mapboxgl.NavigationControl());
-const mapScale = new mapboxgl.ScaleControl({
-  unit: scale === "miles" ? "imperial" : "metric",
+let mapScale = new mapboxgl.ScaleControl({
+  unit: measureVariables.scale === "miles" ? "imperial" : "metric",
 });
 map.addControl(mapScale);
 map.addControl(new LayerButtonControl());
-map.addControl(new MeasureDistance(map));
-map.addControl(new ChangeUnitsOfMeasurement());
-map.addControl(new ClearDistancePoints());
+addMeasurementControls(map);
+map.addControl(new ChangeMapUnit());
+addClearControl(map);
 
 function showHideLayers(layersIds, show) {
   layersIds.forEach((layerId) => {
@@ -344,7 +291,7 @@ function addRaster(itemProps, feature, polygonId, fromZoom) {
       // essential: true, // This ensures a smooth animation
     });
   }
-  if (!measureToggled) {
+  if (!measureVariables.measureToggled) {
     displayPropertiesWithD3(props);
     dragElement(document.getElementById("display_props"));
   }
@@ -420,18 +367,7 @@ document.addEventListener("click", function (e) {
 
 async function main() {
   map.on("load", async () => {
-    map.addSource("distancePoints", {
-      type: "geojson",
-      data: distancePoints,
-    });
-    map.addSource("measureLine", {
-      type: "geojson",
-      data: measureLine,
-    });
-    map.addSource("distanceLabel", {
-      type: "geojson",
-      data: distanceLabel,
-    });
+    addMeasurementSource(map);
 
     const methanMetadata = await (
       await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
@@ -477,10 +413,8 @@ async function main() {
         return f;
       });
 
-    // Add styles to the map
-    map.addLayer(pointLayer);
-    map.addLayer(labelLayer);
-    map.addLayer(lineLayer);
+    // Add layers of measurement to the map
+    addMeasurementLayer(map);
 
     points.forEach(function (point) {
       const itemName = path.basename(point.feature.properties["Data Download"]);
@@ -522,14 +456,14 @@ async function main() {
       markerProps["point-layer-" + point.id] = marker;
 
       map.on("mouseenter", polygonLayerId, () => {
-        if (!measureToggled) {
+        if (!measureVariables.measureToggled) {
           map.getCanvas().style.cursor = "pointer";
           popup.addTo(map);
         }
       });
 
       map.on("mouseleave", polygonLayerId, () => {
-        if (!measureToggled) {
+        if (!measureVariables.measureToggled) {
           map.getCanvas().style.cursor = "";
           popup.remove();
         }
@@ -539,7 +473,7 @@ async function main() {
         addPolygon(polygonSourceId, polygonLayerId, polygon.feature);
         if (
           map.getSource("raster-source-" + point.feature.id) &&
-          !measureToggled
+          !measureVariables.measureToggled
         ) {
           removeLayers("raster-source-" + point.feature.id, [
             "raster-layer-" + point.feature.id,
@@ -573,111 +507,25 @@ async function main() {
     });
 
     map.on("dblclick", (e) => {
-      if (measureToggled) {
-        toggleMeasureIcon(measureToggled);
-        onClearDistanceClick(map);
-        $("#display_props").removeClass("hidden");
-        $("#plume-id-search-box").removeClass("disabled");
-        $(".date-range").removeClass("disabled");
-        measureToggled = !measureToggled;
-        changeCursor(map);
+      if (measureVariables.measureToggled) {
+          disableMeasurementMode(map);
       } else {
         map.doubleClickZoom.enable();
       }
     });
 
     map.on("click", (e) => {
-      const features = map.queryRenderedFeatures(e.point, {
-        layers: ["measure-points"],
-      });
-
-      const totalPoints = distancePoints.features.filter(
-        (f) => f.geometry.type === "Point"
-      );
-
-      // If a feature was clicked, remove it from the map.
-      if (features.length) {
-        const id = features[0].properties.id;
-        distancePoints.features = distancePoints.features.filter(
-          (point) => point.properties.id !== id
-        );
-        measureLine.features.length = 0;
-      }
-      if (
-        totalPoints.length == 1 &&
-        measureToggled &&
-        !markerClicked &&
-        features.length == 0
-      ) {
-        distancePoints.features.length = 0;
-        measureLine.features.length = 0;
-        distanceLabel.features.length = 0;
-      }
-      if (
-        totalPoints.length == 0 &&
-        measureToggled &&
-        !markerClicked &&
-        features.length == 0
-      ) {
-        const point = {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [e.lngLat.lng, e.lngLat.lat],
-          },
-          properties: {
-            id: String(new Date().getTime()),
-          },
-        };
-        distancePoints.features.push(point);
-      }
-
-      if (distancePoints.features.length > 0) {
-        $("#clear-icon-main").addClass("clicked");
-      }
-      if (distancePoints.features.length == 0) {
-        $("#clear-icon-main").removeClass("clicked");
-      }
-      map.getSource("distanceLabel").setData(distanceLabel);
-      map.getSource("distancePoints").setData(distancePoints);
-      map.getSource("measureLine").setData(measureLine);
-      map.moveLayer("measure-points");
-      map.moveLayer("measure-label");
+      if (!markerClicked && measureVariables.measureToggled)
+        addMeasurementAnchor(e, map, markerClicked);
     });
 
     map.on("mousemove", (e) => {
-      if (distancePoints.features.length > 0 && measureToggled) {
-        measureLine.features.pop();
-        const anchorPoint = distancePoints.features[0];
-        const startCoordinates = anchorPoint.geometry.coordinates;
-        const endCoordinates = [e.lngLat.lng, e.lngLat.lat];
-        linestring.geometry.coordinates = [startCoordinates, endCoordinates];
-        distanceLabelAnchor.geometry.coordinates = [
-          endCoordinates,
-          startCoordinates,
-        ];
-        // const value = document.createElement("pre");
-        const turfUnits = scale === "miles" ? "miles" : "kilometers";
-        const distance = turf.length(linestring, {
-          units: turfUnits,
-        });
-        const labelUnit = scale === "miles" ? " miles" : " km";
-        distanceLabelAnchor.properties.description = `${distance.toFixed(
-          2
-        )} ${labelUnit}`;
-        distanceLabelAnchor.properties.icon = `${distance.toFixed(
-          2
-        )} ${labelUnit}`;
-        measureLine.features.push(linestring);
-        distanceLabel.features.push(distanceLabelAnchor);
-        map.getSource("measureLine").setData(measureLine);
-        map.getSource("distanceLabel").setData(distanceLabel);
-        map.moveLayer("measure-line");
-        map.moveLayer("measure-label");
+      if (
+        distancePoints.features.length > 0 &&
+        measureVariables.measureToggled
+      ) {
+        createMeasuringLine(e, map);
       }
-    });
-    map.on("mousemove", (e) => {
-      changeCursor(map);
     });
 
     map.on("moveend", function () {
