@@ -420,3 +420,17 @@ table td {
   justify-content: center;     
 }
 
+/* for the popup */
+.mapboxgl-popup-content {
+  background-color: rgba(255, 255, 255, 0.7); 
+  font-size: 10px; 
+  box-shadow: none; 
+  padding: 5px; 
+  justify-self: center;
+  justify-content: center;
+  color: #333;
+}
+
+.mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip { 
+  border-top-color: rgba(255, 255, 255, 0.7);
+  }

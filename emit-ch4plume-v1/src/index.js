@@ -12,7 +12,7 @@ const VMAX = 1500;
 
 const MAP_STYLE = process.env.MAP_STYLE;
 const PUBLIC_URL = process.env.PUBLIC_URL || ".";
-const ZOOM_THRESHOLD = 10;
+const ZOOM_THRESHOLD = 12;
 mapboxgl.accessToken = process.env.MAP_ACCESS_TOKEN;
 
 // Styling for coverage
@@ -34,11 +34,16 @@ const coverageData = await (
     await fetch(`${PUBLIC_URL}/data/coverage.geojson`)
 ).json();
 
-let ALLPOLYGONS = Array();
-let MARKERS_ON_VIEWPORT = Array();
-let MARKERS_ON_MAP = Array();
-let CURRENTCOVERAGE;
+let ALLPOLYGONS = Array(); // it will be initialized once and will remain constant
+let MARKERS_ON_MAP = Array(); // this is be initialized to methanMetadata (points only) and changes if start and end_date changes
+let MARKERS_ON_VIEWPORT = Array(); // this will change with zoom, drag, start and end filter. Its value will be updated as derived from MARKERS_ON_MAP based on filters
+let CURRENTCOVERAGE; // Its value changes with start and end date, derived from covergaeData
+let viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
+    marker.properties['Data Download'].split('/').pop().split('.')[0]
+);;
 
+const COLLECTION = "emit-ch4plume-v1";
+const ASSETS = "ch4-plume-emissions";
 
 //filters
 let toggleSwitch = document.getElementById("showCoverage");
@@ -56,27 +61,11 @@ const map = new mapboxgl.Map({
     center: [-98, 39], // Initial center coordinates
     zoom: 4, // Initial zoom level
 });
-// disable map rotation using right click + drag
 map.dragRotate.disable();
-// disable map rotation using touch rotation gesture
 map.touchZoomRotate.disableRotation();
+const zoomControl = new mapboxgl.NavigationControl();
+map.addControl(zoomControl, 'top-right');
 
-
-// function showHideLayers(layersIds, show) {
-
-//     layersIds.forEach(layerId => {
-//         if (map.getLayer(layerId)) {
-//             map.setLayoutProperty(
-//                 layerId,
-//                 "visibility",
-//                 show ?
-//                 "visible" :
-//                 "none"
-//             );
-//         }
-//     });
-
-// }
 
 export function removeLayers(sourceId, layersIds) {
     layersIds.forEach(layerId => {
@@ -138,7 +127,6 @@ function addCoverage(){
 function updateDatesandData(){
     startDate =  document.getElementById("start_date").value;
     endDate = document.getElementById("end_date").value;
-    console.log("in updateDatesand Data", endDate);
     CURRENTCOVERAGE = filterByDates(coverageData,startDate, endDate, "coverage");
     const points = filterByDates(methanMetadata,startDate, endDate, "plumes" ).features
             .filter((f) => f.geometry.type === "Point")
@@ -158,17 +146,14 @@ function updateDatesandData(){
 };
 
 
-function addRaster(itemId, feature, polygonId, fromZoom) {
-    const collection = "emit-ch4plume-v1";
-    const assets = "ch4-plume-emissions";
+function addRaster(itemId) {
     const bbox = itemIds[itemId +".tif"]["bbox"];
-    
     const TILE_URL =
-        `https://earth.gov/ghgcenter/api/raster/collections/${collection}/tiles/WebMercatorQuad/{z}/{x}/{y}@1x` +
+        `https://earth.gov/ghgcenter/api/raster/collections/${COLLECTION}/tiles/WebMercatorQuad/{z}/{x}/{y}@1x` +
         "?item=" +
         itemId +
         "&assets=" +
-        assets +
+        ASSETS +
         "&bidx=1&colormap_name=plasma&rescale=" +
         VMIN +
         "%2C" +
@@ -189,12 +174,6 @@ function addRaster(itemId, feature, polygonId, fromZoom) {
         source: "raster-" + itemId + "-source",
         paint: {},
     });
-
-    // If not coming from map zoom fly to position
-    if (!fromZoom) {
-        console.log("not from zoom or drag")
-    }
-
 }
 
 function filterByDates(data, sDate, eDate, type) {
@@ -251,11 +230,14 @@ function filterByDates(data, sDate, eDate, type) {
     
 }
 
+
+
+
 function removeAllPlumeLayers() {
     const layers = map.getStyle().layers;
-    
     layers.forEach((layer) => {
         if (layer.id.startsWith('raster-')) {
+            console.log("removing ", layer.id)
             map.removeLayer(layer.id);
             if (map.getSource(layer.id + '-source')) {
                 map.removeSource(layer.id + '-source');
@@ -263,47 +245,58 @@ function removeAllPlumeLayers() {
         }
     });
 }
+function removePrevPlumeLayers() {
+    const layers = map.getStyle().layers;
+    layers.forEach((layer) => {
+        if (layer.id.startsWith('raster-')) {
+            const layerItemId = layer.id.replace('raster-', ''); 
+            if (!viewportItemIds.includes(layerItemId)) {
+                console.log(`Removing layer: ${layer.id} (not in viewportItemIds)`);
+                //map.setLayoutProperty(layer.id, 'visibility', 'none');
+                map.removeLayer(layer.id);
+                map.removeSource(layer.id +"-source"); 
+                console.log(`Removed source: ${layer.id + "-source"}`);
+            }
+        }
+    });
+    map.resize();
+}
+
 
 function addRasterHoverListener() {
-    // adding listener to raster layer didnt work so i will try putting listener on the marker
-    // MARKERS_ON_VIEWPORT.forEach(item => {
-    //     const itemId = item.feature.properties['Data Download'].split('/').pop().split('.')[0];
-    //     const polygonFeature = ALLPOLYGONS.filter((item) => item.id === itemId)[0];
-    //     console.log("adding listeners ", itemId,ALLPOLYGONS, polygonFeature);
-    //     console.log("look here",map.getStyle().layers.map(layer => layer.id).includes("raster-" + itemId)); // says true
-    //     //check if "raster-"+itemId is in the list of all layers
-    //     map.on('click', "raster-"+itemId, () => addPolygon("polygon-source-" + itemId, "polygon-layer-" +itemId, polygonFeature, "black", "transparent", "black", 2));
-    //     map.on('mouseleave', "raster-"+itemId, () => removeLayers("polygon-source-" + itemId,["polygon-layer-" +itemId]));
-    // });
     MARKERS_ON_VIEWPORT.forEach(marker => {
         const itemId = marker.feature.properties['Data Download'].split('/').pop().split('.')[0];
         const polygonFeature = ALLPOLYGONS.filter((item) => item.id === itemId)[0];
         if (map.getZoom()>= ZOOM_THRESHOLD){
-        document.getElementById(`marker-${marker.id}`).addEventListener("mouseenter", () => {
-            addPolygon("polygon-source-" + itemId, "polygon-layer-" +itemId, polygonFeature.feature, "orange", "transparent", "orange", 2);
-            const selectedItem = document.getElementById("itemDiv-"+itemId);
-            selectedItem.style.border = "2px solid orange";
-            selectedItem.scrollIntoView({
-                behavior: "smooth", // Smooth scroll effect
-                block: "center",   // Aligns the elementin center to the visible part of the container as possible
-                inline: "center"     // Optionally align horizontally if the container is also scrollable horizontally
-            });
-        });
-        document.getElementById(`marker-${marker.id}`).addEventListener("mouseleave", () => {
-            removeLayers("",["polygon-layer-" +itemId, "outline-polygon-layer-" +itemId]);
-            const selectedItem = document.getElementById("itemDiv-"+itemId);
-            selectedItem.style.border = "1px solid black";
-        });
-        document.getElementById("itemDiv-"+itemId).addEventListener("mouseenter", () => {
-            addPolygon("polygon-source-" + itemId, "polygon-layer-" +itemId, polygonFeature.feature, "orange", "transparent", "orange", 2);
-            const selectedItem = document.getElementById("itemDiv-"+itemId);
-            selectedItem.style.border = "2px solid orange";
-        });
-        document.getElementById("itemDiv-"+itemId).addEventListener("mouseleave", () => {
-            removeLayers("",["polygon-layer-" +itemId, "outline-polygon-layer-" +itemId]);
-            const selectedItem = document.getElementById("itemDiv-"+itemId);
-            selectedItem.style.border = "1px solid black";
-        });
+            if (!map.getLayer("outline-polygon-layer-" +itemId)){
+                document.getElementById(`marker-${marker.id}`).addEventListener("mouseenter", () => {
+                    addPolygon("polygon-source-" + itemId, "polygon-layer-" +itemId, polygonFeature.feature, "orange", "transparent", "orange", 2);
+                    const selectedItem = document.getElementById("itemDiv-"+itemId);
+                    selectedItem.style.border = "2px solid orange";
+                    selectedItem.scrollIntoView({
+                        behavior: "smooth", // Smooth scroll effect
+                        block: "center",   // Aligns the elementin center to the visible part of the container as possible
+                        inline: "center"     // Optionally align horizontally if the container is also scrollable horizontally
+                    });
+                });
+                document.getElementById(`marker-${marker.id}`).addEventListener("mouseleave", () => {
+                    removeLayers("",["polygon-layer-" +itemId, "outline-polygon-layer-" +itemId]);
+                    const selectedItem = document.getElementById("itemDiv-"+itemId);
+                    selectedItem.style.border = "1px solid black";
+                });
+                document.getElementById("itemDiv-"+itemId).addEventListener("mouseenter", () => {
+                    addPolygon("polygon-source-" + itemId, "polygon-layer-" +itemId, polygonFeature.feature, "orange", "transparent", "orange", 2);
+                    const selectedItem = document.getElementById("itemDiv-"+itemId);
+                    selectedItem.style.border = "2px solid orange";
+                });
+                document.getElementById("itemDiv-"+itemId).addEventListener("mouseleave", () => {
+                    removeLayers("",["polygon-layer-" +itemId, "outline-polygon-layer-" +itemId]);
+                    const selectedItem = document.getElementById("itemDiv-"+itemId);
+                    selectedItem.style.border = "1px solid black";
+                });
+
+            }
+
     }
     });
   }
@@ -311,18 +304,21 @@ function addRasterHoverListener() {
 function zoomedOrDraggedToThreshold(){
     const currentZoom = map.getZoom();
     if (currentZoom >= ZOOM_THRESHOLD){
+        
         MARKERS_ON_VIEWPORT = MARKERS_ON_MAP.filter(marker => {
             const coords = marker.feature.geometry.coordinates;
             const lngLat = new mapboxgl.LngLat(coords[0], coords[1]);
             return  map.getBounds().contains(lngLat); 
         });
+        
+        viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
+            marker.feature.properties['Data Download'].split('/').pop().split('.')[0]
+        );
+        removePrevPlumeLayers();
 
         //createPlumesList()
         const legendOuter = document.getElementById("plegend-container");
         legendOuter.style.display ='';
-
-        // Create a container for the heading and additional text
-        const headerContainer = document.getElementById("header-container");
 
         // Create the additional text
         const additionalText = document.getElementById('num-plumes');
@@ -331,9 +327,6 @@ function zoomedOrDraggedToThreshold(){
         const legendContainer = document.getElementById("plegend");
         legendContainer.innerHTML = ''; // Clear previous entries
 
-        // // Append heading and line to the legend container
-        // legendContainer.appendChild(heading);
-        removeAllPlumeLayers();
         MARKERS_ON_VIEWPORT.forEach(marker => {
             const properties = marker.feature.properties; // Access properties of the marker
             const itemDiv = document.createElement('div'); // Create a new div
@@ -356,7 +349,10 @@ function zoomedOrDraggedToThreshold(){
             legendContainer.appendChild(itemDiv);
 
             //now add the rasters
-            addRaster(itemId, marker.feature, itemId, true);
+            if (!map.getLayer("raster-"+ itemId)){
+                addRaster(itemId);
+            }
+            
         });
         addRasterHoverListener();
 
@@ -401,6 +397,10 @@ async function main() {
         // Set the global vars when the map loads
         ALLPOLYGONS = polygons;
         MARKERS_ON_VIEWPORT = points;
+        viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
+            marker.feature.properties['Data Download'].split('/').pop().split('.')[0]
+        );
+        removePrevPlumeLayers
         MARKERS_ON_MAP = points;
         CURRENTCOVERAGE = coverageData;
 
@@ -428,7 +428,26 @@ function addPointsOnMap(p){
         const marker = new mapboxgl.Marker(markerEl)
             .setLngLat([coords[0], coords[1]])
             .addTo(map);
-        const popup = new mapboxgl.Popup().setHTML(`<h3>${point.feature.properties['Location']}${point.feature.properties['UTC Time Observed']}</h3>`);
+        const location = point.feature.properties['Location'];
+        const utcTimeObserved = new Date(point.feature.properties['UTC Time Observed']).toLocaleString("en-US", {
+            year: "numeric", 
+            month: "short", 
+            day: "numeric", 
+            hour: "2-digit", 
+            minute: "2-digit", 
+            second: "2-digit",
+            hour12: false
+        });
+            
+        const popup = new mapboxgl.Popup({
+            closeButton: false, 
+            closeOnClick: false
+        }).setHTML(`
+        <table style="line-height: 1.4; font-size: 12px;">
+            <tr><td><strong>Location:</strong></td><td>${location}</td></tr>
+            <tr><td><strong>Date:</strong></td><td>${utcTimeObserved}</td></tr>
+        </table>
+    `);
         marker.setPopup(popup);
         marker.getElement().addEventListener("mouseenter", () => {
             popup.addTo(map);
@@ -468,7 +487,7 @@ isAnimation.addEventListener("change", (event) => {
             map.dragPan.disable();
             map.scrollZoom.disable();
             map.boxZoom.disable();
-            removeAllPlumeLayers();
+            removePrevPlumeLayers();
             const legendOuter = document.getElementById("plegend-container");
             legendOuter.style.display ='none';
 
@@ -476,7 +495,7 @@ isAnimation.addEventListener("change", (event) => {
                 placeholder: 'Plumes',
                 start: startDate,
                 end: endDate,
-                step: 1000 * 3600 * 24,
+                step: 1000 * 3600 * 24* 30,
                 onChange: date => {
                     endDate = new Date(date).toISOString().slice(0, 16);
                     document.getElementById("end_date").value = endDate;
