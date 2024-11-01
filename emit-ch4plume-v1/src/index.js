@@ -461,11 +461,9 @@ document.getElementById("toggle-button").addEventListener("click", () => {
 
     // Check if the container is currently hidden
     if (legendContainer.style.display === "none") {
-        legendContainer.style.display = "block";  // Show the container
-        toggleButton.innerHTML = "&laquo;"; // Change to "<<" to indicate collapse
+        legendContainer.style.display = "block";  
     } else {
-        legendContainer.style.display = "none";  // Hide the container
-        toggleButton.innerHTML = "&#9776;"; // Change to "≡" to indicate expand
+        legendContainer.style.display = "none";  
     }
 }
 });
