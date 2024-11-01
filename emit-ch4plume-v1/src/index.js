@@ -455,6 +455,7 @@ function createPlumesList(){
     });
 }
 document.getElementById("toggle-button").addEventListener("click", () => {
+    if (map.getZoom()>=ZOOM_THRESHOLD){
     const legendContainer = document.getElementById("plegend-container");
     const toggleButton = document.getElementById("toggle-button");
 
@@ -466,6 +467,7 @@ document.getElementById("toggle-button").addEventListener("click", () => {
         legendContainer.style.display = "none";  // Hide the container
         toggleButton.innerHTML = "&#9776;"; // Change to "≡" to indicate expand
     }
+}
 });
 
 
