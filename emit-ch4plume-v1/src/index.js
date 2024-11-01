@@ -55,7 +55,7 @@ document.getElementById("start_date").addEventListener('change', updateDatesandD
 document.getElementById("end_date").addEventListener('change', updateDatesandData);
 toggleSwitch.addEventListener("change", addCoverage);
 
-const map = new mapboxgl.Map({
+export const map = new mapboxgl.Map({
     container: "map",
     style: MAP_STYLE, // You can choose any Mapbox style
     center: [-98, 39], // Initial center coordinates
@@ -76,6 +76,100 @@ export function removeLayers(sourceId, layersIds) {
     if (map.getSource(sourceId)) {
         map.removeSource(sourceId);
     }
+}
+
+// Attach event listener to search input
+document.getElementById("plume-id-search-input").addEventListener("input", (event) => {
+    const keyword = event.target.value.trim();
+    if (keyword) {
+        updateSearchList(keyword); 
+    } else {
+        document.getElementById("plume-id-search-list").innerHTML = ""; 
+    }
+});
+document.addEventListener("click", (event) => {
+    const searchInput = document.getElementById("plume-id-search-input");
+    const searchList = document.getElementById("plume-id-search-list");
+    if (!searchInput.contains(event.target) && !searchList.contains(event.target)) {
+        searchList.innerHTML = "";
+    }
+});
+
+
+function handleSearch(keyword) {
+    let plumeIds = [];
+    let searchResults = [];
+
+    MARKERS_ON_MAP.forEach(marker => {
+        const plumeId = `${marker.feature.properties["Plume ID"]} (${marker.feature.properties["Location"]})`;
+        plumeIds.push(plumeId);
+        
+        // Store the relevant information in the searchResults array
+        searchResults.push({
+            displayText: plumeId,
+            latitude: marker.feature.properties["Latitude of max concentration"],
+            longitude: marker.feature.properties["Longitude of max concentration"],
+            // Add other properties if needed
+        });
+    });
+
+    plumeIds.sort((a, b) => {
+        return getSimilarity(b, keyword) - getSimilarity(a, keyword);
+    });
+
+    plumeIds = plumeIds.filter(plume_id => {
+        return getSimilarity(plume_id, keyword) > 0;
+    });
+
+    // Return both the IDs and the search results
+    return searchResults.filter(result => plumeIds.includes(result.displayText));
+}
+
+function getSimilarity(data, keyword) {
+    data = data.toLowerCase();
+    keyword = keyword.toLowerCase();
+    return data.length - data.replace(new RegExp(keyword, 'g'), '').length;
+}
+
+// Function to update the search list with results
+function updateSearchList(keyword) {
+    const searchList = document.getElementById("plume-id-search-list");
+    searchList.innerHTML = ""; // Clear previous results
+
+    // Get results from handleSearch
+    const results = handleSearch(keyword);
+
+    if (results.length === 0) {
+        // Show 'No results found' message if no matches
+        const noResultItem = document.createElement("li");
+        noResultItem.textContent = "No results found";
+        noResultItem.className = "no-results";
+        searchList.appendChild(noResultItem);
+    } else {
+        // Populate list with results and attach click listeners
+        results.forEach(result => {
+            const resultItem = document.createElement("li");
+            resultItem.textContent = result.displayText;
+            resultItem.className = "result-item";
+            searchList.appendChild(resultItem);
+
+            // Add click listener to each result item
+            resultItem.addEventListener("click", () => handleSelection(result));
+        });
+    }
+}
+
+// Function to handle selection of a search item
+function handleSelection(selectedItem) {
+    // Optionally, set the selected item in the search box
+    //document.getElementById("plume-id-search-input").value = selectedItem.displayText;
+
+    // Clear search results after selection
+    document.getElementById("plume-id-search-list").innerHTML = "";
+    map.flyTo({
+        center: [selectedItem.longitude, selectedItem.latitude], 
+        zoom: ZOOM_THRESHOLD,
+    });
 }
 
 export function addPolygon(polygonSourceId, polygonLayerId, polygonFeature, fillOutlineColor, fillColor, lineColor, lineWidth) {
@@ -230,9 +324,6 @@ function filterByDates(data, sDate, eDate, type) {
     
 }
 
-
-
-
 function removeAllPlumeLayers() {
     const layers = map.getStyle().layers;
     layers.forEach((layer) => {
@@ -261,7 +352,6 @@ function removePrevPlumeLayers() {
     });
     map.resize();
 }
-
 
 function addRasterHoverListener() {
     MARKERS_ON_VIEWPORT.forEach(marker => {
@@ -304,7 +394,6 @@ function addRasterHoverListener() {
 function zoomedOrDraggedToThreshold(){
     const currentZoom = map.getZoom();
     if (currentZoom >= ZOOM_THRESHOLD){
-        
         MARKERS_ON_VIEWPORT = MARKERS_ON_MAP.filter(marker => {
             const coords = marker.feature.geometry.coordinates;
             const lngLat = new mapboxgl.LngLat(coords[0], coords[1]);
@@ -315,47 +404,8 @@ function zoomedOrDraggedToThreshold(){
             marker.feature.properties['Data Download'].split('/').pop().split('.')[0]
         );
         removePrevPlumeLayers();
-
-        //createPlumesList()
-        const legendOuter = document.getElementById("plegend-container");
-        legendOuter.style.display ='';
-
-        // Create the additional text
-        const additionalText = document.getElementById('num-plumes');
-        additionalText.innerText = `${MARKERS_ON_VIEWPORT.length} Plumes`; 
-
-        const legendContainer = document.getElementById("plegend");
-        legendContainer.innerHTML = ''; // Clear previous entries
-
-        MARKERS_ON_VIEWPORT.forEach(marker => {
-            const properties = marker.feature.properties; // Access properties of the marker
-            const itemDiv = document.createElement('div'); // Create a new div
-            const itemId = properties['Data Download'].split('/').pop().split('.')[0];
-            itemDiv.className = "itemDiv";
-            itemDiv.id = "itemDiv-"+itemId;
-            const endpoint = `https://dev.ghg.center/api/raster/collections/emit-ch4plume-v1/items/${itemId}/preview.png?bidx=1&assets=ch4-plume-emissions&rescale=1%2C1500&resampling=bilinear&colormap_name=plasma`
-
-            // Set the content of the div (customize as needed)
-            itemDiv.innerHTML = `
-                <img src="${endpoint}" alt="Thumbnail" style="width: 15%; height: 30px;"/>
-                <strong>ID:</strong> ${marker.id}<br>
-                <strong>Data Download:</strong> <a href="${properties['Data Download']}" target="_blank">Download</a><br>
-                <strong>Max Plume Concentration:</strong> ${properties['Max Plume Concentration (ppm m)']} ppm m<br>
-                <strong>UTC Time Observed:</strong> ${properties['UTC Time Observed']}<br>
-                <strong>Location:</strong> ${properties['Location']}<br>
-            `;
-
-            // Append the new div to the legend container
-            legendContainer.appendChild(itemDiv);
-
-            //now add the rasters
-            if (!map.getLayer("raster-"+ itemId)){
-                addRaster(itemId);
-            }
-            
-        });
+        createPlumesList();
         addRasterHoverListener();
-
     }
     else{
         const legendOuter = document.getElementById("plegend-container");
@@ -364,6 +414,60 @@ function zoomedOrDraggedToThreshold(){
     };
 
 }
+
+function createPlumesList(){
+    const legendOuter = document.getElementById("plegend-container");
+    legendOuter.style.display ='';
+
+    // Create the additional text
+    const additionalText = document.getElementById('num-plumes');
+    additionalText.innerText = `${MARKERS_ON_VIEWPORT.length} Plumes`; 
+
+    const legendContainer = document.getElementById("plegend");
+    legendContainer.innerHTML = ''; // Clear previous entries
+
+    MARKERS_ON_VIEWPORT.forEach(marker => {
+        const properties = marker.feature.properties; // Access properties of the marker
+        const itemDiv = document.createElement('div'); // Create a new div
+        const itemId = properties['Data Download'].split('/').pop().split('.')[0];
+        itemDiv.className = "itemDiv";
+        itemDiv.id = "itemDiv-"+itemId;
+        const endpoint = `https://dev.ghg.center/api/raster/collections/emit-ch4plume-v1/items/${itemId}/preview.png?bidx=1&assets=ch4-plume-emissions&rescale=1%2C1500&resampling=bilinear&colormap_name=plasma`
+
+        // Set the content of the div (customize as needed)
+        itemDiv.innerHTML = `
+            <img src="${endpoint}" alt="Thumbnail" style="width: 15%; height: 30px;"/>
+            <strong>ID:</strong> ${marker.id}<br>
+            <strong>Data Download:</strong> <a href="${properties['Data Download']}" target="_blank">Download</a><br>
+            <strong>Max Plume Concentration:</strong> ${properties['Max Plume Concentration (ppm m)']} ppm m<br>
+            <strong>UTC Time Observed:</strong> ${properties['UTC Time Observed']}<br>
+            <strong>Location:</strong> ${properties['Location']}<br>
+        `;
+
+        // Append the new div to the legend container
+        legendContainer.appendChild(itemDiv);
+
+        //now add the rasters
+        if (!map.getLayer("raster-"+ itemId)){
+            addRaster(itemId);
+        }
+        
+    });
+}
+document.getElementById("toggle-button").addEventListener("click", () => {
+    const legendContainer = document.getElementById("plegend-container");
+    const toggleButton = document.getElementById("toggle-button");
+
+    // Check if the container is currently hidden
+    if (legendContainer.style.display === "none") {
+        legendContainer.style.display = "block";  // Show the container
+        toggleButton.innerHTML = "&laquo;"; // Change to "<<" to indicate collapse
+    } else {
+        legendContainer.style.display = "none";  // Hide the container
+        toggleButton.innerHTML = "&#9776;"; // Change to "≡" to indicate expand
+    }
+});
+
 
 async function main() {
 
@@ -400,17 +504,18 @@ async function main() {
         viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
             marker.feature.properties['Data Download'].split('/').pop().split('.')[0]
         );
-        removePrevPlumeLayers
+        removePrevPlumeLayers();
         MARKERS_ON_MAP = points;
         CURRENTCOVERAGE = coverageData;
 
         // Initially display all plumes as markers
         addPointsOnMap();
+
     
     });
 }
 
-function addPointsOnMap(p){
+function addPointsOnMap(){
     // Removing prev markers
     const existing_markers = document.querySelectorAll('.marker');
     existing_markers.forEach(marker => marker.remove());

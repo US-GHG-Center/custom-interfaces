@@ -398,6 +398,16 @@ table td {
   overflow-y: auto;          /* Enable scrolling if needed */
 
 }
+.toggle-button {
+  background: #f0f0f0;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  position: fixed; 
+  top: 80px; 
+  right: 10px;             
+  z-index: 1000;  
+}
 
 .itemDiv {
   border: 1px solid black;    /* Border */
