@@ -1,48 +1,49 @@
 /* General element styling */
 body { 
-    margin: 0; 
-    padding: 0; 
-    color: rgb(27, 38, 49);
-    font-family: 'Inter', sans-serif;
-    
-  }
+  margin: 0; 
+  padding: 0; 
+  color: rgb(27, 38, 49);
+  font-family: 'Inter', sans-serif;
+  
+}
 
 span{
-    padding: 5px;
-    color: #333;
-    font-weight: normal;
+  padding: 5px;
+  color: #333;
+  font-weight: normal;
+}
+
+/* mapbox related styling goes here */ 
+#map canvas {
+  cursor: default;
   }
 
- /* mapbox related styling goes here */ 
-  #map canvas {
-    cursor: default;
-    }
-
-  #map { 
-    position: absolute; 
-    top: 0; 
-    bottom: 0; 
-    width: 100%; 
-  }
+#map { 
+  position: absolute; 
+  top: 0; 
+  bottom: 0; 
+  width: 100%; 
+  height: 100vh;
+}
 
 .mapboxgl-ctrl  button .mapboxgl-ctrl-icon {
-    display: block;
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
-    background-position: 50%;
-    font-size: 14px;
-    padding-top: 20%;
-    background-color: #082A63;
-    color: white
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  font-size: 14px;
+  padding-top: 20%;
+  background-color: #082A63;
+  color: white
 }
 
 .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon {
-  background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%23FFFFFF%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20role%3D%22img%22%20viewBox%3D%220%200%2016%2016%22%20aria-hidden%3D%22true%22%20class%3D%22plus-small__CollecticonPlusSmall-sc-1fqmt3p-0%20fnbDBt%22%3E%3Ctitle%3Eplus%20small%20icon%3C%2Ftitle%3E%3Cpolygon%20points%3D%2214%2C7%209%2C7%209%2C2%207%2C2%207%2C7%202%2C7%202%2C9%207%2C9%207%2C14%209%2C14%209%2C9%2014%2C9%22%3E%3C%2Fpolygon%3E%3C%2Fsvg%3E);
+background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%23FFFFFF%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20role%3D%22img%22%20viewBox%3D%220%200%2016%2016%22%20aria-hidden%3D%22true%22%20class%3D%22plus-small__CollecticonPlusSmall-sc-1fqmt3p-0%20fnbDBt%22%3E%3Ctitle%3Eplus%20small%20icon%3C%2Ftitle%3E%3Cpolygon%20points%3D%2214%2C7%209%2C7%209%2C2%207%2C2%207%2C7%202%2C7%202%2C9%207%2C9%207%2C14%209%2C14%209%2C9%2014%2C9%22%3E%3C%2Fpolygon%3E%3C%2Fsvg%3E);
 }
 
 .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
-  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%23FFFFFF%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20role%3D%22img%22%20viewBox%3D%220%200%2016%2016%22%20aria-hidden%3D%22true%22%20class%3D%22minus-small__CollecticonMinusSmall-sc-idjajx-0%20iiALwp%22%3E%3Ctitle%3Eminus%20small%20icon%3C%2Ftitle%3E%3Cpolygon%20points%3D%2214%2C7%202%2C7%202%2C9%2014%2C9%22%3E%3C%2Fpolygon%3E%3C%2Fsvg%3E")
+background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%23FFFFFF%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20role%3D%22img%22%20viewBox%3D%220%200%2016%2016%22%20aria-hidden%3D%22true%22%20class%3D%22minus-small__CollecticonMinusSmall-sc-idjajx-0%20iiALwp%22%3E%3Ctitle%3Eminus%20small%20icon%3C%2Ftitle%3E%3Cpolygon%20points%3D%2214%2C7%202%2C7%202%2C9%2014%2C9%22%3E%3C%2Fpolygon%3E%3C%2Fsvg%3E")
 }
 
 button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon {
@@ -51,396 +52,272 @@ padding: 0px;
 }
 
 button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
-  padding: 0px;
-  
-  }
+padding: 0px;
+
+}
 .mapboxgl-ctrl-compass {
-  display: none !important;
+display: none !important;
 }
 
- /* marker related styling goes here */ 
- .marker {
-  background-image: url("./marker-sdf-2.png");
-  background-size: cover;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  cursor: pointer;
-  /* box-shadow: 1px 1px white; */
+/* marker related styling goes here */ 
+.marker {
+background-image: url("./marker-sdf-2.png");
+background-size: cover;
+width: 30px;
+height: 30px;
+border-radius: 50%;
+cursor: pointer;
 }
 
-/* commenting this out and its corresponding element in html
-.lds-roller {
-  display: inline-block;
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  top: 50%;
-  left: 50%;
-}
-.lds-roller div {
-  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  transform-origin: 40px 40px;
-}
-.lds-roller div:after {
-  content: " ";
-  display: block;
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #fff;
-  margin: -4px 0 0 -4px;
-}
-.lds-roller div:nth-child(1) {
-  animation-delay: -0.036s;
-}
-.lds-roller div:nth-child(1):after {
-  top: 63px;
-  left: 63px;
-}
-.lds-roller div:nth-child(2) {
-  animation-delay: -0.072s;
-}
-.lds-roller div:nth-child(2):after {
-  top: 68px;
-  left: 56px;
-}
-.lds-roller div:nth-child(3) {
-  animation-delay: -0.108s;
-}
-.lds-roller div:nth-child(3):after {
-  top: 71px;
-  left: 48px;
-}
-.lds-roller div:nth-child(4) {
-  animation-delay: -0.144s;
-}
-.lds-roller div:nth-child(4):after {
-  top: 72px;
-  left: 40px;
-}
-.lds-roller div:nth-child(5) {
-  animation-delay: -0.18s;
-}
-.lds-roller div:nth-child(5):after {
-  top: 71px;
-  left: 32px;
-}
-.lds-roller div:nth-child(6) {
-  animation-delay: -0.216s;
-}
-.lds-roller div:nth-child(6):after {
-  top: 68px;
-  left: 24px;
-}
-.lds-roller div:nth-child(7) {
-  animation-delay: -0.252s;
-}
-.lds-roller div:nth-child(7):after {
-  top: 63px;
-  left: 17px;
-}
-.lds-roller div:nth-child(8) {
-  animation-delay: -0.288s;
-}
-.lds-roller div:nth-child(8):after {
-  top: 56px;
-  left: 12px;
-}
-@keyframes lds-roller {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-*/
- /* searching related styling goes here */ 
+/* searching related styling goes here */ 
 .autocomplete-search-box {
-  position: relative;
-  width: 100%;
-  box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.25);
-  border-radius: 5px;
-  overflow:  hidden;
-  z-index: 1;
+position: relative;
+width: 100%;
+box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.25);
+border-radius: 5px;
+overflow:  hidden;
+z-index: 1;
 }
+
 
 .autocomplete-search-box .search-box {
-  width: 80%;
-  height: 12px;
-  padding: 10px 10px;
-  outline: none;
-  border: none;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  display:flex;
+width: 100%;
+height: 12px;
+padding: 10px 10px;
+outline: none;
+border: none;
+border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+display:flex;
 }
 
 .autocomplete-search-box .search-result {
-  width: 100%;
-  padding: 0;
-  margin: 0;
+width: 100%;
+padding: 0;
+margin: 0;
 }
 
 .autocomplete-search-box .search-result li {
-  width: 100%;
-  list-style-type: none;
-  padding: 10px 20px;
+width: 100%;
+list-style-type: none;
+padding: 10px 20px;
 }
 
 .autocomplete-search-box .search-result li:hover {
-  background: #082a63;
-  color: white;
-  cursor: pointer;
+background: #082a63;
+color: white;
+cursor: pointer;
 }
 
 .autocomplete-search-box .search-result {
-  background-color: white;
-  max-height: 150px;
-  overflow: auto;
+background-color: white;
+max-height: 150px;
+overflow: auto;
 }
 
-
- /* the date slider related styling goes here */ 
- .ui-widget-header { 
-  background: #082A63;
-}
-
-.ui-slider .ui-slider-handle {
-  position: absolute;
-  z-index: 2;
-  width: 1.2em;
-  height: 1.2em;
-  cursor: col-resize;
-}
-
- /* the toolbar related styling goes here */ 
+/* the toolbar related styling goes here */ 
 
 .toolbar {
-  position: absolute;
-  top: 20px; 
-  left: 20px; 
-  background-color: white;
-  padding: 10px; 
-  width: 300px;
-  font-size: 14px;
-}
+display: none;
+position: absolute;
+top: 20px; 
+left: 20px; 
+background-color: white;
+padding: 20px; 
+margin: 10px;
+width: 300px;
+font-size: 14px;
+border-radius: 8px;
+} 
 
 .toolbar-heading {
-  font-size: 20px;
-  color: #333; 
+font-size: 24px;
+color: #333; 
+text-align: center;
 }
 
 .toolbar-line {
-  border: none; 
-  border-top: 2px solid #333;
-  margin: 10px 0; 
+border: none; 
+border-top: 2px solid #333;
+margin: 20px 0; 
 }
 
 /* selecting date related styling goes here */ 
 .dates {
-  padding: 12px 20px;
-  flex-direction: row;
+padding: 20px 0px;
+flex-direction: row;
 }
 
 .label-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 14px;
 }
 
 input[type="datetime-local"] {
-  width: 40%; 
-  padding: 10px;
-  font-size: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+width: 40%; 
+padding: 10px;
+font-size: 10px;
+border-radius: 5px;
+border: 1px solid #ccc;
+box-shadow: 0 2px 10px 0px rgba(0,0,0,0.2);
 }
 
 
 /* coverage toggle related styling goes here */ 
 .toggle-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-top: 20px;
-  justify-content: space-between;
-  width: 100%
+display: flex;
+flex-direction: row;
+align-items: center;
+margin-top: 20px;
+justify-content: space-between;
+width: 100%
 }
 
 /* Toggle switch container */
 .toggle-switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
+position: relative;
+display: inline-block;
+width: 50px;
+height: 24px;
 }
 
 .toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+opacity: 0;
+width: 0;
+height: 0;
+} 
 
 /* Slider background */
 .slider {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  border-radius: 24px;
-  transition: .4s;
-}
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #ccc;
+border-radius: 24px;
+transition: .4s;
+} 
 
 /* Slider round circle */
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 18px;
-  width: 18px;
-  border-radius: 50%;
-  background-color: white;
-  bottom: 3px;
-  left: 4px;
-  transition: .4s;
-}
+position: absolute;
+content: "";
+height: 18px;
+width: 18px;
+border-radius: 50%;
+background-color: white;
+bottom: 3px;
+left: 4px;
+transition: .4s;
+} 
 
 /* When checked, move the slider */
 input:checked + .slider {
-  background-color: #082A63;
-}
+background-color: #082A63;
+} 
 
 /* When checked, move the circle to the right */
 input:checked + .slider:before {
-  transform: translateX(26px);
-}
-
-/* styling for display of plumes list */
-#display_props {
-  position: absolute;
-  width: 300px; /* Adjust width as needed */
-  bottom : 8%;
-  left: 20px;
-  background-color: white;
-  cursor: move;
-  z-index: 999;
-  padding: 10px; 
-  font-size: 12px;
-}
-
-#close {
-  display:inline-block;
-  padding:1px 5px;
-  background:#ccc;
-}
-
-#close:hover {
-  display:inline-block;
-  padding:1px 5px;
-  background:#ccc;
-  color:#fff;
-  cursor: pointer;
-}
-
-.display-header {
-  padding: 10px; 
-}
-
-.display-header h2 {
-  margin-bottom: 2px;
-  margin-top:0px;
-}
-
-.display-header .datetime {
-  margin: 0; 
-}
-
-.download-link {
-  padding-left: 10px; 
-  font-size: 0.85em; 
-}
-
-.download-link a {
-  text-decoration: none; 
-  color: #007bff; 
-}
-
-/* Table styles */
-table {
-  border-spacing: 0; 
-  padding-left: 10px; 
-  width:100%
-}
-
-table td {
-  padding-bottom: 5px; 
-}
-
+transform: translateX(26px);
+} 
 
 /* for legend */
 .plegend-container {
-  position: fixed;           /* Make it fixed to the viewport */
-  top: 20px;                /* Distance from the top */
-  right: 50px;              /* Distance from the right */
-  z-index: 1000;  
-  background-color: #f0f0f0;   
-  padding : 10px;   
-  width : 300px; 
+position: fixed;          
+top: 20px;           
+right: 50px;          
+z-index: 1000;  
+background-color: #f0f0f0;   
+padding : 10px;   
+width : 300px; 
+border-radius: 8px;;
 }
 
 
 .plumes-legend {
-  background-color: #f0f0f0; /* Light background */
-  max-height: 550px;         /* Limit height */
-  overflow-y: auto;          /* Enable scrolling if needed */
+background-color: #f0f0f0; 
+max-height: 550px;        
+overflow-y: auto; 
 
 }
 .toggle-button {
-  background: #f0f0f0;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  position: fixed; 
-  top: 80px; 
-  right: 10px;             
-  z-index: 1000;  
+background: #f0f0f0;
+border: none;
+font-size: 20px;
+cursor: pointer;
+position: fixed; 
+top: 200px; 
+right: 10px;             
+z-index: 1000;  
 }
 
 .itemDiv {
-  border: 1px solid black;    /* Border */
-  margin:10px;
-  padding:10px;
-  font-size: 10px;
+border: 1px solid black; 
+margin:10px;
+padding:10px;
+font-size: 10px;
 }
 
 .header-container{
-  display: flex;
-  justify-content: space-between;
-  align-content: center;
+display: flex;
+justify-content: space-between;
+align-content: center;
 }
 
 .num-plumes {
-  background-color: lightgray; 
-  border-radius: 8px;          
-  display: flex;                
-  align-items: center;          
-  justify-content: center;     
+background-color: lightgray; 
+border-radius: 8px;          
+display: flex;                
+align-items: center;          
+justify-content: center;     
 }
 
 /* for the popup */
 .mapboxgl-popup-content {
-  background-color: rgba(255, 255, 255, 0.7); 
-  font-size: 10px; 
-  box-shadow: none; 
-  padding: 5px; 
-  justify-self: center;
-  justify-content: center;
-  color: #333;
+background-color: rgba(255, 255, 255, 0.7); 
+font-size: 10px; 
+box-shadow: none; 
+padding: 5px; 
+justify-self: center;
+justify-content: center;
+color: #333;
 }
 
 .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip { 
-  border-top-color: rgba(255, 255, 255, 0.7);
-  }
+border-top-color: rgba(255, 255, 255, 0.7);
+}
+
+
+
+/* colorbar */
+.colorbar {
+  background-color: white; 
+  border-radius: 5px; 
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+}
+.colorbar-scale-label-horizontal {
+  flex: 1;
+  text-align: center; 
+  font-size: 12px; 
+}
+
+.colorbar-label {
+  text-align: center; 
+  margin-top: 8px; 
+}
+
+/* measurement */
+#unit-icon-text { 
+  text-transform:lowercase;
+}
+.mapboxgl-ctrl-icon.measure-icon-clicked {
+  background-color:#2B4B92 !important;
+ }
+ #clear-icon-main{
+   display:none;
+ }
+ #clear-icon-main.clicked{
+   display:block;
+ }
