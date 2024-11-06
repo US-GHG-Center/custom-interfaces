@@ -160,7 +160,7 @@ function addOutline(polygonSourceId, polygonLayerId, polygonFeature){
             'source': polygonSourceId,
             'layout': {},
             'paint': {
-                'line-color': 'orange',
+                'line-color': "#0098d7",
                 'line-width': 2
             }
         });
@@ -181,7 +181,7 @@ function addRasterHoverListener() {
                     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
                     addOutline("polygon-source-" + itemId, "polygon-layer-" + itemId, polygonFeature.feature);
                     const selectedItem = document.getElementById("itemDiv-" + itemId);
-                    selectedItem.style.border = "2px solid orange";
+                    selectedItem.style.border = "2px solid #0098d7";
                     selectedItem.scrollIntoView({
                         behavior: "smooth",
                         block: "center",
@@ -193,22 +193,22 @@ function addRasterHoverListener() {
                     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
                     removeLayers(map, "", ["polygon-layer-" + itemId, "outline-polygon-layer-" + itemId]);
                     const selectedItem = document.getElementById("itemDiv-" + itemId);
-                    selectedItem.style.border = "1px solid black";
+                    selectedItem.style.border = "0px";
                 });
 
                 // Sidebar item hover effect
                 document.getElementById("itemDiv-" + itemId).addEventListener("mouseenter", () => {
                     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
-                    addOutline("polygon-source-" + itemId, "polygon-layer-" + itemId, polygonFeature.feature, "orange", "transparent", "orange", 2);
+                    addOutline("polygon-source-" + itemId, "polygon-layer-" + itemId, polygonFeature.feature);
                     const selectedItem = document.getElementById("itemDiv-" + itemId);
-                    selectedItem.style.border = "2px solid orange";
+                    selectedItem.style.border = "2px solid #0098d7";
                 });
 
                 document.getElementById("itemDiv-" + itemId).addEventListener("mouseleave", () => {
                     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
                     removeLayers(map, "", ["polygon-layer-" + itemId, "outline-polygon-layer-" + itemId]);
                     const selectedItem = document.getElementById("itemDiv-" + itemId);
-                    selectedItem.style.border = "1px solid black";
+                    selectedItem.style.border = "0px";
                 });
             }
         }
