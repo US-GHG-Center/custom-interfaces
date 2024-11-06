@@ -57,7 +57,7 @@ function updateDatesandData(){
                 feature: f
             }));
     MARKERS_ON_MAP = points;
-    addCoverage(map);
+    addCoverage(map, CURRENTCOVERAGE);
     addPointsOnMap(MARKERS_ON_MAP);
     zoomedOrDraggedToThreshold();
 };

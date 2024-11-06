@@ -1,6 +1,6 @@
 
 const styleOptions = {
-    fillColor: "rgba(173, 216, 230, 0.5)",
+    fillColor: "rgba(173, 216, 230, 0.2)",
     lineColor: "transparent",
     lineWidth: 1,
     fillOutlineColor: "#1E90FF"
