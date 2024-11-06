@@ -278,7 +278,7 @@ input:not(:checked) + .slider::after {
 /* for legend */
 .plegend-container {
 position: fixed;          
-top: 180px;           
+top: 235px;           
 right: 10px;          
 z-index: 1000;  
 background-color: #fff;   
@@ -287,24 +287,12 @@ width : 300px;
 border-radius: 6px;
 }
 
-
 .plumes-legend {
 background-color: #fff; 
-max-height: 480px;        
+max-height: 420px;        
 overflow-y: auto; 
 
 }
-.toggle-button {
-background: #fff;
-border: none;
-font-size: 20px;
-cursor: pointer;
-position: fixed; 
-top: 150px; 
-right: 10px;             
-z-index: 1000;  
-}
-
 
 .header-container{
 display: flex;

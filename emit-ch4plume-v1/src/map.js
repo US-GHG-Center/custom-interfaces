@@ -9,10 +9,71 @@ import {
     //classes
     MapControls,
   } from "./measureToolHelper";
+import { ZOOM_THRESHOLD } from './index.js';
 mapboxgl.accessToken = process.env.MAP_ACCESS_TOKEN;
 const MAP_STYLE = process.env.MAP_STYLE;
 
 let map = null; 
+
+class HomeButtonControl {
+  onClick() {
+      // Set the map's center and zoom to the desired location
+      map.flyTo({
+          center: [-98, 39], // Replace with the desired latitude and longitude
+          zoom: 4,
+      });
+  }
+  onAdd(map) {
+      this.map = map;
+      this.container = document.createElement("div");
+      this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
+      this.container.addEventListener("contextmenu", (e) => e.preventDefault());
+      this.container.addEventListener("click", (e) => this.onClick());
+      this.container.innerHTML =
+          '<div class="tools-box">' +
+          "<button>" +
+          '<span class="mapboxgl-ctrl-icon btn fa fa-refresh" aria-hidden="true" title="Reset To USA"></span>' +
+          "</button>" +
+          "</div>";
+      return this.container;
+  }
+  onRemove() {
+      this.container.parentNode.removeChild(this.container);
+      this.map = undefined;
+  }
+}
+
+class legendToggle {
+  onClick() {
+    if (map.getZoom()>=ZOOM_THRESHOLD){
+      const legendContainer = document.getElementById("plegend-container");
+      // Check if the container is currently hidden
+      if (legendContainer.style.display === "none") {
+          legendContainer.style.display = "block";  
+      } else {
+          legendContainer.style.display = "none";  
+      }
+    }
+  }
+  onAdd(map) {
+      this.map = map;
+      this.container = document.createElement("div");
+      this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
+      this.container.addEventListener("contextmenu", (e) => e.preventDefault());
+      this.container.addEventListener("click", (e) => this.onClick());
+      this.container.innerHTML =
+          '<div class="tools-box">' +
+          "<button>" +
+          '<span class="mapboxgl-ctrl-icon btn fa fa-bars" aria-hidden="true" title="Toggle Plumes List"></span>' +
+          "</button>" +
+          "</div>";
+      return this.container;
+  }
+  onRemove() {
+      this.container.parentNode.removeChild(this.container);
+      this.map = undefined;
+  }
+}
 
 class ChangeMapUnit extends MapControls {
   constructor(mapScale) {
@@ -80,11 +141,11 @@ export const getMapInstance = () => {
             unit: measureVariables.scale === "miles" ? "imperial" : "metric",
           });
         map.addControl(mapScale);
-        //map.addControl(new HomeButtonControl());
+        map.addControl(new HomeButtonControl());
         map.addControl(zoomControl, "top-right");
         addMeasurementControls(map);
         map.addControl(new ChangeMapUnit(mapScale)); 
-        //map.addControl(new ChangeMapUnit());
+        map.addControl(new legendToggle());
         addClearControl(map);
 
     }

@@ -22,7 +22,7 @@ import TimelineControl from 'mapboxgl-timeline';
 import 'mapboxgl-timeline/dist/style.css';
 export const map = getMapInstance();
 
-const ZOOM_THRESHOLD = 11;
+export const ZOOM_THRESHOLD = 11;
 const markerClicked = false
 const VMIN = 0;
 const VMAX = 1500;
@@ -362,16 +362,6 @@ document.addEventListener("click", (event) => {
     if (!searchInput.contains(event.target) && !searchList.contains(event.target)) {
         searchList.innerHTML = "";
     }});
-document.getElementById("toggle-button").addEventListener("click", () => {
-    if (map.getZoom()>=ZOOM_THRESHOLD){
-    const legendContainer = document.getElementById("plegend-container");
-    // Check if the container is currently hidden
-    if (legendContainer.style.display === "none") {
-        legendContainer.style.display = "block";  
-    } else {
-        legendContainer.style.display = "none";  
-    }
-}});
 
 map.on("dblclick", (e) => {
     if (measureVariables.measureToggled) {
@@ -394,7 +384,7 @@ map.on("dblclick", (e) => {
       createMeasuringLine(e, map);
     }
   });
-  
+
  // Animation
 const isAnimation = document.getElementById("doAnimation");
 let timeline;

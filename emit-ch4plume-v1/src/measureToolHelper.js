@@ -235,7 +235,6 @@ const measureVariables = {
   }
   class MeasureDistance extends MapControls {
     constructor(map) {
-        console.log("Hello pari")
       super();
       this.onClick = this.onClick.bind(this);
       this.map = map;
