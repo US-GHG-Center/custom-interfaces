@@ -2,9 +2,9 @@
 body { 
   margin: 0; 
   padding: 0; 
-  color: rgb(27, 38, 49);
+  color: #333;
   font-family: 'Inter', sans-serif;
-  
+  color: #082a64;
 }
 
 span{
@@ -48,20 +48,19 @@ background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%
 
 button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon {
 padding: 0px;
-
 }
 
 button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
 padding: 0px;
-
 }
+
 .mapboxgl-ctrl-compass {
 display: none !important;
 }
 
 /* marker related styling goes here */ 
 .marker {
-background-image: url("./marker-sdf-2.png");
+background-image: url("./marker_g1500.png");
 background-size: cover;
 width: 30px;
 height: 30px;
@@ -77,8 +76,8 @@ box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.25);
 border-radius: 5px;
 overflow:  hidden;
 z-index: 1;
+justify-self: CENTER;
 }
-
 
 .autocomplete-search-box .search-box {
 width: 100%;
@@ -86,7 +85,7 @@ height: 12px;
 padding: 10px 10px;
 outline: none;
 border: none;
-border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+border-bottom: 1px solid rrgba(8, 42, 100, 0.3);
 display:flex;
 }
 
@@ -114,31 +113,37 @@ max-height: 150px;
 overflow: auto;
 }
 
+#plume-id-search-input::placeholder {
+  color: #082a64; 
+  opacity: 0.8; 
+}
+
 /* the toolbar related styling goes here */ 
 
 .toolbar {
 display: none;
 position: absolute;
-top: 20px; 
-left: 20px; 
-background-color: white;
-padding: 20px; 
+top: 10px; 
+left: 10px; 
+background-color: #fff;
+padding: 15px; 
 margin: 10px;
-width: 300px;
+width: 280px;
 font-size: 14px;
-border-radius: 8px;
+border-radius: 6px;
 } 
 
 .toolbar-heading {
 font-size: 24px;
-color: #333; 
-text-align: center;
+color: #082a64; 
+text-align: left;
+margin: 0px;
 }
 
 .toolbar-line {
 border: none; 
-border-top: 2px solid #333;
-margin: 20px 0; 
+border-top: 2px solid #082a64;
+margin: 10px 0; 
 }
 
 /* selecting date related styling goes here */ 
@@ -152,6 +157,7 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 font-size: 14px;
+color: #082a64; 
 }
 
 input[type="datetime-local"] {
@@ -160,68 +166,116 @@ padding: 10px;
 font-size: 10px;
 border-radius: 5px;
 border: 1px solid #ccc;
-box-shadow: 0 2px 10px 0px rgba(0,0,0,0.2);
+box-shadow: 0 1px 5px 0px rgba(8, 42, 100, 0.3) ;
+color: #082a64; 
 }
-
 
 /* coverage toggle related styling goes here */ 
 .toggle-container {
 display: flex;
 flex-direction: row;
 align-items: center;
-margin-top: 20px;
+margin-top: 10px;
 justify-content: space-between;
 width: 100%
 }
 
-/* Toggle switch container */
-.toggle-switch {
-position: relative;
-display: inline-block;
-width: 50px;
-height: 24px;
+/* Toggle Container Styling */
+.toggle-container {
+  display: flex;
+  align-items: center;
+  color: #082a64;
+  font-size: 14px;
 }
 
+/* Label before the toggle switch */
+.custom-label {
+  margin-right: 10px;
+  color: #082a64;;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0px; 
+  opacity:1;
+}
+
+/* Toggle Switch Container */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+/* Hide default checkbox */
 .toggle-switch input {
-opacity: 0;
-width: 0;
-height: 0;
-} 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
 
 /* Slider background */
 .slider {
-position: absolute;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-background-color: #ccc;
-border-radius: 24px;
-transition: .4s;
-} 
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(8, 42, 100, 0.3);
+  border-radius: 15px;
+  transition: 0.4s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5px;
+  box-sizing: border-box;
+}
 
 /* Slider round circle */
 .slider:before {
-position: absolute;
-content: "";
-height: 18px;
-width: 18px;
-border-radius: 50%;
-background-color: white;
-bottom: 3px;
-left: 4px;
-transition: .4s;
-} 
+  content: "OFF";
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
 
-/* When checked, move the slider */
+.slider:after {
+  content: "ON";
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  opacity: 0; /* Hidden by default */
+}
+
+/* Round circle on the slider */
+.slider::before {
+  content: "";
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  bottom: 4px;
+  left: px;
+  transition: 0.4s;
+}
+
+/* When checked, move the slider background and show "ON" */
 input:checked + .slider {
-background-color: #082A63;
-} 
+  background-color: #082A63;
+}
 
-/* When checked, move the circle to the right */
 input:checked + .slider:before {
-transform: translateX(26px);
-} 
+  transform: translateX(24px);
+}
+
+input:checked + .slider::after {
+  opacity: 1;
+}
+
+input:not(:checked) + .slider::after {
+  opacity: 0;
+}
 
 /* for legend */
 .plegend-container {

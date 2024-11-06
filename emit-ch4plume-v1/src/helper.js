@@ -113,13 +113,13 @@ function createColorbar(VMIN, VMAX) {
     .attr("class", "colorbar-label")
     .style("text-align", "center") // Center the label
     .style("margin-bottom", "12px") // Adjust margin as needed
-    .html("<strong>Methane enhancement (ppm m)</strong>");
+    .html(`<span class="custom-label"> <strong>Methane enhancement (ppm m) </strong></span>`);
 
   // Add CSS styles to position and style the colorbar
   colorbar
     .style("position", "absolute")
-    .style("bottom", "60px") // Adjust the top position as needed
-    .style("right", "50px") // Adjust the left position as needed
+    .style("bottom", "30px") // Adjust the top position as needed
+    .style("right", "10px") // Adjust the left position as needed
     .style("background-color", "white")
     .style("padding", "12px");
 

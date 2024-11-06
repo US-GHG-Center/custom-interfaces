@@ -166,41 +166,55 @@ function addOutline(polygonSourceId, polygonLayerId, polygonFeature){
         });
 }
 
+
 function addRasterHoverListener() {
     MARKERS_ON_VIEWPORT.forEach(marker => {
         const itemId = marker.feature.properties['Data Download'].split('/').pop().split('.')[0];
-        const polygonFeature = ALLPOLYGONS.filter((item) => item.id === itemId)[0];
-        if (map.getZoom()>= ZOOM_THRESHOLD){
-            if (!map.getLayer("outline-polygon-layer-" +itemId)){
+        const polygonFeature = ALLPOLYGONS.find((item) => item.id === itemId);
+
+        // Only add listeners if zoom is above threshold
+        if (map.getZoom() >= ZOOM_THRESHOLD) {
+            if (!map.getLayer("outline-polygon-layer-" + itemId)) {
+                
+                // Marker hover effect
                 document.getElementById(`marker-${marker.id}`).addEventListener("mouseenter", () => {
-                    addOutline("polygon-source-" + itemId, "polygon-layer-" +itemId, polygonFeature.feature);
-                    const selectedItem = document.getElementById("itemDiv-"+itemId);
+                    if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
+                    addOutline("polygon-source-" + itemId, "polygon-layer-" + itemId, polygonFeature.feature);
+                    const selectedItem = document.getElementById("itemDiv-" + itemId);
                     selectedItem.style.border = "2px solid orange";
                     selectedItem.scrollIntoView({
-                        behavior: "smooth", 
-                        block: "center", 
-                        inline: "center"  
+                        behavior: "smooth",
+                        block: "center",
+                        inline: "center"
                     });
                 });
+
                 document.getElementById(`marker-${marker.id}`).addEventListener("mouseleave", () => {
-                    removeLayers(map, "",["polygon-layer-" +itemId, "outline-polygon-layer-" +itemId]);
-                    const selectedItem = document.getElementById("itemDiv-"+itemId);
+                    if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
+                    removeLayers(map, "", ["polygon-layer-" + itemId, "outline-polygon-layer-" + itemId]);
+                    const selectedItem = document.getElementById("itemDiv-" + itemId);
                     selectedItem.style.border = "1px solid black";
                 });
-                document.getElementById("itemDiv-"+itemId).addEventListener("mouseenter", () => {
-                    addOutline("polygon-source-" + itemId, "polygon-layer-" +itemId, polygonFeature.feature, "orange", "transparent", "orange", 2);
-                    const selectedItem = document.getElementById("itemDiv-"+itemId);
+
+                // Sidebar item hover effect
+                document.getElementById("itemDiv-" + itemId).addEventListener("mouseenter", () => {
+                    if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
+                    addOutline("polygon-source-" + itemId, "polygon-layer-" + itemId, polygonFeature.feature, "orange", "transparent", "orange", 2);
+                    const selectedItem = document.getElementById("itemDiv-" + itemId);
                     selectedItem.style.border = "2px solid orange";
                 });
-                document.getElementById("itemDiv-"+itemId).addEventListener("mouseleave", () => {
-                    removeLayers(map, "",["polygon-layer-" +itemId, "outline-polygon-layer-" +itemId]);
-                    const selectedItem = document.getElementById("itemDiv-"+itemId);
+
+                document.getElementById("itemDiv-" + itemId).addEventListener("mouseleave", () => {
+                    if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
+                    removeLayers(map, "", ["polygon-layer-" + itemId, "outline-polygon-layer-" + itemId]);
+                    const selectedItem = document.getElementById("itemDiv-" + itemId);
                     selectedItem.style.border = "1px solid black";
                 });
             }
-    }
+        }
     });
-  }
+}
+
 
 function createPlumesList(){
     const legendOuter = document.getElementById("plegend-container");
@@ -244,7 +258,6 @@ function addPointsOnMap(){
         if (map.getLayer(`marker-${point.id}`)){
             map.removeLayer(layerId);
         }
-        //const itemName = path.basename(point.feature.properties["Data Download"]); // ---.tif
         const coords = point.feature.geometry.coordinates
         const markerEl = document.createElement("div");
         markerEl.className = "marker";
@@ -262,7 +275,6 @@ function addPointsOnMap(){
             second: "2-digit",
             hour12: false
         });
-        
         const popup = new mapboxgl.Popup({
             closeButton: false, 
             closeOnClick: false
@@ -274,10 +286,9 @@ function addPointsOnMap(){
         marker.getElement().addEventListener("mouseleave", () => {
             popup.remove();
         });
-        // Flying over automatically triggers zoom and drag evemt listeners
         marker.getElement().addEventListener("click", () => {
             map.flyTo({
-                center: [coords[0], coords[1]], // Replace with the desired latitude and longitude
+                center: [coords[0], coords[1]], 
                 zoom: ZOOM_THRESHOLD,
             });   
         });
@@ -285,7 +296,6 @@ function addPointsOnMap(){
 };
 
 async function main() {
-
     map.on("load", async () => {  
         addMeasurementSource(map);
         document.querySelector(".toolbar").style.display = "block";
@@ -328,12 +338,8 @@ async function main() {
         removePrevPlumeLayers();
         MARKERS_ON_MAP = points;
         CURRENTCOVERAGE = coverageData;
-
-       
         // Initially display all plumes as markers
         addPointsOnMap();
-
-    
     });
 }
 
@@ -388,9 +394,7 @@ map.on("dblclick", (e) => {
       createMeasuringLine(e, map);
     }
   });
-
-  // WIP for animation
-// (ZZOM_THRESHOLD, MARKERS_ON_VIEWPORT, )
+ // Animation
 const isAnimation = document.getElementById("doAnimation");
 let timeline;
 isAnimation.addEventListener("change", (event) => {
@@ -435,5 +439,4 @@ isAnimation.addEventListener("change", (event) => {
 
     }
 });
-
 main();
