@@ -31,8 +31,8 @@ export const createItemContent = (marker, properties, endpoint) => {
     </div>
     <div class="text-column">
         <div class="info-row">
-            <div><strong>ID:</strong> ${properties["Plume ID"]}</div>
-            <div><strong>Orbit:</strong> ${properties["Orbit"]}</div>
+            <div><strong class="props">ID:</strong> ${properties["Plume ID"]}</div>
+            <div><strong class="props">Orbit:</strong> ${properties["Orbit"]}</div>
             
         </div>
         <div class="info-row"> <a href="properties['Data Download']}" target="_blank">Download the TIF file <svg width="10" height="10" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 16 16" aria-hidden="true" class="expand-top-right__CollecticonExpandTopRight-sc-1bjhv94-0">
@@ -41,18 +41,18 @@ export const createItemContent = (marker, properties, endpoint) => {
       </svg></a></div>  
         <hr class="separator">
         <div class="info-row">
-            <div><strong>Location:</strong> ${properties['Location']}</div>
-            <div><strong>UTC Time Observed:</strong> ${properties['UTC Time Observed']}</div>
+            <div><strong class="props">Location:</strong> ${properties['Location']}</div>
+            <div><strong class="props">UTC Time Observed:</strong> ${properties['UTC Time Observed']}</div>
             
         </div>
         <div class="info-row">
-            <div><strong>Max Plume Concentration:</strong> ${properties['Max Plume Concentration (ppm m)']} ppm m</div>
-            <div><strong>Concentration Uncertainity:</strong> ${properties['Concentration Uncertainty (ppm m)']} ppm m</div>
+            <div><strong class="props">Max Plume Concentration:</strong> ${properties['Max Plume Concentration (ppm m)']} ppm m</div>
+            <div><strong class="props">Concentration Uncertainity:</strong> ${properties['Concentration Uncertainty (ppm m)']} ppm m</div>
             
         </div>
         <div class="info-row">
-            <div><strong>Latitude (Max conc):</strong> ${latitude}</div>
-            <div><strong>Longitude (Max conc):</strong> ${longitude}</div>
+            <div><strong class="props">Latitude (Max conc):</strong> ${latitude}</div>
+            <div><strong class="props">Longitude (Max conc):</strong> ${longitude}</div>
         </div>
     </div>
     `;

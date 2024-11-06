@@ -22,7 +22,7 @@ import TimelineControl from 'mapboxgl-timeline';
 import 'mapboxgl-timeline/dist/style.css';
 export const map = getMapInstance();
 
-const ZOOM_THRESHOLD = 10;
+const ZOOM_THRESHOLD = 11;
 const markerClicked = false
 const VMIN = 0;
 const VMAX = 1500;
@@ -394,6 +394,7 @@ map.on("dblclick", (e) => {
       createMeasuringLine(e, map);
     }
   });
+  
  // Animation
 const isAnimation = document.getElementById("doAnimation");
 let timeline;
@@ -420,7 +421,7 @@ isAnimation.addEventListener("change", (event) => {
             });
             map.addControl(timeline, 'bottom-left');
         } else {
-            alert("Please zoom into an area you want to animate!!");
+            alert(`Your Zoom level is ${map.getZoom()}. Please increase zoom level to ${ZOOM_THRESHOLD} around the area you want to animate!!`);
             map.dragPan.enable();
             map.scrollZoom.enable();
             map.boxZoom.enable();

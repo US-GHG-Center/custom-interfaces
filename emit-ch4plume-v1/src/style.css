@@ -27,31 +27,25 @@ span{
 }
 
 .mapboxgl-ctrl  button .mapboxgl-ctrl-icon {
-  display: block;
+  display: flex;
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;
   background-position: 50%;
   font-size: 14px;
-  padding-top: 20%;
-  background-color: #082A63;
-  color: white
+  background-color: white;
+  color: #082A63;
+  justify-content: center;
+  align-items: center;
+  padding:0px;
 }
 
 .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon {
-background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%23FFFFFF%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20role%3D%22img%22%20viewBox%3D%220%200%2016%2016%22%20aria-hidden%3D%22true%22%20class%3D%22plus-small__CollecticonPlusSmall-sc-1fqmt3p-0%20fnbDBt%22%3E%3Ctitle%3Eplus%20small%20icon%3C%2Ftitle%3E%3Cpolygon%20points%3D%2214%2C7%209%2C7%209%2C2%207%2C2%207%2C7%202%2C7%202%2C9%207%2C9%207%2C14%209%2C14%209%2C9%2014%2C9%22%3E%3C%2Fpolygon%3E%3C%2Fsvg%3E);
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%23082A63%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpolygon%20points%3D%2214%2C7%209%2C7%209%2C2%207%2C2%207%2C7%202%2C7%202%2C9%207%2C9%207%2C14%209%2C14%209%2C9%2014%2C9%22%3E%3C%2Fpolygon%3E%3C%2Fsvg%3E");
 }
 
 .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
-background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%23FFFFFF%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20role%3D%22img%22%20viewBox%3D%220%200%2016%2016%22%20aria-hidden%3D%22true%22%20class%3D%22minus-small__CollecticonMinusSmall-sc-idjajx-0%20iiALwp%22%3E%3Ctitle%3Eminus%20small%20icon%3C%2Ftitle%3E%3Cpolygon%20points%3D%2214%2C7%202%2C7%202%2C9%2014%2C9%22%3E%3C%2Fpolygon%3E%3C%2Fsvg%3E")
-}
-
-button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon {
-padding: 0px;
-}
-
-button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
-padding: 0px;
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%23082A63%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpolygon%20points%3D%2214%2C7%202%2C7%202%2C9%2014%2C9%22%3E%3C%2Fpolygon%3E%3C%2Fsvg%3E");
 }
 
 .mapboxgl-ctrl-compass {
@@ -127,7 +121,6 @@ top: 10px;
 left: 10px; 
 background-color: #fff;
 padding: 15px; 
-margin: 10px;
 width: 280px;
 font-size: 14px;
 border-radius: 6px;
@@ -139,6 +132,7 @@ color: #082a64;
 text-align: left;
 margin: 0px;
 }
+
 
 .toolbar-line {
 border: none; 
@@ -198,8 +192,8 @@ width: 100%
   opacity:1;
 }
 
-strong{
-  color: #082a64;;
+strong {
+  color: #082a64;
 }
 
 /* Toggle Switch Container */
@@ -327,6 +321,7 @@ justify-content: center;
 color: #fff; 
 padding: 0 8px;
 font-weight: 500;
+font-size: 12px;
 }
 
 .itemDiv {
@@ -362,27 +357,27 @@ font-weight: 500;
 
 .info-row {
   display: flex;
-  justify-content: space-between;  /* Distribute items across the row */
+  justify-content: space-between; 
   margin: 4px;            
 }
 
 .separator {
-  margin: 2px;              /* Space above and below the line */
+  margin: 2px;
   border: 0;
-  border-top: 1px solid #ddd;    /* Horizontal line */
+  border-top: 1px solid #ddd; 
 }
 
 a {
-  color: #1665ef;                /* Link color */
-  text-decoration: none;         /* Remove underline */
+  color: #1665ef;      
+  text-decoration: none;      
 }
 
 a:hover {
-  text-decoration: underline;    /* Underline on hover */
+  text-decoration: underline;  
 }
 
-strong {
-  color: #333;                   /* Make strong text slightly darker */
+.props {
+  color: #082A63; 
 }
 
 
