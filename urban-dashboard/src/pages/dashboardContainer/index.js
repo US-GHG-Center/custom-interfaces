@@ -6,10 +6,11 @@ import Box from '@mui/material/Box';
 
 import { generateUrbanRegions } from './helper';
 import { Dashboard } from "../dashboard";
+import { DATASETS } from "../../constants";
 
 export function DashboardContainer() {
     const [searchParams] = useSearchParams();
-    const [dataset] = useState(searchParams.get("dataset") || "gra2pes"); //vulcan, gra2pes (default)
+    const [dataset] = useState(searchParams.get("dataset") || DATASETS.GRA2PES); //vulcan, gra2pes (default)
     const [urbanRegions, setUrbanRegions] = useState([]);
 
     useEffect(() => {
