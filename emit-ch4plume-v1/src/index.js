@@ -399,12 +399,15 @@ isAnimation.addEventListener("change", (event) => {
             removePrevPlumeLayers();
             const legendOuter = document.getElementById("plegend-container");
             legendOuter.style.display ='none';
+            const start_date = document.getElementById("start_date").value
+            const end_date = document.getElementById("end_date").value
             const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
+            console.log(startDate, endDate);
             timeline = new TimelineControl({
                 placeholder: 'Plumes',
                 className: 'timeline-control' ,
-                start: startDate,
-                end: endDate,
+                start: start_date,
+                end: end_date,
                 step: 1000 * 3600 * 24* 30, // 30 days interval
                 onChange: date => {
                     endDate = new Date(date).toISOString().slice(0, 16);
@@ -413,7 +416,7 @@ isAnimation.addEventListener("change", (event) => {
                 },
             });
             map.addControl(timeline, 'bottom-left');
-            addTimelineMarkers(utcTimesObserved, startDate, endDate);
+            addTimelineMarkers(utcTimesObserved, start_date, end_date);
         } else {
             alert(`Your Zoom level is ${map.getZoom()}. Please increase zoom level to ${ZOOM_THRESHOLD} around the area you want to animate!!`);
             map.dragPan.enable();
@@ -431,7 +434,6 @@ isAnimation.addEventListener("change", (event) => {
             map.removeControl(timeline);
             timeline = null; // Reset timeline to allow recreation
         }
-
     }
 });
 main();
