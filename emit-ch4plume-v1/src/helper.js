@@ -119,7 +119,7 @@ function createColorbar(VMIN, VMAX) {
   colorbar
     .style("position", "absolute")
     .style("bottom", "30px") // Adjust the top position as needed
-    .style("right", "10px") // Adjust the left position as needed
+    .style("right", "50px") // Adjust the left position as needed
     .style("background-color", "white")
     .style("padding", "12px");
 
@@ -130,8 +130,43 @@ function createColorbar(VMIN, VMAX) {
     .style("margin-bottom", "12px"); // Adjust margin as needed
 }
 
+function addTimelineMarkers(utcTimesObserved, start_date, end_date) {
+  const slider = document.querySelector('.mapboxgl-ctrl-timeline__slider');
+  const sliderRect = slider.getBoundingClientRect();
+  const parentRect = slider.parentNode.getBoundingClientRect();
+  const existingMarkers = slider.parentNode.querySelectorAll('.timeline-marker');
+  existingMarkers.forEach(marker => marker.remove());
+  const offsetLeftStart = sliderRect.left - parentRect.left;
+  slider.parentNode.style.position = 'relative';
+
+  // Function to create a marker
+  function createMarker(color, leftOffset) {
+      const marker = document.createElement('div');
+      marker.style.position = 'absolute';
+      marker.style.width = '4px';
+      marker.style.height = `6px`;
+      marker.style.opacity = '0.2';
+      marker.style.backgroundColor = color;
+      marker.style.borderRadius = '50%';
+      marker.style.left = `${leftOffset}px`;
+      marker.style.top = `${slider.offsetTop - 1}px`;
+      slider.parentNode.appendChild(marker);
+  }
+  const startTime = new Date(start_date).getTime();
+  const endTime = new Date(end_date).getTime();
+  const totalDuration = endTime - startTime;
+
+  utcTimesObserved.forEach(timeObserved => {
+      const observedTime = new Date(timeObserved).getTime();
+      const relativePosition = (observedTime - startTime) / totalDuration;
+      const observedOffsetLeft = offsetLeftStart + (relativePosition * sliderRect.width);
+      createMarker('black', observedOffsetLeft);
+      console.log(observedOffsetLeft)
+  });
+}
 
 module.exports = {
     filterByDates: filterByDates,
-    createColorbar: createColorbar
+    createColorbar: createColorbar,
+    addTimelineMarkers: addTimelineMarkers
   };

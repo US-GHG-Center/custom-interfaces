@@ -2,7 +2,9 @@
 import "./style.css";
 import mapboxgl from "./map";
 import { getMapInstance } from "./map";
-import { filterByDates,createColorbar } from "./helper";
+import { filterByDates,
+        createColorbar,
+        addTimelineMarkers } from "./helper";
 import { addCoverage,removeLayers } from "./coverage";
 import { updateSearchList } from "./search";
 import { getPopupContent,createItemContent } from "./content"; 
@@ -20,9 +22,10 @@ import {
   } from "./measureToolHelper";
 import TimelineControl from 'mapboxgl-timeline';
 import 'mapboxgl-timeline/dist/style.css';
-export const map = getMapInstance();
 
-export const ZOOM_THRESHOLD = 11;
+//Global vars
+export const map = getMapInstance();
+export const ZOOM_THRESHOLD = 12;
 const markerClicked = false
 const VMIN = 0;
 const VMAX = 1500;
@@ -166,7 +169,6 @@ function addOutline(polygonSourceId, polygonLayerId, polygonFeature){
         });
 }
 
-
 function addRasterHoverListener() {
     MARKERS_ON_VIEWPORT.forEach(marker => {
         const itemId = marker.feature.properties['Data Download'].split('/').pop().split('.')[0];
@@ -214,7 +216,6 @@ function addRasterHoverListener() {
         }
     });
 }
-
 
 function createPlumesList(){
     const legendOuter = document.getElementById("plegend-container");
@@ -398,8 +399,10 @@ isAnimation.addEventListener("change", (event) => {
             removePrevPlumeLayers();
             const legendOuter = document.getElementById("plegend-container");
             legendOuter.style.display ='none';
+            const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
             timeline = new TimelineControl({
                 placeholder: 'Plumes',
+                className: 'timeline-control' ,
                 start: startDate,
                 end: endDate,
                 step: 1000 * 3600 * 24* 30, // 30 days interval
@@ -410,6 +413,7 @@ isAnimation.addEventListener("change", (event) => {
                 },
             });
             map.addControl(timeline, 'bottom-left');
+            addTimelineMarkers(utcTimesObserved, startDate, endDate);
         } else {
             alert(`Your Zoom level is ${map.getZoom()}. Please increase zoom level to ${ZOOM_THRESHOLD} around the area you want to animate!!`);
             map.dragPan.enable();

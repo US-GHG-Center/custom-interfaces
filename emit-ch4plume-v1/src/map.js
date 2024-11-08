@@ -140,14 +140,13 @@ export const getMapInstance = () => {
         let mapScale = new mapboxgl.ScaleControl({
             unit: measureVariables.scale === "miles" ? "imperial" : "metric",
           });
+        map.addControl(new legendToggle());
         map.addControl(mapScale);
         map.addControl(new HomeButtonControl());
         map.addControl(zoomControl, "top-right");
         addMeasurementControls(map);
         map.addControl(new ChangeMapUnit(mapScale)); 
-        map.addControl(new legendToggle());
         addClearControl(map);
-
     }
     return map;
 };
