@@ -25,7 +25,7 @@ import 'mapboxgl-timeline/dist/style.css';
 
 //Global vars
 export const map = getMapInstance();
-export const ZOOM_THRESHOLD = 12;
+export const ZOOM_THRESHOLD = 10;
 const markerClicked = false
 const VMIN = 0;
 const VMAX = 1500;
@@ -113,6 +113,7 @@ function addRaster(itemId) {
         tileSize: 256,
         bounds: bbox,
     });
+    console.log(TILE_URL);
     const layer_id = "raster-" + itemId
     console.log("adding..",layer_id );
     map.addLayer({
@@ -124,6 +125,9 @@ function addRaster(itemId) {
 }
 
 function zoomedOrDraggedToThreshold(){
+
+    console.log(`Before MARKERS_ON_VIEWPORT from zoomedOrDraggedToThreshold: ${MARKERS_ON_VIEWPORT.length}`);
+    
     const currentZoom = map.getZoom();
     if (currentZoom >= ZOOM_THRESHOLD){
         MARKERS_ON_VIEWPORT = MARKERS_ON_MAP.filter(marker => {
@@ -131,6 +135,8 @@ function zoomedOrDraggedToThreshold(){
             const lngLat = new mapboxgl.LngLat(coords[0], coords[1]);
             return  map.getBounds().contains(lngLat); 
         });
+
+        console.log(`MARKERS_ON_VIEWPORT from zoomedOrDraggedToThreshold: ${MARKERS_ON_VIEWPORT.length}`);
         
         viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
             marker.feature.properties['Data Download'].split('/').pop().split('.')[0]
@@ -228,6 +234,13 @@ function createPlumesList(){
     const legendContainer = document.getElementById("plegend");
     legendContainer.innerHTML = ''; // Clear previous entries
 
+    console.log("startDate ", startDate);
+    console.log("endDate ", endDate);
+    console.log("markers on viewport ", MARKERS_ON_VIEWPORT.length);
+    console.log("markers on map ", MARKERS_ON_MAP.length);
+    let items_added = 0;
+    
+
     MARKERS_ON_VIEWPORT.forEach(marker => {
         const properties = marker.feature.properties; // Access properties of the marker
         const itemDiv = document.createElement('div'); // Create a new div
@@ -241,11 +254,15 @@ function createPlumesList(){
 
         // Append the new div to the legend container
         legendContainer.appendChild(itemDiv);
+        console.log(`Item id ${itemId}`);
 
         //now add the rasters
         if (!map.getLayer("raster-"+ itemId)){
+            items_added += 1
+            console.log(`Item id doesn't exist ${itemId}`);
             addRaster(itemId);
-        }   
+        }
+        console.log(`Items added ${items_added}`);
     });
 }
 
@@ -410,9 +427,13 @@ isAnimation.addEventListener("change", (event) => {
                 end: end_date,
                 step: 1000 * 3600 * 24* 30, // 30 days interval
                 onChange: date => {
+                    
                     endDate = new Date(date).toISOString().slice(0, 16);
                     document.getElementById("end_date").value = endDate;
                     updateDatesandData(); 
+                    //if you dont want cummulative
+                    startDate= endDate
+                    document.getElementById("start_date").value = endDate; 
                 },
             });
             map.addControl(timeline, 'bottom-left');
