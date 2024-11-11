@@ -1,0 +1,13 @@
+.plume-animation-controller-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+}
+
+.mapboxgl-ctrl-timeline {
+    --color-bg: #333;
+    --color-text: #eee;
+    --color-track: #fff2;
+    --border: 1px solid #fff2;
+  }
