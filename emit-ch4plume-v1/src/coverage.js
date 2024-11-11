@@ -33,10 +33,20 @@ function addPolygon(map, polygonSourceId, polygonLayerId, polygonFeature) {
         'source': polygonSourceId,
         'layout': {},
         'paint': {
-            'line-color':styleOptions["lineColor"],
+            'line-color': styleOptions["lineColor"],
             'line-width': styleOptions["lineWidth"]
         }
     });
+
+
+    // always keep the coverage layer below the rasters
+    const layers = map.getStyle().layers;
+    const rasterLayers = layers.filter(layer => layer.id.startsWith('raster-'));
+    if (rasterLayers.length > 0) {
+        const firstRasterLayerId = rasterLayers[0].id;
+        map.moveLayer(polygonLayerId, firstRasterLayerId);
+        map.moveLayer(`outline-${polygonLayerId}`, firstRasterLayerId);
+    }
 
 }
 
