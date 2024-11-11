@@ -1,0 +1,10 @@
+.title-container {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 25rem;
+    height: 14rem;
+    background-color: white;
+    color: black;
+    z-index: 999;
+}
