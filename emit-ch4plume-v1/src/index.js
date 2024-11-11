@@ -240,7 +240,12 @@ function createPlumesList(){
     console.log("markers on map ", MARKERS_ON_MAP.length);
     let items_added = 0;
     
-
+    MARKERS_ON_VIEWPORT.sort((a, b) => {
+        const dateA = new Date(a.feature.properties['UTC Time Observed']);
+        const dateB = new Date(b.feature.properties['UTC Time Observed']);
+        return dateB - dateA; // For descending order (newest first)
+        // return dateA - dateB; for ascending order (oldest first)
+    });
     MARKERS_ON_VIEWPORT.forEach(marker => {
         const properties = marker.feature.properties; // Access properties of the marker
         const itemDiv = document.createElement('div'); // Create a new div
