@@ -416,3 +416,19 @@ border-top-color: rgba(255, 255, 255, 0.7);
  #clear-icon-main.clicked{
    display:block;
  }
+
+/* timeline */
+.mapboxgl-ctrl-timeline {
+  width: 100%;
+  margin-top:15px;
+  box-shadow: none !important;
+  z-index: 1;
+}
+
+.mapboxgl-ctrl-timeline__label {
+  display: block;
+  font-size: 12px !important; /* Adjusted from 2px to a more readable size */
+  line-height: 0.9; /* Reduce line height to compact the label */
+}
+
+

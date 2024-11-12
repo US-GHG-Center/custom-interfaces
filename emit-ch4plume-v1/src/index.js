@@ -441,7 +441,9 @@ isAnimation.addEventListener("change", (event) => {
                     document.getElementById("start_date").value = endDate; 
                 },
             });
-            map.addControl(timeline, 'bottom-left');
+            //map.addControl(timeline, 'bottom-left');
+            const timelineElement = timeline.onAdd(map);
+            document.getElementById('toolbar').appendChild(timelineElement);
             addTimelineMarkers(utcTimesObserved, start_date, end_date);
         } 
         else 
@@ -458,5 +460,5 @@ isAnimation.addEventListener("change", (event) => {
             timeline = null; // Reset timeline to allow recreation
         }
     }
-});
+})
 main();

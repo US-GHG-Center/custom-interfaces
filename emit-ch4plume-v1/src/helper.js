@@ -137,13 +137,12 @@ function addTimelineMarkers(utcTimesObserved, start_date, end_date) {
   function createMarker(color, leftOffset) {
       const marker = document.createElement('div');
       marker.style.position = 'absolute';
-      marker.style.width = '4px';
-      marker.style.height = `6px`;
+      marker.style.width = '2px';
+      marker.style.height = '4px';
       marker.style.opacity = '0.2';
       marker.style.backgroundColor = color;
-      marker.style.borderRadius = '50%';
       marker.style.left = `${leftOffset}px`;
-      marker.style.top = `${slider.offsetTop - 1}px`;
+      marker.style.top = `${slider.offsetTop }px`;
       slider.parentNode.appendChild(marker);
   }
   const startTime = new Date(start_date).getTime();
@@ -154,7 +153,7 @@ function addTimelineMarkers(utcTimesObserved, start_date, end_date) {
       const observedTime = new Date(timeObserved).getTime();
       const relativePosition = (observedTime - startTime) / totalDuration;
       const observedOffsetLeft = offsetLeftStart + (relativePosition * sliderRect.width);
-      createMarker('black', observedOffsetLeft);
+      createMarker('#082a64', observedOffsetLeft);
       console.log(observedOffsetLeft)
   });
 }
