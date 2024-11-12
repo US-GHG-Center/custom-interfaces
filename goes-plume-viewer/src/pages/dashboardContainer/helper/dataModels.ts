@@ -1,5 +1,5 @@
 export interface PlumeRegion {
-    id: string;
+    id: string; // Format: <region>. e.g. BV1
     location: [Lon, Lat]; // [lon, lat]
     startDate: DateTime;
     endDate: DateTime;
@@ -7,7 +7,7 @@ export interface PlumeRegion {
 }
 
 export interface Plume {
-    id: string;
+    id: string; // Format: <country>_<state>_<region>_<plume_id>. e.g. Mexico_Durango_BV1_BV1-1
     region: string;
     representationalPlume: SubDailyPlume;
     location: [Lon, Lat]; // [lon, lat]
