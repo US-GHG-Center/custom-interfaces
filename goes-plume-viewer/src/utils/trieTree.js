@@ -11,7 +11,7 @@ export class TrieTree{
         this.tireRoot = new TrieNode();
     }
 
-    insert = (word) => {
+    insert = (word, alternateWord) => {
         let node = this.tireRoot;
         for (let i=0; i<word.length; i++) {
             let letter = word[i];
@@ -21,7 +21,11 @@ export class TrieTree{
             node = node.children[letter]
         }
         node.isCompleteWord = true;
-        node.word = word;
+        if (alternateWord) {
+            node.word = alternateWord;
+        } else {
+            node.word = word;
+        }
     }
 
     search = (word) => {

@@ -6,10 +6,14 @@ export class TrieSearch {
     }
 
     addItems(items) {
+        if (!items || !items.length){
+            return
+        }
         // add items to the tire tree
         items.forEach(item => {
+            item = item.toUpperCase();
             item.split("_").forEach(word => {
-                this.trieTree.insert(word);
+                this.trieTree.insert(word, item);
             });
         });
     }
@@ -18,7 +22,9 @@ export class TrieSearch {
         if (!prefix) {
             return [];
         }
+        prefix = prefix.toUpperCase();
         // return all recommendations
-        return this.trieTree.search(prefix);
+        const results = this.trieTree.search(prefix);
+        return [...new Set(results)];
     }
 }
