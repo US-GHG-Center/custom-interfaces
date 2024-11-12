@@ -4,46 +4,43 @@ import ReactDOM from "react-dom/client";
 
 function ChangeUnitButton({ onClick, unit }) {
   return (
-    <IconButton 
-      className="change-unit" 
+    <IconButton
+      className="change-unit"
       onClick={onClick}
       style={{
-        backgroundColor: '#fff',
-        padding: '6px'
+        backgroundColor: "#fff",
+        padding: "6px",
       }}
     >
       {unit}
     </IconButton>
   );
 }
-
 export class ChangeUnitControl {
-  constructor() {
+  constructor(mapScaleUnit, setMapScaleUnit) {
     this.map = null;
     this.container = null;
     this.root = null;
-    this.unit = 'km';
+    this.unit = mapScaleUnit;
     this._mounted = false;
+    this._setMapScaleUnit = setMapScaleUnit;
   }
 
   onClick = () => {
     if (!this._mounted || !this.map) return;
-    
-    this.unit = this.unit === 'km' ? 'mi' : 'km';
+    this.unit = this.unit === "km" ? "mi" : "km";
     this.updateUI();
-  }
+    this._setMapScaleUnit(this.unit);
+  };
 
   updateUI() {
     if (this._mounted && this.root) {
       try {
         this.root.render(
-          <ChangeUnitButton 
-            unit={this.unit} 
-            onClick={this.onClick}
-          />
+          <ChangeUnitButton unit={this.unit} onClick={this.onClick} />
         );
       } catch (error) {
-        console.warn('Failed to update UI:', error);
+        console.warn("Failed to update UI:", error);
       }
     }
   }
@@ -53,17 +50,17 @@ export class ChangeUnitControl {
       this.map = map;
       this.container = document.createElement("div");
       this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
-      
+
       // Create root and mark as mounted
       this.root = ReactDOM.createRoot(this.container);
       this._mounted = true;
-      
+
       // Initial render
       this.updateUI();
-      
+
       return this.container;
     } catch (error) {
-      console.error('Error adding control:', error);
+      console.error("Error adding control:", error);
       return document.createElement("div"); // Return empty div in case of error
     }
   }
@@ -73,20 +70,17 @@ export class ChangeUnitControl {
     setTimeout(() => {
       try {
         this._mounted = false;
-        
         if (this.root) {
           this.root.unmount();
           this.root = null;
         }
-        
         if (this.container && this.container.parentNode) {
           this.container.parentNode.removeChild(this.container);
         }
-        
         this.map = null;
         this.container = null;
       } catch (error) {
-        console.warn('Error during cleanup:', error);
+        console.warn("Error during cleanup:", error);
       }
     }, 0);
   }
