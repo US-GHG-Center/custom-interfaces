@@ -16,6 +16,7 @@ import {
 
 export const MeasurementLayer = ({
   measureMode,
+  setMeasureMode,
   setClearMeasurementIcon,
   clearMeasurementLayer,
   setClearMeasurementLayer,
@@ -42,6 +43,10 @@ export const MeasurementLayer = ({
     map.moveLayer("measure-points");
   };
 
+  const handleDoubleClick = (e) => {
+    setMeasureMode(false);
+  };
+
   const handleMouseMovement = (e) => {
     const { line, label } = createMeasuringLine(e, measurePoints, mapScaleUnit);
     map.getSource("measureLine")?.setData(line);
@@ -51,6 +56,12 @@ export const MeasurementLayer = ({
     setMeasureLine(line);
     setMeasureLabel(label);
   };
+
+  useEffect(() => {
+    if (!measureMode) {
+      setClearMeasurementIcon(false);
+    }
+  }, [measureMode]);
   useEffect(() => {
     if (clearMeasurementLayer) {
       cleanMeasurementControlLayers(map);
@@ -80,10 +91,12 @@ export const MeasurementLayer = ({
       if (measureMode) {
         addMeasurementSource(map, measurePoints, measureLine, measureLabel);
         addMeasurementLayer(map);
+        map.doubleClickZoom.disable();
       } else if (!measureMode) {
         removeMeasurementSource(map);
         removeMeasurementLayer(map);
         clearMeasurementState();
+        map.doubleClickZoom.enable();
       }
       return () => {
         removeMeasurementSource(map);
@@ -96,11 +109,13 @@ export const MeasurementLayer = ({
     if (!map) return;
     if (measureMode && map) {
       map.on("click", handleClick);
+      map.on("dblclick", handleDoubleClick);
     }
     return () => {
       // cleanups
       if (map) {
         map.off("click", handleClick);
+        map.off("dblclick", handleDoubleClick);
       }
     };
   });

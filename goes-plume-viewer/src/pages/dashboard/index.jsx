@@ -109,12 +109,14 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
           <PlumeAnimation plumes={plumesForAnimation} />
           <MeasurementLayer
             measureMode={measureMode}
+            setMeasureMode={setMeasureMode}
             setClearMeasurementIcon={setClearMeasurementIcon}
             clearMeasurementLayer={clearMeasurementLayer}
             setClearMeasurementLayer={setClearMeasurementLayer}
             mapScaleUnit={mapScaleUnit}
           />
           <MapControls
+            measureMode={measureMode}
             onClickHamburger={() => setOpenDrawer(true)}
             onClickMeasureMode={() => {
               setMeasureMode((measureMode) => !measureMode);

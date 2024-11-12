@@ -1,24 +1,6 @@
 import * as turf from "@turf/turf";
 const { sourceExists, layerExists } = require(".");
 
-const measureVariables = {
-  measureToggled: false,
-  scale: "miles",
-  scaleText: "mi",
-};
-
-// function toggleMeasureIcon(measureToggled) {
-//   if (measureToggled) {
-//     $("#measure-icon i")
-//       .removeClass("fa-ruler-horizontal")
-//       .addClass("fa-arrows-left-right-to-line");
-//   } else {
-//     $("#measure-icon i")
-//       .removeClass("fa-arrows-left-right-to-line")
-//       .addClass("fa-ruler-horizontal");
-//   }
-// }
-
 // GeoJSON object to hold  measurement features
 export const MEASURE_POINTS = {
   type: "FeatureCollection",
@@ -128,7 +110,7 @@ export function findMeasurementAnchor(e, map, measurePoints) {
     temp = {
       ...temp,
       features: measurePoints?.features.filter(
-        (point) => point.properties.id !== id
+	       (point) => point.properties.id !== id
       ),
     };
   } else if (
@@ -142,7 +124,7 @@ export function findMeasurementAnchor(e, map, measurePoints) {
         coordinates: [e.lngLat.lng, e.lngLat.lat],
       },
       properties: {
-        id: String(new Date().getTime()),
+	      id: String(new Date().getTime()),
       },
     };
     temp = {
@@ -203,21 +185,6 @@ export function removeMeasurementLayer(map) {
     if (layerExists(map, `measure-label`)) map.removeLayer("measure-label");
   }
 }
-export function removePointLayer(map) {
-  if (map) {
-    if (layerExists(map, `measure-points`)) map.removeLayer("measure-points");
-  }
-}
-export function removeLabelLayer(map) {
-  if (map) {
-    if (layerExists(map, `measure-Label`)) map.removeLayer("measure-Label");
-  }
-}
-export function removeLineLayer(map) {
-  if (map) {
-    if (layerExists(map, `measure-line`)) map.removeLayer("measure-line");
-  }
-}
 export function removeMeasurementSource(map) {
   if (map) {
     map.getSource("measureLabel")?.setData(MEASURE_LABEL);
@@ -231,7 +198,7 @@ export function createMeasuringLine(e, measurePoints, mapScaleUnit) {
   const startCoordinates = anchorPoint?.geometry.coordinates;
   const endCoordinates = [e.lngLat.lng, e.lngLat.lat];
   linestring.geometry.coordinates = [startCoordinates, endCoordinates];
-  const turfUnits = measureVariables.scale === "miles" ? "miles" : "kilometers";
+  const turfUnits = mapScaleUnit === "mi" ? "miles" : "kilometers";
   const distance = turf?.length(linestring, {
     units: turfUnits,
   });
