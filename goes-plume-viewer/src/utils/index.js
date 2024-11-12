@@ -1,7 +1,7 @@
 export const addSourceLayerToMap = (map, feature, sourceId, layerId) => {
     if (!map || (sourceExists(map, sourceId) && layerExists(map, layerId))) return;
 
-    const collection = "goes-ch4-2"; // feature.collection
+    const collection = feature.collection; // feature.collection
     const assets = "rad"; // first element in the asset json object. i.e. Object.keys(features.assets)[0]
     let VMIN = 0;
     let VMAX = 0.4;
