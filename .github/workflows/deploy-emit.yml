@@ -4,9 +4,8 @@ on:
     - cron: '15 17 * * *' # Every day at 12:15 CT (5:15 PM UTC)
   workflow_dispatch:
   push:
-    branches: [ main, production ]
-    paths:
-      - emit-ch4plume-v1/**
+    branches: [ emit/revamp-integrated, production ]
+
 
 jobs:
   define-environment:
@@ -22,8 +21,8 @@ jobs:
           if [ "${{ github.ref }}" = "refs/heads/production" ] || [ "${{ github.event_name }}" = "schedule" ]; then
             echo "target_branch=production" >> $GITHUB_OUTPUT
             echo "env_name=production" >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            echo "target_branch=main" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" = "refs/heads/emit/revamp-integrated" ]; then
+            echo "target_branch=emit/revamp-integrated" >> $GITHUB_OUTPUT
             echo "env_name=staging" >> $GITHUB_OUTPUT
           fi
       - name: Print the environment
@@ -71,7 +70,7 @@ jobs:
     needs:
       - build
       - define-environment
-    if: needs.define-environment.outputs.target_branch == 'main'
+    if: needs.define-environment.outputs.target_branch == 'emit/revamp-integrated'
     environment: ${{ needs.define-environment.outputs.env_name }}
 
     permissions:
