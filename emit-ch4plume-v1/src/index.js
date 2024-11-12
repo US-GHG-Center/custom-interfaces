@@ -329,7 +329,7 @@ async function main() {
         let endDate = document.getElementById("end_date").value;
 
         coverageData = await (
-            await fetch(`${PUBLIC_URL}/data/coverage.geojson`)
+            await fetch(`${PUBLIC_URL}/data/coverage_data.json`)
         ).json();
     
         addMeasurementLayer(map);
