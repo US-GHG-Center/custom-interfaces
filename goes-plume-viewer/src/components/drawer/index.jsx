@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { PlumeCard } from '../card';
-import { PLUMES_META } from "../../assets/data/metadata";
+import { PLUMES_META } from "../../assets/dataset/metadata";
 import { useEffect, useState } from 'react';
 
 const drawerWidth = "36rem";
