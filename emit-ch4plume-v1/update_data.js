@@ -39,12 +39,18 @@ async function fetchAndProcessCoverage() {
         const response = await fetch(COVERAGE_FILE_URL);
         const coverageData = await response.json();
 
-        // Extract only the desired properties from each feature
-        const processedCoverage = coverageData.features.map(feature => ({
-            "start_time": feature.properties["start_time"],
-            "end_time": feature.properties["end_time"],
-            "geometry": feature.geometry
-        }));
+        // Build a valid GeoJSON object
+        const processedCoverage = {
+            "type": "FeatureCollection",
+            "features": coverageData.features.map(feature => ({
+                "type": "Feature",
+                "properties": {
+                    "start_time": feature.properties["start_time"],
+                    "end_time": feature.properties["end_time"]
+                },
+                "geometry": feature.geometry
+            }))
+        };
 
         fs.writeFileSync("./data/coverage_data.json", JSON.stringify(processedCoverage, null, 2));
         console.log("Coverage data saved successfully.");
@@ -52,6 +58,7 @@ async function fetchAndProcessCoverage() {
         console.error("Error fetching or processing coverage data:", error);
     }
 }
+
 
 
 async function similarrity_location_lookup(lat, lon) {
