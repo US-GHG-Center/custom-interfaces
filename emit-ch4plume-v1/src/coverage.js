@@ -1,6 +1,6 @@
 
 const styleOptions = {
-    fillColor: "rgba(173, 216, 230, 0.2)",
+    fillColor: "rgba(173, 216, 230, 0.4)",
     lineColor: "transparent",
     lineWidth: 1,
     fillOutlineColor: "#1E90FF"
@@ -27,16 +27,16 @@ function addPolygon(map, polygonSourceId, polygonLayerId, polygonFeature) {
     });
 
     // Add a black outline around the polygon.
-    map.addLayer({
-        'id': `outline-${polygonLayerId}`,
-        'type': 'line',
-        'source': polygonSourceId,
-        'layout': {},
-        'paint': {
-            'line-color': styleOptions["lineColor"],
-            'line-width': styleOptions["lineWidth"]
-        }
-    });
+    // map.addLayer({
+    //     'id': `outline-${polygonLayerId}`,
+    //     'type': 'line',
+    //     'source': polygonSourceId,
+    //     'layout': {},
+    //     'paint': {
+    //         'line-color': styleOptions["lineColor"],
+    //         'line-width': styleOptions["lineWidth"]
+    //     }
+    // });
 
 
     // always keep the coverage layer below the rasters
@@ -45,7 +45,7 @@ function addPolygon(map, polygonSourceId, polygonLayerId, polygonFeature) {
     if (rasterLayers.length > 0) {
         const firstRasterLayerId = rasterLayers[0].id;
         map.moveLayer(polygonLayerId, firstRasterLayerId);
-        map.moveLayer(`outline-${polygonLayerId}`, firstRasterLayerId);
+        //map.moveLayer(`outline-${polygonLayerId}`, firstRasterLayerId);
     }
 
 }
@@ -64,12 +64,14 @@ function removeLayers(map, sourceId, layersIds) {
 function addCoverage(map, currentCov){
     if (document.getElementById("showCoverage").checked) {
         if (map.getLayer("coverage")){
-            removeLayers(map, "coverage", ['coverage','outline-coverage']);
+            //removeLayers(map, "coverage", ['coverage','outline-coverage']);
+            removeLayers(map, "coverage", ['coverage']);
         }
         addPolygon(map, "coverage", "coverage",currentCov);
 
     } else {
-        removeLayers(map, "coverage", ['coverage','outline-coverage']);
+        //removeLayers(map, "coverage", ['coverage','outline-coverage']);
+        removeLayers(map, "coverage", ['coverage']);
     }
 }
 

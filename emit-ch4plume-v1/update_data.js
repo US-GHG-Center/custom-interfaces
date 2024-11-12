@@ -46,7 +46,6 @@ async function fetchAndProcessCoverage() {
                 "type": "Feature",
                 "properties": {
                     "start_time": feature.properties["start_time"],
-                    "end_time": feature.properties["end_time"]
                 },
                 "geometry": feature.geometry
             }))

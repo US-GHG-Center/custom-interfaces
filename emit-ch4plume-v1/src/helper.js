@@ -1,23 +1,21 @@
 // It has no global vars referenced
 function filterByDates(data, sDate, eDate, type) {
-
     // Filter features within the date range for coverage
     if (type === "coverage"){
         const start = new Date(sDate+'Z');
         const end = new Date(eDate+'Z');
         const filteredFeatures = data.features.filter(feature => {
             const featureStartTime = new Date(feature.properties.start_time);
-            const featureEndTime = new Date(feature.properties.end_time);
-
+            //skip end date
+            // const featureEndTime = new Date(feature.properties.end_time);
             // Check if the feature's time range overlaps with the given date range
-            return (featureStartTime >= start && featureEndTime <= end);
+            return (featureStartTime >= start && featureStartTime <= end);
         });
         return {
             ...data,
             features: filteredFeatures
         };
     }
-
     if (type === "methane-stac") {
         const start = new Date(sDate);
         const end = new Date(eDate);
@@ -26,7 +24,6 @@ function filterByDates(data, sDate, eDate, type) {
             const item = data[key];
             const fileDateStr = key.match(/(\d{8}T\d{6})/)[0]; // Extract the date part '20240902T130832'
             const fileDate = new Date(fileDateStr.slice(0, 4) + '-' + fileDateStr.slice(4, 6) + '-' + fileDateStr.slice(6, 8) + 'T' + fileDateStr.slice(9, 11) + ':' + fileDateStr.slice(11, 13) + ':' + fileDateStr.slice(13, 15));
-
             // Check if the file date is within the range
             return (fileDate >= start && fileDate <= end);
         }).map(key => data[key]); // Return the filtered objects
@@ -35,7 +32,6 @@ function filterByDates(data, sDate, eDate, type) {
             features: filteredFeatures
         };
     }
-
     if (type === "plumes") {
         const start = new Date(sDate);
         const end = new Date(eDate);
@@ -49,12 +45,10 @@ function filterByDates(data, sDate, eDate, type) {
             ...data,
             features: filteredFeatures
         };
-    }
-    
+    } 
 }
 
 const d3 = require("d3");
-
 function generateScale(min, max, step) {
   const numbers = [];
   for (let i = min; i <= max; i += step) {
