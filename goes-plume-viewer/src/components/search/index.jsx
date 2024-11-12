@@ -9,8 +9,7 @@ export function Search({ ids, setSelectedPlumeId }) {
     const [ searchOptions, setSearchOptions ] = useState([]);
 
     const handleSearch = (prefix) => {
-        const captialized_prefix = prefix.toUpperCase()
-        const searchResult = trieSearch.current.getRecommendations(captialized_prefix);
+        const searchResult = trieSearch.current.getRecommendations(prefix);
         return searchResult;
     }
 

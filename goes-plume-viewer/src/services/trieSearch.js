@@ -11,8 +11,8 @@ export class TrieSearch {
         }
         // add items to the tire tree
         items.forEach(item => {
-            item = item.toUpperCase();
-            item.split("_").forEach(word => {
+            const capitalizedItem = item.toUpperCase();
+            capitalizedItem.split("_").forEach(word => {
                 this.trieTree.insert(word, item);
             });
         });
