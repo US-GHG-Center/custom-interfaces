@@ -1,4 +1,3 @@
-
 import * as turf from "@turf/turf";
 const { sourceExists, layerExists } = require(".");
 
@@ -107,7 +106,7 @@ export function changeCursor(map, measurePoints, measureMode) {
 }
 
 export function cleanMeasurementControlLayers(map) {
-  map.getSource("measurePoints").setData(MEASURE_POINTS)
+  map.getSource("measurePoints").setData(MEASURE_POINTS);
   map.getSource("measureLine").setData(MEASURE_LINE);
   map.getSource("measureLabel").setData(MEASURE_LABEL);
 }
@@ -132,8 +131,7 @@ export function findMeasurementAnchor(e, map, measurePoints) {
         (point) => point.properties.id !== id
       ),
     };
-  }
-  else if (
+  } else if (
     !totalPoints ||
     (totalPoints?.length === 0 && features?.length === 0)
   ) {
@@ -228,7 +226,7 @@ export function removeMeasurementSource(map) {
   }
 }
 
-export function createMeasuringLine(e, measurePoints) {
+export function createMeasuringLine(e, measurePoints, mapScaleUnit) {
   const anchorPoint = measurePoints?.features[0];
   const startCoordinates = anchorPoint?.geometry.coordinates;
   const endCoordinates = [e.lngLat.lng, e.lngLat.lat];
@@ -237,7 +235,7 @@ export function createMeasuringLine(e, measurePoints) {
   const distance = turf?.length(linestring, {
     units: turfUnits,
   });
-  const labelUnit = measureVariables.scale === "miles" ? " miles" : " km";
+  const labelUnit = mapScaleUnit === "mi" ? " miles" : " km";
   const distanceWithUnit = `${distance.toFixed(2)} ${labelUnit}`;
   const line = {
     type: "Feature",

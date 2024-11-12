@@ -14,31 +14,36 @@ import {
   MEASURE_POINTS,
 } from "../../utils/measureDistance";
 
-export const MeasurementLayer = ({ measureMode,setClearMeasurementIcon,clearMeasurementLayer,setClearMeasurementLayer }) => {
+export const MeasurementLayer = ({
+  measureMode,
+  setClearMeasurementIcon,
+  clearMeasurementLayer,
+  setClearMeasurementLayer,
+  mapScaleUnit,
+}) => {
   const { map } = useMapbox();
   const [measurePoints, setMeasurePoints] = useState(null);
   const [measureLine, setMeasureLine] = useState(null);
   const [measureLabel, setMeasureLabel] = useState(null);
- 
-  const clearMeasurementState = () => { 
+  const clearMeasurementState = () => {
     setMeasureLine(MEASURE_LINE);
     setMeasureLabel(MEASURE_LABEL);
-    setMeasurePoints(MEASURE_POINTS)
+    setMeasurePoints(MEASURE_POINTS);
   };
 
   const handleClick = (e) => {
     const anchor = findMeasurementAnchor(e, map, measurePoints);
     if (!anchor?.features?.length) {
-      cleanMeasurementControlLayers(map)
-      setClearMeasurementIcon(false)
-    } 
+      cleanMeasurementControlLayers(map);
+      setClearMeasurementIcon(false);
+    }
     setMeasurePoints(anchor);
     map.getSource("measurePoints").setData(anchor);
     map.moveLayer("measure-points");
   };
 
   const handleMouseMovement = (e) => {
-    const { line, label } = createMeasuringLine(e, measurePoints);
+    const { line, label } = createMeasuringLine(e, measurePoints, mapScaleUnit);
     map.getSource("measureLine")?.setData(line);
     map.getSource("measureLabel")?.setData(label);
     map.moveLayer("measure-line");
@@ -46,21 +51,19 @@ export const MeasurementLayer = ({ measureMode,setClearMeasurementIcon,clearMeas
     setMeasureLine(line);
     setMeasureLabel(label);
   };
-  
-   useEffect(() => {
+  useEffect(() => {
     if (clearMeasurementLayer) {
-      cleanMeasurementControlLayers(map)
+      cleanMeasurementControlLayers(map);
       clearMeasurementState();
-      setClearMeasurementIcon(false)
-      setClearMeasurementLayer(false)
+      setClearMeasurementIcon(false);
+      setClearMeasurementLayer(false);
     }
-  
-  }, [clearMeasurementLayer, map])
+  }, [clearMeasurementLayer, map]);
 
   useEffect(() => {
     if (!map) return;
     if (measurePoints?.features.length > 0 && measureMode) {
-      setClearMeasurementIcon(true)
+      setClearMeasurementIcon(true);
       map.on("mousemove", handleMouseMovement);
     }
     return () => {
@@ -69,7 +72,7 @@ export const MeasurementLayer = ({ measureMode,setClearMeasurementIcon,clearMeas
         map.off("mousemove", handleMouseMovement);
       }
     };
-  }, [map, measurePoints]);
+  }, [map, measurePoints, mapScaleUnit]);
 
   useEffect(() => {
     if (map) {

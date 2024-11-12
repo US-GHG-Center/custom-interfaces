@@ -27,6 +27,11 @@ const HorizontalLayout = styled.div`
     margin: 15px;
 `;
 
+const scaleUnits = {
+  KM: "km",
+  MILES: "mi",
+};
+
 // // A representational plume for subdaily plumes
 // interface dailyRepPlume {
 //   id: string,
@@ -46,7 +51,8 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
   const [measureMode, setMeasureMode] = useState(false);
   const [clearMeasurementIcon, setClearMeasurementIcon] = useState(false)
   const [clearMeasurementLayer, setClearMeasurementLayer] = useState(false)
-  
+  const [mapScaleUnit, setMapScaleUnit] = useState(scaleUnits.MILES);
+
   const handleSelectedPlume = (dailyRepPlume) => {
     const { location, plumeId} = dailyRepPlume;
     setSelectedPlume(dailyRepPlume);
@@ -82,24 +88,52 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
       <div id="dashboard-map-container">
         <Title>
           <HorizontalLayout>
-            <Search ids={dailyRepPlumeIds} setSelectedPlumeId={handleSearchSelectedPlumeId}></Search>
+            <Search
+              ids={dailyRepPlumeIds}
+              setSelectedPlumeId={handleSearchSelectedPlumeId}
+            ></Search>
           </HorizontalLayout>
           <HorizontalLayout>
-            <FilterByDate plumes={dailyRepPlumes} setFilteredPlumes={setFilteredDailyRepPlumes}/>
+            <FilterByDate
+              plumes={dailyRepPlumes}
+              setFilteredPlumes={setFilteredDailyRepPlumes}
+            />
           </HorizontalLayout>
         </Title>
         <MainMap>
-            <MarkerFeature plots={filteredDailyRepPlumes} setSelectedPlume={handleSelectedPlume}></MarkerFeature>
-            <MapLayer plume={selectedPlume}></MapLayer>
-            <PlumeAnimation plumes={plumesForAnimation}/>
-            <MeasurementLayer measureMode={measureMode} setClearMeasurementIcon={setClearMeasurementIcon} clearMeasurementLayer={clearMeasurementLayer} setClearMeasurementLayer= {setClearMeasurementLayer}  />
-            <MapControls onClickHamburger={() => setOpenDrawer(true)}  onClickMeasureMode={() => {
-                setMeasureMode((measureMode) => !measureMode)}}
-                onClickClearIcon={() => { setClearMeasurementLayer(true) }}
-                clearMeasurementIcon={clearMeasurementIcon}/>
-            <MapZoom zoomLevel={zoomLevel} />
+          <MarkerFeature
+            plots={filteredDailyRepPlumes}
+            setSelectedPlume={handleSelectedPlume}
+          ></MarkerFeature>
+          <MapLayer plume={selectedPlume}></MapLayer>
+          <PlumeAnimation plumes={plumesForAnimation} />
+          <MeasurementLayer
+            measureMode={measureMode}
+            setClearMeasurementIcon={setClearMeasurementIcon}
+            clearMeasurementLayer={clearMeasurementLayer}
+            setClearMeasurementLayer={setClearMeasurementLayer}
+            mapScaleUnit={mapScaleUnit}
+          />
+          <MapControls
+            onClickHamburger={() => setOpenDrawer(true)}
+            onClickMeasureMode={() => {
+              setMeasureMode((measureMode) => !measureMode);
+            }}
+            onClickClearIcon={() => {
+              setClearMeasurementLayer(true);
+            }}
+            clearMeasurementIcon={clearMeasurementIcon}
+            mapScaleUnit={mapScaleUnit}
+            setMapScaleUnit={setMapScaleUnit}
+          />
+          <MapZoom zoomLevel={zoomLevel} />
         </MainMap>
-        <PersistentDrawerRight open={openDrawer} setOpen={setOpenDrawer} selectedPlume={selectedPlume} collectionId={collectionId}/>
+        <PersistentDrawerRight
+          open={openDrawer}
+          setOpen={setOpenDrawer}
+          selectedPlume={selectedPlume}
+          collectionId={collectionId}
+        />
       </div>
     </Box>
   );
