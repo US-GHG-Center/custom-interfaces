@@ -165,8 +165,58 @@ function addTimelineMarkers(utcTimesObserved, start_date, end_date) {
   });
 }
 
+function beforeAnimation(map){
+  map.dragPan.disable();
+  map.scrollZoom.disable();
+  map.boxZoom.disable();
+
+  document.getElementById("plegend-container").style.display ='none';
+  const start_date = document.getElementById("start_date").value;
+  const end_date = document.getElementById("end_date").value;
+  const cov = document.getElementById("showCoverage").checked;
+  preservedState = {
+      dates: {
+          startDate:start_date,
+          endDate: end_date
+      },
+      coverage: cov,
+  }
+  document.querySelector('.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in').disabled = true;
+  document.querySelector('.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out').disabled = true;
+  document.querySelector('.autocomplete-search-box .search-box').disabled = true;
+  document.querySelector('.toggle-switch input').disabled = true;
+  const dateInputs = document.querySelectorAll('input[type="datetime-local"]');
+  dateInputs.forEach(input => {
+      input.disabled = true;
+      input.style.opacity = '0.6'; 
+  });
+  return {start_date, end_date, cov}
+}
+
+function afterAnimation(map, preservedState){
+  map.dragPan.enable();
+  map.scrollZoom.enable();
+  map.boxZoom.enable();
+
+  document.querySelector('.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in').disabled = false;
+  document.querySelector('.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out').disabled = false;
+  document.querySelector('.autocomplete-search-box .search-box').disabled = false;
+  document.querySelector('.toggle-switch input').disabled = false;
+  const dateInputs = document.querySelectorAll('input[type="datetime-local"]');
+  dateInputs.forEach(input => {
+      input.disabled = false;
+      input.style.opacity = '1'; 
+  });
+  // Restore dates and coverage
+  document.getElementById("showCoverage").checked = preservedState.coverage;
+  document.getElementById("start_date").value = preservedState.startDate;
+  document.getElementById("end_date").value = preservedState.endDate;
+}
+
 module.exports = {
     filterByDates: filterByDates,
     createColorbar: createColorbar,
-    addTimelineMarkers: addTimelineMarkers
+    addTimelineMarkers: addTimelineMarkers,
+    afterAnimation: afterAnimation,
+    beforeAnimation: beforeAnimation
   };

@@ -4,7 +4,9 @@ import mapboxgl from "./map";
 import { getMapInstance } from "./map";
 import { filterByDates,
         createColorbar,
-        addTimelineMarkers } from "./helper";
+        addTimelineMarkers,
+        beforeAnimation,
+        afterAnimation } from "./helper";
 import { addCoverage,removeLayers } from "./coverage";
 import { updateSearchList } from "./search";
 import { getPopupContent,createItemContent } from "./content"; 
@@ -25,7 +27,7 @@ import 'mapboxgl-timeline/dist/style.css';
 
 //Global vars
 export const map = getMapInstance();
-export const ZOOM_THRESHOLD = 10;
+export const ZOOM_THRESHOLD = 12;
 const markerClicked = false
 const VMIN = 0;
 const VMAX = 1500;
@@ -153,7 +155,6 @@ function zoomedOrDraggedToThreshold(){
 
 }
 
-// Plumes polygon
 function addOutline(polygonSourceId, polygonLayerId, polygonFeature){
     if (!map.getSource(polygonSourceId)){
         map.addSource(polygonSourceId, {
@@ -394,37 +395,37 @@ map.on("dblclick", (e) => {
     }
   });
 
-  map.on("click", (e) => {
-    if (!markerClicked && measureVariables.measureToggled)
-      addMeasurementAnchor(e, map, markerClicked);
-  });
+map.on("click", (e) => {
+if (!markerClicked && measureVariables.measureToggled)
+    addMeasurementAnchor(e, map, markerClicked);
+});
 
-  map.on("mousemove", (e) => {
-    if (
-      distancePoints.features.length > 0 &&
-      measureVariables.measureToggled
-    ) {
-      createMeasuringLine(e, map);
-    }
-  });
+map.on("mousemove", (e) => {
+if (
+    distancePoints.features.length > 0 &&
+    measureVariables.measureToggled
+) {
+    createMeasuringLine(e, map);
+}
+});
 
- // Animation
+
 const isAnimation = document.getElementById("doAnimation");
 let timeline;
+let preservedState= {};
 isAnimation.addEventListener("change", (event) => {
     if (event.target.checked) {
-        // Check if the zoom level is sufficient before adding the control
         if (map.getZoom() >= ZOOM_THRESHOLD) {
-            map.dragPan.disable();
-            map.scrollZoom.disable();
-            map.boxZoom.disable();
-            removePrevPlumeLayers();
-            const legendOuter = document.getElementById("plegend-container");
-            legendOuter.style.display ='none';
-            const start_date = document.getElementById("start_date").value
-            const end_date = document.getElementById("end_date").value
+            const {start_date, end_date, cov}= beforeAnimation(map);
+            preservedState = {
+                startDate:start_date,
+                endDate: end_date,
+                coverage: cov,
+            };
             const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
-            console.log(startDate, endDate);
+            document.getElementById("showCoverage").checked = true;
+            removePrevPlumeLayers();
+            // Animation function
             timeline = new TimelineControl({
                 placeholder: 'Plumes',
                 className: 'timeline-control' ,
@@ -432,7 +433,6 @@ isAnimation.addEventListener("change", (event) => {
                 end: end_date,
                 step: 1000 * 3600 * 24* 30, // 30 days interval
                 onChange: date => {
-                    
                     endDate = new Date(date).toISOString().slice(0, 16);
                     document.getElementById("end_date").value = endDate;
                     updateDatesandData(); 
@@ -443,19 +443,16 @@ isAnimation.addEventListener("change", (event) => {
             });
             map.addControl(timeline, 'bottom-left');
             addTimelineMarkers(utcTimesObserved, start_date, end_date);
-        } else {
+        } 
+        else 
+        {
             alert(`Your Zoom level is ${map.getZoom()}. Please increase zoom level to ${ZOOM_THRESHOLD} around the area you want to animate!!`);
-            map.dragPan.enable();
-            map.scrollZoom.enable();
-            map.boxZoom.enable();
-            isAnimation.checked = false; 
+            document.getElementById("doAnimation").checked= false;
+
         }
     } else {
-        // Remove the timeline control when animation is stopped
-        console.log("stop animation");
-        map.dragPan.enable();
-        map.scrollZoom.enable();
-        map.boxZoom.enable();
+        afterAnimation(map, preservedState);
+        updateDatesandData();
         if (timeline) {
             map.removeControl(timeline);
             timeline = null; // Reset timeline to allow recreation
