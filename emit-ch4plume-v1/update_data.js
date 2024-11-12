@@ -4,6 +4,7 @@ const COMBINED_METADATA_ENDPOINT = "https://earth.jpl.nasa.gov/emit-mmgis-lb/Mis
 const STAC_ENDPOINT = "https://earth.gov/ghgcenter/api/stac/collections/emit-ch4plume-v1/items?limit=500";
 const LAT_LON_TO_COUNTRY_ENDPOINT = "https://api.geoapify.com/v1/geocode/reverse"; //?lat=33.81&lon=-101.92&format=json"
 const APIKEY = process.env.GEOAPIFY_APIKEY;
+const COVERAGE_FILE_URL = "https://earth.jpl.nasa.gov/emit-mmgis/Missions/EMIT/Layers/coverage/coverage_pub.json";
 var lon_lat_lookup = {};
 
 const get_methane_geojson = async () => {
@@ -32,6 +33,26 @@ const get_methane_geojson = async () => {
     }
     return items
 }
+
+async function fetchAndProcessCoverage() {
+    try {
+        const response = await fetch(COVERAGE_FILE_URL);
+        const coverageData = await response.json();
+
+        // Extract only the desired properties from each feature
+        const processedCoverage = coverageData.features.map(feature => ({
+            "start_time": feature.properties["start_time"],
+            "end_time": feature.properties["end_time"],
+            "geometry": feature.geometry
+        }));
+
+        fs.writeFileSync("./data/coverage_data.json", JSON.stringify(processedCoverage, null, 2));
+        console.log("Coverage data saved successfully.");
+    } catch (error) {
+        console.error("Error fetching or processing coverage data:", error);
+    }
+}
+
 
 async function similarrity_location_lookup(lat, lon) {
     let floor_lat = Number(lat.toFixed(1));
@@ -100,6 +121,8 @@ async function main() {
     const methane_stac_geojson = await get_methane_geojson();
     // Write the data to a file
     fs.writeFileSync("./data/methane_stac.geojson", JSON.stringify(methane_stac_geojson, null, 2));
+    // Download and process the coverage file
+    await fetchAndProcessCoverage();
 }
 main()
 
