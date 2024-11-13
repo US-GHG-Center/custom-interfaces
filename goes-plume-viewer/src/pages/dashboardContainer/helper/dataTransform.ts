@@ -10,7 +10,7 @@ interface PlumeMap {
 
 type DataTree = PlumeRegionMap;
 
-export function dataTransformation(data: STACItem[]): PlumeMap { // TODO: return type should be DataTree(i.e. PlumeRegionMap)
+export function dataTransformation(data: STACItem[]): PlumeRegionMap { // TODO: return type should be DataTree(i.e. PlumeRegionMap)
     // format of FeatureCollection Id: <something>_<region>_<plumeid>_<datetime>
     // goes_ch4_<country>_<administrativeDivision>_<plumeSourceId>_<plumeId>_<datetime>
     const dataTree: DataTree = {};
@@ -74,5 +74,5 @@ export function dataTransformation(data: STACItem[]): PlumeMap { // TODO: return
         dataTree[region].endDate = plume.endDate; // to get realistic endDate for the PlumeRegion.
     });
 
-    return plumeMap;
+    return dataTree;
 }

@@ -4,20 +4,21 @@ import mapboxgl from 'mapbox-gl';
 import { useMapbox } from "../../context/mapContext";
 import "./index.css";
 
-export const MarkerFeature = ({ plots, setSelectedPlume }) => {
+export const MarkerFeature = ({ regions, setSelectedRegionId }) => {
     const { map } = useMapbox();
 
     useEffect(() => {
-        if (!map || !plots.length) return;
+        if (!map || !regions.length) return;
 
-        // plot the plots in the map.
-        const plottedMarkers = plots.map((plot) => {
-            const { location } = plot;
+        console.log(regions)
+        // plot the regions in the map.
+        const plottedMarkers = regions.map((region) => {
+            const { location } = region;
             const [ lon, lat ] = location;
             const marker = addMarker(map, lon, lat);
             const mel = marker.getElement();
             mel.addEventListener("click", (e) => {
-                setSelectedPlume(plot);
+                setSelectedRegionId(region.id);
             });
             return mel;
         });
@@ -28,7 +29,7 @@ export const MarkerFeature = ({ plots, setSelectedPlume }) => {
                 marker.parentNode.removeChild(marker);
             })
         }
-    }, [plots, map, setSelectedPlume]);
+    }, [regions, map, setSelectedRegionId]);
 
     return null;
 }

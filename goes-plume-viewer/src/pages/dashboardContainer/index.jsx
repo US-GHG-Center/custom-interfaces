@@ -34,11 +34,7 @@ export function DashboardContainer() {
                 setCollectionItems(data)
 
                 // TODO: change the dashboard component to take in data via new dataTree
-                const transformedDataNew = dataTransformation(data);
-                const transformedData = {};
-                Object.keys(transformedDataNew).forEach(key => {
-                    transformedData[key] = transformedDataNew[key].subDailyPlumes;
-                })
+                const transformedData = dataTransformation(data);
                 setDataTree(transformedData);
                 //
 
