@@ -11,7 +11,6 @@ import { MapZoom } from '../../components/mapZoom';
 
 import { PersistentDrawerRight } from "../../components/drawer";
 import { Title } from "../../components/title";
-import { extractRepPlumes, getRepPlume } from './helper';
 import { Search } from "../../components/search";
 import { FilterByDate } from '../../components/filter';
 
