@@ -32,14 +32,6 @@ const scaleUnits = {
   MILES: "mi",
 };
 
-// // A representational plume for subdaily plumes
-// interface dailyRepPlume {
-//   id: string,
-//   data: StacFeature, // object
-//   location: [string, string] // lon, lat
-//   dateTime: string // date of the plume
-// }
-
 export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoomLevel }) {
   const [ regions, setRegions ] = useState([]);
   const [ plumes, setPlumes ] = useState([]);
@@ -99,7 +91,6 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
   useEffect(() => {
     if (!dataTree || !selectedRegionId) return;
     const plumes = dataTree[selectedRegionId].plumes;
-    console.log("selected plumes", plumes)
     setSelectedPlumes(plumes);
     setPlumesForAnimation([]); // reset the animation
   }, [dataTree, selectedRegionId]);

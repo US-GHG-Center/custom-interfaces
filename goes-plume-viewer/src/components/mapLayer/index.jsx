@@ -20,7 +20,6 @@ export const MapLayer = ({ plume, handleLayerClick, plumeId }) => {
         addSourcePolygonToMap(map, feature, polygonSourceId, polygonLayerId);
 
         const onClickHandler = (e) => {
-            console.log(plumeId);
             handleLayerClick(plumeId);
         }
         map.setLayoutProperty(rasterLayerId, 'visibility', 'visible');
