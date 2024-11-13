@@ -3,7 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 
 import { Dashboard } from '../dashboard/index.jsx';
 import { fetchAllFromSTACAPI } from "../../services/api";
-import { dataTransformation } from './helper/dataTransform';
+import { dataTransformationPlume, dataTransformationPlumeRegion } from './helper/dataTransform';
+// import { PlumeMetas } from '../../assets/dataset/metadata.js';
 
 export function DashboardContainer() {
     // get the query params
@@ -29,23 +30,21 @@ export function DashboardContainer() {
                 }).catch(err => console.error("Error fetching data: ", err)); 
                 // get all the collection items
                 const collectionItemUrl = `${process.env.REACT_APP_STAC_API_URL}/collections/${collectionId}/items`;
-                
                 const data = await fetchAllFromSTACAPI(collectionItemUrl);
                 setCollectionItems(data)
-
-                // TODO: change the dashboard component to take in data via new dataTree
-                const transformedData = dataTransformation(data);
-                setDataTree(transformedData);
-                //
-
-                // get location and image information
-                // plot it in the map.
+                const plumeMap = dataTransformationPlume(data);
+                const plumeRegionMap = dataTransformationPlumeRegion(plumeMap);
+                setDataTree(plumeRegionMap);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
         fetchData().catch(console.error);
+
+        // DataTransformation for the plumesMeta
+
+
     }, []); // only on initial mount
 
     return (

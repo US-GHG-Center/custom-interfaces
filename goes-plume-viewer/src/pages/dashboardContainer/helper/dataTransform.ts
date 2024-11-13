@@ -1,4 +1,4 @@
-import { PlumeRegion, Plume, SubDailyPlume, STACItem } from "../../../dataModel";
+import { PlumeRegion, Plume, SubDailyPlume, STACItem, PlumeMeta, PlumeRegionMeta } from "../../../dataModel";
 
 interface PlumeRegionMap {
     [key: string]: PlumeRegion;
@@ -10,10 +10,9 @@ interface PlumeMap {
 
 type DataTree = PlumeRegionMap;
 
-export function dataTransformation(data: STACItem[]): PlumeRegionMap { // TODO: return type should be DataTree(i.e. PlumeRegionMap)
+export function dataTransformationPlume(data: STACItem[]): PlumeMap {
     // format of FeatureCollection Id: <something>_<region>_<plumeid>_<datetime>
     // goes_ch4_<country>_<administrativeDivision>_<plumeSourceId>_<plumeId>_<datetime>
-    const dataTree: DataTree = {};
     const plumeMap: PlumeMap = {};
 
     // sort by data by time
@@ -47,6 +46,11 @@ export function dataTransformation(data: STACItem[]): PlumeRegionMap { // TODO: 
         plumeMap[newPlumeId].subDailyPlumes.push(item);
     });
 
+    return plumeMap;
+}
+
+export function dataTransformationPlumeRegion(plumeMap: PlumeMap):PlumeRegionMap {
+    const dataTree: DataTree = {};
     // create a data tree
     Object.keys(plumeMap).forEach(plumeId => {
         // datetime correction in the plume. Note: plumes are in sorted order (by datetime)
@@ -75,4 +79,17 @@ export function dataTransformation(data: STACItem[]): PlumeRegionMap { // TODO: 
     });
 
     return dataTree;
+}
+
+
+interface PlumeMetaMap {
+    [key: string]: PlumeMeta
+}
+
+export function dataTransformationPlumeMeta(plumeMetas: PlumeMeta[]) {
+    // : PlumeMetaMap
+}
+
+export function dataTransformationPlumeRegionMeta(plumeMetaMap: PlumeMetaMap) {
+    // : PlumeRegionMap
 }
