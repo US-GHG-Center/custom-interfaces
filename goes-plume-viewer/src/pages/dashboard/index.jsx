@@ -55,6 +55,7 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
     setSelectedRegionId(regionId);
     const region = dataTree[regionId];
     setZoomLevel(region.location);
+    setSelectedPlumes([]); // reset the plumes shown, to trigger re-evaluation of selected plume
   }
 
   const handleSelectedPlume = (plumeId) => {
@@ -66,6 +67,7 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
     setOpenDrawer(true);
     setZoomLevel(location);
     setSelectedRegionId(null); //to reset the plume that was shown
+    setFilteredSelectedPlumes([]) // to reset the all the plumes that were shown on region click
   }
 
   useEffect(() => {
