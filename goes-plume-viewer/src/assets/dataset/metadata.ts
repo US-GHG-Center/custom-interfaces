@@ -214,7 +214,7 @@ export const PlumeMetas: PlumeMeta[] = [
         administrativeDivision: "Indiana",
     },
     {
-        id: "Mexico_Durango_PB_PB-1",
+        id: "USA_Texas_Permian_PB-1",
         plumeSourceId: "Permian",
         plumeSourceName: "Permian Basin 1 ?",
         imageUrl: "https://dev.ghg.center/api/raster/collections/goes-ch4/items/GOES-CH4_Permian_2023-07-26T17:36:00Z/preview.png?assets=rad&amp;rescale=0.0%2C0.2&amp;colormap_name=magma",
