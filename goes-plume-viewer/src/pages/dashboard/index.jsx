@@ -31,7 +31,7 @@ const scaleUnits = {
   MILES: "mi",
 };
 
-export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoomLevel }) {
+export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData, zoomLevel, setZoomLevel }) {
   const [ regions, setRegions ] = useState([]);
   const [ plumes, setPlumes ] = useState([]);
   const [ selectedRegionId, setSelectedRegionId ] = useState(null); //string
@@ -55,6 +55,7 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
     setSelectedRegionId(regionId);
     const region = dataTree[regionId];
     setZoomLevel(region.location);
+    setOpenDrawer(true);
     setSelectedPlumes([]); // reset the plumes shown, to trigger re-evaluation of selected plume
   }
 
@@ -64,7 +65,6 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
     const plume = plumes[plumeId];
     const { location } = plume;
     setPlumesForAnimation(plume.subDailyPlumes);
-    setOpenDrawer(true);
     setZoomLevel(location);
     setSelectedRegionId(null); //to reset the plume that was shown
     setFilteredSelectedPlumes([]) // to reset the all the plumes that were shown on region click
@@ -145,12 +145,15 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
             mapScaleUnit={mapScaleUnit}
           />
         </MainMap>
-        {/* <PersistentDrawerRight
+        <PersistentDrawerRight
           open={openDrawer}
           setOpen={setOpenDrawer}
-          selectedPlumeId={selectedPlumeId}
+          selectedPlumes={filteredSelectedPlumes}
+          plumeMetaData={plumeMetaData}
+          metaDataTree={metaDataTree}
           collectionId={collectionId}
-        /> */}
+          plumesMap={plumes}
+        />
       </div>
     </Box>
   );

@@ -3,8 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 
 import { Dashboard } from '../dashboard/index.jsx';
 import { fetchAllFromSTACAPI } from "../../services/api";
-import { dataTransformationPlume, dataTransformationPlumeRegion } from './helper/dataTransform';
-// import { PlumeMetas } from '../../assets/dataset/metadata.js';
+import { dataTransformationPlume, dataTransformationPlumeRegion, dataTransformationPlumeMeta, dataTransformationPlumeRegionMeta } from './helper/dataTransform';
+import { PlumeMetas } from '../../assets/dataset/metadata.ts';
 
 export function DashboardContainer() {
     // get the query params
@@ -15,6 +15,8 @@ export function DashboardContainer() {
     const [ collectionItems, setCollectionItems ] = useState([]);
     const [ collectionMeta, setCollectionMeta ] = useState({});
     const [ dataTree, setDataTree ] = useState({});
+    const [ metaDataTree, setMetaDataTree ] = useState({});
+    const [ plumeMetaData, setPlumeMetaData ] = useState({});
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,8 +45,11 @@ export function DashboardContainer() {
         fetchData().catch(console.error);
 
         // DataTransformation for the plumesMeta
+        const plumeMetaMap = dataTransformationPlumeMeta(PlumeMetas);
+        const plumeRegionMetaMap = dataTransformationPlumeRegionMeta(plumeMetaMap);
 
-
+        setMetaDataTree(plumeRegionMetaMap);
+        setPlumeMetaData(plumeMetaMap);
     }, []); // only on initial mount
 
     return (
@@ -53,7 +58,8 @@ export function DashboardContainer() {
             zoomLevel={zoomLevel}
             setZoomLevel={setZoomLevel}
             dataTree={dataTree}
-            metaData={collectionMeta}
+            metaDataTree={metaDataTree}
+            plumeMetaData={plumeMetaData}
             collectionId={collectionId}
         />
     );

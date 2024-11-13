@@ -86,10 +86,38 @@ interface PlumeMetaMap {
     [key: string]: PlumeMeta
 }
 
-export function dataTransformationPlumeMeta(plumeMetas: PlumeMeta[]) {
-    // : PlumeMetaMap
+interface PlumeRegionMetaMap {
+    [key: string]: PlumeRegionMeta
 }
 
-export function dataTransformationPlumeRegionMeta(plumeMetaMap: PlumeMetaMap) {
-    // : PlumeRegionMap
+export function dataTransformationPlumeMeta(plumeMetas: PlumeMeta[]): PlumeMetaMap {
+    // basically array to hashmap conversion.
+    const plumeMetaMap:PlumeMetaMap = {};
+    plumeMetas.forEach((plumeMeta:PlumeMeta) => {
+        if (!(plumeMeta.id in plumeMetaMap)) {
+            plumeMetaMap[plumeMeta.id] = plumeMeta;
+        }
+    });
+    return plumeMetaMap;
+}
+
+export function dataTransformationPlumeRegionMeta(plumeMetaMap: PlumeMetaMap): PlumeRegionMetaMap {
+    const plumeRegionMetaMap:PlumeRegionMetaMap = {};
+
+    Object.keys(plumeMetaMap).forEach((plumeId) => {
+        let plumeMeta:PlumeMeta = plumeMetaMap[plumeId];
+        if (!(plumeMeta.plumeSourceId in plumeRegionMetaMap)) {
+            const plumeRegionMeta: PlumeRegionMeta = {
+                id: plumeMeta.plumeSourceId, // Format: <region>. e.g. BV1
+                plumeSourceName: plumeMeta.plumeSourceName,
+                country: plumeMeta.country,
+                administrativeDivision: plumeMeta.administrativeDivision,
+                plumes: []
+            }
+            plumeRegionMetaMap[plumeMeta.plumeSourceId] = plumeRegionMeta;
+        }
+        plumeRegionMetaMap[plumeMeta.plumeSourceId].plumes.push(plumeMeta);
+    });
+    console.log("!!!!!", plumeRegionMetaMap);
+    return plumeRegionMetaMap;
 }

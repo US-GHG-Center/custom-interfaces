@@ -8,7 +8,6 @@ import IconButton from '@mui/material/IconButton';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { PlumeCard } from '../card';
-import { PLUMES_META } from "../../assets/dataset/metadata";
 import { useEffect, useState } from 'react';
 
 const drawerWidth = "36rem";
@@ -62,8 +61,8 @@ const HorizontalLayout = styled.div`
     margin-bottom: 5px;
 `;
 
-export function PersistentDrawerRight({open, setOpen, selectedPlume, collectionId}) {
-  const [ selectedPlumeMeta, setSelectedPlumeMeta ] = useState(null);
+export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, collectionId, metaDataTree, plumesMap}) {
+  const [ selectedPlumeMetas, setSelectedPlumeMetas ] = useState([]);
   let VMIN = 0;
   let VMAX = 0.4;
   let colorMap = "plasma";
@@ -76,11 +75,12 @@ export function PersistentDrawerRight({open, setOpen, selectedPlume, collectionI
   };
 
   useEffect(() => {
-    if (!selectedPlume) return;
+    if (!selectedPlumes.length) return;
 
-    const { plumeId } = selectedPlume;
-    if ( plumeId in PLUMES_META) setSelectedPlumeMeta(PLUMES_META[plumeId]);
-  }, [selectedPlume]);
+    const selectedMetas = selectedPlumes.map(plume => plumeMetaData[plume.id]);
+    setSelectedPlumeMetas(selectedMetas)
+
+  }, [plumeMetaData, selectedPlumes]);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -122,17 +122,20 @@ export function PersistentDrawerRight({open, setOpen, selectedPlume, collectionI
             </Typography>
           </HorizontalLayout>
         </DrawerHeader>
-          { selectedPlumeMeta && selectedPlume && <PlumeCard
-              plumeSourceName={selectedPlumeMeta.plumeSourceName}
-              imageUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${selectedPlume["data"]["id"]}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
-              tiffUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${selectedPlume["data"]["id"]}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
-              lon={selectedPlumeMeta.lon}
-              lat={selectedPlumeMeta.lat}
-              totalReleaseMass={selectedPlumeMeta.totalReleaseMass}
-              colEnhancements={selectedPlumeMeta.colEnhancements}
-              startDatetime={selectedPlumeMeta.startDatetime}
-              endDatetime={selectedPlumeMeta.endDatetime}
-            />
+          { selectedPlumeMetas.length &&
+            selectedPlumeMetas.map(selectedPlumeMeta => (
+              <PlumeCard
+                plumeSourceName={selectedPlumeMeta.plumeSourceName}
+                imageUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
+                tiffUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
+                lon={selectedPlumeMeta.lon}
+                lat={selectedPlumeMeta.lat}
+                totalReleaseMass={selectedPlumeMeta.totalReleaseMass}
+                colEnhancements={selectedPlumeMeta.colEnhancements}
+                startDatetime={selectedPlumeMeta.startDatetime}
+                endDatetime={selectedPlumeMeta.endDatetime}
+              />
+            ))
           }
       </Drawer>
     </Box>
