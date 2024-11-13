@@ -319,6 +319,22 @@ function addPointsOnMap(){
     });   
 };
 
+async function getCoverageData() {
+    const cacheName = "coverageDataCache";
+    const cacheUrl = `${PUBLIC_URL}/data/coverage_data.json`;
+    const cache = await caches.open(cacheName);
+
+    const cachedResponse = await cache.match(cacheUrl);
+    if (cachedResponse) {
+        console.log("Loaded from Cache Storage");
+        return await cachedResponse.json(); 
+    }
+    console.log("Fetching data from server");
+    const networkResponse = await fetch(cacheUrl);
+    await cache.put(cacheUrl, networkResponse.clone()); 
+    return await networkResponse.json(); 
+}
+
 async function main() {
     map.on("load", async () => {  
         addMeasurementSource(map);
@@ -328,9 +344,7 @@ async function main() {
         let startDate = document.getElementById("start_date").value;
         let endDate = document.getElementById("end_date").value;
 
-        coverageData = await (
-            await fetch(`${PUBLIC_URL}/data/coverage_data.json`)
-        ).json();
+        coverageData = await getCoverageData();
     
         addMeasurementLayer(map);
         const polygons = methanMetadata.features
