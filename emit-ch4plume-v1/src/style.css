@@ -427,8 +427,9 @@ border-top-color: rgba(255, 255, 255, 0.7);
 
 .mapboxgl-ctrl-timeline__label {
   display: block;
-  font-size: 12px !important; /* Adjusted from 2px to a more readable size */
-  line-height: 0.9; /* Reduce line height to compact the label */
+  font-size: 12px !important; 
+  line-height: 0.9;
+  color:#082A63;
 }
 
 

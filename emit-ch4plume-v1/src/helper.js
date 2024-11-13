@@ -176,12 +176,16 @@ function beforeAnimation(map){
   }
   document.querySelector('.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in').disabled = true;
   document.querySelector('.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out').disabled = true;
+  document.getElementById('refresh').disabled = true;
   document.querySelector('.autocomplete-search-box .search-box').disabled = true;
-  document.querySelector('.toggle-switch input').disabled = true;
-  const dateInputs = document.querySelectorAll('input[type="datetime-local"]');
-  dateInputs.forEach(input => {
+  document.getElementById('showCoverage').disabled = true;
+
+  document.querySelector('.autocomplete-search-box .search-box').style.opacity = '0.4'
+  document.querySelector('.slider').style.opacity = '0.4';
+
+  document.querySelectorAll('input[type="datetime-local"]').forEach(input => {
       input.disabled = true;
-      input.style.opacity = '0.6'; 
+      input.style.opacity = '0.4';
   });
   return {start_date, end_date, cov}
 }
@@ -193,8 +197,13 @@ function afterAnimation(map, preservedState){
 
   document.querySelector('.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in').disabled = false;
   document.querySelector('.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out').disabled = false;
+  document.getElementById('refresh').disabled = false;
   document.querySelector('.autocomplete-search-box .search-box').disabled = false;
-  document.querySelector('.toggle-switch input').disabled = false;
+  document.getElementById('showCoverage').disabled = false;
+
+  document.querySelector('.autocomplete-search-box .search-box').style.opacity = '1'
+  document.querySelector('.slider').style.opacity = '1';
+
   const dateInputs = document.querySelectorAll('input[type="datetime-local"]');
   dateInputs.forEach(input => {
       input.disabled = false;

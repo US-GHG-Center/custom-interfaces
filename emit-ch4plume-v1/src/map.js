@@ -31,7 +31,7 @@ class HomeButtonControl {
       this.container.addEventListener("click", (e) => this.onClick());
       this.container.innerHTML =
           '<div class="tools-box">' +
-          "<button>" +
+          '<button id="refresh">' +
           '<span class="mapboxgl-ctrl-icon btn fa fa-refresh" aria-hidden="true" title="Reset To USA"></span>' +
           "</button>" +
           "</div>";
