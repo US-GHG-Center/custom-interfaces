@@ -71,7 +71,6 @@ const handleAnimation = (map, date, plumeDateIdxMap, plumes, bufferedLayer, buff
     if (!(momentFormattedDatetimeStr in plumeDateIdxMap)) return;
 
     const index = plumeDateIdxMap[momentFormattedDatetimeStr];
-    console.log("index:", index);
 
     // buffer the following k elements.
     const k = 4;

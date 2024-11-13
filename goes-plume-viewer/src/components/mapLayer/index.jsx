@@ -42,19 +42,9 @@ export const MapLayer = ({ plume, handleLayerClick, plumeId }) => {
 }
 
 
-export const MapLayers = ({ dataTree, region, handleLayerClick }) => {
-    const [ plumes, setPlumes ] = useState([]);
+export const MapLayers = ({ plumes, handleLayerClick }) => {
     const { map } = useMapbox();
-
-    useEffect(() => {
-        if (!map || !dataTree) return;
-        if (!region){
-            setPlumes([]);
-            return;
-        }
-        const plumes = dataTree[region].plumes;
-        setPlumes(plumes);
-    }, [dataTree, region, map]);
+    if (!map || !plumes.length) return;
 
     return (<>
         {plumes && plumes.length && plumes.map((plume) => <MapLayer plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick}></MapLayer>)}

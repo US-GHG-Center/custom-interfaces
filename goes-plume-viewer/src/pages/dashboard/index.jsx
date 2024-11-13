@@ -43,10 +43,12 @@ const scaleUnits = {
 export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoomLevel }) {
   const [ regions, setRegions ] = useState([]);
   const [ plumes, setPlumes ] = useState([]);
-  const [ selectedPlumeId, setSelectedPlumeId ] = useState(null);
   const [ selectedRegionId, setSelectedRegionId ] = useState(null); //string
+  const [ selectedPlumes, setSelectedPlumes ] = useState([]);
 
-  const [ filteredDailyRepPlumes, setFilteredDailyRepPlumes ] = useState([]);
+  const [ filteredRegions, setFilteredRegions ] = useState([]);
+  const [ filteredSelectedPlumes, setFilteredSelectedPlumes ] = useState([]);
+
   const [ plumeIds, setPlumeIds ] = useState([]);
   const [ plumesForAnimation, setPlumesForAnimation ] = useState([]);
   const [ openDrawer, setOpenDrawer ] = useState(false);
@@ -69,7 +71,6 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
 
     const plume = plumes[plumeId];
     const { location } = plume;
-    setSelectedPlumeId(plume);
     setPlumesForAnimation(plume.subDailyPlumes);
     setOpenDrawer(true);
     setZoomLevel(location);
@@ -92,15 +93,15 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
     });
     setPlumes(plumes);
     setRegions(regions);
-    // setFilteredDailyRepPlumes(dailyRepPlumes);
     setPlumeIds(plumeIds); // for search
   }, [dataTree]);
 
-  // useEffect(() => {
-  //   // helps the search feature to be on top of filter feature
-  //   const dailyFilteredRepPlumeIds = filteredDailyRepPlumes.map(plume => plume.plumeId);
-  //   setPlumeIds(dailyFilteredRepPlumeIds);
-  // }, [filteredDailyRepPlumes]);
+  useEffect(() => {
+    if (!dataTree || !selectedRegionId) return;
+    const plumes = dataTree[selectedRegionId].plumes;
+    console.log("selected plumes", plumes)
+    setSelectedPlumes(plumes);
+  }, [dataTree, selectedRegionId]);
 
   return (
     <Box className="fullSize">
@@ -109,24 +110,26 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
           <HorizontalLayout>
             <Search
               ids={plumeIds}
-              setSelectedPlumeId={handleSelectedPlume}
+              handleSelectedPlume={handleSelectedPlume}
             ></Search>
           </HorizontalLayout>
-          {/* <HorizontalLayout>
+          <HorizontalLayout>
             <FilterByDate
-              plumes={dailyRepPlumes}
-              setFilteredPlumes={setFilteredDailyRepPlumes}
+              regions={regions}
+              plumes={selectedPlumes}
+              setFilteredRegions={setFilteredRegions}
+              setFilteredSelectedPlumes={setFilteredSelectedPlumes}
             />
-          </HorizontalLayout> */}
+          </HorizontalLayout>
         </Title>
         <MainMap>
           <MarkerFeature
-            regions={regions}
+            regions={filteredRegions}
             setSelectedRegionId={handleSelectedRegion}
           ></MarkerFeature>
           <PlumeAnimation plumes={plumesForAnimation} />
 
-          <MapLayers region={selectedRegionId} dataTree={dataTree} handleLayerClick={handleSelectedPlume}></MapLayers>
+          <MapLayers plumes={filteredSelectedPlumes} handleLayerClick={handleSelectedPlume}></MapLayers>
           {/* 
           <MeasurementLayer
             measureMode={measureMode}

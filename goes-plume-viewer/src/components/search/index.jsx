@@ -4,7 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 
 import { TrieSearch } from "../../services/trieSearch";
 
-export function Search({ ids, setSelectedPlumeId }) {
+export function Search({ ids, handleSelectedPlume }) {
     const trieSearch = useRef(null);
     const [ searchOptions, setSearchOptions ] = useState([]);
 
@@ -20,7 +20,7 @@ export function Search({ ids, setSelectedPlumeId }) {
     }
 
     const handleOnOptionClicked = (event, clickedValue) => {
-        setSelectedPlumeId(clickedValue);
+        handleSelectedPlume(clickedValue);
     }
 
     useEffect(() => {

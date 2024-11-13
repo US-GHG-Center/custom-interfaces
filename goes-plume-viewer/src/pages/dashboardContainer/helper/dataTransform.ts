@@ -1,4 +1,4 @@
-import { PlumeRegion, Plume, SubDailyPlume, STACItem } from "./dataModels";
+import { PlumeRegion, Plume, SubDailyPlume, STACItem } from "../../../dataModel";
 
 interface PlumeRegionMap {
     [key: string]: PlumeRegion;

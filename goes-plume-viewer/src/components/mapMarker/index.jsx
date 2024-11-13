@@ -10,7 +10,6 @@ export const MarkerFeature = ({ regions, setSelectedRegionId }) => {
     useEffect(() => {
         if (!map || !regions.length) return;
 
-        console.log(regions)
         // plot the regions in the map.
         const plottedMarkers = regions.map((region) => {
             const { location } = region;
