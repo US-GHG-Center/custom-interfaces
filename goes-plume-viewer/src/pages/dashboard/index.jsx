@@ -101,6 +101,7 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
     const plumes = dataTree[selectedRegionId].plumes;
     console.log("selected plumes", plumes)
     setSelectedPlumes(plumes);
+    setPlumesForAnimation([]); // reset the animation
   }, [dataTree, selectedRegionId]);
 
   return (
