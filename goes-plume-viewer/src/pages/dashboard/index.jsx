@@ -128,17 +128,7 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
             setSelectedRegionId={handleSelectedRegion}
           ></MarkerFeature>
           <PlumeAnimation plumes={plumesForAnimation} />
-
           <MapLayers plumes={filteredSelectedPlumes} handleLayerClick={handleSelectedPlume}></MapLayers>
-          {/* 
-          <MeasurementLayer
-            measureMode={measureMode}
-            setMeasureMode={setMeasureMode}
-            setClearMeasurementIcon={setClearMeasurementIcon}
-            clearMeasurementLayer={clearMeasurementLayer}
-            setClearMeasurementLayer={setClearMeasurementLayer}
-            mapScaleUnit={mapScaleUnit}
-          />
           <MapControls
             measureMode={measureMode}
             onClickHamburger={() => setOpenDrawer(true)}
@@ -151,8 +141,16 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
             clearMeasurementIcon={clearMeasurementIcon}
             mapScaleUnit={mapScaleUnit}
             setMapScaleUnit={setMapScaleUnit}
-          /> */}
-          <MapZoom zoomLevel={zoomLevel} /> 
+          />
+          <MapZoom zoomLevel={zoomLevel} />
+          <MeasurementLayer
+            measureMode={measureMode}
+            setMeasureMode={setMeasureMode}
+            setClearMeasurementIcon={setClearMeasurementIcon}
+            clearMeasurementLayer={clearMeasurementLayer}
+            setClearMeasurementLayer={setClearMeasurementLayer}
+            mapScaleUnit={mapScaleUnit}
+          />
         </MainMap>
         {/* <PersistentDrawerRight
           open={openDrawer}
