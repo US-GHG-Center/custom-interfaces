@@ -12,7 +12,7 @@ export const Title = ({ children }) => {
                 align="center"
                 style={{ borderBottom: "2px solid #082A64", margin: "10px" }}
             >
-                Methane Plume - Data Portal
+                GOES Methane Plume - Data Portal
             </Typography>
             { children }
         </Paper>
