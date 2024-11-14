@@ -76,17 +76,24 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
 
   useEffect(() => {
     if (!selectedPlumes.length || !plumeMetaData ) return;
+    try {
+      const selectedMetas = selectedPlumes.map(plume => {
+        if (!(plume.id in plumeMetaData)) {
+          throw new Error(`plumeId: "${plume.id}" not found in metadata.`);
+        }
+        return plumeMetaData[plume.id]
+      });
+      setSelectedPlumeMetas(selectedMetas)
 
-    const selectedMetas = selectedPlumes.map(plume => plumeMetaData[plume.id]);
-    setSelectedPlumeMetas(selectedMetas)
-
-    const firstPlumeMeta = plumeMetaData[selectedPlumes[0].id];
-    const { administrativeDivision, country } = firstPlumeMeta;
-    const location = `${administrativeDivision}, ${country}`;
-    const numberOfPlumes = selectedPlumes.length;
-    setLocation(location);
-    setNumberOfPlumes(numberOfPlumes);
-
+      const firstPlumeMeta = plumeMetaData[selectedPlumes[0].id];
+      const { administrativeDivision, country } = firstPlumeMeta;
+      const location = `${administrativeDivision}, ${country}`;
+      const numberOfPlumes = selectedPlumes.length;
+      setLocation(location);
+      setNumberOfPlumes(numberOfPlumes);
+    } catch (err) {
+      console.error("Error getting data for the drawer.", err)
+    }
   }, [plumeMetaData, selectedPlumes]);
 
   return (
