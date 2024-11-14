@@ -70,7 +70,7 @@ function createColorbar(VMIN, VMAX) {
 
   colorbar
     .append("svg")
-    .attr("width", 300) // Adjust the width as needed
+    .attr("width",350) // Adjust the width as needed
     .attr("height", 12) // Adjust the height as needed
     .attr("rx", 10)
     .append("g")
@@ -124,7 +124,7 @@ function createColorbar(VMIN, VMAX) {
     .style("margin-bottom", "12px"); // Adjust margin as needed
 }
 
-function addTimelineMarkers(utcTimesObserved, start_date, end_date) {
+function addTimelineMarkers(utcTimesObserved, start_date, end_date, color) {
   const slider = document.querySelector('.mapboxgl-ctrl-timeline__slider');
   const sliderRect = slider.getBoundingClientRect();
   const parentRect = slider.parentNode.getBoundingClientRect();
@@ -154,7 +154,7 @@ function addTimelineMarkers(utcTimesObserved, start_date, end_date) {
       const observedTime = new Date(timeObserved).getTime();
       const relativePosition = (observedTime - startTime) / totalDuration;
       const observedOffsetLeft = offsetLeftStart + (relativePosition * sliderRect.width);
-      createMarker('#20068f', observedOffsetLeft);
+      createMarker(color, observedOffsetLeft);
       console.log(observedOffsetLeft)
   });
 }

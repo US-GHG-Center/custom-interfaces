@@ -127,7 +127,7 @@ border-radius: 6px;
 } 
 
 .toolbar-heading {
-font-size: 24px;
+font-size: 20px;
 color: #082a64; 
 text-align: left;
 margin: 0px;
@@ -283,13 +283,13 @@ right: 50px;
 z-index: 1000;  
 background-color: #fff;   
 padding : 10px;   
-width : 300px; 
+width : 350px; 
 border-radius: 6px;
 }
 
 .plumes-legend {
 background-color: #fff; 
-max-height: 420px;        
+max-height: 650px;        
 overflow-y: auto; 
 
 }

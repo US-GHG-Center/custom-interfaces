@@ -226,7 +226,7 @@ function addRasterHoverListener() {
                 map.on('mouseenter', `fill-${itemId}`,() => {
                     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
                     //addOutline("polygon-source-" + itemId, "polygon-layer-" + itemId, polygonFeature.feature);
-                    map.setPaintProperty(`outline-${itemId}`, 'line-width', 6); 
+                    map.setPaintProperty(`outline-${itemId}`, 'line-width', 4); 
                     const selectedItem = document.getElementById("itemDiv-" + itemId);
                     selectedItem.scrollIntoView({
                         behavior: "smooth",
@@ -252,7 +252,7 @@ function addRasterHoverListener() {
                         //removeLayers(map, "", ["polygon-layer-" + itemId, "outline-polygon-layer-" + itemId]);
                         map.setPaintProperty(`outline-${itemId}`, 'line-width', 2); 
                         const selectedItem = document.getElementById("itemDiv-" + itemId);
-                        selectedItem.style.border ='';
+                        selectedItem.style.border = "2px solid rgba(255,255,255,0)";
                     });
 
                 // document.getElementById(`marker-${marker.id}`).addEventListener("mouseleave", () => {
@@ -266,7 +266,7 @@ function addRasterHoverListener() {
                 document.getElementById("itemDiv-" + itemId).addEventListener("mouseenter", () => {
                     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
                     //addOutline("polygon-source-" + itemId,  itemId, polygonFeature.feature);
-                    map.setPaintProperty(`outline-${itemId}`, 'line-width', 8); 
+                    map.setPaintProperty(`outline-${itemId}`, 'line-width', 4); 
                     const selectedItem = document.getElementById("itemDiv-" + itemId);
                     selectedItem.style.border = "2px solid #0098d7";
                     map.moveLayer(`raster-${itemId}`); 
@@ -279,7 +279,7 @@ function addRasterHoverListener() {
                     //removeLayers(map, "", ["polygon-layer-" + itemId, "outline-polygon-layer-" + itemId]);
                     map.setPaintProperty(`outline-${itemId}`, 'line-width', 1); 
                     const selectedItem = document.getElementById("itemDiv-" + itemId);
-                    selectedItem.style.border = "0px";
+                    selectedItem.style.border = "2px solid rgba(255,255,255,0)";
                 });
             }
         }
@@ -341,15 +341,7 @@ function addPointsOnMap(){
             .setLngLat([coords[0], coords[1]])
             .addTo(map);
         const location = point.feature.properties['Location'];
-        const utcTimeObserved = new Date(point.feature.properties['UTC Time Observed']).toLocaleString("en-US", {
-            year: "numeric", 
-            month: "short", 
-            day: "numeric", 
-            hour: "2-digit", 
-            minute: "2-digit", 
-            second: "2-digit",
-            hour12: false
-        });
+        const utcTimeObserved = point.feature.properties['UTC Time Observed'];
         const popup = new mapboxgl.Popup({
             closeButton: false, 
             closeOnClick: false
@@ -488,6 +480,8 @@ isAnimation.addEventListener("change", (event) => {
                 coverage: cov,
             };
             const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
+            //const covTimes = CURRENTCOVERAGE.features.map(item => item.properties['start_time']);
+            console.log("see cov", CURRENTCOVERAGE);
             document.getElementById("showCoverage").checked = true;
             removePrevPlumeLayers();
             timeline = new TimelineControl({
@@ -495,6 +489,14 @@ isAnimation.addEventListener("change", (event) => {
                 className: 'timeline-control' ,
                 start: start_date,
                 end: end_date,
+                format: (date) => {
+                    const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: 'numeric'
+                    });
+                    return `From ${formattedDate} - 30 days prior`;
+                },         
                 step: 1000 * 3600 * 24* 30, // 30 days interval
                 onChange: date => {
                     endDate = new Date(date).toISOString().slice(0, 16);
@@ -502,12 +504,13 @@ isAnimation.addEventListener("change", (event) => {
                     updateDatesandData(); 
                     //if you dont want cummulative
                     startDate= endDate
-                    document.getElementById("start_date").value = endDate; 
+                    document.getElementById("start_date").value = endDate;
                 },
             });
             const timelineElement = timeline.onAdd(map);
             document.getElementById('toolbar').appendChild(timelineElement);
-            addTimelineMarkers(utcTimesObserved, start_date, end_date);
+            addTimelineMarkers(utcTimesObserved, start_date, end_date,'#20068f');
+            //addTimelineMarkers(covTimes, start_date, end_date, 'red');
         } 
         else 
         {
