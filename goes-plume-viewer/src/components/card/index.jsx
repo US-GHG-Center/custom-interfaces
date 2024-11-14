@@ -33,7 +33,7 @@ const CaptionValue = ({ caption, value, className }) => {
             <Typography
                 variant="caption"
                 component="div"
-                sx={{ color: 'text.secondary' }}
+                sx={{ color: 'text.primary' }}
             >
                 { caption }
             </Typography>
