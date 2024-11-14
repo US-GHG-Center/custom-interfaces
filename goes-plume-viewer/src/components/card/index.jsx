@@ -42,7 +42,7 @@ const CaptionValue = ({ caption, value, className }) => {
 
 export function PlumeCard({ plumeSourceName, startDatetime, endDatetime, imageUrl, tiffUrl, lon, lat, totalReleaseMass, colEnhancements }) {
     return (
-    <Card sx={{ display: 'flex', flex: '1 0 auto', margin: '15px'}}>
+    <Card sx={{ display: 'flex', flex: '0 0 auto', margin: '15px'}}>
         <div
             style={{display: "flex", alignItems: "center", justifyContent: "center"}}
         >
