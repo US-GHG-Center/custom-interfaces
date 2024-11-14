@@ -139,7 +139,7 @@ export const PlumeMetas: PlumeMeta[] = [
         administrativeDivision: "Durango",
     },
     {
-        id: "Mexico_Durango_BV4_BV4-4",
+        id: "Mexico_Durango_BV4_BV4-3",
         plumeSourceId: "BV4",
         plumeSourceName: "El Encino La Laguna Pipeline Block Valve 4",
         imageUrl: "https://dev.ghg.center/api/raster/collections/goes-ch4/items/GOES-CH4_Permian_2023-07-26T17:36:00Z/preview.png?assets=rad&amp;rescale=0.0%2C0.2&amp;colormap_name=magma",
@@ -154,7 +154,7 @@ export const PlumeMetas: PlumeMeta[] = [
         administrativeDivision: "Durango",
     },
     {
-        id: "Mexico_Durango_BV4_BV4-5",
+        id: "Mexico_Durango_BV4_BV4-4",
         plumeSourceId: "BV4",
         plumeSourceName: "El Encino La Laguna Pipeline Block Valve 4",
         imageUrl: "https://dev.ghg.center/api/raster/collections/goes-ch4/items/GOES-CH4_Permian_2023-07-26T17:36:00Z/preview.png?assets=rad&amp;rescale=0.0%2C0.2&amp;colormap_name=magma",
