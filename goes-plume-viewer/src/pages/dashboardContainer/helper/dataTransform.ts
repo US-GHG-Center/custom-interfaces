@@ -10,7 +10,7 @@ interface PlumeMap {
 
 type DataTree = PlumeRegionMap;
 
-export function dataTransformationPlume(data: STACItem[]): PlumeMap {
+export function dataTransformationPlume(data: STACItem[], plumeMetaData: PlumeMetaMap): PlumeMap {
     // format of FeatureCollection Id: <something>_<region>_<plumeid>_<datetime>
     // goes_ch4_<country>_<administrativeDivision>_<plumeSourceId>_<plumeId>_<datetime>
     const plumeMap: PlumeMap = {};
@@ -30,7 +30,11 @@ export function dataTransformationPlume(data: STACItem[]): PlumeMap {
         const [ _, country, administrativeDivision, region, plumeId, __ ] = destructuredId;
         const newPlumeId:string = `${country}_${administrativeDivision}_${region}_${plumeId}`;
         if (!(newPlumeId in plumeMap)) {
-            const [lon, lat] = item.geometry.coordinates[0][0];
+            let [lon, lat] = item.geometry.coordinates[0][0];
+            if (newPlumeId in plumeMetaData) {
+                lon = plumeMetaData[newPlumeId].lon;
+                lat = plumeMetaData[newPlumeId].lat;
+            }
             const plume: Plume = {
                 id: newPlumeId,
                 region: region,

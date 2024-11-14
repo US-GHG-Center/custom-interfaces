@@ -20,6 +20,18 @@ export function DashboardContainer() {
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
+        let plumeMetaMap = {};
+        let plumeRegionMetaMap = {};
+        try {
+            // DataTransformation for the plumesMeta
+            plumeMetaMap = dataTransformationPlumeMeta(PlumeMetas);
+            plumeRegionMetaMap = dataTransformationPlumeRegionMeta(plumeMetaMap);
+            setMetaDataTree(plumeRegionMetaMap);
+            setPlumeMetaData(plumeMetaMap);
+        } catch (error) {
+            console.log('Error Transforming metadata');
+        }
+
         const fetchData = async () => {
             try {
                 // fetch in the collection from the features api
@@ -34,7 +46,7 @@ export function DashboardContainer() {
                 const collectionItemUrl = `${process.env.REACT_APP_STAC_API_URL}/collections/${collectionId}/items`;
                 const data = await fetchAllFromSTACAPI(collectionItemUrl);
                 setCollectionItems(data)
-                const plumeMap = dataTransformationPlume(data);
+                const plumeMap = dataTransformationPlume(data, plumeMetaMap);
                 const plumeRegionMap = dataTransformationPlumeRegion(plumeMap);
                 setDataTree(plumeRegionMap);
             } catch (error) {
@@ -43,13 +55,6 @@ export function DashboardContainer() {
         };
 
         fetchData().catch(console.error);
-
-        // DataTransformation for the plumesMeta
-        const plumeMetaMap = dataTransformationPlumeMeta(PlumeMetas);
-        const plumeRegionMetaMap = dataTransformationPlumeRegionMeta(plumeMetaMap);
-
-        setMetaDataTree(plumeRegionMetaMap);
-        setPlumeMetaData(plumeMetaMap);
     }, []); // only on initial mount
 
     return (
