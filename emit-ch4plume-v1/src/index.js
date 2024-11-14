@@ -238,7 +238,8 @@ function addRasterHoverListener() {
                     map.moveLayer(`fill-${itemId}`); 
                     map.moveLayer(`outline-${itemId}`); 
                 });
-                map.on('click', `fill-${itemId}`, () => {
+                map.on('click', `fill-${itemId}`, (event) => {
+                    event.preventDefault();
                     if (map.getZoom() < ZOOM_THRESHOLD) return; 
                     const currentVisibility = map.getLayoutProperty(`raster-${itemId}`, 'visibility');
                     if (currentVisibility === 'visible') {
@@ -387,7 +388,7 @@ async function main() {
         let startDate = document.getElementById("start_date").value;
         let endDate = document.getElementById("end_date").value;
 
-        coverageData = await getCoverageData();
+        coverageData =  getCoverageData();
     
         addMeasurementLayer(map);
         const polygons = methanMetadata.features
