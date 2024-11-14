@@ -9,6 +9,7 @@ import { PlumeAnimation } from '../../components/plumeAnimation';
 import { MapControls } from "../../components/mapControls";
 import { MapZoom } from '../../components/mapZoom';
 
+import { LoadingSpinner } from '../../components/loading';
 import { PersistentDrawerRight } from "../../components/drawer";
 import { Title } from "../../components/title";
 import { Search } from "../../components/search";
@@ -31,7 +32,7 @@ const scaleUnits = {
   MILES: "mi",
 };
 
-export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData, zoomLevel, setZoomLevel }) {
+export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData, zoomLevel, setZoomLevel, loadingData }) {
   const [ regions, setRegions ] = useState([]);
   const [ plumes, setPlumes ] = useState([]);
   const [ selectedRegionId, setSelectedRegionId ] = useState(null); //string
@@ -155,6 +156,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
           plumesMap={plumes}
         />
       </div>
+      {loadingData && <LoadingSpinner/>}
     </Box>
   );
 }

@@ -18,7 +18,10 @@ export function DashboardContainer() {
     const [ metaDataTree, setMetaDataTree ] = useState({});
     const [ plumeMetaData, setPlumeMetaData ] = useState({});
 
+    const [ loadingData, setLoadingData ] = useState(true);
+
     useEffect(() => {
+        setLoadingData(true);
         // eslint-disable-next-line react-hooks/exhaustive-deps
         let plumeMetaMap = {};
         let plumeRegionMetaMap = {};
@@ -49,6 +52,7 @@ export function DashboardContainer() {
                 const plumeMap = dataTransformationPlume(data, plumeMetaMap);
                 const plumeRegionMap = dataTransformationPlumeRegion(plumeMap);
                 setDataTree(plumeRegionMap);
+                setLoadingData(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -66,6 +70,7 @@ export function DashboardContainer() {
             metaDataTree={metaDataTree}
             plumeMetaData={plumeMetaData}
             collectionId={collectionId}
+            loadingData={loadingData}
         />
     );
 }
