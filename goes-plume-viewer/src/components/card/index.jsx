@@ -81,12 +81,12 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
             <HorizontalLayout>
                 <CaptionValue
                     className="card-plume"
-                    caption = "Approx Start time"
+                    caption = "Approximate Start time"
                     value = { startDatetime + " UTC" }
                 />
                 <CaptionValue
                     className="card-plume"
-                    caption = "Approx End time"
+                    caption = "Approximate End time"
                     value = { endDatetime + " UTC" }
                 />
             </HorizontalLayout>
