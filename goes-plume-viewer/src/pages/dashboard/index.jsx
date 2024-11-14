@@ -154,6 +154,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
           metaDataTree={metaDataTree}
           collectionId={collectionId}
           plumesMap={plumes}
+          handleSelectedPlumeCard={handleSelectedPlume}
         />
       </div>
       {loadingData && <LoadingSpinner/>}

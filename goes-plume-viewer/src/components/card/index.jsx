@@ -48,9 +48,16 @@ const CaptionValue = ({ caption, value, className }) => {
     )
 }
 
-export function PlumeCard({ plumeSourceName, startDatetime, endDatetime, imageUrl, tiffUrl, lon, lat, totalReleaseMass, colEnhancements }) {
+export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDatetime, imageUrl, tiffUrl, lon, lat, totalReleaseMass, colEnhancements, handleSelectedPlumeCard }) {
+    const handleCardClick = () => {
+        handleSelectedPlumeCard(plumeSourceId);
+    }
+
     return (
-    <HighlightableCard sx={{ display: 'flex', flex: '0 0 auto', margin: '15px' }}>
+    <HighlightableCard
+        sx={{ display: 'flex', flex: '0 0 auto', margin: '15px' }}
+        onClick={handleCardClick}
+    >
         <div
             style={{display: "flex", alignItems: "center", justifyContent: "center"}}
         >
