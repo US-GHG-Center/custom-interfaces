@@ -63,22 +63,29 @@ const HorizontalLayout = styled.div`
 
 export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, collectionId, metaDataTree, plumesMap}) {
   const [ selectedPlumeMetas, setSelectedPlumeMetas ] = useState([]);
+  const [ location, setLocation ] = useState("");
+  const [ numberOfPlumes, setNumberOfPlumes ] = useState("");
+
   let VMIN = 0;
   let VMAX = 0.4;
   let colorMap = "plasma";
-
-  const location = "White, Indiana, United States";
-  const numberOfPlumes = "3";
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
   useEffect(() => {
-    if (!selectedPlumes.length) return;
+    if (!selectedPlumes.length || !plumeMetaData ) return;
 
     const selectedMetas = selectedPlumes.map(plume => plumeMetaData[plume.id]);
     setSelectedPlumeMetas(selectedMetas)
+
+    const firstPlumeMeta = plumeMetaData[selectedPlumes[0].id];
+    const { administrativeDivision, country } = firstPlumeMeta;
+    const location = `${administrativeDivision}, ${country}`;
+    const numberOfPlumes = selectedPlumes.length;
+    setLocation(location);
+    setNumberOfPlumes(numberOfPlumes);
 
   }, [plumeMetaData, selectedPlumes]);
 
