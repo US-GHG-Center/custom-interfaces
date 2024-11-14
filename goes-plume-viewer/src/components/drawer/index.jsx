@@ -63,8 +63,8 @@ const HorizontalLayout = styled.div`
 
 export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, collectionId, metaDataTree, plumesMap}) {
   const [ selectedPlumeMetas, setSelectedPlumeMetas ] = useState([]);
-  const [ location, setLocation ] = useState("");
-  const [ numberOfPlumes, setNumberOfPlumes ] = useState("");
+  const [ location, setLocation ] = useState("USA");
+  const [ numberOfPlumes, setNumberOfPlumes ] = useState(0);
 
   let VMIN = 0;
   let VMAX = 0.4;
@@ -129,7 +129,7 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
             </Typography>
           </HorizontalLayout>
         </DrawerHeader>
-          { selectedPlumeMetas.length &&
+          { !!selectedPlumeMetas.length &&
             selectedPlumeMetas.map(selectedPlumeMeta => (
               <PlumeCard
                 plumeSourceName={selectedPlumeMeta.plumeSourceName}
