@@ -48,7 +48,8 @@ export function PlumeCard({ plumeSourceName, startDatetime, endDatetime, imageUr
         >
             <CardMedia
                 component="img"
-                sx={{ width: 100, height: 100 }}
+                height="100"
+                sx={{ padding: "1em", objectFit: "contain" }}
                 image={imageUrl}
                 alt="Live from space album cover"
             />
