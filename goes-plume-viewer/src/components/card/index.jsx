@@ -19,6 +19,14 @@ const HorizontalLayout = styled.div`
     margin-bottom: 5px;
 `;
 
+const HighlightableCard = styled(Card)`
+    transition: border 0.3s ease;
+    &:hover {
+        border: 1px solid blue;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+`;
+
 const CaptionValue = ({ caption, value, className }) => {
     return (
         <div className={className}>
@@ -42,7 +50,7 @@ const CaptionValue = ({ caption, value, className }) => {
 
 export function PlumeCard({ plumeSourceName, startDatetime, endDatetime, imageUrl, tiffUrl, lon, lat, totalReleaseMass, colEnhancements }) {
     return (
-    <Card sx={{ display: 'flex', flex: '0 0 auto', margin: '15px'}}>
+    <HighlightableCard sx={{ display: 'flex', flex: '0 0 auto', margin: '15px' }}>
         <div
             style={{display: "flex", alignItems: "center", justifyContent: "center"}}
         >
@@ -112,6 +120,6 @@ export function PlumeCard({ plumeSourceName, startDatetime, endDatetime, imageUr
             </HorizontalLayout>
         </CardContent>
       </Box>
-    </Card>
+    </HighlightableCard>
   );
 }
