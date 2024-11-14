@@ -63,3 +63,7 @@ button.clear-icon{
     align-items:center;
     color:#000000;
 }
+button.menu-open-icon{
+    display: flex;
+    align-items: center;
+}
