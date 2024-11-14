@@ -45,7 +45,6 @@ function addPolygon(map, polygonSourceId, polygonLayerId, polygonFeature) {
     if (rasterLayers.length > 0) {
         const firstRasterLayerId = rasterLayers[0].id;
         map.moveLayer(polygonLayerId, firstRasterLayerId);
-        //map.moveLayer(`outline-${polygonLayerId}`, firstRasterLayerId);
     }
 
 }

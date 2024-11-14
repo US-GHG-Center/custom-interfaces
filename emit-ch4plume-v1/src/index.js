@@ -70,28 +70,51 @@ function updateDatesandData(){
 function removeAllPlumeLayers() {
     const layers = map.getStyle().layers;
     layers.forEach((layer) => {
-        if (layer.id.startsWith('raster-')) {
-            map.removeLayer(layer.id);
-            if (map.getSource(layer.id + '-source')) {
-                map.removeSource(layer.id + '-source');
+        const prefixes = ['raster-', 'outline-', 'fill-'];
+        prefixes.forEach(prefix => {
+            if (layer.id.startsWith(prefix)) {
+                const layerItemId = layer.id.replace(prefix, '');
+                    map.removeLayer(layer.id);
+                    if (map.getSource(layer.id + "-source")){
+                        map.removeSource(layer.id + "-source");
+                    }
             }
-        }
+        });
     });
 }
+
+// function removePrevPlumeLayers() {
+//     const layers = map.getStyle().layers;
+//     layers.forEach((layer) => {
+//         if (layer.id.startsWith('raster-') || layer.id.startsWith('outline-') || layer.id.startsWith('fill-')) {
+//             const layerItemId = layer.id.replace('raster-', ''); 
+//             if (!viewportItemIds.includes(layerItemId)) {
+//                 console.log(`Removing layer: ${layer.id} (not in viewportItemIds)`);
+//                 //map.setLayoutProperty(layer.id, 'visibility', 'none');
+//                 map.removeLayer(layer.id);
+//                 map.removeSource(layer.id +"-source"); 
+//                 console.log(`Removed source: ${layer.id + "-source"}`);
+//             }
+//         }
+//     });
+// }
 
 function removePrevPlumeLayers() {
     const layers = map.getStyle().layers;
     layers.forEach((layer) => {
-        if (layer.id.startsWith('raster-')) {
-            const layerItemId = layer.id.replace('raster-', ''); 
-            if (!viewportItemIds.includes(layerItemId)) {
-                console.log(`Removing layer: ${layer.id} (not in viewportItemIds)`);
-                //map.setLayoutProperty(layer.id, 'visibility', 'none');
-                map.removeLayer(layer.id);
-                map.removeSource(layer.id +"-source"); 
-                console.log(`Removed source: ${layer.id + "-source"}`);
+        const prefixes = ['raster-', 'outline-', 'fill-'];
+        prefixes.forEach(prefix => {
+            if (layer.id.startsWith(prefix)) {
+                const layerItemId = layer.id.replace(prefix, '');
+                if (!viewportItemIds.includes(layerItemId)) {
+                    console.log(`Removing layer: ${layer.id} (not in viewportItemIds)`);
+                    map.removeLayer(layer.id);
+                    if (map.getSource(layer.id + "-source")){
+                        map.removeSource(layer.id + "-source");}
+                    console.log(`Removed source: ${layer.id + "-source"}`);
+                }
             }
-        }
+        });
     });
 }
 
@@ -127,9 +150,6 @@ function addRaster(itemId) {
 }
 
 function zoomedOrDraggedToThreshold(){
-
-    console.log(`Before MARKERS_ON_VIEWPORT from zoomedOrDraggedToThreshold: ${MARKERS_ON_VIEWPORT.length}`);
-    
     const currentZoom = map.getZoom();
     if (currentZoom >= ZOOM_THRESHOLD){
         MARKERS_ON_VIEWPORT = MARKERS_ON_MAP.filter(marker => {
@@ -137,9 +157,8 @@ function zoomedOrDraggedToThreshold(){
             const lngLat = new mapboxgl.LngLat(coords[0], coords[1]);
             return  map.getBounds().contains(lngLat); 
         });
-
-        console.log(`MARKERS_ON_VIEWPORT from zoomedOrDraggedToThreshold: ${MARKERS_ON_VIEWPORT.length}`);
-        
+        const existing_markers = document.querySelectorAll('.marker');
+        existing_markers.forEach(marker => marker.remove());
         viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
             marker.feature.properties['Data Download'].split('/').pop().split('.')[0]
         );
@@ -150,9 +169,9 @@ function zoomedOrDraggedToThreshold(){
     else{
         const legendOuter = document.getElementById("plegend-container");
         legendOuter.style.display ='none';
-        removeAllPlumeLayers(map);
+        removeAllPlumeLayers();
+        addPointsOnMap();
     };
-
 }
 
 function addOutline(polygonSourceId, polygonLayerId, polygonFeature){
@@ -163,7 +182,6 @@ function addOutline(polygonSourceId, polygonLayerId, polygonFeature){
         });
         }
         if (!map.getLayer(`outline-${polygonLayerId}`))
-        // Add a black outline around the polygon.
         map.addLayer({
             'id': `outline-${polygonLayerId}`,
             'type': 'line',
@@ -171,51 +189,95 @@ function addOutline(polygonSourceId, polygonLayerId, polygonFeature){
             'layout': {},
             'paint': {
                 'line-color': "#0098d7",
-                'line-width': 2
+                'line-width': 1
             }
         });
+        if (!map.getLayer(`fill-${polygonLayerId}`))
+            map.addLayer({
+                'id': `fill-${polygonLayerId}`,
+                'type': 'fill',
+                'source': polygonSourceId,
+                'layout': {},
+                'paint': {
+                    'fill-opacity': 0,
+                }
+            });
 }
 
 function addRasterHoverListener() {
     MARKERS_ON_VIEWPORT.forEach(marker => {
         const itemId = marker.feature.properties['Data Download'].split('/').pop().split('.')[0];
         const polygonFeature = ALLPOLYGONS.find((item) => item.id === itemId);
-
-        // Only add listeners if zoom is above threshold
         if (map.getZoom() >= ZOOM_THRESHOLD) {
             if (!map.getLayer("outline-polygon-layer-" + itemId)) {
                 
                 // Marker hover effect
-                document.getElementById(`marker-${marker.id}`).addEventListener("mouseenter", () => {
+                // document.getElementById(`marker-${marker.id}`).addEventListener("mouseenter", () => {
+                //     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
+                //     addOutline("polygon-source-" + itemId, "polygon-layer-" + itemId, polygonFeature.feature);
+                //     const selectedItem = document.getElementById("itemDiv-" + itemId);
+                //     selectedItem.style.border = "2px solid #0098d7";
+                //     selectedItem.scrollIntoView({
+                //         behavior: "smooth",
+                //         block: "center",
+                //         inline: "center"
+                //     });
+                // });
+                map.on('mouseenter', `fill-${itemId}`,() => {
                     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
-                    addOutline("polygon-source-" + itemId, "polygon-layer-" + itemId, polygonFeature.feature);
+                    //addOutline("polygon-source-" + itemId, "polygon-layer-" + itemId, polygonFeature.feature);
+                    map.setPaintProperty(`outline-${itemId}`, 'line-width', 6); 
                     const selectedItem = document.getElementById("itemDiv-" + itemId);
-                    selectedItem.style.border = "2px solid #0098d7";
                     selectedItem.scrollIntoView({
                         behavior: "smooth",
                         block: "center",
                         inline: "center"
                     });
+                    selectedItem.style.border = "2px solid #0098d7";
+                    map.moveLayer(`raster-${itemId}`); 
+                    map.moveLayer(`fill-${itemId}`); 
+                    map.moveLayer(`outline-${itemId}`); 
                 });
+                map.on('click', `fill-${itemId}`, () => {
+                    if (map.getZoom() < ZOOM_THRESHOLD) return; 
+                    const currentVisibility = map.getLayoutProperty(`raster-${itemId}`, 'visibility');
+                    if (currentVisibility === 'visible') {
+                        map.setLayoutProperty(`raster-${itemId}`, 'visibility', 'none');
+                    } else {
+                        map.setLayoutProperty(`raster-${itemId}`, 'visibility', 'visible');
+                    }
+                });
+                map.on('mouseleave', `fill-${itemId}`, () => {
+                        if (map.getZoom() < ZOOM_THRESHOLD) return; 
+                        //removeLayers(map, "", ["polygon-layer-" + itemId, "outline-polygon-layer-" + itemId]);
+                        map.setPaintProperty(`outline-${itemId}`, 'line-width', 2); 
+                        const selectedItem = document.getElementById("itemDiv-" + itemId);
+                        selectedItem.style.border ='';
+                    });
 
-                document.getElementById(`marker-${marker.id}`).addEventListener("mouseleave", () => {
-                    if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
-                    removeLayers(map, "", ["polygon-layer-" + itemId, "outline-polygon-layer-" + itemId]);
-                    const selectedItem = document.getElementById("itemDiv-" + itemId);
-                    selectedItem.style.border = "0px";
-                });
+                // document.getElementById(`marker-${marker.id}`).addEventListener("mouseleave", () => {
+                //     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
+                //     removeLayers(map, "", ["polygon-layer-" + itemId, "outline-polygon-layer-" + itemId]);
+                //     const selectedItem = document.getElementById("itemDiv-" + itemId);
+                //     selectedItem.style.border = "0px";
+                // });
 
                 // Sidebar item hover effect
                 document.getElementById("itemDiv-" + itemId).addEventListener("mouseenter", () => {
                     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
-                    addOutline("polygon-source-" + itemId, "polygon-layer-" + itemId, polygonFeature.feature);
+                    //addOutline("polygon-source-" + itemId,  itemId, polygonFeature.feature);
+                    map.setPaintProperty(`outline-${itemId}`, 'line-width', 8); 
                     const selectedItem = document.getElementById("itemDiv-" + itemId);
                     selectedItem.style.border = "2px solid #0098d7";
+                    map.moveLayer(`raster-${itemId}`); 
+                    map.moveLayer(`fill-${itemId}`); 
+                    map.moveLayer(`outline-${itemId}`); 
                 });
 
                 document.getElementById("itemDiv-" + itemId).addEventListener("mouseleave", () => {
                     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
-                    removeLayers(map, "", ["polygon-layer-" + itemId, "outline-polygon-layer-" + itemId]);
+                    //removeLayers(map, "", ["polygon-layer-" + itemId, "outline-polygon-layer-" + itemId]);
+                    map.setPaintProperty(`outline-${itemId}`, 'line-width', 1); 
                     const selectedItem = document.getElementById("itemDiv-" + itemId);
                     selectedItem.style.border = "0px";
                 });
@@ -227,19 +289,14 @@ function addRasterHoverListener() {
 function createPlumesList(){
     const legendOuter = document.getElementById("plegend-container");
     legendOuter.style.display ='';
-
-    // Create the additional text
     const additionalText = document.getElementById('num-plumes');
     additionalText.innerText = `${MARKERS_ON_VIEWPORT.length} Plumes`; 
-
     const legendContainer = document.getElementById("plegend");
-    legendContainer.innerHTML = ''; // Clear previous entries
-
+    legendContainer.innerHTML = '';
     console.log("startDate ", startDate);
     console.log("endDate ", endDate);
     console.log("markers on viewport ", MARKERS_ON_VIEWPORT.length);
     console.log("markers on map ", MARKERS_ON_MAP.length);
-    let items_added = 0;
     
     MARKERS_ON_VIEWPORT.sort((a, b) => {
         const dateA = new Date(a.feature.properties['UTC Time Observed']);
@@ -248,27 +305,21 @@ function createPlumesList(){
         // return dateA - dateB; for ascending order (oldest first)
     });
     MARKERS_ON_VIEWPORT.forEach(marker => {
-        const properties = marker.feature.properties; // Access properties of the marker
-        const itemDiv = document.createElement('div'); // Create a new div
+        const properties = marker.feature.properties; 
+        const itemDiv = document.createElement('div');
         const itemId = properties['Data Download'].split('/').pop().split('.')[0];
         itemDiv.className = "itemDiv";
         itemDiv.id = "itemDiv-"+itemId;
-        const endpoint = `https://dev.ghg.center/api/raster/collections/emit-ch4plume-v1/items/${itemId}/preview.png?bidx=1&assets=ch4-plume-emissions&rescale=1%2C1500&resampling=bilinear&colormap_name=plasma`
-
-        // Set the content of the div (customize as needed)
+        const endpoint = `https://dev.ghg.center/api/raster/collections/emit-ch4plume-v1/items/${itemId}/preview.png?bidx=1&assets=ch4-plume-emissions&rescale=1%2C1500&resampling=bilinear&colormap_name=plasma`;
         itemDiv.innerHTML =createItemContent(marker, properties, endpoint);
-
-        // Append the new div to the legend container
         legendContainer.appendChild(itemDiv);
-        console.log(`Item id ${itemId}`);
-
-        //now add the rasters
+        const polygonFeature = ALLPOLYGONS.find((item) => item.id === itemId);
+        if (!map.getLayer("fill-"+ itemId)){
+            addOutline(itemId + "source-",itemId, polygonFeature.feature)
+        }
         if (!map.getLayer("raster-"+ itemId)){
-            items_added += 1
-            console.log(`Item id doesn't exist ${itemId}`);
             addRaster(itemId);
         }
-        console.log(`Items added ${items_added}`);
     });
 }
 
@@ -439,7 +490,6 @@ isAnimation.addEventListener("change", (event) => {
             const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
             document.getElementById("showCoverage").checked = true;
             removePrevPlumeLayers();
-            // Animation function
             timeline = new TimelineControl({
                 placeholder: 'Plumes',
                 className: 'timeline-control' ,
