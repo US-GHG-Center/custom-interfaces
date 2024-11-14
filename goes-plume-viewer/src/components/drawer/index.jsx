@@ -132,6 +132,7 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
           { !!selectedPlumeMetas.length &&
             selectedPlumeMetas.map(selectedPlumeMeta => (
               <PlumeCard
+                key={selectedPlumeMeta.id}
                 plumeSourceName={selectedPlumeMeta.plumeSourceName}
                 imageUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
                 tiffUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}

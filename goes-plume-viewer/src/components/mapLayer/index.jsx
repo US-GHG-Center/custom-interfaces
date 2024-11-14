@@ -46,7 +46,7 @@ export const MapLayers = ({ plumes, handleLayerClick }) => {
     if (!map || !plumes.length) return;
 
     return (<>
-        {plumes && plumes.length && plumes.map((plume) => <MapLayer plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick}></MapLayer>)}
+        {plumes && plumes.length && plumes.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick}></MapLayer>)}
         </>
     );
 }
