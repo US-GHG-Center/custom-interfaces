@@ -379,57 +379,8 @@ async function getCoverageData() {
     return await networkResponse.json(); 
 }
 
-// async function main() {
-//     map.on("load", async () => {  
-//         addMeasurementSource(map);
-//         document.querySelector(".toolbar").style.display = "block";
-//         createColorbar(VMIN, VMAX);
-
-//         let startDate = document.getElementById("start_date").value;
-//         let endDate = document.getElementById("end_date").value;
-
-//         coverageData =  getCoverageData();
-    
-//         addMeasurementLayer(map);
-//         const polygons = methanMetadata.features
-//         .filter((f) => f.geometry.type === "Polygon")
-//         .map((f) => {
-//             const id = f.properties["Data Download"].split('/').pop().split('.')[0]; // Extract "abc" from "http://.../abc.tif"
-//             return {
-//                 id: id,     
-//                 feature: f
-//             };
-//         })
-//         // Filter the data by dates and select only points
-//         const points = filterByDates(methanMetadata,startDate, endDate, "plumes" ).features
-//             .filter((f) => f.geometry.type === "Point")
-//             .map((f) => {
-//                 const id = f.properties["Data Download"].split('/').pop().split('.')[0]; // Extract "abc" from "http://.../abc.tif"
-//                 return {
-//                     id: id,     
-//                     feature: f
-//                 };
-//             })
-
-//         // Set the global vars when the map loads
-//         ALLPOLYGONS = polygons;
-//         MARKERS_ON_VIEWPORT = points;
-//         viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
-//             marker.feature.properties['Data Download'].split('/').pop().split('.')[0]
-//         );
-//         removePrevPlumeLayers();
-//         MARKERS_ON_MAP = points;
-//         CURRENTCOVERAGE = coverageData;
-//         // Initially display all plumes as markers
-//         addPointsOnMap();
-//     });
-// }
-
 async function main() {
-    map.on("load", async () => {
-        // Show loading spinner while fetching data
-        document.getElementById("loading-spinner").style.display = "block";
-        
+    map.on("load", async () => {  
         addMeasurementSource(map);
         document.querySelector(".toolbar").style.display = "block";
         createColorbar(VMIN, VMAX);
@@ -437,51 +388,40 @@ async function main() {
         let startDate = document.getElementById("start_date").value;
         let endDate = document.getElementById("end_date").value;
 
-        try {
-            // Fetch the coverage data and wait for it to resolve
-            coverageData = await getCoverageData();
+        coverageData =  getCoverageData();
+    
+        addMeasurementLayer(map);
+        const polygons = methanMetadata.features
+        .filter((f) => f.geometry.type === "Polygon")
+        .map((f) => {
+            const id = f.properties["Data Download"].split('/').pop().split('.')[0]; // Extract "abc" from "http://.../abc.tif"
+            return {
+                id: id,     
+                feature: f
+            };
+        })
+        // Filter the data by dates and select only points
+        const points = filterByDates(methanMetadata,startDate, endDate, "plumes" ).features
+            .filter((f) => f.geometry.type === "Point")
+            .map((f) => {
+                const id = f.properties["Data Download"].split('/').pop().split('.')[0]; // Extract "abc" from "http://.../abc.tif"
+                return {
+                    id: id,     
+                    feature: f
+                };
+            })
 
-            // Proceed with the rest of the map setup after data is fetched
-            addMeasurementLayer(map);
-
-            const polygons = methanMetadata.features
-                .filter((f) => f.geometry.type === "Polygon")
-                .map((f) => {
-                    const id = f.properties["Data Download"].split('/').pop().split('.')[0]; // Extract "abc" from "http://.../abc.tif"
-                    return {
-                        id: id,
-                        feature: f
-                    };
-                });
-
-            // Filter the data by dates and select only points
-            const points = filterByDates(methanMetadata, startDate, endDate, "plumes").features
-                .filter((f) => f.geometry.type === "Point")
-                .map((f) => {
-                    const id = f.properties["Data Download"].split('/').pop().split('.')[0]; // Extract "abc" from "http://.../abc.tif"
-                    return {
-                        id: id,
-                        feature: f
-                    };
-                });
-
-            // Set the global vars when the map loads
-            ALLPOLYGONS = polygons;
-            MARKERS_ON_VIEWPORT = points;
-            viewportItemIds = MARKERS_ON_VIEWPORT.map(marker =>
-                marker.feature.properties['Data Download'].split('/').pop().split('.')[0]
-            );
-            removePrevPlumeLayers();
-            MARKERS_ON_MAP = points;
-
-            // Initially display all plumes as markers
-            addPointsOnMap();
-        } catch (error) {
-            console.error("Error loading coverage data:", error);
-        } finally {
-            // Hide the loading spinner once the data is loaded (or if an error occurred)
-            document.getElementById("loading-spinner").style.display = "none";
-        }
+        // Set the global vars when the map loads
+        ALLPOLYGONS = polygons;
+        MARKERS_ON_VIEWPORT = points;
+        viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
+            marker.feature.properties['Data Download'].split('/').pop().split('.')[0]
+        );
+        removePrevPlumeLayers();
+        MARKERS_ON_MAP = points;
+        CURRENTCOVERAGE = coverageData;
+        // Initially display all plumes as markers
+        addPointsOnMap();
     });
 }
 
