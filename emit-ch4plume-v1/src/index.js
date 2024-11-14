@@ -238,8 +238,7 @@ function addRasterHoverListener() {
                     map.moveLayer(`fill-${itemId}`); 
                     map.moveLayer(`outline-${itemId}`); 
                 });
-                map.on('click', `fill-${itemId}`, (event) => {
-                    event.preventDefault();
+                map.on('click', `fill-${itemId}`, () => {
                     if (map.getZoom() < ZOOM_THRESHOLD) return; 
                     const currentVisibility = map.getLayoutProperty(`raster-${itemId}`, 'visibility');
                     if (currentVisibility === 'visible') {
@@ -387,8 +386,8 @@ async function main() {
 
         let startDate = document.getElementById("start_date").value;
         let endDate = document.getElementById("end_date").value;
-
-        coverageData =  getCoverageData();
+        try {
+        coverageData = await getCoverageData();
     
         addMeasurementLayer(map);
         const polygons = methanMetadata.features
@@ -422,6 +421,11 @@ async function main() {
         CURRENTCOVERAGE = coverageData;
         // Initially display all plumes as markers
         addPointsOnMap();
+    } catch (error) {
+        console.log("Error loading coverage file");
+    } finally {
+        document.getElementById("loading-spinner").style.display = "none";
+    }
     });
 }
 
