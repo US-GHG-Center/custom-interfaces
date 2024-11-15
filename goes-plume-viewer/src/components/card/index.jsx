@@ -131,13 +131,13 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
             <HorizontalLayout>
                 <CaptionValue
                     className="card-plume"
-                    caption = "Total Release Mass"
+                    caption = "Approximate Total Release Mass"
                     value = {totalReleaseMass + " Metric Tonne"}
                 />
                 <CaptionValue
                     className="card-plume"
                     caption = "Methane Column Enhancement"
-                    value = {colEnhancements + " mol m-2"}
+                    value = {colEnhancements + " mol/m²"}
                 />
             </HorizontalLayout>
             <HorizontalLayout>
