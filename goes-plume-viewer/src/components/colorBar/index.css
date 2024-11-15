@@ -1,8 +1,8 @@
 #colorbar {
     position: absolute;
-    bottom: 5px;
+    bottom: 3%;
     right: 5px;
-    height: 13%;
+    height: 11%;
     width: 35.5rem;
     z-index: 10000;
     background-color: white;
