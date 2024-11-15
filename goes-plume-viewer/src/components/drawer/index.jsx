@@ -10,7 +10,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { PlumeCard } from '../card';
 import { useEffect, useState } from 'react';
 
-const drawerWidth = "36rem";
+const drawerWidth = "34rem";
 
 const Main = styledmui('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme }) => ({

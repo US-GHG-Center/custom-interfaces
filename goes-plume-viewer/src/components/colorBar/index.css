@@ -3,7 +3,7 @@
     bottom: 3%;
     right: 5px;
     height: 11%;
-    width: 35.5rem;
+    width: 33.5rem;
     z-index: 10000;
     background-color: white;
     padding: 1%;
@@ -11,5 +11,5 @@
 
 .colorbar-svg {
     height: 10%;
-    width: 33rem; /* this will define the colorbar width as well */
+    width: 31rem; /* this will define the colorbar width as well */
 }
