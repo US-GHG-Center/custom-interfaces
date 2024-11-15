@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import mapboxgl from 'mapbox-gl';
 
 import { useMapbox } from "../../context/mapContext";
@@ -6,6 +6,7 @@ import "./index.css";
 
 export const MarkerFeature = ({ regions, setSelectedRegionId }) => {
     const { map } = useMapbox();
+    const [ markersVisible, setMarkersVisible ] = useState(true);
 
     useEffect(() => {
         if (!map || !regions.length) return;
@@ -19,6 +20,7 @@ export const MarkerFeature = ({ regions, setSelectedRegionId }) => {
             mel.addEventListener("click", (e) => {
                 setSelectedRegionId(region.id);
             });
+            mel.style.display = markersVisible ? "block" : "none";
             return mel;
         });
 
@@ -28,7 +30,21 @@ export const MarkerFeature = ({ regions, setSelectedRegionId }) => {
                 marker.parentNode.removeChild(marker);
             })
         }
-    }, [regions, map, setSelectedRegionId]);
+    }, [regions, map, setSelectedRegionId, markersVisible]);
+
+    useEffect(() => {
+        if (!map) return;
+
+        const threshold = 8;
+        map.on("zoom", () => {
+            const currentZoom = map.getZoom();
+            if (currentZoom <= threshold) {
+                setMarkersVisible(true);
+            } else {
+                setMarkersVisible(false);
+            }
+        });
+    }, [map])
 
     return null;
 }
