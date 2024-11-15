@@ -115,7 +115,7 @@ overflow: auto;
 /* the toolbar related styling goes here */ 
 
 .toolbar {
-display: flex;
+display: block;
 position: absolute;
 top: 10px; 
 left: 10px; 
@@ -477,4 +477,3 @@ border-top-color: rgba(255, 255, 255, 0.7);
   display: flex;
   justify-self: center;
 }
-
