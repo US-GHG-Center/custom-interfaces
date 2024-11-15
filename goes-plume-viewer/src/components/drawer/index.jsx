@@ -108,7 +108,8 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: drawerWidth,
-            height: "85%"
+            height: "85%",
+            borderRadius: '3px',
           },
         }}
         variant="persistent"
