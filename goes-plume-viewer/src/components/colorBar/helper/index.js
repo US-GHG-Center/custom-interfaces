@@ -18,7 +18,7 @@ export const createColorbar = (colorbarElement, VMIN=0, VMAX=1500) => {
         .data(d3.range(VMIN, VMAX, (VMAX - VMIN) / 100)) // Adjust the number of color segments as needed
         .enter()
         .append("rect")
-        .attr("height", 20)
+        .attr("height", 12) // height of the svg color segment portion
         .attr("width", "100%") // Adjust the width of each color segment
         .attr("x", (d, i) => i * 3)
         .attr("fill", (d) => colorScale(d));

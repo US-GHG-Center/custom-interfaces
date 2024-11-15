@@ -1,15 +1,15 @@
 #colorbar {
     position: absolute;
-    bottom: 0;
-    right: 0;
-    z-index: 1000;
+    bottom: 5px;
+    right: 5px;
+    height: 13%;
+    width: 35.5rem;
+    z-index: 10000;
     background-color: white;
-    padding: 12px;
-    margin-right: 9px;
-    margin-bottom: 22px;
+    padding: 1%;
 }
 
 .colorbar-svg {
-    height: 14px;
-    width: 34rem;
+    height: 10%;
+    width: 33rem; /* this will define the colorbar width as well */
 }
