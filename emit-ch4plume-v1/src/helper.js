@@ -68,20 +68,29 @@ function createColorbar(VMIN, VMAX) {
   // Create a colorbar element
   const colorbar = d3.select("body").append("div").attr("class", "colorbar");
 
-  colorbar
+  // Define colorbar width and height
+  const colorbarWidth = 350; // Adjusted width
+  const colorbarHeight = 12; // Height of the colorbar
+  const numSegments = 100; // Number of color segments
+
+
+  // Create the SVG container for the colorbar
+  const svg = colorbar
     .append("svg")
-    .attr("width",350) // Adjust the width as needed
-    .attr("height", 12) // Adjust the height as needed
-    .attr("rx", 10)
+    .attr("width", colorbarWidth)
+    .attr("height", colorbarHeight) // Set the height of the colorbar
+    .attr("rx", 10);
+
+  // Add color segments (rectangles)
+  svg
     .append("g")
     .selectAll("rect")
-    .data(d3.range(VMIN, VMAX, (VMAX - VMIN) / 100)) // Adjust the number of color segments as needed
+    .data(d3.range(VMIN, VMAX, (VMAX - VMIN) / numSegments)) // Number of segments
     .enter()
     .append("rect")
-    .attr("height", 20)
-    .attr("width", 3) // Adjust the width of each color segment
-
-    .attr("x", (d, i) => i * 3)
+    .attr("height", colorbarHeight) // Match the height of the colorbar
+    .attr("width", colorbarWidth / numSegments) // Dynamically calculate width of each segment
+    .attr("x", (d, i) => (i * (colorbarWidth / numSegments)) ) // Shift by 25px to center the rects
     .attr("fill", (d) => colorScale(d));
 
   // Define custom scale labels
@@ -99,6 +108,7 @@ function createColorbar(VMIN, VMAX) {
     .enter()
     .append("div")
     .attr("class", "colorbar-scale-label-horizontal")
+    .style("text-align","left")
     .text((d) => d); // Set the label text
 
   // Add the label "Methane enhancement (ppm m)" under the scale labels
@@ -107,12 +117,12 @@ function createColorbar(VMIN, VMAX) {
     .attr("class", "colorbar-label")
     .style("text-align", "center") // Center the label
     .style("margin-bottom", "12px") // Adjust margin as needed
-    .html(`<span class="custom-label"> <strong>Methane enhancement (ppm m) </strong></span>`);
+    .html("<strong>Methane enhancement (ppm m)</strong>");
 
   // Add CSS styles to position and style the colorbar
   colorbar
     .style("position", "absolute")
-    .style("bottom", "30px") // Adjust the top position as needed
+    .style("bottom", "60px") // Adjust the top position as needed
     .style("right", "50px") // Adjust the left position as needed
     .style("background-color", "white")
     .style("padding", "12px");
@@ -120,7 +130,7 @@ function createColorbar(VMIN, VMAX) {
   // Add CSS styles to style horizontal scale labels
   scaleLabelContainer
     .style("display", "flex")
-    .style("justify-content", "space-between")
+    .style("justify-content", "center")
     .style("margin-bottom", "12px"); // Adjust margin as needed
 }
 
