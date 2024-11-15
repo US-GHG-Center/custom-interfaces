@@ -8,7 +8,7 @@ import { MapLayers } from '../../components/mapLayer';
 import { PlumeAnimation } from '../../components/plumeAnimation';
 import { MapControls } from "../../components/mapControls";
 import { MapZoom } from '../../components/mapZoom';
-
+import { ColorBar } from '../../components/colorBar';
 import { LoadingSpinner } from '../../components/loading';
 import { PersistentDrawerRight } from "../../components/drawer";
 import { Title } from "../../components/title";
@@ -165,6 +165,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
           setHoveredPlumeId={setHoveredPlumeId}
         />
       </div>
+      <ColorBar/>
       {loadingData && <LoadingSpinner/>}
     </Box>
   );

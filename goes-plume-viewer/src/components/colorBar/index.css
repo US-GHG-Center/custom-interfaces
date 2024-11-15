@@ -1,0 +1,15 @@
+#colorbar {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: white;
+    padding: 12px;
+    margin-right: 9px;
+    margin-bottom: 22px;
+}
+
+.colorbar-svg {
+    height: 14px;
+    width: 34rem;
+}
