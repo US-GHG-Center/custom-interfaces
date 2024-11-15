@@ -103,12 +103,12 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
                 <CaptionValue
                     className="card-plume"
                     caption = "Approximate Start time"
-                    value = { moment(startDatetime).utc().format("MM/DD/YYYY, HH:mm:ss") + " UTC" }
+                    value = { moment.utc(startDatetime).format("MM/DD/YYYY, HH:mm:ss") + " UTC" }
                 />
                 <CaptionValue
                     className="card-plume"
                     caption = "Approximate End time"
-                    value = { moment(startDatetime).utc().format("MM/DD/YYYY, HH:mm:ss") + " UTC" }
+                    value = { moment.utc(endDatetime).format("MM/DD/YYYY, HH:mm:ss") + " UTC" }
                 />
             </HorizontalLayout>
             <HorizontalLayout>
