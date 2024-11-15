@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useTheme } from '@mui/material/styles';
+import moment from "moment";
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -7,7 +7,6 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import styled from "styled-components";
 import Divider from '@mui/material/Divider';
-
 
 import "./index.css";
 
@@ -20,11 +19,6 @@ const HorizontalLayout = styled.div`
     margin-bottom: 5px;
 `;
 
-// const HighlightableCard = styled(Card)
-// .attrs(props => ({
-//     type: "boolean",
-//     ishovered: props.isHovered
-// }))
 const HighlightableCard = styled(Card)
 `
     transition: border 0.3s ease;
@@ -109,12 +103,12 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
                 <CaptionValue
                     className="card-plume"
                     caption = "Approximate Start time"
-                    value = { startDatetime + " UTC" }
+                    value = { moment(startDatetime).utc().format("MM/DD/YYYY, HH:mm:ss") + " UTC" }
                 />
                 <CaptionValue
                     className="card-plume"
                     caption = "Approximate End time"
-                    value = { endDatetime + " UTC" }
+                    value = { moment(startDatetime).utc().format("MM/DD/YYYY, HH:mm:ss") + " UTC" }
                 />
             </HorizontalLayout>
             <HorizontalLayout>
