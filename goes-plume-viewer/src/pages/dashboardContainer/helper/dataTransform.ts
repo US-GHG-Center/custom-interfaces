@@ -122,6 +122,5 @@ export function dataTransformationPlumeRegionMeta(plumeMetaMap: PlumeMetaMap): P
         }
         plumeRegionMetaMap[plumeMeta.plumeSourceId].plumes.push(plumeMeta);
     });
-    console.log("!!!!!", plumeRegionMetaMap);
     return plumeRegionMetaMap;
 }

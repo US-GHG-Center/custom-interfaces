@@ -32,7 +32,7 @@ export function DashboardContainer() {
             setMetaDataTree(plumeRegionMetaMap);
             setPlumeMetaData(plumeMetaMap);
         } catch (error) {
-            console.log('Error Transforming metadata');
+            console.error('Error Transforming metadata');
         }
 
         const fetchData = async () => {

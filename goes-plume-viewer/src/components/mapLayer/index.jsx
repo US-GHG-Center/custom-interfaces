@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useMapbox } from "../../context/mapContext";
 import { addSourceLayerToMap, addSourcePolygonToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
 
-export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId }) => {
+export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId }) => {
     const { map } = useMapbox();
 
     useEffect(() => {
@@ -20,8 +20,14 @@ export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId }) =
         const onClickHandler = (e) => {
             handleLayerClick(plumeId);
         }
+
+        const onHoverHandler = (e) => {
+            setHoveredPlumeId(plumeId);
+        }
+
         map.setLayoutProperty(rasterLayerId, 'visibility', 'visible');
         map.on("click", polygonLayerId, onClickHandler);
+        map.on("mousemove", polygonLayerId, onHoverHandler);
 
         return () => {
             // cleanups
@@ -33,7 +39,7 @@ export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId }) =
                 map.off("click", "clusters", onClickHandler);
             }
         }
-    }, [plume, map, handleLayerClick, plumeId]);
+    }, [plume, map, handleLayerClick, plumeId, setHoveredPlumeId]);
 
     useEffect(() => {
         if (!map || !hoveredPlumeId || !plumeId ) return;
@@ -68,12 +74,12 @@ export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId }) =
 }
 
 
-export const MapLayers = ({ plumes, hoveredPlumeId, handleLayerClick }) => {
+export const MapLayers = ({ plumes, hoveredPlumeId, handleLayerClick, setHoveredPlumeId }) => {
     const { map } = useMapbox();
     if (!map || !plumes.length) return;
 
     return (<>
-        {plumes && plumes.length && plumes.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick} hoveredPlumeId={hoveredPlumeId}></MapLayer>)}
+        {plumes && plumes.length && plumes.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick} hoveredPlumeId={hoveredPlumeId} setHoveredPlumeId={setHoveredPlumeId}></MapLayer>)}
         </>
     );
 }

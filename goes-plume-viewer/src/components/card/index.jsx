@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -19,12 +20,20 @@ const HorizontalLayout = styled.div`
     margin-bottom: 5px;
 `;
 
-const HighlightableCard = styled(Card)`
+// const HighlightableCard = styled(Card)
+// .attrs(props => ({
+//     type: "boolean",
+//     ishovered: props.isHovered
+// }))
+const HighlightableCard = styled(Card)
+`
     transition: border 0.3s ease;
     &:hover {
         border: 1px solid blue;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
+    border: ${props => props.$isHovered ? "1px solid blue" : "1px solid transparent"};
+    box-shadow: ${props => props.$isHovered ? "0 4px 20px rgba(0, 0, 0, 0.2)" : "none"};
 `;
 
 const CaptionValue = ({ caption, value, className }) => {
@@ -48,7 +57,9 @@ const CaptionValue = ({ caption, value, className }) => {
     )
 }
 
-export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDatetime, imageUrl, tiffUrl, lon, lat, totalReleaseMass, colEnhancements, handleSelectedPlumeCard, setHoveredPlumeId }) {
+export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDatetime, imageUrl, tiffUrl, lon, lat, totalReleaseMass, colEnhancements, handleSelectedPlumeCard, hoveredPlumeId, setHoveredPlumeId }) {
+    const [ isHovered, setIsHovered ] = useState(false);
+
     const handleCardClick = () => {
         handleSelectedPlumeCard(plumeSourceId);
     }
@@ -61,12 +72,18 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
         setHoveredPlumeId("");
     }
 
+    useEffect(() => {
+        if (hoveredPlumeId === plumeSourceId) setIsHovered(true);
+        if (hoveredPlumeId !== plumeSourceId) setIsHovered(false);
+    }, [hoveredPlumeId, plumeSourceId])
+
     return (
     <HighlightableCard
         sx={{ display: 'flex', flex: '0 0 auto', margin: '15px' }}
         onClick={handleCardClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        $isHovered={isHovered}
     >
         <div
             style={{display: "flex", alignItems: "center", justifyContent: "center"}}

@@ -61,7 +61,7 @@ const HorizontalLayout = styled.div`
     margin-bottom: 5px;
 `;
 
-export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, collectionId, metaDataTree, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId}) {
+export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, collectionId, metaDataTree, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId}) {
   const [ selectedPlumeMetas, setSelectedPlumeMetas ] = useState([]);
   const [ location, setLocation ] = useState("USA");
   const [ numberOfPlumes, setNumberOfPlumes ] = useState(0);
@@ -151,6 +151,7 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
                 startDatetime={selectedPlumeMeta.startDatetime}
                 endDatetime={selectedPlumeMeta.endDatetime}
                 handleSelectedPlumeCard={handleSelectedPlumeCard}
+                hoveredPlumeId={hoveredPlumeId}
                 setHoveredPlumeId={setHoveredPlumeId}
               />
             ))
