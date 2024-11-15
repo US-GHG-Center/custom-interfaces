@@ -124,7 +124,7 @@ function createColorbar(VMIN, VMAX) {
     .style("margin-bottom", "12px"); // Adjust margin as needed
 }
 
-function addTimelineMarkers(utcTimesObserved, start_date, end_date, color) {
+function addTimelineMarkers(utcTimesObserved, start_date, end_date, color, zindex, height,width, radius) {
   const slider = document.querySelector('.mapboxgl-ctrl-timeline__slider');
   const sliderRect = slider.getBoundingClientRect();
   const parentRect = slider.parentNode.getBoundingClientRect();
@@ -137,13 +137,14 @@ function addTimelineMarkers(utcTimesObserved, start_date, end_date, color) {
   function createMarker(color, leftOffset) {
       const marker = document.createElement('div');
       marker.style.position = 'absolute';
-      marker.style.width = '4px';
-      marker.style.height = '4px';
+      marker.style.width = `${width}px`;
+      marker.style.zIndex= zindex
+      marker.style.height = `${height}px`;
       marker.style.opacity = '1';
-      marker.style.borderRadius = '50%';
+      marker.style.borderRadius = `${radius}%`;
       marker.style.backgroundColor = color;
       marker.style.left = `${leftOffset}px`;
-      marker.style.top = `${slider.offsetTop }px`;
+      marker.style.top = `${slider.offsetTop - (height/2) +2 }px`;
       slider.parentNode.appendChild(marker);
   }
   const startTime = new Date(start_date).getTime();
@@ -216,10 +217,27 @@ function afterAnimation(map, preservedState){
   document.getElementById("end_date").value = preservedState.endDate;
 }
 
+function isFeatureWithinBounds(feature, bounds) {
+  if (feature.geometry.type !== 'Polygon') return false;
+
+  // Create a bounding box feature from the map bounds
+  const boundingBox = turf.bboxPolygon([
+    bounds._sw.lng,
+    bounds._sw.lat,
+    bounds._ne.lng,
+    bounds._ne.lat
+  ]);
+
+  // Check if the feature intersects with the bounding box
+  return turf.booleanIntersects(feature, boundingBox);
+}
+
+
 module.exports = {
     filterByDates: filterByDates,
     createColorbar: createColorbar,
     addTimelineMarkers: addTimelineMarkers,
     afterAnimation: afterAnimation,
-    beforeAnimation: beforeAnimation
+    beforeAnimation: beforeAnimation,
+    isFeatureWithinBounds: isFeatureWithinBounds
   };

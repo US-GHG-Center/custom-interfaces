@@ -6,7 +6,8 @@ import { filterByDates,
         createColorbar,
         addTimelineMarkers,
         beforeAnimation,
-        afterAnimation } from "./helper";
+        afterAnimation,
+        isFeatureWithinBounds } from "./helper";
 import { addCoverage,removeLayers } from "./coverage";
 import { updateSearchList } from "./search";
 import { getPopupContent,createItemContent } from "./content"; 
@@ -485,8 +486,9 @@ isAnimation.addEventListener("change", (event) => {
                 coverage: cov,
             };
             const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
-            //const covTimes = CURRENTCOVERAGE.features.map(item => item.properties['start_time']);
-            console.log("see cov", CURRENTCOVERAGE);
+            const covTimes = CURRENTCOVERAGE.features
+            .filter(feature => isFeatureWithinBounds(feature, map.getBounds()))
+            .map(feature => new Date(feature.properties.start_time));
             document.getElementById("showCoverage").checked = true;
             removePrevPlumeLayers();
             timeline = new TimelineControl({
@@ -514,8 +516,8 @@ isAnimation.addEventListener("change", (event) => {
             });
             const timelineElement = timeline.onAdd(map);
             document.getElementById('toolbar').appendChild(timelineElement);
-            addTimelineMarkers(utcTimesObserved, start_date, end_date,'#20068f');
-            //addTimelineMarkers(covTimes, start_date, end_date, 'red');
+            addTimelineMarkers(covTimes, start_date, end_date, '#20068f', 999, 8,4, 0);
+            addTimelineMarkers(utcTimesObserved, start_date, end_date,"red", 1000, 4,4,50);
         } 
         else 
         {
