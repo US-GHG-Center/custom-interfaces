@@ -176,8 +176,11 @@ function beforeAnimation(map){
   map.boxZoom.disable();
 
   document.getElementById("plegend-container").style.display ='none';
-  const start_date = document.getElementById("start_date").value;
-  const end_date = document.getElementById("end_date").value;
+  // const start_date = document.getElementById("start_date").value;
+  // const end_date = document.getElementById("end_date").value;
+  // console.log("paila ko format", start_date)
+  // console.log("aba ko format", getSliderValues())
+  const {s:start_date, e:end_date} = getSliderValues();
   const cov = document.getElementById("showCoverage").checked;
   preservedState = {
       dates: {
@@ -186,6 +189,9 @@ function beforeAnimation(map){
       },
       coverage: cov,
   }
+  $("#slider-range").slider("disable");
+  $("#slider-range").css("opacity", "0.4"); 
+  $("#amount").css("opacity", 0); 
   document.querySelector('.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in').disabled = true;
   document.querySelector('.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out').disabled = true;
   document.getElementById('refresh').disabled = true;
@@ -207,6 +213,12 @@ function afterAnimation(map, preservedState){
   map.scrollZoom.enable();
   map.boxZoom.enable();
 
+  $("#slider-range").slider("enable");
+  $("#slider-range").css("opacity", "1"); 
+  const sDate= new Date(preservedState.startDate).getTime()/1000;
+  const eDate= new Date(preservedState.endDate).getTime()/1000;
+  $("#slider-range").slider("values", [sDate, eDate]);
+  $("#amount").css("opacity", 1); 
   document.querySelector('.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in').disabled = false;
   document.querySelector('.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out').disabled = false;
   document.getElementById('refresh').disabled = false;
@@ -216,15 +228,15 @@ function afterAnimation(map, preservedState){
   document.querySelector('.autocomplete-search-box .search-box').style.opacity = '1'
   document.querySelector('.slider').style.opacity = '1';
 
-  const dateInputs = document.querySelectorAll('input[type="datetime-local"]');
-  dateInputs.forEach(input => {
-      input.disabled = false;
-      input.style.opacity = '1'; 
-  });
+  // const dateInputs = document.querySelectorAll('input[type="datetime-local"]');
+  // dateInputs.forEach(input => {
+  //     input.disabled = false;
+  //     input.style.opacity = '1'; 
+  // });
   // Restore dates and coverage
   document.getElementById("showCoverage").checked = preservedState.coverage;
-  document.getElementById("start_date").value = preservedState.startDate;
-  document.getElementById("end_date").value = preservedState.endDate;
+  // document.getElementById("start_date").value = preservedState.startDate;
+  // document.getElementById("end_date").value = preservedState.endDate;
 }
 
 function isFeatureWithinBounds(feature, bounds) {
@@ -242,6 +254,72 @@ function isFeatureWithinBounds(feature, bounds) {
   return turf.booleanIntersects(feature, boundingBox);
 }
 
+function initializeDateSlider() {
+  const firstPoint = "2022-06-06T00:00:00";
+  const lastPoint = "2024-06-06T00:00:00";
+
+  var minStartDate = new Date(firstPoint);
+  minStartDate.setUTCHours(0, 0, 0, 0);
+
+  var maxStopDate = new Date(lastPoint);
+  maxStopDate.setUTCHours(23, 59, 59, 0);
+
+  // Store a reference to the slider
+  dateSlider = $("#slider-range").slider({
+    range: true,
+    min: minStartDate.getTime() / 1000,  // Convert to seconds
+    max: maxStopDate.getTime() / 1000,  // Convert to seconds
+    step: 86400,  // Step size of 1 day (86400 seconds)
+    values: [minStartDate.getTime() / 1000, maxStopDate.getTime() / 1000],  // Default slider range
+    slide: function (event, ui) {
+      let startDate = new Date(ui.values[0] * 1000); // Convert to milliseconds
+      let stopDate = new Date(ui.values[1] * 1000); // Convert to milliseconds
+      startDate.setUTCHours(0, 0, 0, 0);
+      stopDate.setUTCHours(23, 59, 59, 0);
+
+      $("#amount").val(
+        startDate.toUTCString().slice(0, -13) + " - " + stopDate.toUTCString().slice(0, -13)
+      );
+
+      // You can now access the left and right handles specifically:
+      console.log("Left Handle (Start Date): ", startDate);
+      console.log("Right Handle (End Date): ", stopDate);
+    }
+  });
+
+  // Set the initial value for the date range in the text input
+  var startDate = new Date($("#slider-range").slider("values", 0) * 1000);
+  var endDate = new Date($("#slider-range").slider("values", 1) * 1000);
+  console.log("esto airacha",startDate)
+
+  $("#amount").val(
+    startDate.toUTCString().slice(0, -13) + " - " + endDate.toUTCString().slice(0, -13)
+  );
+}
+function formatTimestampToDate(timestamp) {
+  const d = new Date(timestamp);  // Convert the timestamp to a Date object
+  
+  const year = d.getUTCFullYear();  // Get the full year in UTC
+  const month = String(d.getUTCMonth() + 1).padStart(2, '0');  // Get the month (0-indexed, so add 1)
+  const day = String(d.getUTCDate()).padStart(2, '0');  // Get the day of the month
+  const hours = String(d.getUTCHours()).padStart(2, '0');  // Get the hour (UTC)
+  const minutes = String(d.getUTCMinutes()).padStart(2, '0');  // Get the minutes (UTC)
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`;  // Return in the desired format
+}
+
+
+function getSliderValues() {
+  const dateSlider = document.getElementById("slider-range");
+  if (dateSlider) {
+    const s= formatTimestampToDate($("#slider-range").slider("values", 0) * 1000)
+    const e= formatTimestampToDate($("#slider-range").slider("values", 1) * 1000)
+    console.log("s ra e", s)
+    return {s,e}
+  } else {
+    console.log("Slider is not initialized yet.");
+  }
+}
 
 module.exports = {
     filterByDates: filterByDates,
@@ -249,5 +327,8 @@ module.exports = {
     addTimelineMarkers: addTimelineMarkers,
     afterAnimation: afterAnimation,
     beforeAnimation: beforeAnimation,
-    isFeatureWithinBounds: isFeatureWithinBounds
+    isFeatureWithinBounds: isFeatureWithinBounds,
+    initializeDateSlider: initializeDateSlider,
+    getSliderValues: getSliderValues,
+    formatTimestampToDate: formatTimestampToDate
   };

@@ -7,8 +7,10 @@ import { filterByDates,
         addTimelineMarkers,
         beforeAnimation,
         afterAnimation,
-        isFeatureWithinBounds } from "./helper";
-import { addCoverage,removeLayers } from "./coverage";
+        isFeatureWithinBounds,
+        formatTimestampToDate,
+        getSliderValues } from "./helper";
+import { addCoverage } from "./coverage";
 import { updateSearchList } from "./search";
 import { getPopupContent,createItemContent } from "./content"; 
 import {
@@ -49,14 +51,17 @@ let CURRENTCOVERAGE; // Its value changes with start and end date, derived from 
 let viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
     marker.properties['Data Download'].split('/').pop().split('.')[0]
 );
-let startDate = document.getElementById("start_date").value;
-let endDate = document.getElementById("end_date").value;
+// let startDate = document.getElementById("start_date").value;
+// let endDate = document.getElementById("end_date").value;
+let startDate, endDate;
 
 function updateDatesandData(){
-    const startDate =  document.getElementById("start_date").value;
-    const endDate = document.getElementById("end_date").value;
-    CURRENTCOVERAGE = filterByDates(coverageData,startDate, endDate, "coverage");
-    const points = filterByDates(methanMetadata,startDate, endDate, "plumes" ).features
+    // const startDate =  document.getElementById("start_date").value;
+    // const endDate = document.getElementById("end_date").value;
+    const {s: start_date, e: end_date} = getSliderValues();
+
+    CURRENTCOVERAGE = filterByDates(coverageData,start_date, end_date, "coverage");
+    const points = filterByDates(methanMetadata,start_date, end_date, "plumes" ).features
             .filter((f) => f.geometry.type === "Point")
             .map((f, i) => ({
                 id: i,
@@ -298,10 +303,6 @@ function createPlumesList(){
     additionalText.innerText = `${MARKERS_ON_VIEWPORT.length} Plumes`; 
     const legendContainer = document.getElementById("plegend");
     legendContainer.innerHTML = '';
-    console.log("startDate ", startDate);
-    console.log("endDate ", endDate);
-    console.log("markers on viewport ", MARKERS_ON_VIEWPORT.length);
-    console.log("markers on map ", MARKERS_ON_MAP.length);
     
     MARKERS_ON_VIEWPORT.sort((a, b) => {
         const dateA = new Date(a.feature.properties['UTC Time Observed']);
@@ -368,6 +369,7 @@ function addPointsOnMap(){
 };
 
 async function getCoverageData() {
+    try{
     const cacheName = "coverageDataCache";
     const cacheUrl = `${PUBLIC_URL}/data/coverage_data.json`;
     const cache = await caches.open(cacheName);
@@ -381,7 +383,45 @@ async function getCoverageData() {
     const networkResponse = await fetch(cacheUrl);
     await cache.put(cacheUrl, networkResponse.clone()); 
     return await networkResponse.json(); 
+}catch (error) {
+    console.log("Error loading coverage");
+} finally {
+    document.getElementById("loading-spinner").style.display = "none";
 }
+}
+function initializeDateSlider() {
+    const firstPoint = "2022-06-06T00:00:00";
+    const lastPoint = "2024-12-06T00:00:00";
+    var minStartDate = new Date(firstPoint);
+    minStartDate.setUTCHours(0, 0, 0, 0);
+    var maxStopDate = new Date(lastPoint);
+    maxStopDate.setUTCHours(23, 59, 59, 0);
+
+    $("#amount").val(
+        minStartDate.toUTCString().slice(0, -13) + " - " + maxStopDate.toUTCString().slice(0, -13)
+      );
+    const dateSlider = $("#slider-range").slider({
+      range: true,
+      min: minStartDate.getTime() / 1000,  // Convert to seconds
+      max: maxStopDate.getTime() / 1000,  // Convert to seconds
+      step: 86400,  // Step size of 1 day (86400 seconds)
+      values: [minStartDate.getTime() / 1000, maxStopDate.getTime() / 1000],
+      slide: function (event, ui) {
+        let sDate = new Date(ui.values[0] * 1000); // Convert to milliseconds
+        let eDate = new Date(ui.values[1] * 1000); // Convert to milliseconds
+        sDate.setUTCHours(0, 0, 0, 0);
+        eDate.setUTCHours(23, 59, 59, 0);
+  
+        $("#amount").val(
+          sDate.toUTCString().slice(0, -13) + " - " + eDate.toUTCString().slice(0, -13)
+        );
+        startDate = formatTimestampToDate(sDate);
+        endDate = formatTimestampToDate(eDate);
+        updateDatesandData();
+      }
+    });
+  }
+
 
 async function main() {
     map.on("load", async () => {  
@@ -389,13 +429,10 @@ async function main() {
         addMeasurementSource(map);
         document.querySelector(".toolbar").style.display = "block";
         createColorbar(VMIN, VMAX);
-
-        let startDate = document.getElementById("start_date").value;
-        let endDate = document.getElementById("end_date").value;
-        try {
-        coverageData = await getCoverageData();
-    
+        coverageData =  await getCoverageData();
         addMeasurementLayer(map);
+        initializeDateSlider();
+        let {s: startDate, e: endDate} = getSliderValues();
         const polygons = methanMetadata.features
         .filter((f) => f.geometry.type === "Polygon")
         .map((f) => {
@@ -414,8 +451,8 @@ async function main() {
                     id: id,     
                     feature: f
                 };
-            })
-
+            });
+        
         // Set the global vars when the map loads
         ALLPOLYGONS = polygons;
         MARKERS_ON_VIEWPORT = points;
@@ -427,19 +464,14 @@ async function main() {
         CURRENTCOVERAGE = coverageData;
         // Initially display all plumes as markers
         addPointsOnMap();
-    } catch (error) {
-        console.log("Error loading coverage file");
-    } finally {
-        document.getElementById("loading-spinner").style.display = "none";
-    }
     });
 }
 
 //Add event listeners
 map.on('drag', () => { zoomedOrDraggedToThreshold(); });
 map.on('zoomend', () => { zoomedOrDraggedToThreshold(); });
-document.getElementById("start_date").addEventListener('change', updateDatesandData);
-document.getElementById("end_date").addEventListener('change', updateDatesandData);
+// document.getElementById("start_date").addEventListener('change', updateDatesandData);
+// document.getElementById("end_date").addEventListener('change', updateDatesandData);
 document.getElementById("showCoverage").addEventListener("change", () => addCoverage(map,CURRENTCOVERAGE));
 document.getElementById("plume-id-search-input").addEventListener("input", (event) => {
     const keyword = event.target.value.trim();
@@ -511,18 +543,20 @@ isAnimation.addEventListener("change", (event) => {
                 },         
                 step: 1000 * 3600 * 24* 30, // 30 days interval
                 onChange: date => {
-                    endDate = new Date(date).toISOString().slice(0, 16);
-                    document.getElementById("end_date").value = endDate;
+                    const currentStartTime = $("#slider-range").slider("values", 0);
+                    const manualEndTime =  new Date(date).getTime()/1000;
+                    $("#slider-range").slider("values", [currentStartTime, manualEndTime]);
                     updateDatesandData(); 
                     //if you dont want cummulative
-                    startDate= endDate
-                    document.getElementById("start_date").value = endDate;
+                    const currentEndTime = $("#slider-range").slider("values", 1);
+                    const manualStartTime= currentEndTime;
+                    $("#slider-range").slider("values", [manualStartTime, currentEndTime]);
                 },
             });
             const timelineElement = timeline.onAdd(map);
             document.getElementById('toolbar').appendChild(timelineElement);
-            addTimelineMarkers(covTimes, start_date, end_date, '#ddd', 999, 8,4, 0);
-            addTimelineMarkers(utcTimesObserved, start_date, end_date,"#20068f", 1000, 4,4,50);
+            addTimelineMarkers(covTimes, start_date, end_date, '#ddd', 9, 8,4, 0);
+            addTimelineMarkers(utcTimesObserved, start_date, end_date,"#20068f", 10, 4,4,50);
         } 
         else 
         {

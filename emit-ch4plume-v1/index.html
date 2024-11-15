@@ -9,15 +9,15 @@
     rel="stylesheet"
     />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
-    <link rel="stylesheet" href="src/style.css" />
     <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="https://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+    <link rel="stylesheet" href="src/style.css" />
     </head>
   <body>
 
@@ -39,6 +39,16 @@
         <ul id="plume-id-search-list" class="search-result"></ul>
       </div>
 
+
+      <div class="date-range">
+        <input id="amount" class="amount" type="text">
+        <div id="slider-range"></div>
+        <div class="label-container">
+          <span class="custom-label"> Start Date</span>
+          <span class="custom-label"> End Date</span>
+        </div>
+    
+      <!--
       <div class="dates">
         <div class="label-container">
           <span class="custom-label"> Start Date</span>
@@ -51,6 +61,8 @@
                id="end_date">
         </div>
       </div>
+      -->
+      
         <div class="toggle-container">
           <span class="custom-label"> Show EMIT Coverage</span>
           <label class="toggle-switch">

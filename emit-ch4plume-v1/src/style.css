@@ -115,7 +115,7 @@ overflow: auto;
 /* the toolbar related styling goes here */ 
 
 .toolbar {
-display: none;
+display: flex;
 position: absolute;
 top: 10px; 
 left: 10px; 
@@ -184,7 +184,6 @@ width: 100%
 
 /* Label before the toggle switch */
 .custom-label {
-  margin-right: 10px;
   color: #082a64;;
   font-size: 14px;
   font-weight: 500;
@@ -384,8 +383,6 @@ color: #333;
 border-top-color: rgba(255, 255, 255, 0.7);
 }
 
-
-
 /* colorbar */
 .colorbar {
   background-color: white; 
@@ -457,3 +454,27 @@ border-top-color: rgba(255, 255, 255, 0.7);
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+/* selecting date related styling goes here */ 
+.ui-widget-header { background: #082A63;}
+.ui-slider .ui-slider-handle {
+  position: absolute;
+  z-index: 99;
+  width: 1.2em;
+  height: 1.2em;
+  cursor: col-resize;
+}
+
+.amount {
+  color: #082A63;
+  width: 100%;
+  text-align: center;
+  border: 0;
+  margin-top: 15px;
+  font-size: 12px;;
+}
+#slider-range {
+  width:90%;
+  display: flex;
+  justify-self: center;
+}
+
