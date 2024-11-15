@@ -521,8 +521,8 @@ isAnimation.addEventListener("change", (event) => {
             });
             const timelineElement = timeline.onAdd(map);
             document.getElementById('toolbar').appendChild(timelineElement);
-            addTimelineMarkers(covTimes, start_date, end_date, '#20068f', 999, 8,4, 0);
-            addTimelineMarkers(utcTimesObserved, start_date, end_date,"red", 1000, 4,4,50);
+            addTimelineMarkers(covTimes, start_date, end_date, '#ddd', 999, 8,4, 0);
+            addTimelineMarkers(utcTimesObserved, start_date, end_date,"#20068f", 1000, 4,4,50);
         } 
         else 
         {
