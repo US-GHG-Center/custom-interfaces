@@ -122,7 +122,7 @@ function createColorbar(VMIN, VMAX) {
   // Add CSS styles to position and style the colorbar
   colorbar
     .style("position", "absolute")
-    .style("bottom", "60px") // Adjust the top position as needed
+    .style("bottom", "20px") // Adjust the top position as needed
     .style("right", "50px") // Adjust the left position as needed
     .style("background-color", "white")
     .style("padding", "12px");
