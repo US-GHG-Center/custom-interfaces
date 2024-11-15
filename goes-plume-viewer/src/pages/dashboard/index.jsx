@@ -40,38 +40,43 @@ const scaleUnits = {
 //   dateTime: string // date of the plume
 // }
 
-export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoomLevel }) {
-  const [ selectedPlume, setSelectedPlume ] = useState(null); // plume id looks like BV1-1
-  const [ dailyRepPlumes, setDailyRepPlumes ] = useState([]);
-  const [ filteredDailyRepPlumes, setFilteredDailyRepPlumes ] = useState([]);
-  const [ dailyRepPlumeIds, setDailyRepPlumeIds ] = useState([]);
-  const [ plumesForAnimation, setPlumesForAnimation ] = useState([]);
-  const [ openDrawer, setOpenDrawer ] = useState(false);
+export function Dashboard({
+  dataTree,
+  collectionId,
+  metaData,
+  zoomLevel,
+  setZoomLevel,
+}) {
+  const [selectedPlume, setSelectedPlume] = useState(null); // plume id looks like BV1-1
+  const [dailyRepPlumes, setDailyRepPlumes] = useState([]);
+  const [filteredDailyRepPlumes, setFilteredDailyRepPlumes] = useState([]);
+  const [dailyRepPlumeIds, setDailyRepPlumeIds] = useState([]);
+  const [plumesForAnimation, setPlumesForAnimation] = useState([]);
+  const [openDrawer, setOpenDrawer] = useState(false);
 
   const [measureMode, setMeasureMode] = useState(false);
-  const [clearMeasurementIcon, setClearMeasurementIcon] = useState(false)
-  const [clearMeasurementLayer, setClearMeasurementLayer] = useState(false)
+  const [clearMeasurementIcon, setClearMeasurementIcon] = useState(false);
+  const [clearMeasurementLayer, setClearMeasurementLayer] = useState(false);
   const [mapScaleUnit, setMapScaleUnit] = useState(scaleUnits.MILES);
 
   const handleSelectedPlume = (dailyRepPlume) => {
-    const { location, plumeId} = dailyRepPlume;
+    const { location, plumeId } = dailyRepPlume;
     setSelectedPlume(dailyRepPlume);
-    setPlumesForAnimation(dataTree[plumeId])
+    setPlumesForAnimation(dataTree[plumeId]);
     setOpenDrawer(true);
-    setZoomLevel(location)
-
-  }
+    setZoomLevel(location);
+  };
 
   const handleSearchSelectedPlumeId = (plumeId) => {
     const selectedPlume = getRepPlume(plumeId, dataTree);
     handleSelectedPlume(selectedPlume);
-  }
+  };
 
   useEffect(() => {
     if (!dataTree) return;
 
     const dailyRepPlumes = extractRepPlumes(dataTree);
-    const dailyRepPlumeIds = dailyRepPlumes.map(plume => plume.plumeId);
+    const dailyRepPlumeIds = dailyRepPlumes.map((plume) => plume.plumeId);
     setDailyRepPlumes(dailyRepPlumes);
     setFilteredDailyRepPlumes(dailyRepPlumes);
     setDailyRepPlumeIds(dailyRepPlumeIds);
@@ -79,34 +84,38 @@ export function Dashboard({ dataTree, collectionId, metaData, zoomLevel, setZoom
 
   useEffect(() => {
     // helps the search feature to be on top of filter feature
-    const dailyFilteredRepPlumeIds = filteredDailyRepPlumes.map(plume => plume.plumeId);
+    const dailyFilteredRepPlumeIds = filteredDailyRepPlumes.map(
+      (plume) => plume.plumeId
+    );
     setDailyRepPlumeIds(dailyFilteredRepPlumeIds);
   }, [filteredDailyRepPlumes]);
 
   return (
     <Box className="fullSize">
       <div id="dashboard-map-container">
-        <Title>
-          <HorizontalLayout>
-            <Search
-              ids={dailyRepPlumeIds}
-              setSelectedPlumeId={handleSearchSelectedPlumeId}
-            ></Search>
-          </HorizontalLayout>
-          <HorizontalLayout>
-            <FilterByDate
-              plumes={dailyRepPlumes}
-              setFilteredPlumes={setFilteredDailyRepPlumes}
-            />
-          </HorizontalLayout>
-        </Title>
         <MainMap>
+          <Title>
+            <HorizontalLayout>
+              <Search
+                ids={dailyRepPlumeIds}
+                setSelectedPlumeId={handleSearchSelectedPlumeId}
+              ></Search>
+            </HorizontalLayout>
+            <HorizontalLayout>
+              <FilterByDate
+                plumes={dailyRepPlumes}
+                setFilteredPlumes={setFilteredDailyRepPlumes}
+              />
+            </HorizontalLayout>
+            <HorizontalLayout>
+              <PlumeAnimation plumes={plumesForAnimation} />
+            </HorizontalLayout>
+          </Title>
           <MarkerFeature
             plots={filteredDailyRepPlumes}
             setSelectedPlume={handleSelectedPlume}
           ></MarkerFeature>
           <MapLayer plume={selectedPlume}></MapLayer>
-          <PlumeAnimation plumes={plumesForAnimation} />
           <MeasurementLayer
             measureMode={measureMode}
             setMeasureMode={setMeasureMode}
