@@ -1,7 +1,7 @@
 // index.js
 import "./style.css";
-import mapboxgl from "./map";
-import { getMapInstance } from "./map";
+import mapboxgl  from "./map";
+import { getMapInstance, layerToggled } from "./map";
 import { filterByDates,
         createColorbar,
         addTimelineMarkers,
@@ -142,11 +142,15 @@ function addRaster(itemId) {
     console.log(TILE_URL);
     const layer_id = "raster-" + itemId
     console.log("adding..",layer_id );
+    const visibility = layerToggled ? 'visible' : 'none';
     map.addLayer({
         id: layer_id,
         type: "raster",
         source: "raster-" + itemId + "-source",
-        paint: {},
+        paint: {},        
+        layout: {
+            visibility: visibility
+        }
     });
 }
 

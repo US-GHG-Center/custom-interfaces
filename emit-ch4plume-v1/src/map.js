@@ -42,6 +42,45 @@ class HomeButtonControl {
       this.map = undefined;
   }
 }
+export var layerToggled = true;
+class LayerButtonControl extends MapControls {
+  onClick() {
+    // Toggle the icon between eye and eye-slash
+    $("#layer-eye").toggleClass("fa-eye fa-eye-slash");
+
+    // Toggle the layer visibility state
+    layerToggled = !layerToggled;
+
+    // Get the layers from the map style
+    const layers = this.map.getStyle().layers;
+
+    // Loop through all layers
+    layers.forEach((layer) => {
+      // Check if the layer id starts with 'raster-'
+      if (layer.id.startsWith('raster-')) {
+        // If layerToggled is true, make it visible, else hide it
+        const visibility = layerToggled ? 'visible' : 'none';
+        map.setLayoutProperty(layer.id, 'visibility', visibility);
+      }
+    });
+  }
+
+  onAdd(map) {
+    this.map = map;
+    this.container = document.createElement("div");
+    this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
+    this.container.addEventListener("contextmenu", (e) => e.preventDefault());
+    this.container.addEventListener("click", (e) => this.onClick());
+    this.container.innerHTML =
+      '<div class="tools-box">' +
+      "<button>" +
+      '<span id="layer-eye" class="mapboxgl-ctrl-icon btn fa fa-eye" aria-hidden="true" title="Show/Hide layers"></span>' +
+      "</button>" +
+      "</div>";
+    return this.container;
+  }
+  
+}
 
 class legendToggle {
   onClick() {
@@ -143,6 +182,7 @@ export const getMapInstance = () => {
         map.addControl(new legendToggle());
         map.addControl(mapScale);
         map.addControl(new HomeButtonControl());
+        map.addControl(new LayerButtonControl());
         map.addControl(zoomControl, "top-right");
         addMeasurementControls(map);
         map.addControl(new ChangeMapUnit(mapScale)); 
