@@ -136,7 +136,7 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
                 />
                 <CaptionValue
                     className="card-plume"
-                    caption = "Methane Column Enhancement"
+                    caption = "Maximum Methane Column Enhancement"
                     value = {colEnhancements + " mol/m²"}
                 />
             </HorizontalLayout>
