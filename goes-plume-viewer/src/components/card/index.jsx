@@ -48,15 +48,25 @@ const CaptionValue = ({ caption, value, className }) => {
     )
 }
 
-export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDatetime, imageUrl, tiffUrl, lon, lat, totalReleaseMass, colEnhancements, handleSelectedPlumeCard }) {
+export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDatetime, imageUrl, tiffUrl, lon, lat, totalReleaseMass, colEnhancements, handleSelectedPlumeCard, setHoveredPlumeId }) {
     const handleCardClick = () => {
         handleSelectedPlumeCard(plumeSourceId);
+    }
+
+    const handleMouseEnter = () => {
+        setHoveredPlumeId(plumeSourceId);
+    }
+
+    const handleMouseLeave = () => {
+        setHoveredPlumeId("");
     }
 
     return (
     <HighlightableCard
         sx={{ display: 'flex', flex: '0 0 auto', margin: '15px' }}
         onClick={handleCardClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
     >
         <div
             style={{display: "flex", alignItems: "center", justifyContent: "center"}}

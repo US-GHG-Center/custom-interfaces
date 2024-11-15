@@ -37,6 +37,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
   const [ plumes, setPlumes ] = useState([]);
   const [ selectedRegionId, setSelectedRegionId ] = useState(null); //string
   const [ selectedPlumes, setSelectedPlumes ] = useState([]);
+  const [ hoveredPlumeId, setHoveredPlumeId ] = useState("");
 
   const [ filteredRegions, setFilteredRegions ] = useState([]);
   const [ filteredSelectedPlumes, setFilteredSelectedPlumes ] = useState([]);
@@ -97,6 +98,8 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setPlumesForAnimation([]); // reset the animation
   }, [dataTree, selectedRegionId]);
 
+  console.log("hovered plumeId>>>>", hoveredPlumeId)
+
   return (
     <Box className="fullSize">
       <div id="dashboard-map-container">
@@ -122,7 +125,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
             setSelectedRegionId={handleSelectedRegion}
           ></MarkerFeature>
           <PlumeAnimation plumes={plumesForAnimation} />
-          <MapLayers plumes={filteredSelectedPlumes} handleLayerClick={handleSelectedPlume}></MapLayers>
+          <MapLayers plumes={filteredSelectedPlumes} handleLayerClick={handleSelectedPlume} hoveredPlumeId={hoveredPlumeId}></MapLayers>
           <MapControls
             measureMode={measureMode}
             onClickHamburger={() => setOpenDrawer(true)}
@@ -155,6 +158,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
           collectionId={collectionId}
           plumesMap={plumes}
           handleSelectedPlumeCard={handleSelectedPlume}
+          setHoveredPlumeId={setHoveredPlumeId}
         />
       </div>
       {loadingData && <LoadingSpinner/>}

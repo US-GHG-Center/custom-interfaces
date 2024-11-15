@@ -1,20 +1,18 @@
-import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import { useEffect } from "react";
 import { useMapbox } from "../../context/mapContext";
 import { addSourceLayerToMap, addSourcePolygonToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
 
-export const MapLayer = ({ plume, handleLayerClick, plumeId }) => {
+export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId }) => {
     const { map } = useMapbox();
 
     useEffect(() => {
         if (!map || !plume) return;
 
         const feature = plume;
-        const id = uuidv4();
-        const rasterSourceId = getSourceId(id);
-        const rasterLayerId = getLayerId(id);
-        const polygonSourceId = getSourceId("polygon"+id);
-        const polygonLayerId = getLayerId("polygon"+id);
+        const rasterSourceId = getSourceId("raster"+plumeId);
+        const rasterLayerId = getLayerId("raster"+plumeId);
+        const polygonSourceId = getSourceId("polygon"+plumeId);
+        const polygonLayerId = getLayerId("polygon"+plumeId);
 
         addSourceLayerToMap(map, feature, rasterSourceId, rasterLayerId);
         addSourcePolygonToMap(map, feature, polygonSourceId, polygonLayerId);
@@ -37,16 +35,45 @@ export const MapLayer = ({ plume, handleLayerClick, plumeId }) => {
         }
     }, [plume, map, handleLayerClick, plumeId]);
 
+    useEffect(() => {
+        if (!map || !hoveredPlumeId || !plumeId ) return;
+
+        const polygonLayerId = getLayerId("polygon"+plumeId);
+        const rasterLayerId = getLayerId("raster"+plumeId);
+
+        if (hoveredPlumeId !== plumeId) {
+            // when the plume is not hovered
+            if (layerExists(map, polygonLayerId)) {
+                map.setPaintProperty(polygonLayerId, 'fill-outline-color', '#20B2AA');
+            }
+            if (layerExists(map, rasterLayerId)) {
+                map.setLayoutProperty(rasterLayerId, 'visibility', 'none');
+            }
+        }
+
+        if (hoveredPlumeId === plumeId) {
+            // when the plume is hovered
+            if (layerExists(map, rasterLayerId)) {
+                map.moveLayer(rasterLayerId);
+            }
+            if (layerExists(map, polygonLayerId)) {
+                map.setPaintProperty(polygonLayerId, 'fill-outline-color', '#0000ff');
+            }
+        }
+    }, [hoveredPlumeId, map, plumeId]);
+
+    // console.log("layers>", map.getStyle().layers)
+
     return null;
 }
 
 
-export const MapLayers = ({ plumes, handleLayerClick }) => {
+export const MapLayers = ({ plumes, hoveredPlumeId, handleLayerClick }) => {
     const { map } = useMapbox();
     if (!map || !plumes.length) return;
 
     return (<>
-        {plumes && plumes.length && plumes.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick}></MapLayer>)}
+        {plumes && plumes.length && plumes.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick} hoveredPlumeId={hoveredPlumeId}></MapLayer>)}
         </>
     );
 }
