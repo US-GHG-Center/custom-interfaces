@@ -385,6 +385,11 @@ async function getCoverageData() {
 
 async function main() {
     map.on("load", async () => {  
+        const [_, coverageData] = await Promise.all([
+            new Promise(resolve => map.on("load", resolve)),
+            getCoverageData()
+        ]);
+    
         addMeasurementSource(map);
         document.querySelector(".toolbar").style.display = "block";
         createColorbar(VMIN, VMAX);
@@ -392,7 +397,7 @@ async function main() {
         let startDate = document.getElementById("start_date").value;
         let endDate = document.getElementById("end_date").value;
         try {
-        coverageData = await getCoverageData();
+        //coverageData = await getCoverageData();
     
         addMeasurementLayer(map);
         const polygons = methanMetadata.features
