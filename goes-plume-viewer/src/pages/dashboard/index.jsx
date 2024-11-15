@@ -72,6 +72,14 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setFilteredSelectedPlumes([]) // to reset the all the plumes that were shown on region click
   }
 
+  const updateFilteredSelectedPlumeAfterSearch = (plumeId) => {
+    // will react to update the metadata on the sidedrawer
+    if (!plumes || !plumeId) return;
+    const plume = plumes[plumeId]
+    setSelectedPlumes([plume]);
+    setOpenDrawer(true);
+  }
+
   useEffect(() => {
     if (!dataTree) return;
 
@@ -106,6 +114,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
             <Search
               ids={plumeIds}
               handleSelectedPlume={handleSelectedPlume}
+              updateFilteredSelectedPlumeAfterSearch={updateFilteredSelectedPlumeAfterSearch}
             ></Search>
           </HorizontalLayout>
           <HorizontalLayout>
