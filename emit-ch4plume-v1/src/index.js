@@ -423,7 +423,7 @@ function initializeDateSlider() {
   }
 
 
-async function main() {
+function main() {
     map.on("load", async () => {  
     
         addMeasurementSource(map);
@@ -431,6 +431,7 @@ async function main() {
         createColorbar(VMIN, VMAX);
         initializeDateSlider();
         addMeasurementLayer(map);
+        coverageData =  await getCoverageData();
         let {s: startDate, e: endDate} = getSliderValues();
         const polygons = methanMetadata.features
         .filter((f) => f.geometry.type === "Polygon")
@@ -463,7 +464,7 @@ async function main() {
         // Initially display all plumes as markers
         addPointsOnMap();
         CURRENTCOVERAGE = coverageData;
-        coverageData =  await getCoverageData();
+        
     });
 }
 
