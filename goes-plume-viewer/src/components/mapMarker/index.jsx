@@ -52,7 +52,7 @@ export const MarkerFeature = ({ regions, setSelectedRegionId }) => {
 const addMarker = (map, longitude, latitude) => {
     const el = document.createElement('div');
     el.className = 'marker';
-    const markerColor = "#fcbb46";
+    const markerColor = "#00b7eb";
     el.innerHTML = getMarkerSVG(markerColor);
     let marker = new mapboxgl.Marker(el)
         .setLngLat([longitude, latitude])
