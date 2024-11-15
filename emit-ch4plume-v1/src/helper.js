@@ -166,7 +166,6 @@ function addTimelineMarkers(utcTimesObserved, start_date, end_date, color, zinde
       const relativePosition = (observedTime - startTime) / totalDuration;
       const observedOffsetLeft = offsetLeftStart + (relativePosition * sliderRect.width);
       createMarker(color, observedOffsetLeft);
-      console.log(observedOffsetLeft)
   });
 }
 
@@ -280,17 +279,12 @@ function initializeDateSlider() {
       $("#amount").val(
         startDate.toUTCString().slice(0, -13) + " - " + stopDate.toUTCString().slice(0, -13)
       );
-
-      // You can now access the left and right handles specifically:
-      console.log("Left Handle (Start Date): ", startDate);
-      console.log("Right Handle (End Date): ", stopDate);
     }
   });
 
   // Set the initial value for the date range in the text input
   var startDate = new Date($("#slider-range").slider("values", 0) * 1000);
   var endDate = new Date($("#slider-range").slider("values", 1) * 1000);
-  console.log("esto airacha",startDate)
 
   $("#amount").val(
     startDate.toUTCString().slice(0, -13) + " - " + endDate.toUTCString().slice(0, -13)
@@ -314,7 +308,6 @@ function getSliderValues() {
   if (dateSlider) {
     const s= formatTimestampToDate($("#slider-range").slider("values", 0) * 1000)
     const e= formatTimestampToDate($("#slider-range").slider("values", 1) * 1000)
-    console.log("s ra e", s)
     return {s,e}
   } else {
     console.log("Slider is not initialized yet.");
