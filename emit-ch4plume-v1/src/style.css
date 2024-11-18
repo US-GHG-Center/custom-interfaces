@@ -189,6 +189,7 @@ width: 100%
   font-weight: 500;
   letter-spacing: -0px; 
   opacity:1;
+  padding-top: 15px;;
 }
 
 strong {
@@ -469,6 +470,8 @@ border-top-color: rgba(255, 255, 255, 0.7);
   width: 100%;
   text-align: center;
   border: 0;
+  padding-bottom: 10px;
+  padding-top: 15px;
   margin-top: 15px;
   font-size: 12px;;
 }
