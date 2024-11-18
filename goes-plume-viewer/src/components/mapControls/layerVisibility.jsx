@@ -1,12 +1,27 @@
+import { useState } from "react";
 import ReactDOM from "react-dom/client";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-function VisibilityIconComp ({visible}) {
+function VisibilityIconComp ({map}) {
+    const [ isVisible, setIsVisible ] = useState(true);
+
+    const toggleLayers = () => {
+        if (!map) return;
+        const layers = map.getStyle().layers;
+        layers.forEach(layer => {
+            if (layer.id.includes("raster-layer")) {
+                // toggle here
+                map.setLayoutProperty(layer.id, 'visibility', isVisible ? 'none' : 'visible');
+            }
+        });
+        setIsVisible(!isVisible);
+    }
+
     return (
-        <IconButton className="menu-open-icon" >
-            { visible ? <VisibilityIcon/> : <VisibilityOffIcon/>}
+        <IconButton className="menu-open-icon" onClick={toggleLayers} >
+            { isVisible ? <VisibilityIcon/> : <VisibilityOffIcon/>}
         </IconButton>
     )
 }
@@ -15,24 +30,6 @@ export class LayerVisibilityControl {
     constructor(){
         this.root = null;
         this._map = null;
-        this.visible = true;
-    }
-
-    onClick = () => {
-        // toggle the visibility of all the layers
-        this.visible = !this.visible;
-        this.toggleLayers();
-    }
-
-    toggleLayers = () => {
-        if (!this._map) return;
-        const layers = this._map.getStyle().layers;
-        layers.forEach(layer => {
-            if (layer.id.includes("raster-layer")) {
-                console.log(layer.id)
-                this._map.setLayoutProperty(layer.id, 'visibility', this.visible ? 'visible' : 'none');
-            }
-        });
     }
 
     onAdd = (map) => {
@@ -40,9 +37,8 @@ export class LayerVisibilityControl {
         this._container = document.createElement('div');
         this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
         const root = ReactDOM.createRoot(this._container);
-        root.render(<VisibilityIconComp visible={this.visible}/>);
+        root.render(<VisibilityIconComp map={this._map}/>);
         this.root = root;
-        this._container.onclick = this.onClick;
         return this._container;
     }
 
