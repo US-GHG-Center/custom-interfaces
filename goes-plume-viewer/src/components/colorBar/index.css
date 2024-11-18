@@ -1,9 +1,13 @@
+:root {
+    --colorbar-height: 7rem; /* Adjust this value to match your d2 height */
+}
+
 #colorbar {
     position: absolute;
     bottom: 3%;
     right: 5px;
-    height: 7rem;
-    width: 33.5rem;
+    height: var(--colorbar-height);
+    width: 33.6rem;
     z-index: 10000;
     background-color: white;
     padding: 1rem;
