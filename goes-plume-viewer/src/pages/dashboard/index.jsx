@@ -82,7 +82,8 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setOpenDrawer(true);
     setZoomLevel(location);
     setSelectedRegionId(null); //to reset the plume that was shown
-    setFilteredSelectedPlumes([]) // to reset the all the plumes that were shown on region click
+    setFilteredSelectedPlumes([]); // to reset the all the plumes that were shown on region click
+    setPlumesForAnimation([]); // to reset the previous animation
   }
 
   useEffect(() => {
