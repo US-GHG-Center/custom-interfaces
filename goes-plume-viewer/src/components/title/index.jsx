@@ -14,7 +14,9 @@ export const Title = ({ children }) => {
             >
                 GOES Methane Plume Viewer
             </Typography>
-            { children }
+            <div className="title-content">
+                { children }
+            </div>
         </Paper>
     )
 }
