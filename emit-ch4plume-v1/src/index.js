@@ -4,9 +4,9 @@ import mapboxgl  from "./map";
 import { getMapInstance, layerToggled } from "./map";
 import { filterByDates,
         createColorbar,
-        addTimelineMarkers,
-        beforeAnimation,
-        afterAnimation,
+        // addTimelineMarkers,
+        // beforeAnimation,
+        // afterAnimation,
         isFeatureWithinBounds,
         formatTimestampToDate,
         getSliderValues } from "./helper";
@@ -25,7 +25,7 @@ import {
     addMeasurementLayer,
 
   } from "./measureToolHelper";
-import TimelineControl from 'mapboxgl-timeline';
+//import TimelineControl from 'mapboxgl-timeline';
 import 'mapboxgl-timeline/dist/style.css';
 
 //Global vars
@@ -47,6 +47,7 @@ let coverageData =[]
 let ALLPOLYGONS = Array(); // it will be initialized once and will remain constant
 let MARKERS_ON_MAP = Array(); // this is be initialized to methanMetadata (points only) and changes if  and end_date changes
 let MARKERS_ON_VIEWPORT = Array(); // this will change with zoom, drag, start and end filter. Its value will be updated as derived from MARKERS_ON_MAP based on filters
+let POLYGONS_ON_MAP = Array(); 
 let CURRENTCOVERAGE; // Its value changes with start and end date, derived from covergaeData
 let viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
     marker.properties['Data Download'].split('/').pop().split('.')[0]
@@ -162,10 +163,20 @@ function addRaster(itemId) {
 function zoomedOrDraggedToThreshold(){
     const currentZoom = map.getZoom();
     if (currentZoom >= ZOOM_THRESHOLD){
+        // MARKERS_ON_VIEWPORT = MARKERS_ON_MAP.filter(marker => {
+        //     const coords = marker.feature.geometry.coordinates;
+        //     const lngLat = new mapboxgl.LngLat(coords[0], coords[1]);
+        //     return  map.getBounds().contains(lngLat); 
+        // });
+        const bounds = map.getBounds(); 
+        const intersectingPolygonIds = POLYGONS_ON_MAP
+        .filter(({ feature }) => isFeatureWithinBounds(feature, bounds)) // Check if polygon intersects
+        .map(({ feature }) => {
+            return feature.properties["Data Download"].split('/').pop().split('.')[0]; 
+        });
         MARKERS_ON_VIEWPORT = MARKERS_ON_MAP.filter(marker => {
-            const coords = marker.feature.geometry.coordinates;
-            const lngLat = new mapboxgl.LngLat(coords[0], coords[1]);
-            return  map.getBounds().contains(lngLat); 
+            const markerId = marker.feature.properties["Data Download"].split('/').pop().split('.')[0];
+            return intersectingPolygonIds.includes(markerId); // Match IDs
         });
         const existing_markers = document.querySelectorAll('.marker');
         existing_markers.forEach(marker => marker.remove());
@@ -389,6 +400,7 @@ async function getCoverageData() {
     document.getElementById("loading-spinner").style.display = "none";
 }
 }
+
 function initializeDateSlider() {
     const firstPoint = "2022-06-06T00:00:00";
     const lastPoint = "2024-12-06T00:00:00";
@@ -452,6 +464,16 @@ function main() {
                     feature: f
                 };
             });
+
+        POLYGONS_ON_MAP = filterByDates(methanMetadata,startDate, endDate, "plumes" ).features
+        .filter((f) => f.geometry.type === "Polygon")
+        .map((f) => {
+            const id = f.properties["Data Download"].split('/').pop().split('.')[0]; // Extract "abc" from "http://.../abc.tif"
+            return {
+                id: id,     
+                feature: f
+            };
+        });
         
         // Set the global vars when the map loads
         ALLPOLYGONS = polygons;
@@ -511,67 +533,67 @@ if (
 });
 
 
-const isAnimation = document.getElementById("doAnimation");
-let timeline;
-let preservedState= {};
-isAnimation.addEventListener("change", (event) => {
-    if (event.target.checked) {
-        if (map.getZoom() >= ZOOM_THRESHOLD) {
-            const {start_date, end_date, cov}= beforeAnimation(map);
-            preservedState = {
-                startDate:start_date,
-                endDate: end_date,
-                coverage: cov,
-            };
-            const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
-            const covTimes = CURRENTCOVERAGE.features
-            .filter(feature => isFeatureWithinBounds(feature, map.getBounds()))
-            .map(feature => new Date(feature.properties.start_time));
-            document.getElementById("showCoverage").checked = true;
-            removePrevPlumeLayers();
-            timeline = new TimelineControl({
-                placeholder: 'Plumes',
-                className: 'timeline-control' ,
-                start: start_date,
-                end: end_date,
-                format: (date) => {
-                    const formattedDate = new Date(date).toLocaleDateString('en-US', {
-                        year: 'numeric', 
-                        month: 'short', 
-                        day: 'numeric'
-                    });
-                    return `From ${formattedDate} - 30 days prior`;
-                },         
-                step: 1000 * 3600 * 24* 30, // 30 days interval
-                onChange: date => {
-                    const currentStartTime = $("#slider-range").slider("values", 0);
-                    const manualEndTime =  new Date(date).getTime()/1000;
-                    $("#slider-range").slider("values", [currentStartTime, manualEndTime]);
-                    updateDatesandData(); 
-                    //if you dont want cummulative
-                    const currentEndTime = $("#slider-range").slider("values", 1);
-                    const manualStartTime= currentEndTime;
-                    $("#slider-range").slider("values", [manualStartTime, currentEndTime]);
-                },
-            });
-            const timelineElement = timeline.onAdd(map);
-            document.getElementById('toolbar').appendChild(timelineElement);
-            addTimelineMarkers(covTimes, start_date, end_date, '#ddd', 9, 8,4, 0);
-            addTimelineMarkers(utcTimesObserved, start_date, end_date,"#20068f", 10, 4,4,50);
-        } 
-        else 
-        {
-            alert(`Your Zoom level is ${map.getZoom()}. Please increase zoom level to ${ZOOM_THRESHOLD} around the area you want to animate!!`);
-            document.getElementById("doAnimation").checked= false;
+// const isAnimation = document.getElementById("doAnimation");
+// let timeline;
+// let preservedState= {};
+// isAnimation.addEventListener("change", (event) => {
+//     if (event.target.checked) {
+//         if (map.getZoom() >= ZOOM_THRESHOLD) {
+//             const {start_date, end_date, cov}= beforeAnimation(map);
+//             preservedState = {
+//                 startDate:start_date,
+//                 endDate: end_date,
+//                 coverage: cov,
+//             };
+//             const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
+//             const covTimes = CURRENTCOVERAGE.features
+//             .filter(feature => isFeatureWithinBounds(feature, map.getBounds()))
+//             .map(feature => new Date(feature.properties.start_time));
+//             document.getElementById("showCoverage").checked = true;
+//             removePrevPlumeLayers();
+//             timeline = new TimelineControl({
+//                 placeholder: 'Plumes',
+//                 className: 'timeline-control' ,
+//                 start: start_date,
+//                 end: end_date,
+//                 format: (date) => {
+//                     const formattedDate = new Date(date).toLocaleDateString('en-US', {
+//                         year: 'numeric', 
+//                         month: 'short', 
+//                         day: 'numeric'
+//                     });
+//                     return `From ${formattedDate} - 30 days prior`;
+//                 },         
+//                 step: 1000 * 3600 * 24* 30, // 30 days interval
+//                 onChange: date => {
+//                     const currentStartTime = $("#slider-range").slider("values", 0);
+//                     const manualEndTime =  new Date(date).getTime()/1000;
+//                     $("#slider-range").slider("values", [currentStartTime, manualEndTime]);
+//                     updateDatesandData(); 
+//                     //if you dont want cummulative
+//                     const currentEndTime = $("#slider-range").slider("values", 1);
+//                     const manualStartTime= currentEndTime;
+//                     $("#slider-range").slider("values", [manualStartTime, currentEndTime]);
+//                 },
+//             });
+//             const timelineElement = timeline.onAdd(map);
+//             document.getElementById('toolbar').appendChild(timelineElement);
+//             addTimelineMarkers(covTimes, start_date, end_date, '#ddd', 9, 8,4, 0);
+//             addTimelineMarkers(utcTimesObserved, start_date, end_date,"#20068f", 10, 4,4,50);
+//         } 
+//         else 
+//         {
+//             alert(`Your Zoom level is ${map.getZoom()}. Please increase zoom level to ${ZOOM_THRESHOLD} around the area you want to animate!!`);
+//             document.getElementById("doAnimation").checked= false;
 
-        }
-    } else {
-        afterAnimation(map, preservedState);
-        updateDatesandData();
-        if (timeline) {
-            map.removeControl(timeline);
-            timeline = null; // Reset timeline to allow recreation
-        }
-    }
-})
+//         }
+//     } else {
+//         afterAnimation(map, preservedState);
+//         updateDatesandData();
+//         if (timeline) {
+//             map.removeControl(timeline);
+//             timeline = null; // Reset timeline to allow recreation
+//         }
+//     }
+// })
 main();
