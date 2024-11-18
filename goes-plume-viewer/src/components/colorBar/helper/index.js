@@ -1,14 +1,10 @@
 import * as d3 from "d3";
 
-export const createColorbar = (colorbarElement, VMIN=0, VMAX=0.4) => {
-
+export const createColorbar = (colorbar, VMIN=0, VMAX=0.4) => {
     // Create a color scale using D3
     const colorScale = d3
         .scaleSequential(d3.interpolatePlasma)
         .domain([VMIN, VMAX]); // Set VMIN and VMAX as your desired min and max values
-
-    // Create a colorbar element
-    const colorbar = colorbarElement;
 
     colorbar
         .append("svg")
@@ -26,34 +22,16 @@ export const createColorbar = (colorbarElement, VMIN=0, VMAX=0.4) => {
     // Define custom scale labels
     const scaleLabels = generateScale(VMIN, VMAX, 0.08);
 
-    // Create a container for horizontal scale labels
-    const scaleLabelContainer = colorbar
+    // Create a container for color labels
+    colorbar
         .append("div")
-        .attr("class", "scale-label-container");
-
-    // Create scale label elements horizontally
-    scaleLabelContainer
+        .attr("class", "colorbar-scale-tick-label-container")
         .selectAll("div")
         .data(scaleLabels)
         .enter()
         .append("div")
-        .attr("class", "colorbar-scale-label-horizontal")
-        .text((d) => d); // Set the label text
-
-    // Add the label "Methane enhancement (ppm m)" under the scale labels
-    colorbar
-        .append("div")
-        .attr("class", "colorbar-label")
-        .style("text-align", "center") // Center the label
-        .style("margin-bottom", "12px") // Adjust margin as needed
-        .html("Maximum Methane Column Enhancement (mol/m²)");
-
-    // Add CSS styles to style horizontal scale labels
-    scaleLabelContainer
-        .style("display", "flex")
-        .style("justify-content", "space-between")
-        .style("margin-bottom", "12px"); // Adjust margin as needed
-
+        .attr("class", "colorbar-scale-tick-label")
+        .text((d) => d); // Set the tick label text
 }
 
 function generateScale(min, max, step) {

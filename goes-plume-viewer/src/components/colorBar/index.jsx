@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
 
 import { createColorbar } from "./helper";
 import * as d3 from "d3";
@@ -7,18 +8,23 @@ import * as d3 from "d3";
 import "./index.css";
 
 export const ColorBar = () => {
-    const colorBarRef = useRef();
+    const colorBarScale = useRef();
+
     useEffect(() => {
-        const colorBarElement = d3.select(colorBarRef.current);
-        createColorbar(colorBarElement);
+        const colorbar = d3.select(colorBarScale.current);
+        createColorbar(colorbar);
 
         return () => {
-            colorBarElement.selectAll("*").remove();
+            colorbar.selectAll("*").remove();
         }
     }, []);
 
     return (
-        <Card ref={colorBarRef} id="colorbar">
+        <Card id="colorbar">
+            <div ref={colorBarScale} className="colorbar-scale"></div>
+            <Typography variant="subtitle2" gutterBottom sx={{ marginBottom: 0 }} className="colorbar-label">
+                Maximum Methane Column Enhancement (mol/m²)
+            </Typography>
         </Card>
     )
 }
