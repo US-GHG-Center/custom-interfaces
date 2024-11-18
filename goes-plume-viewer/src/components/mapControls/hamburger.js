@@ -17,10 +17,6 @@ export class HamburgerControl {
     this.isMounted = true;
   }
 
-  onClick() {
-    if (!this.isMounted) return;
-  }
-
   onAdd(map) {
     this._map = map;
     this._container = document.createElement('div');

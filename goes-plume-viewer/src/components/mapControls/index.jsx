@@ -5,6 +5,7 @@ import { HamburgerControl } from "./hamburger";
 import { MeasureDistanceControl } from "./measureDistance";
 import { ChangeUnitControl } from "./changeUnit";
 import { ClearMeasurementControl } from "./clearMeasurement";
+import { LayerVisibilityControl } from "./layerVisibility";
 
 export const MapControls = ({
   measureMode,
@@ -22,14 +23,17 @@ export const MapControls = ({
 
     const hamburgerControl = new HamburgerControl(onClickHamburger);
     const mapboxNavigation = new mapboxgl.NavigationControl();
+    const layerVisibilityControl = new LayerVisibilityControl();
 
     map.addControl(hamburgerControl);
     map.addControl(mapboxNavigation);
+    map.addControl(layerVisibilityControl);
 
     return () => {
       // clean ups
       if (hamburgerControl) map.removeControl(hamburgerControl);
       if (mapboxNavigation) map.removeControl(mapboxNavigation);
+      if (layerVisibilityControl) map.removeControl(layerVisibilityControl);
     };
   }, [map]);
 
