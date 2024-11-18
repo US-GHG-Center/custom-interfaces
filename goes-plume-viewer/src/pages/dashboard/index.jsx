@@ -86,6 +86,21 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setPlumesForAnimation([]); // to reset the previous animation
   }
 
+  const handleResetHome = () => {
+    // reset the selected region
+    setSelectedRegionId(null);
+    // reset searched result
+    // reset the filters applied
+    // reset the plume cards
+    setFilteredSelectedPlumes([]);
+    setOpenDrawer(false);
+    // reset the animation
+    setPlumesForAnimation([]);
+    // reset the zoom level. For now done internally.
+    // TODO: Update it to be able to take in zoomlevel not just location
+    // setZoomLevel([-98.771556, 32.967243]);
+  }
+
   useEffect(() => {
     if (!dataTree) return;
 
@@ -155,6 +170,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
             clearMeasurementIcon={clearMeasurementIcon}
             mapScaleUnit={mapScaleUnit}
             setMapScaleUnit={setMapScaleUnit}
+            handleResetHome={handleResetHome}
           />
           <MapZoom zoomLevel={zoomLevel} />
           <MeasurementLayer

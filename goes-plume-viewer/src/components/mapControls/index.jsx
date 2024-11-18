@@ -6,6 +6,7 @@ import { MeasureDistanceControl } from "./measureDistance";
 import { ChangeUnitControl } from "./changeUnit";
 import { ClearMeasurementControl } from "./clearMeasurement";
 import { LayerVisibilityControl } from "./layerVisibility";
+import { HomeControl } from "./home";
 
 export const MapControls = ({
   measureMode,
@@ -15,6 +16,7 @@ export const MapControls = ({
   clearMeasurementIcon,
   mapScaleUnit,
   setMapScaleUnit,
+  handleResetHome
 }) => {
   const { map } = useMapbox();
 
@@ -24,8 +26,10 @@ export const MapControls = ({
     const hamburgerControl = new HamburgerControl(onClickHamburger);
     const mapboxNavigation = new mapboxgl.NavigationControl();
     const layerVisibilityControl = new LayerVisibilityControl();
+    const homeControl = new HomeControl(handleResetHome);
 
     map.addControl(hamburgerControl);
+    map.addControl(homeControl);
     map.addControl(mapboxNavigation);
     map.addControl(layerVisibilityControl);
 
@@ -34,6 +38,7 @@ export const MapControls = ({
       if (hamburgerControl) map.removeControl(hamburgerControl);
       if (mapboxNavigation) map.removeControl(mapboxNavigation);
       if (layerVisibilityControl) map.removeControl(layerVisibilityControl);
+      if (homeControl) map.removeControl(homeControl);
     };
   }, [map]);
 
