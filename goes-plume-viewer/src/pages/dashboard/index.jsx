@@ -93,7 +93,6 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setSelectedRegionId("");
     setHoveredPlumeId("");
     setFilteredSelectedPlumes([]);
-    setFilteredRegions([]);
     setPlumesForAnimation([]);
     setOpenDrawer(false);
     // reset the zoom level. For now done internally.
