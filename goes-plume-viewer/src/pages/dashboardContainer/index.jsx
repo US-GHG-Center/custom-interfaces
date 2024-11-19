@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { Dashboard } from '../dashboard/index.jsx';
@@ -15,7 +15,7 @@ export function DashboardContainer() {
 
     const [ collectionItems, setCollectionItems ] = useState([]);
     const [ collectionMeta, setCollectionMeta ] = useState({});
-    const [ dataTree, setDataTree ] = useState({});
+    const dataTree = useRef(null);
     const [ metaDataTree, setMetaDataTree ] = useState({});
     const [ plumeMetaData, setPlumeMetaData ] = useState({});
 
@@ -52,7 +52,8 @@ export function DashboardContainer() {
                 setCollectionItems(data)
                 const plumeMap = dataTransformationPlume(data, plumeMetaMap);
                 const plumeRegionMap = dataTransformationPlumeRegion(plumeMap);
-                setDataTree(plumeRegionMap);
+                // dataTree(plumeRegionMap);
+                dataTree.current = plumeRegionMap;
                 setLoadingData(false);
             } catch (error) {
                 console.error('Error fetching data:', error);

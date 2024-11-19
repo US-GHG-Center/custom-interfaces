@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import styled from "styled-components";
 
@@ -37,6 +37,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
   const [ regions, setRegions ] = useState([]); // store all available regions
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
   const [ selectedRegionId, setSelectedRegionId ] = useState(""); // region_id of the selected region (marker)
+  const prevSelectedRegionId = useRef("");
   const [ selectedPlumes, setSelectedPlumes ] = useState([]); // all plumes for the selected region (marker)
   const [ hoveredPlumeId, setHoveredPlumeId ] = useState(""); // plume_id of the plume which was hovered over
 
@@ -55,9 +56,10 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
 
   // handler functions
   const handleSelectedRegion = (regionId) => {
-    if (!Object.keys(dataTree).length || !regionId) return;
+    if (!dataTree.current || !Object.keys(dataTree.current).length || !regionId) return;
     setSelectedRegionId(regionId);
-    const region = dataTree[regionId];
+    prevSelectedRegionId.current = regionId;
+    const region = dataTree.current[regionId];
     setZoomLocation(region.location);
     setZoomLevel(null); // take the default zoom level
     setOpenDrawer(true);
@@ -104,20 +106,19 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
   const handleResetToSelectedRegion = () => {
     setHoveredPlumeId("");
     setPlumesForAnimation([]);
-    setZoomLevel(4);
-    setZoomLocation([-98.771556, 32.967243]);
+    handleSelectedRegion(prevSelectedRegionId.current);
   }
 
   // Component Effects
   useEffect(() => {
-    if (!dataTree) return;
+    if (!dataTree.current) return;
 
     const plumes = {}; // plumes[string] = Plume
     const regions = []; // string[]
     const plumeIds = []; // string[] // for search
-    Object.keys(dataTree).forEach(region => {
-      regions.push(dataTree[region]);
-      dataTree[region].plumes.forEach(plume => {
+    Object.keys(dataTree.current).forEach(region => {
+      regions.push(dataTree.current[region]);
+      dataTree.current[region].plumes.forEach(plume => {
         // check what plume is in dataModels.ts
         plumes[plume.id] = plume;
         plumeIds.push(plume.id);
@@ -126,14 +127,14 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setPlumes(plumes);
     setRegions(regions);
     setPlumeIds(plumeIds); // for search
-  }, [dataTree]);
+  }, [dataTree.current]);
 
   useEffect(() => {
-    if (!dataTree || !selectedRegionId) return;
-    const plumes = dataTree[selectedRegionId].plumes;
+    if (!dataTree.current || !selectedRegionId) return;
+    const plumes = dataTree.current[selectedRegionId].plumes;
     setSelectedPlumes(plumes);
     setPlumesForAnimation([]); // reset the animation
-  }, [dataTree, selectedRegionId]);
+  }, [dataTree.current, selectedRegionId]);
 
   // JSX
   return (
