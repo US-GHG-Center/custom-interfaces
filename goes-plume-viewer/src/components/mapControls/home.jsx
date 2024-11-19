@@ -22,15 +22,7 @@ export class HomeControl {
         this._container = document.createElement('div');
         this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
         const root = ReactDOM.createRoot(this._container);
-        root.render(<Home onClickHandler={
-                () => {
-                    map.flyTo({
-                        center: [-98.771556, 32.967243], // Replace with the desired latitude and longitude
-                        zoom: 4,
-                    });
-                    this._onClick();
-                }
-            }/>);
+        root.render(<Home onClickHandler={this._onClick}/>);
         this.root = root;
         return this._container;
     }

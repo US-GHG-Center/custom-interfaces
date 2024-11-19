@@ -32,7 +32,7 @@ const scaleUnits = {
   MILES: "mi",
 };
 
-export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData, zoomLocation, setZoomLocation, loadingData }) {
+export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
   // states for data
   const [ regions, setRegions ] = useState([]); // store all available regions
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
@@ -95,9 +95,8 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setFilteredSelectedPlumes([]);
     setPlumesForAnimation([]);
     setOpenDrawer(false);
-    // reset the zoom level. For now done internally.
-    // TODO: Update it to be able to take in zoomlevel not just location
-    // setZoomLocation([-98.771556, 32.967243]);
+    setZoomLevel(4);
+    setZoomLocation([-98.771556, 32.967243]);
   }
 
   const handleResetToSelectedRegion = () => {
@@ -181,7 +180,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
             setMapScaleUnit={setMapScaleUnit}
             handleResetHome={handleResetHome}
           />
-          <MapZoom zoomLocation={zoomLocation} />
+          <MapZoom zoomLocation={zoomLocation} zoomLevel={zoomLevel} />
           <MeasurementLayer
             measureMode={measureMode}
             setMeasureMode={setMeasureMode}
