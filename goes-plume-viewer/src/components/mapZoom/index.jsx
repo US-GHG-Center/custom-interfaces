@@ -11,7 +11,7 @@ export const MapZoom = ({ zoomLocation, zoomLevel }) => {
         const [lon, lat] = zoomLocation;
         map.flyTo({
             center: [lon, lat], // Replace with the desired latitude and longitude
-            offset: [-250, 0],
+            offset: zoomLevel ? [0, 0] : [-250, 0],
             zoom: zoomLevel ? zoomLevel : 8.5,
         });
 
