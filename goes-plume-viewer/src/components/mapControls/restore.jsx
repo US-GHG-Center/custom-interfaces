@@ -1,16 +1,16 @@
 import ReactDOM from "react-dom/client";
 import { IconButton } from "@mui/material";
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import RestoreIcon from '@mui/icons-material/Restore';
 
-const Refresh = ({onClickHandler}) => {
+const Restore = ({onClickHandler}) => {
     return (
         <IconButton className="menu-open-icon" onClick={onClickHandler}>
-            <RestartAltIcon/>
+            <RestoreIcon/>
         </IconButton>
     )
 }
 
-export class RefreshControl {
+export class RestoreControl {
     constructor(handleRefresh) {
         this.root = null;
         this._map = null;
@@ -22,7 +22,7 @@ export class RefreshControl {
         this._container = document.createElement('div');
         this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
         const root = ReactDOM.createRoot(this._container);
-        root.render(<Refresh onClickHandler={this._onClick}/>);
+        root.render(<Restore onClickHandler={this._onClick}/>);
         this.root = root;
         return this._container;
     }

@@ -7,7 +7,7 @@ import { ChangeUnitControl } from "./changeUnit";
 import { ClearMeasurementControl } from "./clearMeasurement";
 import { LayerVisibilityControl } from "./layerVisibility";
 import { HomeControl } from "./home";
-import { RefreshControl } from "./refresh";
+import { RestoreControl } from "./restore";
 
 export const MapControls = ({
   measureMode,
@@ -29,11 +29,11 @@ export const MapControls = ({
     const mapboxNavigation = new mapboxgl.NavigationControl();
     const layerVisibilityControl = new LayerVisibilityControl();
     const homeControl = new HomeControl(handleResetHome);
-    const refreshControl = new RefreshControl(handleResetToSelectedRegion);
+    const restoreControl = new RestoreControl(handleResetToSelectedRegion);
 
     map.addControl(hamburgerControl);
     map.addControl(homeControl);
-    map.addControl(refreshControl);
+    map.addControl(restoreControl);
     map.addControl(mapboxNavigation);
     map.addControl(layerVisibilityControl);
 
@@ -43,7 +43,7 @@ export const MapControls = ({
       if (mapboxNavigation) map.removeControl(mapboxNavigation);
       if (layerVisibilityControl) map.removeControl(layerVisibilityControl);
       if (homeControl) map.removeControl(homeControl);
-      if (refreshControl) map.removeControl(refreshControl);
+      if (restoreControl) map.removeControl(restoreControl);
     };
   }, [map]);
 
