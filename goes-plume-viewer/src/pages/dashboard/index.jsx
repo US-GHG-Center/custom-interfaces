@@ -60,6 +60,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setSelectedRegionId(regionId);
     const region = dataTree[regionId];
     setZoomLocation(region.location);
+    setZoomLevel(null); // take the default zoom level
     setOpenDrawer(true);
     setSelectedPlumes([]); // reset the plumes shown, to trigger re-evaluation of selected plume
   }
@@ -71,6 +72,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     const { location } = plume;
     setPlumesForAnimation(plume.subDailyPlumes);
     setZoomLocation(location);
+    setZoomLevel(null); // take the default zoom level
     setSelectedRegionId(""); //to reset the plume that was shown
     setFilteredSelectedPlumes([]) // to reset the all the plumes that were shown on region click
   }
@@ -84,6 +86,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setSelectedPlumes([plume]);
     setOpenDrawer(true);
     setZoomLocation(location);
+    setZoomLevel(null); // take the default zoom level
     setSelectedRegionId(""); //to reset the plume that was shown
     setFilteredSelectedPlumes([]); // to reset the all the plumes that were shown on region click
     setPlumesForAnimation([]); // to reset the previous animation
@@ -102,9 +105,8 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
   const handleResetToSelectedRegion = () => {
     setHoveredPlumeId("");
     setPlumesForAnimation([]);
-    // reset the zoom level. For now done internally.
-    // TODO: Update it to be able to take in zoomlevel not just location
-    // setZoomLocation([-98.771556, 32.967243]);
+    setZoomLevel(4);
+    setZoomLocation([-98.771556, 32.967243]);
   }
 
   // Component Effects
@@ -179,6 +181,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
             mapScaleUnit={mapScaleUnit}
             setMapScaleUnit={setMapScaleUnit}
             handleResetHome={handleResetHome}
+            handleResetToSelectedRegion={handleResetToSelectedRegion}
           />
           <MapZoom zoomLocation={zoomLocation} zoomLevel={zoomLevel} />
           <MeasurementLayer
