@@ -124,3 +124,13 @@ export function dataTransformationPlumeRegionMeta(plumeMetaMap: PlumeMetaMap): P
     });
     return plumeRegionMetaMap;
 }
+
+// using the dataset, update the metadata
+export function metaDatetimeFix(plumeMetaMap: PlumeMetaMap, plumeMap: PlumeMap) {
+    Object.keys(plumeMap).forEach(plumeId => {
+        if (!(plumeId in plumeMetaMap)) return;
+        plumeMetaMap[plumeId].startDatetime = plumeMap[plumeId].startDate;
+        plumeMetaMap[plumeId].endDatetime = plumeMap[plumeId].endDate;
+    });
+    return plumeMetaMap;
+}

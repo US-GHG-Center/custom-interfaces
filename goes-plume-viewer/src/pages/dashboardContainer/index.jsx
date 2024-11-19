@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { Dashboard } from '../dashboard/index.jsx';
 import { fetchAllFromSTACAPI } from "../../services/api";
-import { dataTransformationPlume, dataTransformationPlumeRegion, dataTransformationPlumeMeta, dataTransformationPlumeRegionMeta } from './helper/dataTransform';
+import { dataTransformationPlume, dataTransformationPlumeRegion, dataTransformationPlumeMeta, dataTransformationPlumeRegionMeta, metaDatetimeFix } from './helper/dataTransform';
 import { PlumeMetas } from '../../assets/dataset/metadata.ts';
 
 export function DashboardContainer() {
@@ -50,10 +50,14 @@ export function DashboardContainer() {
                 const collectionItemUrl = `${process.env.REACT_APP_STAC_API_URL}/collections/${collectionId}/items`;
                 const data = await fetchAllFromSTACAPI(collectionItemUrl);
                 setCollectionItems(data)
+                // use the lon and lat in the fetched data from the metadata.
                 const plumeMap = dataTransformationPlume(data, plumeMetaMap);
                 const plumeRegionMap = dataTransformationPlumeRegion(plumeMap);
-                // dataTree(plumeRegionMap);
                 dataTree.current = plumeRegionMap;
+                // update the datetime in metadata via fetched data.
+                const updatedPlumeMetaMap = metaDatetimeFix(plumeMetaMap, plumeMap);
+                setPlumeMetaData(updatedPlumeMetaMap);
+                // remove loading
                 setLoadingData(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
