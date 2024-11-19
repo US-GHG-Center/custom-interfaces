@@ -33,24 +33,27 @@ const scaleUnits = {
 };
 
 export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData, zoomLevel, setZoomLevel, loadingData }) {
-  const [ regions, setRegions ] = useState([]);
-  const [ plumes, setPlumes ] = useState([]);
-  const [ selectedRegionId, setSelectedRegionId ] = useState(null); //string
-  const [ selectedPlumes, setSelectedPlumes ] = useState([]);
-  const [ hoveredPlumeId, setHoveredPlumeId ] = useState("");
+  // states for data
+  const [ regions, setRegions ] = useState([]); // store all available regions
+  const [ plumes, setPlumes ] = useState([]); // store all available plumes
+  const [ selectedRegionId, setSelectedRegionId ] = useState(""); // region_id of the selected region (marker)
+  const [ selectedPlumes, setSelectedPlumes ] = useState([]); // all plumes for the selected region (marker)
+  const [ hoveredPlumeId, setHoveredPlumeId ] = useState(""); // plume_id of the plume which was hovered over
 
-  const [ filteredRegions, setFilteredRegions ] = useState([]);
-  const [ filteredSelectedPlumes, setFilteredSelectedPlumes ] = useState([]);
+  const [ filteredRegions, setFilteredRegions ] = useState([]); // all regions with the filter applied
+  const [ filteredSelectedPlumes, setFilteredSelectedPlumes ] = useState([]); // plumes for the selected region with the filter applied
 
-  const [ plumeIds, setPlumeIds ] = useState([]);
-  const [ plumesForAnimation, setPlumesForAnimation ] = useState([]);
+  const [ plumeIds, setPlumeIds ] = useState([]); // list of plume_ids for the search feature.
+  const [ plumesForAnimation, setPlumesForAnimation ] = useState([]); // list of subdaily_plumes used for animation
+
+  // states for components/controls
   const [ openDrawer, setOpenDrawer ] = useState(false);
+  const [ measureMode, setMeasureMode ] = useState(false);
+  const [ clearMeasurementIcon, setClearMeasurementIcon ] = useState(false)
+  const [ clearMeasurementLayer, setClearMeasurementLayer ] = useState(false)
+  const [ mapScaleUnit, setMapScaleUnit ] = useState(scaleUnits.MILES);
 
-  const [measureMode, setMeasureMode] = useState(false);
-  const [clearMeasurementIcon, setClearMeasurementIcon] = useState(false)
-  const [clearMeasurementLayer, setClearMeasurementLayer] = useState(false)
-  const [mapScaleUnit, setMapScaleUnit] = useState(scaleUnits.MILES);
-
+  // handler functions
   const handleSelectedRegion = (regionId) => {
     if (!dataTree || !regionId) return;
 
@@ -101,6 +104,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     // setZoomLevel([-98.771556, 32.967243]);
   }
 
+  // Component Effects
   useEffect(() => {
     if (!dataTree) return;
 
@@ -127,6 +131,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setPlumesForAnimation([]); // reset the animation
   }, [dataTree, selectedRegionId]);
 
+  // JSX
   return (
     <Box className="fullSize">
       <div id="dashboard-map-container">
