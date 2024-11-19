@@ -54,7 +54,9 @@ async function fetchAndProcessCoverage() {
         const processedCoverage = {
             "type": "FeatureCollection",
             "features": coverageData.features.map(feature => ({
-                "start_time": feature.properties["start_time"],
+                "properties":{
+                    "start_time": feature.properties["start_time"]
+                },
                 "geometry": roundCoordinates(feature.geometry)
             }))
         };

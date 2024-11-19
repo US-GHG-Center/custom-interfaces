@@ -5,7 +5,7 @@ function filterByDates(data, sDate, eDate, type) {
         const start = new Date(sDate+'Z');
         const end = new Date(eDate+'Z');
         const filteredFeatures = data.features.filter(feature => {
-            const featureStartTime = new Date(feature.start_time);
+            const featureStartTime = new Date(feature.properties.start_time);
             //skip end date
             // const featureEndTime = new Date(feature.properties.end_time);
             // Check if the feature's time range overlaps with the given date range
