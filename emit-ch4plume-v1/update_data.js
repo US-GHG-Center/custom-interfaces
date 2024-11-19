@@ -39,15 +39,23 @@ async function fetchAndProcessCoverage() {
         const response = await fetch(COVERAGE_FILE_URL);
         const coverageData = await response.json();
 
+        const roundCoordinates = (geometry) => {
+            if (geometry && geometry.coordinates) {
+                geometry.coordinates = geometry.coordinates.map(polygon =>
+                    polygon.map(coord =>
+                        coord.map(value => Math.round(value * 100) / 100)// Round to 2 decimal places
+                    )
+                );
+            }
+            return geometry;
+        };
+
         // Build a valid GeoJSON object
         const processedCoverage = {
             "type": "FeatureCollection",
             "features": coverageData.features.map(feature => ({
-                "type": "Feature",
-                "properties": {
-                    "start_time": feature.properties["start_time"],
-                },
-                "geometry": feature.geometry
+                "start_time": feature.properties["start_time"],
+                "geometry": roundCoordinates(feature.geometry)
             }))
         };
 
@@ -57,8 +65,6 @@ async function fetchAndProcessCoverage() {
         console.error("Error fetching or processing coverage data:", error);
     }
 }
-
-
 
 async function similarrity_location_lookup(lat, lon) {
     let floor_lat = Number(lat.toFixed(1));
