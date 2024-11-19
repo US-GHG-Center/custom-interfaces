@@ -55,8 +55,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
 
   // handler functions
   const handleSelectedRegion = (regionId) => {
-    if (!dataTree || !regionId) return;
-
+    if (!Object.keys(dataTree).length || !regionId) return;
     setSelectedRegionId(regionId);
     const region = dataTree[regionId];
     setZoomLocation(region.location);
