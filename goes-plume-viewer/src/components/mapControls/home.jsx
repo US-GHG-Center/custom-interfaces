@@ -1,12 +1,15 @@
 import ReactDOM from "react-dom/client";
 import IconButton from "@mui/material/IconButton";
 import HomeIcon from '@mui/icons-material/Home';
+import Tooltip from '@mui/material/Tooltip';
 
 const Home = ({onClickHandler}) => {
     return (
-        <IconButton className="menu-open-icon" onClick={onClickHandler}>
-            <HomeIcon/>
-        </IconButton>
+        <Tooltip title="Home">
+            <IconButton className="menu-open-icon" onClick={onClickHandler}>
+                <HomeIcon/>
+            </IconButton>
+        </Tooltip>
     );
 }
 

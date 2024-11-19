@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Tooltip from '@mui/material/Tooltip';
 
 function VisibilityIconComp ({map}) {
     const [ isVisible, setIsVisible ] = useState(true);
@@ -20,9 +21,11 @@ function VisibilityIconComp ({map}) {
     }
 
     return (
-        <IconButton className="menu-open-icon" onClick={toggleLayers} >
-            { isVisible ? <VisibilityIcon/> : <VisibilityOffIcon/>}
-        </IconButton>
+        <Tooltip title="Layer Visibility">
+            <IconButton className="menu-open-icon" onClick={toggleLayers} >
+                { isVisible ? <VisibilityIcon/> : <VisibilityOffIcon/>}
+            </IconButton>
+        </Tooltip>
     )
 }
 

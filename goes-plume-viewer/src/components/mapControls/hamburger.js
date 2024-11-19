@@ -1,12 +1,15 @@
 import IconButton from "@mui/material/IconButton";
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ReactDOM from "react-dom/client";
+import Tooltip from '@mui/material/Tooltip';
 
 function HamburgerIcon() {
   return (
-    <IconButton className="menu-open-icon" >
-     <MenuOpenIcon/>
-    </IconButton>
+    <Tooltip title="Open Drawer">
+      <IconButton className="menu-open-icon" >
+        <MenuOpenIcon/>
+      </IconButton>
+    </Tooltip>
   );
 }
 

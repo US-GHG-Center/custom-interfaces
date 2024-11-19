@@ -1,12 +1,15 @@
 import ReactDOM from "react-dom/client";
 import { IconButton } from "@mui/material";
 import RestoreIcon from '@mui/icons-material/Restore';
+import Tooltip from '@mui/material/Tooltip';
 
 const Restore = ({onClickHandler}) => {
     return (
-        <IconButton className="menu-open-icon" onClick={onClickHandler}>
-            <RestoreIcon/>
-        </IconButton>
+        <Tooltip title="Restore Previous Region">
+            <IconButton className="menu-open-icon" onClick={onClickHandler}>
+                <RestoreIcon/>
+            </IconButton>
+        </Tooltip>
     )
 }
 

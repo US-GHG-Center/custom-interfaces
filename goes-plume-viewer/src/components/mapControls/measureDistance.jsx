@@ -3,16 +3,19 @@ import IconButton from "@mui/material/IconButton";
 import ExpandIcon from "@mui/icons-material/Expand";
 import StraightenIcon from '@mui/icons-material/Straighten';
 import ReactDOM from "react-dom/client";
+import Tooltip from '@mui/material/Tooltip';
 
 function MeasureButton({ icon, onClick }) {
   return (
-    <IconButton className="measure-icon" onClick={onClick}>
-      {!icon ? (
-        <ExpandIcon />
-      ) : (
-        <StraightenIcon style={{ transform: "rotate(90deg)" }} />
-      )}
-    </IconButton>
+    <Tooltip title="Measurement Scale">
+      <IconButton className="measure-icon" onClick={onClick}>
+        {!icon ? (
+          <ExpandIcon />
+        ) : (
+          <StraightenIcon style={{ transform: "rotate(90deg)" }} />
+        )}
+      </IconButton>
+    </Tooltip>
   );
 }
 
