@@ -37,7 +37,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
   const [ regions, setRegions ] = useState([]); // store all available regions
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
   const [ selectedRegionId, setSelectedRegionId ] = useState(""); // region_id of the selected region (marker)
-  const prevSelectedRegionId = useRef("");
+  const prevSelectedRegionId = useRef(""); // to be able to restore to previously selected region.
   const [ selectedPlumes, setSelectedPlumes ] = useState([]); // all plumes for the selected region (marker)
   const [ hoveredPlumeId, setHoveredPlumeId ] = useState(""); // plume_id of the plume which was hovered over
 
@@ -127,6 +127,8 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setPlumes(plumes);
     setRegions(regions);
     setPlumeIds(plumeIds); // for search
+  // the reference to datatree is in current, so see changes with respect to that
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataTree.current]);
 
   useEffect(() => {
@@ -134,6 +136,8 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     const plumes = dataTree.current[selectedRegionId].plumes;
     setSelectedPlumes(plumes);
     setPlumesForAnimation([]); // reset the animation
+  // the reference to datatree is in current, so see changes with respect to that
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataTree.current, selectedRegionId]);
 
   // JSX
