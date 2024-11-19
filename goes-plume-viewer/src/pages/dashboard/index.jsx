@@ -71,7 +71,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     const { location } = plume;
     setPlumesForAnimation(plume.subDailyPlumes);
     setZoomLevel(location);
-    setSelectedRegionId(null); //to reset the plume that was shown
+    setSelectedRegionId(""); //to reset the plume that was shown
     setFilteredSelectedPlumes([]) // to reset the all the plumes that were shown on region click
   }
 
@@ -84,20 +84,25 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setSelectedPlumes([plume]);
     setOpenDrawer(true);
     setZoomLevel(location);
-    setSelectedRegionId(null); //to reset the plume that was shown
+    setSelectedRegionId(""); //to reset the plume that was shown
     setFilteredSelectedPlumes([]); // to reset the all the plumes that were shown on region click
     setPlumesForAnimation([]); // to reset the previous animation
   }
 
   const handleResetHome = () => {
-    // reset the selected region
-    setSelectedRegionId(null);
-    // reset searched result
-    // reset the filters applied
-    // reset the plume cards
+    setSelectedRegionId("");
+    setHoveredPlumeId("");
     setFilteredSelectedPlumes([]);
+    setFilteredRegions([]);
+    setPlumesForAnimation([]);
     setOpenDrawer(false);
-    // reset the animation
+    // reset the zoom level. For now done internally.
+    // TODO: Update it to be able to take in zoomlevel not just location
+    // setZoomLevel([-98.771556, 32.967243]);
+  }
+
+  const handleResetToSelectedRegion = () => {
+    setHoveredPlumeId("");
     setPlumesForAnimation([]);
     // reset the zoom level. For now done internally.
     // TODO: Update it to be able to take in zoomlevel not just location
