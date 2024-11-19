@@ -31,8 +31,14 @@ export class HomeControl {
     }
 
     onRemove = () => {
-        this.root.unmount();
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
+        setTimeout(() => {
+            try {
+                this.root.unmount();
+                this._container.parentNode.removeChild(this._container);
+                this._map = undefined;
+            } catch (err) {
+                console.warn("Error during cleanup:", err);
+            }
+        }, 0);
     }
 }

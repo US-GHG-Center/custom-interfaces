@@ -32,9 +32,15 @@ export class HamburgerControl {
   }
 
   onRemove() {
-    this.isMounted = false;
-    this.root.unmount();
-    this._container.parentNode.removeChild(this._container);
-    this._map = undefined;
+    setTimeout(() => {
+      try {
+        this.isMounted = false;
+        this.root.unmount();
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
+      } catch (err) {
+        console.error("Error adding control:", err);
+      }
+    }, 0);
   }
 }

@@ -9,6 +9,8 @@ import { LayerVisibilityControl } from "./layerVisibility";
 import { HomeControl } from "./home";
 import { RestoreControl } from "./restore";
 
+import "./index.css";
+
 export const MapControls = ({
   measureMode,
   onClickHamburger,
@@ -18,7 +20,8 @@ export const MapControls = ({
   mapScaleUnit,
   setMapScaleUnit,
   handleResetHome,
-  handleResetToSelectedRegion
+  handleResetToSelectedRegion,
+  openDrawer
 }) => {
   const { map } = useMapbox();
 
@@ -31,19 +34,26 @@ export const MapControls = ({
     const homeControl = new HomeControl(handleResetHome);
     const restoreControl = new RestoreControl(handleResetToSelectedRegion);
 
-    map.addControl(hamburgerControl);
-    map.addControl(homeControl);
-    map.addControl(restoreControl);
-    map.addControl(mapboxNavigation);
-    map.addControl(layerVisibilityControl);
+    const hamburgerControlElem = hamburgerControl.onAdd(map);
+    const homeControlElem = homeControl.onAdd(map);
+    const restoreControlElem = restoreControl.onAdd(map);
+    const mapboxNavigationElem = mapboxNavigation.onAdd(map);
+    const layerVisibilityControlElem = layerVisibilityControl.onAdd(map);
+
+    const mapboxCustomControlContainer = document.querySelector('#mapbox-custom-controls');
+    mapboxCustomControlContainer.append(hamburgerControlElem);
+    mapboxCustomControlContainer.append(homeControlElem);
+    mapboxCustomControlContainer.append(restoreControlElem);
+    mapboxCustomControlContainer.append(mapboxNavigationElem);
+    mapboxCustomControlContainer.append(layerVisibilityControlElem);
 
     return () => {
       // clean ups
-      if (hamburgerControl) map.removeControl(hamburgerControl);
-      if (mapboxNavigation) map.removeControl(mapboxNavigation);
-      if (layerVisibilityControl) map.removeControl(layerVisibilityControl);
-      if (homeControl) map.removeControl(homeControl);
-      if (restoreControl) map.removeControl(restoreControl);
+        if (hamburgerControl) hamburgerControl.onRemove();
+        if (mapboxNavigation) mapboxNavigation.onRemove();
+        if (layerVisibilityControl) layerVisibilityControl.onRemove();
+        if (homeControl) homeControl.onRemove();
+        if (restoreControl) restoreControl.onRemove();
     };
   }, [map]);
 
@@ -55,12 +65,16 @@ export const MapControls = ({
     );
 
     if (measurementControl) {
-      map.addControl(measurementControl);
+      const mapboxCustomControlContainer = document.querySelector("#mapbox-custom-controls");
+      const measurementControlElem = measurementControl.onAdd(map);
+      mapboxCustomControlContainer.append(measurementControlElem);
     }
 
     return () => {
       // clean ups
-      if (measurementControl) map.removeControl(measurementControl);
+      if (measurementControl) {
+        measurementControl.onRemove();
+      }
     };
   }, [map, measureMode]);
 
@@ -72,11 +86,15 @@ export const MapControls = ({
       setMapScaleUnit
     );
 
-    map.addControl(changeUnitControl);
+    const mapboxCustomControlContainer = document.querySelector("#mapbox-custom-controls");
+    const changeUnitControlElem = changeUnitControl.onAdd(map);
+    mapboxCustomControlContainer.append(changeUnitControlElem);
 
     return () => {
       // clean ups
-      if (changeUnitControl) map.removeControl(changeUnitControl);
+      if (changeUnitControl) {
+        changeUnitControl.onRemove();
+      }
     };
   }, [map, mapScaleUnit, measureMode]);
 
@@ -88,13 +106,16 @@ export const MapControls = ({
       : null;
 
     if (clearMeasurementIcon) {
-      map.addControl(clearMeasurementControl);
+      const mapboxCustomControlContainer = document.querySelector("#mapbox-custom-controls");
+      const clearMeasurementControlElem = clearMeasurementControl.onAdd(map);
+      mapboxCustomControlContainer.append(clearMeasurementControlElem);
     }
 
     return () => {
       // clean ups
-      if (clearMeasurementControl && clearMeasurementIcon)
-        map.removeControl(clearMeasurementControl);
+      if (clearMeasurementControl && clearMeasurementIcon) {
+        clearMeasurementControl.onRemove();
+      }
     };
   }, [map, clearMeasurementIcon, measureMode]);
 
@@ -116,5 +137,7 @@ export const MapControls = ({
     };
   }, [map, mapScaleUnit, measureMode]);
 
-  return null;
+  return (
+    <div id="mapbox-custom-controls" style={{ right: openDrawer ? "34.5rem" : "0.5rem" }}></div>
+  );
 };

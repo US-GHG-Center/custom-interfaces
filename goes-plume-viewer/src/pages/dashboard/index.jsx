@@ -173,6 +173,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
             setHoveredPlumeId={setHoveredPlumeId}
           />
           <MapControls
+            openDrawer={openDrawer}
             measureMode={measureMode}
             onClickHamburger={() => setOpenDrawer(true)}
             onClickMeasureMode={() => {

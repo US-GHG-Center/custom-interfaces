@@ -31,8 +31,14 @@ export class RestoreControl {
     }
 
     onRemove = () => {
-        this.root.unmount();
-        this._container.parentNode.removeChild(this._container);
-        this._map = null;
+        setTimeout(() => {
+            try {
+                this.root.unmount();
+                this._container.parentNode.removeChild(this._container);
+                this._map = null;
+            } catch (err) {
+                console.warn("Error during cleanup:", err);
+            }
+        }, 0);
     }
 }
