@@ -9,7 +9,7 @@ import { PlumeMetas } from '../../assets/dataset/metadata.ts';
 export function DashboardContainer() {
     // get the query params
     const [ searchParams ] = useSearchParams();
-    const [ zoomLevel, setZoomLevel ] = useState (searchParams.get('zoom-level') || []); // let default zoom level controlled by map component
+    const [ zoomLocation, setZoomLocation ] = useState (searchParams.get('zoom-location') || []); // let default zoom level controlled by map component
     const [ collectionId ] = useState(searchParams.get("collection-id") || "goes-ch4-v1");
 
     const [ collectionItems, setCollectionItems ] = useState([]);
@@ -64,8 +64,8 @@ export function DashboardContainer() {
     return (
         <Dashboard
             data={collectionItems}
-            zoomLevel={zoomLevel}
-            setZoomLevel={setZoomLevel}
+            zoomLocation={zoomLocation}
+            setZoomLocation={setZoomLocation}
             dataTree={dataTree}
             metaDataTree={metaDataTree}
             plumeMetaData={plumeMetaData}

@@ -32,7 +32,7 @@ const scaleUnits = {
   MILES: "mi",
 };
 
-export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData, zoomLevel, setZoomLevel, loadingData }) {
+export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData, zoomLocation, setZoomLocation, loadingData }) {
   // states for data
   const [ regions, setRegions ] = useState([]); // store all available regions
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
@@ -59,7 +59,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
 
     setSelectedRegionId(regionId);
     const region = dataTree[regionId];
-    setZoomLevel(region.location);
+    setZoomLocation(region.location);
     setOpenDrawer(true);
     setSelectedPlumes([]); // reset the plumes shown, to trigger re-evaluation of selected plume
   }
@@ -70,7 +70,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     const plume = plumes[plumeId];
     const { location } = plume;
     setPlumesForAnimation(plume.subDailyPlumes);
-    setZoomLevel(location);
+    setZoomLocation(location);
     setSelectedRegionId(""); //to reset the plume that was shown
     setFilteredSelectedPlumes([]) // to reset the all the plumes that were shown on region click
   }
@@ -83,7 +83,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
 
     setSelectedPlumes([plume]);
     setOpenDrawer(true);
-    setZoomLevel(location);
+    setZoomLocation(location);
     setSelectedRegionId(""); //to reset the plume that was shown
     setFilteredSelectedPlumes([]); // to reset the all the plumes that were shown on region click
     setPlumesForAnimation([]); // to reset the previous animation
@@ -98,7 +98,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setOpenDrawer(false);
     // reset the zoom level. For now done internally.
     // TODO: Update it to be able to take in zoomlevel not just location
-    // setZoomLevel([-98.771556, 32.967243]);
+    // setZoomLocation([-98.771556, 32.967243]);
   }
 
   const handleResetToSelectedRegion = () => {
@@ -106,7 +106,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setPlumesForAnimation([]);
     // reset the zoom level. For now done internally.
     // TODO: Update it to be able to take in zoomlevel not just location
-    // setZoomLevel([-98.771556, 32.967243]);
+    // setZoomLocation([-98.771556, 32.967243]);
   }
 
   // Component Effects
@@ -182,7 +182,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
             setMapScaleUnit={setMapScaleUnit}
             handleResetHome={handleResetHome}
           />
-          <MapZoom zoomLevel={zoomLevel} />
+          <MapZoom zoomLocation={zoomLocation} />
           <MeasurementLayer
             measureMode={measureMode}
             setMeasureMode={setMeasureMode}
