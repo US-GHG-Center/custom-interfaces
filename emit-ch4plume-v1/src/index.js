@@ -4,13 +4,13 @@ import mapboxgl  from "./map";
 import { getMapInstance, layerToggled } from "./map";
 import { filterByDates,
         createColorbar,
-        // addTimelineMarkers,
-        // beforeAnimation,
-        // afterAnimation,
+        addTimelineMarkers,
+        beforeAnimation,
+        afterAnimation,
         isFeatureWithinBounds,
         formatTimestampToDate,
         getSliderValues } from "./helper";
-import { addCoverage } from "./coverage";
+import { checkToggle,addCoverageToggleListener } from "./coverage";
 import { updateSearchList } from "./search";
 import { getPopupContent,createItemContent } from "./content"; 
 import {
@@ -25,7 +25,7 @@ import {
     addMeasurementLayer,
 
   } from "./measureToolHelper";
-//import TimelineControl from 'mapboxgl-timeline';
+import TimelineControl from 'mapboxgl-timeline';
 import 'mapboxgl-timeline/dist/style.css';
 
 //Global vars
@@ -52,25 +52,20 @@ let CURRENTCOVERAGE; // Its value changes with start and end date, derived from 
 let viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
     marker.properties['Data Download'].split('/').pop().split('.')[0]
 );
-// let startDate = document.getElementById("start_date").value;
-// let endDate = document.getElementById("end_date").value;
 let startDate, endDate;
 
 function updateDatesandData(){
-    // const startDate =  document.getElementById("start_date").value;
-    // const endDate = document.getElementById("end_date").value;
     const {s: start_date, e: end_date} = getSliderValues();
-
-    CURRENTCOVERAGE = filterByDates(coverageData,start_date, end_date, "coverage");
-    const points = filterByDates(methanMetadata,start_date, end_date, "plumes" ).features
+    //CURRENTCOVERAGE = filterByDates(coverageData,start_date, end_date, "coverage");
+    MARKERS_ON_MAP = filterByDates(methanMetadata,start_date, end_date, "plumes" ).features
             .filter((f) => f.geometry.type === "Point")
             .map((f, i) => ({
                 id: i,
                 feature: f
             }));
-    MARKERS_ON_MAP = points;
-    addCoverage(map, CURRENTCOVERAGE);
-    addPointsOnMap(MARKERS_ON_MAP);
+    checkToggle(map, coverageData, start_date, end_date);
+    //if (map.getZoom()<ZOOM_THRESHOLD){addPointsOnMap(MARKERS_ON_MAP)}
+    addPointsOnMap();
     zoomedOrDraggedToThreshold();
 };
 
@@ -80,31 +75,16 @@ function removeAllPlumeLayers() {
         const prefixes = ['raster-', 'outline-', 'fill-'];
         prefixes.forEach(prefix => {
             if (layer.id.startsWith(prefix)) {
-                const layerItemId = layer.id.replace(prefix, '');
+                console.log("removing")
                     map.removeLayer(layer.id);
                     if (map.getSource(layer.id + "-source")){
+                        console.log("removing source")
                         map.removeSource(layer.id + "-source");
                     }
             }
         });
     });
 }
-
-// function removePrevPlumeLayers() {
-//     const layers = map.getStyle().layers;
-//     layers.forEach((layer) => {
-//         if (layer.id.startsWith('raster-') || layer.id.startsWith('outline-') || layer.id.startsWith('fill-')) {
-//             const layerItemId = layer.id.replace('raster-', ''); 
-//             if (!viewportItemIds.includes(layerItemId)) {
-//                 console.log(`Removing layer: ${layer.id} (not in viewportItemIds)`);
-//                 //map.setLayoutProperty(layer.id, 'visibility', 'none');
-//                 map.removeLayer(layer.id);
-//                 map.removeSource(layer.id +"-source"); 
-//                 console.log(`Removed source: ${layer.id + "-source"}`);
-//             }
-//         }
-//     });
-// }
 
 function removePrevPlumeLayers() {
     const layers = map.getStyle().layers;
@@ -115,8 +95,10 @@ function removePrevPlumeLayers() {
                 const layerItemId = layer.id.replace(prefix, '');
                 if (!viewportItemIds.includes(layerItemId)) {
                     console.log(`Removing layer: ${layer.id} (not in viewportItemIds)`);
+                    console.log("removing")
                     map.removeLayer(layer.id);
                     if (map.getSource(layer.id + "-source")){
+                        console.log("removing source")
                         map.removeSource(layer.id + "-source");}
                     console.log(`Removed source: ${layer.id + "-source"}`);
                 }
@@ -160,7 +142,9 @@ function addRaster(itemId) {
     });
 }
 
-function zoomedOrDraggedToThreshold(){
+function zoomedOrDraggedToThreshold(from){
+    console.log("zoomed")
+    
     const currentZoom = map.getZoom();
     if (currentZoom >= ZOOM_THRESHOLD){
         // MARKERS_ON_VIEWPORT = MARKERS_ON_MAP.filter(marker => {
@@ -179,7 +163,11 @@ function zoomedOrDraggedToThreshold(){
             return intersectingPolygonIds.includes(markerId); // Match IDs
         });
         const existing_markers = document.querySelectorAll('.marker');
-        existing_markers.forEach(marker => marker.remove());
+        //existing_markers.forEach(marker => marker.remove());
+        existing_markers.forEach(marker => {
+            marker.style.visibility = 'hidden'; // Hides the marker while keeping it in the DOM
+        });
+
         viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
             marker.feature.properties['Data Download'].split('/').pop().split('.')[0]
         );
@@ -191,18 +179,24 @@ function zoomedOrDraggedToThreshold(){
         const legendOuter = document.getElementById("plegend-container");
         legendOuter.style.display ='none';
         removeAllPlumeLayers();
-        addPointsOnMap();
+        //addPointsOnMap();
+        const existing_markers = document.querySelectorAll('.marker');
+        existing_markers.forEach(marker => {
+            marker.style.visibility = ''; // Hides the marker while keeping it in the DOM
+        });
     };
 }
 
 function addOutline(polygonSourceId, polygonLayerId, polygonFeature){
     if (!map.getSource(polygonSourceId)){
+        console.log("add source polygon ", polygonSourceId);
         map.addSource(polygonSourceId, {
             type: "geojson",
             data: polygonFeature,
         });
         }
         if (!map.getLayer(`outline-${polygonLayerId}`))
+            console.log("add layer outline polygon ", "outline" +polygonLayerId);
         map.addLayer({
             'id': `outline-${polygonLayerId}`,
             'type': 'line',
@@ -214,13 +208,14 @@ function addOutline(polygonSourceId, polygonLayerId, polygonFeature){
             }
         });
         if (!map.getLayer(`fill-${polygonLayerId}`))
+            console.log("add layer fill polygon ", "fill"+polygonLayerId);
             map.addLayer({
                 'id': `fill-${polygonLayerId}`,
                 'type': 'fill',
                 'source': polygonSourceId,
                 'layout': {},
                 'paint': {
-                    'fill-opacity': 0,
+                    'fill-opacity': 0
                 }
             });
 }
@@ -228,25 +223,11 @@ function addOutline(polygonSourceId, polygonLayerId, polygonFeature){
 function addRasterHoverListener() {
     MARKERS_ON_VIEWPORT.forEach(marker => {
         const itemId = marker.feature.properties['Data Download'].split('/').pop().split('.')[0];
-        const polygonFeature = ALLPOLYGONS.find((item) => item.id === itemId);
         if (map.getZoom() >= ZOOM_THRESHOLD) {
             if (!map.getLayer("outline-polygon-layer-" + itemId)) {
                 
-                // Marker hover effect
-                // document.getElementById(`marker-${marker.id}`).addEventListener("mouseenter", () => {
-                //     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
-                //     addOutline("polygon-source-" + itemId, "polygon-layer-" + itemId, polygonFeature.feature);
-                //     const selectedItem = document.getElementById("itemDiv-" + itemId);
-                //     selectedItem.style.border = "2px solid #0098d7";
-                //     selectedItem.scrollIntoView({
-                //         behavior: "smooth",
-                //         block: "center",
-                //         inline: "center"
-                //     });
-                // });
                 map.on('mouseenter', `fill-${itemId}`,() => {
                     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
-                    //addOutline("polygon-source-" + itemId, "polygon-layer-" + itemId, polygonFeature.feature);
                     map.setPaintProperty(`outline-${itemId}`, 'line-width', 4); 
                     const selectedItem = document.getElementById("itemDiv-" + itemId);
                     selectedItem.scrollIntoView({
@@ -276,7 +257,6 @@ function addRasterHoverListener() {
                         selectedItem.style.border = "2px solid rgba(255,255,255,0)";
                     });
 
-                // document.getElementById(`marker-${marker.id}`).addEventListener("mouseleave", () => {
                 //     if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
                 //     removeLayers(map, "", ["polygon-layer-" + itemId, "outline-polygon-layer-" + itemId]);
                 //     const selectedItem = document.getElementById("itemDiv-" + itemId);
@@ -285,8 +265,7 @@ function addRasterHoverListener() {
 
                 // Sidebar item hover effect
                 document.getElementById("itemDiv-" + itemId).addEventListener("mouseenter", () => {
-                    if (map.getZoom() < ZOOM_THRESHOLD) return; // Zoom check inside event
-                    //addOutline("polygon-source-" + itemId,  itemId, polygonFeature.feature);
+
                     map.setPaintProperty(`outline-${itemId}`, 'line-width', 4); 
                     const selectedItem = document.getElementById("itemDiv-" + itemId);
                     selectedItem.style.border = "2px solid #0098d7";
@@ -321,7 +300,9 @@ function createPlumesList(){
         return dateB - dateA; // For descending order (newest first)
         // return dateA - dateB; for ascending order (oldest first)
     });
+    
     MARKERS_ON_VIEWPORT.forEach(marker => {
+        console.log(MARKERS_ON_VIEWPORT.length);
         const properties = marker.feature.properties; 
         const itemDiv = document.createElement('div');
         const itemId = properties['Data Download'].split('/').pop().split('.')[0];
@@ -332,52 +313,107 @@ function createPlumesList(){
         legendContainer.appendChild(itemDiv);
         const polygonFeature = ALLPOLYGONS.find((item) => item.id === itemId);
         if (!map.getLayer("fill-"+ itemId)){
-            addOutline(itemId + "source-",itemId, polygonFeature.feature)
+            addOutline(itemId + "-source",itemId, polygonFeature.feature)
         }
         if (!map.getLayer("raster-"+ itemId)){
+            console.log("adding raster")
             addRaster(itemId);
         }
     });
 }
+// Global to keep track of active markers
+const activeMarkers = new Map();
 
-function addPointsOnMap(){
-    // Removing prev markers
-    const existing_markers = document.querySelectorAll('.marker');
-    existing_markers.forEach(marker => marker.remove());
+function addPointsOnMap() {
+    const newMarkerIds = new Set(MARKERS_ON_MAP.map(point => point.id));
+    const currentMarkerIds = new Set(activeMarkers.keys());
 
-    // Adding new markers
-    MARKERS_ON_MAP.forEach(function(point) {
-        if (map.getLayer(`marker-${point.id}`)){
-            map.removeLayer(layerId);
+    // Remove markers no longer needed
+    for (const markerId of currentMarkerIds) {
+        if (!newMarkerIds.has(markerId)) {
+            const markerObj = activeMarkers.get(markerId);
+            markerObj.marker.remove(); // Remove from map
+            activeMarkers.delete(markerId); // Remove from activeMarkers map
         }
-        const coords = point.feature.geometry.coordinates
-        const markerEl = document.createElement("div");
-        markerEl.className = "marker";
-        markerEl.id = `marker-${point.id}`;
-        const marker = new mapboxgl.Marker(markerEl)
-            .setLngLat([coords[0], coords[1]])
-            .addTo(map);
-        const location = point.feature.properties['Location'];
-        const utcTimeObserved = point.feature.properties['UTC Time Observed'];
-        const popup = new mapboxgl.Popup({
-            closeButton: false, 
-            closeOnClick: false
-        }).setHTML(getPopupContent(location, utcTimeObserved)); 
-        marker.setPopup(popup);
-        marker.getElement().addEventListener("mouseenter", () => {
-            popup.addTo(map);
-        });
-        marker.getElement().addEventListener("mouseleave", () => {
-            popup.remove();
-        });
-        marker.getElement().addEventListener("click", () => {
-            map.flyTo({
-                center: [coords[0], coords[1]], 
-                zoom: ZOOM_THRESHOLD,
-            });   
-        });
-    });   
-};
+    }
+
+    // Add new markers
+    MARKERS_ON_MAP.forEach(point => {
+        if (!activeMarkers.has(point.id)) {
+            const coords = point.feature.geometry.coordinates;
+            const markerEl = document.createElement("div");
+            markerEl.className = "marker";
+            markerEl.id = `marker-${point.id}`;
+
+            const marker = new mapboxgl.Marker(markerEl)
+                .setLngLat([coords[0], coords[1]])
+                .addTo(map);
+
+            const location = point.feature.properties["Location"];
+            const utcTimeObserved = point.feature.properties["UTC Time Observed"];
+
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false,
+            }).setHTML(getPopupContent(location, utcTimeObserved));
+
+            marker.setPopup(popup);
+
+            // Event listeners for hover and click
+            marker.getElement().addEventListener("mouseenter", () => popup.addTo(map));
+            marker.getElement().addEventListener("mouseleave", () => popup.remove());
+            marker.getElement().addEventListener("click", () => {
+                map.flyTo({
+                    center: [coords[0], coords[1]],
+                    zoom: ZOOM_THRESHOLD,
+                });
+            });
+
+            // Add marker to activeMarkers map
+            activeMarkers.set(point.id, { marker, element: markerEl });
+        }
+    });
+}
+
+// function addPointsOnMap(){
+//     // Removing prev markers
+//     const existing_markers = document.querySelectorAll('.marker');
+//     existing_markers.forEach(marker => marker.remove());
+
+//     // Adding new markers
+//     MARKERS_ON_MAP.forEach(function(point) {
+//         if (map.getLayer(`marker-${point.id}`)){
+//             map.removeLayer(layerId);
+//         }
+//         const coords = point.feature.geometry.coordinates
+//         const markerEl = document.createElement("div");
+//         markerEl.className = "marker";
+//         markerEl.id = `marker-${point.id}`;
+//         const marker = new mapboxgl.Marker(markerEl)
+//             .setLngLat([coords[0], coords[1]])
+//             .addTo(map);
+//         const location = point.feature.properties['Location'];
+//         const utcTimeObserved = point.feature.properties['UTC Time Observed'];
+//         const popup = new mapboxgl.Popup({
+//             closeButton: false, 
+//             closeOnClick: false
+//         }).setHTML(getPopupContent(location, utcTimeObserved)); 
+//         marker.setPopup(popup);
+//         marker.getElement().addEventListener("mouseenter", () => {
+//             popup.addTo(map);
+//         });
+//         marker.getElement().addEventListener("mouseleave", () => {
+//             popup.remove();
+//         });
+//         marker.getElement().addEventListener("click", () => {
+//             console.log("flying")
+//             map.flyTo({
+//                 center: [coords[0], coords[1]], 
+//                 zoom: ZOOM_THRESHOLD,
+//             });   
+//         });
+//     });   
+// };
 
 async function getCoverageData() {
     try{
@@ -418,7 +454,7 @@ function initializeDateSlider() {
       max: maxStopDate.getTime() / 1000,  // Convert to seconds
       step: 86400,  // Step size of 1 day (86400 seconds)
       values: [minStartDate.getTime() / 1000, maxStopDate.getTime() / 1000],
-      slide: function (event, ui) {
+      stop: function (event, ui) {
         let sDate = new Date(ui.values[0] * 1000); // Convert to milliseconds
         let eDate = new Date(ui.values[1] * 1000); // Convert to milliseconds
         sDate.setUTCHours(0, 0, 0, 0);
@@ -433,39 +469,89 @@ function initializeDateSlider() {
       }
     });
   }
-
+// coverageData={
+//     "type": "FeatureCollection",
+//     "features": [
+//       {
+//         "properties": {
+//           "start_time": "2024-08-10T03:41:03Z"
+//         },
+//         "geometry": {
+//           "coordinates": [
+//             [
+//                 [-88.4720, 35.0041],  // Northwest corner
+//                 [-85.6067, 34.9847],  // Northeast corner
+//                 [-85.0023, 32.8404],  // East-central border
+//                 [-85.0692, 31.0009],  // Southeast corner
+//                 [-87.3593, 30.9964],  // Southwest corner
+//                 [-88.4720, 35.0041]
+//             ]
+//           ],
+//           "type": "Polygon"
+//         }
+//       },
+//       {
+//         "properties": {
+//           "start_time": "2022-08-10T03:41:15Z"
+//         },
+//         "geometry": {
+//           "coordinates": [
+//             [
+//               [
+//                 74.27,
+//                 21.89
+//               ],
+//               [
+//                 73.66,
+//                 22.34
+//               ],
+//               [
+//                 74.16,
+//                 22.91
+//               ],
+//               [
+//                 74.78,
+//                 22.46
+//               ],
+//               [
+//                 74.27,
+//                 21.89
+//               ]
+//             ]
+//           ],
+//           "type": "Polygon"
+//         }
+//       },
+//     ]
+//   }
 
 function main() {
     map.on("load", async () => {  
-    
         addMeasurementSource(map);
         document.querySelector(".toolbar").style.display = "block";
         createColorbar(VMIN, VMAX);
         initializeDateSlider();
         addMeasurementLayer(map);
+
         coverageData =  await getCoverageData();
+        addCoverageToggleListener(map, coverageData)
+        document.getElementById("loading-spinner").style.display = "none";
+
         let {s: startDate, e: endDate} = getSliderValues();
-        const polygons = methanMetadata.features
-        .filter((f) => f.geometry.type === "Polygon")
+        MARKERS_ON_MAP = methanMetadata.features
+        .filter((f) => f.geometry.type === "Point")
         .map((f) => {
             const id = f.properties["Data Download"].split('/').pop().split('.')[0]; // Extract "abc" from "http://.../abc.tif"
             return {
                 id: id,     
                 feature: f
             };
-        })
-        // Filter the data by dates and select only points
-        const points = filterByDates(methanMetadata,startDate, endDate, "plumes" ).features
-            .filter((f) => f.geometry.type === "Point")
-            .map((f) => {
-                const id = f.properties["Data Download"].split('/').pop().split('.')[0]; // Extract "abc" from "http://.../abc.tif"
-                return {
-                    id: id,     
-                    feature: f
-                };
-            });
-
-        POLYGONS_ON_MAP = filterByDates(methanMetadata,startDate, endDate, "plumes" ).features
+        }).sort((prev, next) => {
+            const prev_date = new Date(prev.feature.properties["UTC Time Observed"]).getTime();
+            const next_date = new Date(next.feature.properties["UTC Time Observed"]).getTime();
+            return prev_date - next_date
+        });
+        ALLPOLYGONS = methanMetadata.features
         .filter((f) => f.geometry.type === "Polygon")
         .map((f) => {
             const id = f.properties["Data Download"].split('/').pop().split('.')[0]; // Extract "abc" from "http://.../abc.tif"
@@ -474,28 +560,23 @@ function main() {
                 feature: f
             };
         });
-        
         // Set the global vars when the map loads
-        ALLPOLYGONS = polygons;
-        MARKERS_ON_VIEWPORT = points;
+        POLYGONS_ON_MAP = ALLPOLYGONS;
+        MARKERS_ON_VIEWPORT = MARKERS_ON_MAP;
         viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
             marker.feature.properties['Data Download'].split('/').pop().split('.')[0]
         );
-        removePrevPlumeLayers();
-        MARKERS_ON_MAP = points;
-        // Initially display all plumes as markers
+        removeAllPlumeLayers();
         addPointsOnMap();
-        CURRENTCOVERAGE = coverageData;
+        //CURRENTCOVERAGE = coverageData;
         
     });
 }
 
 //Add event listeners
-map.on('drag', () => { zoomedOrDraggedToThreshold(); });
+map.on('dragend', () => { zoomedOrDraggedToThreshold(); });
 map.on('zoomend', () => { zoomedOrDraggedToThreshold(); });
-// document.getElementById("start_date").addEventListener('change', updateDatesandData);
-// document.getElementById("end_date").addEventListener('change', updateDatesandData);
-document.getElementById("showCoverage").addEventListener("change", () => addCoverage(map,CURRENTCOVERAGE));
+//document.getElementById("showCoverage").addEventListener("change", () => addCoverage(map,CURRENTCOVERAGE));
 document.getElementById("plume-id-search-input").addEventListener("input", (event) => {
     const keyword = event.target.value.trim();
     if (keyword) {
@@ -533,67 +614,67 @@ if (
 });
 
 
-// const isAnimation = document.getElementById("doAnimation");
-// let timeline;
-// let preservedState= {};
-// isAnimation.addEventListener("change", (event) => {
-//     if (event.target.checked) {
-//         if (map.getZoom() >= ZOOM_THRESHOLD) {
-//             const {start_date, end_date, cov}= beforeAnimation(map);
-//             preservedState = {
-//                 startDate:start_date,
-//                 endDate: end_date,
-//                 coverage: cov,
-//             };
-//             const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
-//             const covTimes = CURRENTCOVERAGE.features
-//             .filter(feature => isFeatureWithinBounds(feature, map.getBounds()))
-//             .map(feature => new Date(feature.properties.start_time));
-//             document.getElementById("showCoverage").checked = true;
-//             removePrevPlumeLayers();
-//             timeline = new TimelineControl({
-//                 placeholder: 'Plumes',
-//                 className: 'timeline-control' ,
-//                 start: start_date,
-//                 end: end_date,
-//                 format: (date) => {
-//                     const formattedDate = new Date(date).toLocaleDateString('en-US', {
-//                         year: 'numeric', 
-//                         month: 'short', 
-//                         day: 'numeric'
-//                     });
-//                     return `From ${formattedDate} - 30 days prior`;
-//                 },         
-//                 step: 1000 * 3600 * 24* 30, // 30 days interval
-//                 onChange: date => {
-//                     const currentStartTime = $("#slider-range").slider("values", 0);
-//                     const manualEndTime =  new Date(date).getTime()/1000;
-//                     $("#slider-range").slider("values", [currentStartTime, manualEndTime]);
-//                     updateDatesandData(); 
-//                     //if you dont want cummulative
-//                     const currentEndTime = $("#slider-range").slider("values", 1);
-//                     const manualStartTime= currentEndTime;
-//                     $("#slider-range").slider("values", [manualStartTime, currentEndTime]);
-//                 },
-//             });
-//             const timelineElement = timeline.onAdd(map);
-//             document.getElementById('toolbar').appendChild(timelineElement);
-//             addTimelineMarkers(covTimes, start_date, end_date, '#ddd', 9, 8,4, 0);
-//             addTimelineMarkers(utcTimesObserved, start_date, end_date,"#20068f", 10, 4,4,50);
-//         } 
-//         else 
-//         {
-//             alert(`Your Zoom level is ${map.getZoom()}. Please increase zoom level to ${ZOOM_THRESHOLD} around the area you want to animate!!`);
-//             document.getElementById("doAnimation").checked= false;
+const isAnimation = document.getElementById("doAnimation");
+let timeline;
+let preservedState= {};
+isAnimation.addEventListener("change", (event) => {
+    if (event.target.checked) {
+        if (map.getZoom() >= ZOOM_THRESHOLD) {
+            const {start_date, end_date, cov}= beforeAnimation(map);
+            preservedState = {
+                startDate:start_date,
+                endDate: end_date,
+                coverage: cov,
+            };
+            const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
+            // const covTimes = CURRENTCOVERAGE.features
+            // .filter(feature => isFeatureWithinBounds(feature, map.getBounds()))
+            // .map(feature => new Date(feature.properties.start_time));
+            document.getElementById("showCoverage").checked = true;
+            removePrevPlumeLayers();
+            timeline = new TimelineControl({
+                placeholder: 'Plumes',
+                className: 'timeline-control' ,
+                start: start_date,
+                end: end_date,
+                format: (date) => {
+                    const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: 'numeric'
+                    });
+                    return `From ${formattedDate} - 30 days prior`;
+                },         
+                step: 1000 * 3600 * 24* 30, // 30 days interval
+                onChange: date => {
+                    const currentStartTime = $("#slider-range").slider("values", 0);
+                    const manualEndTime =  new Date(date).getTime()/1000;
+                    $("#slider-range").slider("values", [currentStartTime, manualEndTime]);
+                    updateDatesandData(); 
+                    //if you dont want cummulative
+                    const currentEndTime = $("#slider-range").slider("values", 1);
+                    const manualStartTime= currentEndTime;
+                    $("#slider-range").slider("values", [manualStartTime, currentEndTime]);
+                },
+            });
+            const timelineElement = timeline.onAdd(map);
+            document.getElementById('toolbar').appendChild(timelineElement);
+            //addTimelineMarkers(covTimes, start_date, end_date, '#ddd', 9, 8,4, 0);
+            addTimelineMarkers(utcTimesObserved, start_date, end_date,"#20068f", 10, 4,4,50);
+        } 
+        else 
+        {
+            alert(`Your Zoom level is ${map.getZoom()}. Please increase zoom level to ${ZOOM_THRESHOLD} around the area you want to animate!!`);
+            document.getElementById("doAnimation").checked= false;
 
-//         }
-//     } else {
-//         afterAnimation(map, preservedState);
-//         updateDatesandData();
-//         if (timeline) {
-//             map.removeControl(timeline);
-//             timeline = null; // Reset timeline to allow recreation
-//         }
-//     }
-// })
+        }
+    } else {
+        afterAnimation(map, preservedState);
+        updateDatesandData();
+        if (timeline) {
+            map.removeControl(timeline);
+            timeline = null; // Reset timeline to allow recreation
+        }
+    }
+})
 main();

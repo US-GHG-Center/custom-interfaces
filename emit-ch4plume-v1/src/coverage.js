@@ -26,19 +26,6 @@ function addPolygon(map, polygonSourceId, polygonLayerId, polygonFeature) {
         },
     });
 
-    // Add a black outline around the polygon.
-    // map.addLayer({
-    //     'id': `outline-${polygonLayerId}`,
-    //     'type': 'line',
-    //     'source': polygonSourceId,
-    //     'layout': {},
-    //     'paint': {
-    //         'line-color': styleOptions["lineColor"],
-    //         'line-width': styleOptions["lineWidth"]
-    //     }
-    // });
-
-
     // always keep the coverage layer below the rasters
     const layers = map.getStyle().layers;
     const rasterLayers = layers.filter(layer => layer.id.startsWith('raster-'));
@@ -49,32 +36,82 @@ function addPolygon(map, polygonSourceId, polygonLayerId, polygonFeature) {
 
 }
 
-function removeLayers(map, sourceId, layersIds) {
-    layersIds.forEach(layerId => {
-        if (map.getLayer(layerId)) {
-            map.removeLayer(layerId)
-        }
-    });
+function removeLayers(map, sourceId, layerId) {
+
+
+    if (map.getLayer(layerId)) {
+        console.log("layer for cov removed")
+        map.removeLayer(layerId)
+    }
+
     if (map.getSource(sourceId)) {
+        console.log("source for cov removed")
         map.removeSource(sourceId);
     }
 }
-
-function addCoverage(map, currentCov){
-    if (document.getElementById("showCoverage").checked) {
-        if (map.getLayer("coverage")){
-            //removeLayers(map, "coverage", ['coverage','outline-coverage']);
-            removeLayers(map, "coverage", ['coverage']);
-        }
-        addPolygon(map, "coverage", "coverage",currentCov);
-
-    } else {
-        //removeLayers(map, "coverage", ['coverage','outline-coverage']);
-        removeLayers(map, "coverage", ['coverage']);
+function checkToggle(map, coverageData, startDate, stopDate){
+    if ($('#showCoverage').is(':checked')){
+        removeLayers(map, "coverage", 'coverage')
+        addCoverage(map, coverageData, "coverage", startDate,stopDate)
     }
+    else {
+        removeLayers(map, "coverage", 'coverage')
+    }
+}
+
+// function addCoverage(map, currentCov){
+//     if (document.getElementById("showCoverage").checked) {
+//         if (map.getLayer("coverage")){
+//             //removeLayers(map, "coverage", ['coverage','outline-coverage']);
+//             removeLayers(map, "coverage", ['coverage']);
+//         }
+//         addPolygon(map, "coverage", "coverage",currentCov);
+
+//     } else {
+//         //removeLayers(map, "coverage", ['coverage','outline-coverage']);
+//         removeLayers(map, "coverage", ['coverage']);
+//     }
+// }
+
+function addCoverage(map, geojsonData, layerId, startDate, stopDate) {
+    // Convert startDate and endDate to Date objects for comparison
+    const start = new Date(startDate);
+    const end = new Date(stopDate);
+
+    // Filter features within the date range
+    const filteredFeatures = geojsonData.features.filter(feature => {
+        const featureStartTime = new Date(feature.properties.start_time);
+        
+        // Check if the feature's time range overlaps with the given date range
+        return (featureStartTime >= start && featureStartTime <= end);
+    });
+
+    // Create a new GeoJSON object with the filtered features
+    const filteredGeoJSON = {
+        ...geojsonData,
+        features: filteredFeatures
+    };
+
+    addPolygon(map, layerId, layerId,filteredGeoJSON)
+}
+
+function addCoverageToggleListener(map, coverageData) {
+    // Event listener for the toggle button
+    document.getElementById('showCoverage').addEventListener('change', function() {
+        // Get the current values from the slider
+        let sliderValues = $("#slider-range").slider("values");
+        let startDate = new Date(sliderValues[0] * 1000);
+        let stopDate = new Date(sliderValues[1] * 1000);
+        startDate.setUTCHours(0, 0, 0, 0);
+        stopDate.setUTCHours(23, 59, 59, 0);
+
+        checkToggle(map, coverageData, startDate, stopDate)
+    });
 }
 
 module.exports = {
     addCoverage: addCoverage,
-    removeLayers: removeLayers
+    removeLayers: removeLayers,
+    checkToggle: checkToggle,
+    addCoverageToggleListener:addCoverageToggleListener
   };
