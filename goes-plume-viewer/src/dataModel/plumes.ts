@@ -1,13 +1,7 @@
-export interface PlumeRegion {
-    id: string;
-    location: [Lon, Lat]; // [lon, lat]
-    startDate: DateTime;
-    endDate: DateTime;
-    plumes: Plume[];
-}
+export type SubDailyPlume = STACItem; // This is the smallest working unit of data. Format: <country>_<state>_<region>_<plume_id>_<datetime>. e.g. "GOES-CH4_Mexico_Durango_BV1_BV1-2_2019-05-21T17:31:00Z"
 
 export interface Plume {
-    id: string;
+    id: string; // Format: <country>_<state>_<region>_<plume_id>. e.g. Mexico_Durango_BV1_BV1-1
     region: string;
     representationalPlume: SubDailyPlume;
     location: [Lon, Lat]; // [lon, lat]
@@ -16,7 +10,16 @@ export interface Plume {
     subDailyPlumes: SubDailyPlume[];
 }
 
-export type SubDailyPlume = STACItem;
+export interface PlumeRegion {
+    id: string; // Format: <region>. e.g. BV1
+    location: [Lon, Lat]; // [lon, lat]
+    startDate: DateTime;
+    endDate: DateTime;
+    plumes: Plume[];
+}
+
+// helpers
+
 export type DateTime = string;
 export type Lon = string;
 export type Lat = string;

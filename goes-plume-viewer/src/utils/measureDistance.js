@@ -176,7 +176,6 @@ export function addMeasurementLayer(map) {
   map.addLayer(pointLayer);
   map.addLayer(labelLayer);
   map.addLayer(lineLayer);
-  // console.log("Added Layer");
 }
 export function removeMeasurementLayer(map) {
   if (map) {

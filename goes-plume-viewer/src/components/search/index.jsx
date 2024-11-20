@@ -4,13 +4,12 @@ import Autocomplete from '@mui/material/Autocomplete';
 
 import { TrieSearch } from "../../services/trieSearch";
 
-export function Search({ ids, setSelectedPlumeId }) {
+export function Search({ ids, handleSelectedPlumeSearch }) {
     const trieSearch = useRef(null);
     const [ searchOptions, setSearchOptions ] = useState([]);
 
     const handleSearch = (prefix) => {
-        const captialized_prefix = prefix.toUpperCase()
-        const searchResult = trieSearch.current.getRecommendations(captialized_prefix);
+        const searchResult = trieSearch.current.getRecommendations(prefix);
         return searchResult;
     }
 
@@ -21,7 +20,7 @@ export function Search({ ids, setSelectedPlumeId }) {
     }
 
     const handleOnOptionClicked = (event, clickedValue) => {
-        setSelectedPlumeId(clickedValue);
+        handleSelectedPlumeSearch(clickedValue);
     }
 
     useEffect(() => {

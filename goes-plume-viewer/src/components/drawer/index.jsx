@@ -8,10 +8,9 @@ import IconButton from '@mui/material/IconButton';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { PlumeCard } from '../card';
-import { PLUMES_META } from "../../assets/dataset/metadata";
 import { useEffect, useState } from 'react';
 
-const drawerWidth = "36rem";
+const drawerWidth = "34rem";
 
 const Main = styledmui('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme }) => ({
@@ -62,25 +61,47 @@ const HorizontalLayout = styled.div`
     margin-bottom: 5px;
 `;
 
-export function PersistentDrawerRight({open, setOpen, selectedPlume, collectionId}) {
-  const [ selectedPlumeMeta, setSelectedPlumeMeta ] = useState(null);
+export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, collectionId, metaDataTree, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId}) {
+  const [ selectedPlumeMetas, setSelectedPlumeMetas ] = useState([]);
+  const [ location, setLocation ] = useState("USA");
+  const [ numberOfPlumes, setNumberOfPlumes ] = useState(0);
+
   let VMIN = 0;
   let VMAX = 0.4;
   let colorMap = "plasma";
-
-  const location = "White, Indiana, United States";
-  const numberOfPlumes = "3";
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
   useEffect(() => {
-    if (!selectedPlume) return;
+    if ( !plumeMetaData ) return;
+    if ( !selectedPlumes.length ) {
+      setSelectedPlumeMetas([]);
+      setLocation("USA");
+      setNumberOfPlumes(0);
+      return;
+    }
 
-    const { plumeId } = selectedPlume;
-    if ( plumeId in PLUMES_META) setSelectedPlumeMeta(PLUMES_META[plumeId]);
-  }, [selectedPlume]);
+    try {
+      const selectedMetas = selectedPlumes.map(plume => {
+        if (!(plume.id in plumeMetaData)) {
+          throw new Error(`plumeId: "${plume.id}" not found in metadata.`);
+        }
+        return plumeMetaData[plume.id]
+      });
+      setSelectedPlumeMetas(selectedMetas)
+
+      const firstPlumeMeta = plumeMetaData[selectedPlumes[0].id];
+      const { administrativeDivision, country } = firstPlumeMeta;
+      const location = `${administrativeDivision}, ${country}`;
+      const numberOfPlumes = selectedPlumes.length;
+      setLocation(location);
+      setNumberOfPlumes(numberOfPlumes);
+    } catch (err) {
+      console.error("Error getting data for the drawer.", err)
+    }
+  }, [plumeMetaData, selectedPlumes]);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -94,7 +115,8 @@ export function PersistentDrawerRight({open, setOpen, selectedPlume, collectionI
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: drawerWidth,
-            height: "100%"
+            height: 'calc(100vh - var(--colorbar-height) - 3.5%)', //colobar is up 3% from bottom
+            borderRadius: '3px',
           },
         }}
         variant="persistent"
@@ -122,17 +144,25 @@ export function PersistentDrawerRight({open, setOpen, selectedPlume, collectionI
             </Typography>
           </HorizontalLayout>
         </DrawerHeader>
-          { selectedPlumeMeta && selectedPlume && <PlumeCard
-              plumeSourceName={selectedPlumeMeta.plumeSourceName}
-              imageUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${selectedPlume["data"]["id"]}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
-              tiffUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${selectedPlume["data"]["id"]}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
-              lon={selectedPlumeMeta.lon}
-              lat={selectedPlumeMeta.lat}
-              totalReleaseMass={selectedPlumeMeta.totalReleaseMass}
-              colEnhancements={selectedPlumeMeta.colEnhancements}
-              startDatetime={selectedPlumeMeta.startDatetime}
-              endDatetime={selectedPlumeMeta.endDatetime}
-            />
+          { !!selectedPlumeMetas.length &&
+            selectedPlumeMetas.map(selectedPlumeMeta => (
+              <PlumeCard
+                key={selectedPlumeMeta.id}
+                plumeSourceId={selectedPlumeMeta.id}
+                plumeSourceName={selectedPlumeMeta.id.replace(/_/g, " ")}
+                imageUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
+                tiffUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
+                lon={selectedPlumeMeta.lon}
+                lat={selectedPlumeMeta.lat}
+                totalReleaseMass={selectedPlumeMeta.totalReleaseMass}
+                colEnhancements={selectedPlumeMeta.colEnhancements}
+                startDatetime={selectedPlumeMeta.startDatetime}
+                endDatetime={selectedPlumeMeta.endDatetime}
+                handleSelectedPlumeCard={handleSelectedPlumeCard}
+                hoveredPlumeId={hoveredPlumeId}
+                setHoveredPlumeId={setHoveredPlumeId}
+              />
+            ))
           }
       </Drawer>
     </Box>

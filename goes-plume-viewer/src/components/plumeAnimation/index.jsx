@@ -41,6 +41,10 @@ export const PlumeAnimation = ({ plumes }) => {
             onChange: date => {
                 // executed on each changed step tick.
                 handleAnimation(map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource);
+            },
+            format: date => {
+                const dateStr = moment(date).utc().format("MM/DD/YYYY, HH:mm:ss") + " UTC";
+                return dateStr
             }
         });
         map.addControl(timeline.current, "bottom-left");
@@ -71,7 +75,6 @@ const handleAnimation = (map, date, plumeDateIdxMap, plumes, bufferedLayer, buff
     if (!(momentFormattedDatetimeStr in plumeDateIdxMap)) return;
 
     const index = plumeDateIdxMap[momentFormattedDatetimeStr];
-    console.log("index:", index);
 
     // buffer the following k elements.
     const k = 4;

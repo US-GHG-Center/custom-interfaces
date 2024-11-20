@@ -2,20 +2,20 @@ import { useEffect } from "react";
 
 import { useMapbox } from "../../context/mapContext";
 
-export const MapZoom = ({ zoomLevel }) => {
+export const MapZoom = ({ zoomLocation, zoomLevel }) => {
     const { map } = useMapbox();
 
     useEffect(() => {
-        if (!map || !zoomLevel.length) return;
+        if (!map || !zoomLocation.length) return;
 
-        const [lon, lat] = zoomLevel;
+        const [lon, lat] = zoomLocation;
         map.flyTo({
             center: [lon, lat], // Replace with the desired latitude and longitude
-            offset: [-250, 0],
-            zoom: 7.5,
+            offset: zoomLevel ? [0, 0] : [-250, 0],
+            zoom: zoomLevel ? zoomLevel : 8.5,
         });
 
-    }, [map, zoomLevel]);
+    }, [map, zoomLevel, zoomLocation]);
 
     return null;
 }

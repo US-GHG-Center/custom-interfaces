@@ -1,14 +1,16 @@
-import React, { useRef } from "react";
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from '@mui/icons-material/Clear';
 import ReactDOM from "react-dom/client";
+import Tooltip from '@mui/material/Tooltip';
 
 function ClearMeasurementIcon() {
 
   return (
-    <IconButton className="clear-icon" >
-     <ClearIcon/>
-    </IconButton>
+    <Tooltip title="Clear Measurement Selection">
+      <IconButton className="clear-icon" >
+        <ClearIcon/>
+      </IconButton>
+    </Tooltip>
   );
 }
 

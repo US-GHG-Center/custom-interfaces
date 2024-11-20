@@ -1,24 +1,26 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import mapboxgl from 'mapbox-gl';
 
 import { useMapbox } from "../../context/mapContext";
 import "./index.css";
 
-export const MarkerFeature = ({ plots, setSelectedPlume }) => {
+export const MarkerFeature = ({ regions, setSelectedRegionId }) => {
     const { map } = useMapbox();
+    const [ markersVisible, setMarkersVisible ] = useState(true);
 
     useEffect(() => {
-        if (!map || !plots.length) return;
+        if (!map || !regions.length) return;
 
-        // plot the plots in the map.
-        const plottedMarkers = plots.map((plot) => {
-            const { location } = plot;
+        // plot the regions in the map.
+        const plottedMarkers = regions.map((region) => {
+            const { location } = region;
             const [ lon, lat ] = location;
             const marker = addMarker(map, lon, lat);
             const mel = marker.getElement();
             mel.addEventListener("click", (e) => {
-                setSelectedPlume(plot);
+                setSelectedRegionId(region.id);
             });
+            mel.style.display = markersVisible ? "block" : "none";
             return mel;
         });
 
@@ -28,7 +30,21 @@ export const MarkerFeature = ({ plots, setSelectedPlume }) => {
                 marker.parentNode.removeChild(marker);
             })
         }
-    }, [plots, map, setSelectedPlume]);
+    }, [regions, map, setSelectedRegionId, markersVisible]);
+
+    useEffect(() => {
+        if (!map) return;
+
+        const threshold = 8;
+        map.on("zoom", () => {
+            const currentZoom = map.getZoom();
+            if (currentZoom <= threshold) {
+                setMarkersVisible(true);
+            } else {
+                setMarkersVisible(false);
+            }
+        });
+    }, [map])
 
     return null;
 }
@@ -36,7 +52,7 @@ export const MarkerFeature = ({ plots, setSelectedPlume }) => {
 const addMarker = (map, longitude, latitude) => {
     const el = document.createElement('div');
     el.className = 'marker';
-    const markerColor = "#fcbb46";
+    const markerColor = "#00b7eb";
     el.innerHTML = getMarkerSVG(markerColor);
     let marker = new mapboxgl.Marker(el)
         .setLngLat([longitude, latitude])

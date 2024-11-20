@@ -1,4 +1,5 @@
-import { useTheme } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
+import moment from "moment";
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -6,7 +7,6 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import styled from "styled-components";
 import Divider from '@mui/material/Divider';
-
 
 import "./index.css";
 
@@ -19,13 +19,24 @@ const HorizontalLayout = styled.div`
     margin-bottom: 5px;
 `;
 
+const HighlightableCard = styled(Card)
+`
+    transition: border 0.3s ease;
+    &:hover {
+        border: 1px solid blue;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    border: ${props => props.$isHovered ? "1px solid blue" : "1px solid transparent"};
+    box-shadow: ${props => props.$isHovered ? "0 4px 20px rgba(0, 0, 0, 0.2)" : "none"};
+`;
+
 const CaptionValue = ({ caption, value, className }) => {
     return (
         <div className={className}>
             <Typography
                 variant="caption"
                 component="div"
-                sx={{ color: 'text.secondary' }}
+                sx={{ color: 'text.primary' }}
             >
                 { caption }
             </Typography>
@@ -40,15 +51,41 @@ const CaptionValue = ({ caption, value, className }) => {
     )
 }
 
-export function PlumeCard({ plumeSourceName, startDatetime, endDatetime, imageUrl, tiffUrl, lon, lat, totalReleaseMass, colEnhancements }) {
+export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDatetime, imageUrl, tiffUrl, lon, lat, totalReleaseMass, colEnhancements, handleSelectedPlumeCard, hoveredPlumeId, setHoveredPlumeId }) {
+    const [ isHovered, setIsHovered ] = useState(false);
+
+    const handleCardClick = () => {
+        handleSelectedPlumeCard(plumeSourceId);
+    }
+
+    const handleMouseEnter = () => {
+        setHoveredPlumeId(plumeSourceId);
+    }
+
+    const handleMouseLeave = () => {
+        setHoveredPlumeId("");
+    }
+
+    useEffect(() => {
+        if (hoveredPlumeId === plumeSourceId) setIsHovered(true);
+        if (hoveredPlumeId !== plumeSourceId) setIsHovered(false);
+    }, [hoveredPlumeId, plumeSourceId])
+
     return (
-    <Card sx={{ display: 'flex', margin: '15px'}}>
+    <HighlightableCard
+        sx={{ display: 'flex', flex: '0 0 auto', margin: '15px' }}
+        onClick={handleCardClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        $isHovered={isHovered}
+    >
         <div
             style={{display: "flex", alignItems: "center", justifyContent: "center"}}
         >
             <CardMedia
                 component="img"
-                sx={{ width: 100, height: 100 }}
+                height="100"
+                sx={{ padding: "1em", objectFit: "contain" }}
                 image={imageUrl}
                 alt="Live from space album cover"
             />
@@ -65,13 +102,13 @@ export function PlumeCard({ plumeSourceName, startDatetime, endDatetime, imageUr
             <HorizontalLayout>
                 <CaptionValue
                     className="card-plume"
-                    caption = "Approx Start time"
-                    value = { startDatetime + " UTC" }
+                    caption = "Approximate Start time"
+                    value = { moment.utc(startDatetime).format("MM/DD/YYYY, HH:mm:ss") + " UTC" }
                 />
                 <CaptionValue
                     className="card-plume"
-                    caption = "Approx End time"
-                    value = { endDatetime + " UTC" }
+                    caption = "Approximate End time"
+                    value = { moment.utc(endDatetime).format("MM/DD/YYYY, HH:mm:ss") + " UTC" }
                 />
             </HorizontalLayout>
             <HorizontalLayout>
@@ -88,13 +125,13 @@ export function PlumeCard({ plumeSourceName, startDatetime, endDatetime, imageUr
             <HorizontalLayout>
                 <CaptionValue
                     className="card-plume"
-                    caption = "Total Release Mass"
+                    caption = "Approximate Total Release Mass"
                     value = {totalReleaseMass + " Metric Tonne"}
                 />
                 <CaptionValue
                     className="card-plume"
-                    caption = "Methane Column Enhancement"
-                    value = {colEnhancements + " mol m-2"}
+                    caption = "Maximum Methane Column Enhancement"
+                    value = {colEnhancements + " mol/m²"}
                 />
             </HorizontalLayout>
             <HorizontalLayout>
@@ -111,6 +148,6 @@ export function PlumeCard({ plumeSourceName, startDatetime, endDatetime, imageUr
             </HorizontalLayout>
         </CardContent>
       </Box>
-    </Card>
+    </HighlightableCard>
   );
 }

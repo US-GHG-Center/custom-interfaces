@@ -1,19 +1,22 @@
 import React from "react";
 import IconButton from "@mui/material/IconButton";
 import ReactDOM from "react-dom/client";
+import Tooltip from '@mui/material/Tooltip';
 
 function ChangeUnitButton({ onClick, unit }) {
   return (
-    <IconButton
-      className="change-unit"
-      onClick={onClick}
-      style={{
-        backgroundColor: "#fff",
-        padding: "6px",
-      }}
-    >
-      {unit}
-    </IconButton>
+    <Tooltip title="Change Measurement Unit">
+      <IconButton
+        className="change-unit"
+        onClick={onClick}
+        style={{
+          backgroundColor: "#fff",
+          padding: "6px",
+        }}
+      >
+        {unit}
+      </IconButton>
+    </Tooltip>
   );
 }
 export class ChangeUnitControl {
