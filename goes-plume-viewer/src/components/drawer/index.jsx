@@ -75,7 +75,14 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
   };
 
   useEffect(() => {
-    if (!selectedPlumes.length || !plumeMetaData ) return;
+    if ( !plumeMetaData ) return;
+    if ( !selectedPlumes.length ) {
+      setSelectedPlumeMetas([]);
+      setLocation("USA");
+      setNumberOfPlumes(0);
+      return;
+    }
+
     try {
       const selectedMetas = selectedPlumes.map(plume => {
         if (!(plume.id in plumeMetaData)) {
