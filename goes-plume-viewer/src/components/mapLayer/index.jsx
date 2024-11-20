@@ -74,12 +74,12 @@ export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId, set
 }
 
 
-export const MapLayers = ({ plumes, hoveredPlumeId, handleLayerClick, setHoveredPlumeId }) => {
+export const MapLayers = ({ plumes, hoveredPlumeId, showPlumeLayers, handleLayerClick, setHoveredPlumeId }) => {
     const { map } = useMapbox();
     if (!map || !plumes.length) return;
 
     return (<>
-        {plumes && plumes.length && plumes.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick} hoveredPlumeId={hoveredPlumeId} setHoveredPlumeId={setHoveredPlumeId}></MapLayer>)}
+        {showPlumeLayers && plumes && plumes.length && plumes.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick} hoveredPlumeId={hoveredPlumeId} setHoveredPlumeId={setHoveredPlumeId}></MapLayer>)}
         </>
     );
 }

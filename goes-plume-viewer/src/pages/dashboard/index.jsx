@@ -47,6 +47,8 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
   const [ plumeIds, setPlumeIds ] = useState([]); // list of plume_ids for the search feature.
   const [ plumesForAnimation, setPlumesForAnimation ] = useState([]); // list of subdaily_plumes used for animation
 
+  const [ showPlumeLayers, setShowPlumeLayers ] = useState(true);
+
   // states for components/controls
   const [ openDrawer, setOpenDrawer ] = useState(false);
   const [ measureMode, setMeasureMode ] = useState(false);
@@ -57,7 +59,8 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
   // handler functions
   const handleSelectedRegion = (regionId) => {
     if (!dataTree.current || !Object.keys(dataTree.current).length || !regionId) return;
-    setSelectedRegionId(regionId);
+    setSelectedRegionId(regionId); // an useEffect handles it further
+    setShowPlumeLayers(true); // all the available plumes layers should be visible when region is selected
     prevSelectedRegionId.current = regionId;
     const region = dataTree.current[regionId];
     setZoomLocation(region.location);
@@ -71,15 +74,25 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
 
     const plume = plumes[plumeId];
     const { location } = plume;
-
-    setFilteredSelectedPlumes([plume]) // to just have the clicked plume meta
-    setPlumesForAnimation(plume.subDailyPlumes);
+    handleSelectedPlumeSearch(plumeId);
+    handleAnimationReady(plumeId);
     setZoomLocation(location);
     setZoomLevel(null); // take the default zoom level
     setSelectedRegionId(""); //to reset the plume that was shown
   }
 
+  const handleAnimationReady = (plumeId) => {
+    // will make the plume ready for animation.
+    if (!plumes || !plumeId) return;
+
+    const plume = plumes[plumeId];
+    setPlumesForAnimation(plume.subDailyPlumes);
+    // just clear the previous plume layers and not the cards
+    setShowPlumeLayers(false);
+  }
+
   const handleSelectedPlumeSearch = (plumeId) => {
+    // will focus on the plume along with its plume metadata card
     // will react to update the metadata on the sidedrawer
     if (!plumes || !plumeId) return;
     const plume = plumes[plumeId];
@@ -90,7 +103,6 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setZoomLocation(location);
     setZoomLevel(null); // take the default zoom level
     setSelectedRegionId(""); //to reset the plume that was shown
-    setFilteredSelectedPlumes([]); // to reset the all the plumes that were shown on region click
     setPlumesForAnimation([]); // to reset the previous animation
   }
 
@@ -137,6 +149,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     const plumes = dataTree.current[selectedRegionId].plumes;
     setSelectedPlumes(plumes);
     setPlumesForAnimation([]); // reset the animation
+    setShowPlumeLayers(true); // all the available plumes layers should be visible when region is selected
   // the reference to datatree is in current, so see changes with respect to that
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataTree.current, selectedRegionId]);
@@ -168,6 +181,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
           ></MarkerFeature>
           <PlumeAnimation plumes={plumesForAnimation} />
           <MapLayers
+            showPlumeLayers={showPlumeLayers}
             plumes={filteredSelectedPlumes}
             handleLayerClick={handleSelectedPlume}
             hoveredPlumeId={hoveredPlumeId}
