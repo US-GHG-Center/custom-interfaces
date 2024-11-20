@@ -71,11 +71,12 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
 
     const plume = plumes[plumeId];
     const { location } = plume;
+
+    setFilteredSelectedPlumes([plume]) // to just have the clicked plume meta
     setPlumesForAnimation(plume.subDailyPlumes);
     setZoomLocation(location);
     setZoomLevel(null); // take the default zoom level
     setSelectedRegionId(""); //to reset the plume that was shown
-    setFilteredSelectedPlumes([]) // to reset the all the plumes that were shown on region click
   }
 
   const handleSelectedPlumeSearch = (plumeId) => {
