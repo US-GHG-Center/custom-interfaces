@@ -8,9 +8,7 @@ export const Title = ({ children }) => {
             <Typography
                 variant="h6"
                 component="div"
-                sx={{ color: 'text.secondary' }}
-                align="center"
-                style={{ borderBottom: "2px solid #082A64", margin: "10px" }}
+                className="title-head"
             >
                 GOES Methane Plume Viewer
             </Typography>
