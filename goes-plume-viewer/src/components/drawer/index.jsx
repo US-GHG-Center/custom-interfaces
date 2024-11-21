@@ -127,12 +127,15 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
             <Typography
                   variant="h6"
                   component="div"
+                  fontWeight="bold"
+                  className='drawer-head-content'
             >
               { location }
             </Typography>
             <Typography
                   variant="subtitle1"
                   component="div"
+                  className='drawer-head-content'
             >
               { numberOfPlumes + " Plumes"}
             </Typography>
