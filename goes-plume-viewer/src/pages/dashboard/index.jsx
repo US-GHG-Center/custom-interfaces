@@ -119,6 +119,9 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
   const handleResetToSelectedRegion = () => {
     setHoveredPlumeId("");
     setPlumesForAnimation([]);
+    if (!prevSelectedRegionId.current) {
+      return handleResetHome();
+    }
     handleSelectedRegion(prevSelectedRegionId.current);
   }
 
