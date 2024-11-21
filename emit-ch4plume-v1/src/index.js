@@ -637,11 +637,27 @@ isAnimation.addEventListener("change", (event) => {
                 endDate: end_date,
                 coverage: cov,
             };
-            const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
-            // const covTimes = CURRENTCOVERAGE.features
-            // .filter(feature => isFeatureWithinBounds(feature, map.getBounds()))
-            // .map(feature => new Date(feature.properties.start_time));
             document.getElementById("showCoverage").checked = true;
+            const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
+            // const covTimes = { 
+            //     ...coverageData, 
+            //     features: coverageData.features
+            //         .filter(feature => 
+            //             isFeatureWithinBounds(feature, map.getBounds()) && 
+            //             new Date(feature.properties.start_time) >= start_date && 
+            //             new Date(feature.properties.start_time) <= end_date
+            //         ) 
+            // };
+            // console.log(covTimes)
+            
+            // //const filteredGeoJSON = { ...coverageData, features: coverageData.features.filter(({ properties: { start_time } }) => new Date(start_time) >= start_date && new Date(start_time) <= end_date) };
+            console.log("start_date and end_date format", start_date, end_date)
+            const covTimes = coverageData.features
+            .filter(feature => isFeatureWithinBounds(feature, map.getBounds()))
+            .map(feature => feature.properties.start_time)
+            .filter(date => date >=  start_date && date <= end_date);
+            console.log("after", covTimes)
+
             removePrevPlumeLayers();
             timeline = new TimelineControl({
                 placeholder: 'Plumes',
@@ -670,7 +686,7 @@ isAnimation.addEventListener("change", (event) => {
             });
             const timelineElement = timeline.onAdd(map);
             document.getElementById('toolbar').appendChild(timelineElement);
-            //addTimelineMarkers(covTimes, start_date, end_date, '#ddd', 9, 8,4, 0);
+            addTimelineMarkers(covTimes, start_date, end_date, '#ddd', -5, 8,4, 0);
             addTimelineMarkers(utcTimesObserved, start_date, end_date,"#20068f", 10, 4,4,50);
         } 
         else 
