@@ -158,28 +158,30 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
   return (
     <Box className="fullSize">
       <div id="dashboard-map-container">
-        <Title>
-          <HorizontalLayout>
-            <Search
-              ids={plumeIds}
-              handleSelectedPlumeSearch={handleSelectedPlumeSearch}
-            ></Search>
-          </HorizontalLayout>
-          <HorizontalLayout>
-            <FilterByDate
-              regions={regions}
-              plumes={selectedPlumes}
-              setFilteredRegions={setFilteredRegions}
-              setFilteredSelectedPlumes={setFilteredSelectedPlumes}
-            />
-          </HorizontalLayout>
-        </Title>
         <MainMap>
+          <Title>
+            <HorizontalLayout>
+              <Search
+                ids={plumeIds}
+                handleSelectedPlumeSearch={handleSelectedPlumeSearch}
+              ></Search>
+            </HorizontalLayout>
+            <HorizontalLayout>
+              <FilterByDate
+                regions={regions}
+                plumes={selectedPlumes}
+                setFilteredRegions={setFilteredRegions}
+                setFilteredSelectedPlumes={setFilteredSelectedPlumes}
+              />
+            </HorizontalLayout>
+            <HorizontalLayout>
+              <PlumeAnimation plumes={plumesForAnimation} />
+            </HorizontalLayout>
+          </Title>
           <MarkerFeature
             regions={filteredRegions}
             setSelectedRegionId={handleSelectedRegion}
           ></MarkerFeature>
-          <PlumeAnimation plumes={plumesForAnimation} />
           <MapLayers
             showPlumeLayers={showPlumeLayers}
             plumes={filteredSelectedPlumes}

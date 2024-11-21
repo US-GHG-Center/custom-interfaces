@@ -11,6 +11,7 @@ export const PlumeAnimation = ({ plumes }) => {
     // plume is the array of stac collection features
     const { map } = useMapbox();
     const timeline = useRef(null);
+    const timelineComponent = useRef(null);
 
     useEffect(() => {
         if (!map || !plumes.length) return;
@@ -47,7 +48,8 @@ export const PlumeAnimation = ({ plumes }) => {
                 return dateStr
             }
         });
-        map.addControl(timeline.current, "bottom-left");
+        const timelineElement = timeline.current.onAdd(map);
+        timelineComponent.current.append(timelineElement);
 
         return () => {
             // cleanups
@@ -63,7 +65,8 @@ export const PlumeAnimation = ({ plumes }) => {
     }, [plumes, map]);
 
     return (
-        <div className="plume-animation-controller-container">
+        <div style={{ width: "100%", height: "100%" }} className="player-container">
+            <div id="plume-animation-controller" ref={timelineComponent}></div>
         </div>
     );
 }
