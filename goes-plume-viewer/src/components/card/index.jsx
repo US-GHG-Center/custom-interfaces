@@ -117,7 +117,6 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
                     <Typography
                         variant="caption"
                         component="div"
-                        sx={{ color: 'text.secondary' }}
                     >
                         <div style={{display: "flex", justifyContent: "center"}}>
                             Download the Tiff File <DownloadIcon fontSize='small'/>
@@ -141,12 +140,12 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
                 <CaptionValue
                     className="card-plume"
                     caption = "Longitude"
-                    value = {lon}
+                    value = {Number(lon).toFixed(3)}
                 />
                 <CaptionValue
                     className="card-plume"
                     caption = "Latitude"
-                    value = {lat}
+                    value = {Number(lat).toFixed(3)}
                 />
             </HorizontalLayout>
         </CardContent>
