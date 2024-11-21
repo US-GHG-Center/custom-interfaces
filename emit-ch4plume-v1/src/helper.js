@@ -236,7 +236,7 @@ function isFeatureWithinBounds(feature, bounds) {
   ]);
 
   // Check if the feature intersects with the bounding box
-  return turf.booleanIntersects(feature, boundingBox);
+  return turf.booleanIntersects(feature.geometry, boundingBox);
 }
 
 function initializeDateSlider() {

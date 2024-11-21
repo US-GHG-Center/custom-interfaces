@@ -43,7 +43,7 @@ const methanMetadata = await (
 const itemIds = await (
     await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
 ).json();
-let coverageData =[]
+// let coverageData =[]
 let ALLPOLYGONS = Array(); // it will be initialized once and will remain constant
 let MARKERS_ON_MAP = Array(); // this is be initialized to methanMetadata (points only) and changes if  and end_date changes
 let MARKERS_ON_VIEWPORT = Array(); // this will change with zoom, drag, start and end filter. Its value will be updated as derived from MARKERS_ON_MAP based on filters
@@ -542,8 +542,12 @@ function main() {
         initializeDateSlider();
         addMeasurementLayer(map);
 
+        const coverageData = await (
+            await fetch(`${PUBLIC_URL}/data/coverage_data.json`)
+        ).json();
 
-        coverageData =  await getCoverageData();
+
+        // coverageData =  await getCoverageData();
         addCoverageToggleListener(map, coverageData)
         document.getElementById("loading-spinner").style.display = "none";
 
