@@ -7,6 +7,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import styled from "styled-components";
 import Divider from '@mui/material/Divider';
+import DownloadIcon from '@mui/icons-material/Download';
 
 import "./index.css";
 
@@ -112,13 +113,15 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
                 />
             </HorizontalLayout>
             <HorizontalLayout>
-                <a href={tiffUrl} target='_blank' rel="noreferrer">
+                <a href={tiffUrl} target='_blank' rel="noreferrer" className='card-download-link'>
                     <Typography
                         variant="caption"
                         component="div"
                         sx={{ color: 'text.secondary' }}
                     >
-                        Download the Tiff File
+                        <div style={{display: "flex", justifyContent: "center"}}>
+                            Download the Tiff File <DownloadIcon fontSize='small'/>
+                        </div>
                     </Typography></a>
             </HorizontalLayout>
             <Divider></Divider>
