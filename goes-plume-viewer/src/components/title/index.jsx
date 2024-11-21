@@ -9,6 +9,8 @@ export const Title = ({ children }) => {
                 variant="h6"
                 component="div"
                 className="title-head"
+                fontWeight="bold"
+                sx={{margin: "0 0.9rem"}}
             >
                 GOES Methane Plume Viewer
             </Typography>

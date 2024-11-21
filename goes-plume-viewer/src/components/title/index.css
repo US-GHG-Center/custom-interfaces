@@ -2,7 +2,8 @@
     color: var(--main-blue);
     text-align: center;
     border-bottom: 2px solid var(--main-blue);
-    margin: 10px;
+    padding: 0.9rem;
+    margin: 0 0.8rem;
 }
 
 .title-container {
