@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import { useMapbox } from "../../context/mapContext";
 import { HamburgerControl } from "./hamburger";
@@ -24,6 +24,7 @@ export const MapControls = ({
   openDrawer
 }) => {
   const { map } = useMapbox();
+  const customControlContainer = useRef();
 
   useEffect(() => {
     if (!map) return;
@@ -40,7 +41,7 @@ export const MapControls = ({
     const mapboxNavigationElem = mapboxNavigation.onAdd(map);
     const layerVisibilityControlElem = layerVisibilityControl.onAdd(map);
 
-    const mapboxCustomControlContainer = document.querySelector('#mapbox-custom-controls');
+    const mapboxCustomControlContainer = customControlContainer.current;
     mapboxCustomControlContainer.append(hamburgerControlElem);
     mapboxCustomControlContainer.append(homeControlElem);
     mapboxCustomControlContainer.append(restoreControlElem);
@@ -138,6 +139,6 @@ export const MapControls = ({
   }, [map, mapScaleUnit, measureMode]);
 
   return (
-    <div id="mapbox-custom-controls" style={{ right: openDrawer ? "34.5rem" : "0.5rem" }}></div>
+    <div id="mapbox-custom-controls" ref={customControlContainer} style={{ right: openDrawer ? "34.5rem" : "0.5rem" }}></div>
   );
 };

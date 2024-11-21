@@ -195,7 +195,9 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
           <MapControls
             openDrawer={openDrawer}
             measureMode={measureMode}
-            onClickHamburger={() => setOpenDrawer(true)}
+            onClickHamburger={() => {
+              setOpenDrawer((openDrawer) => !openDrawer);
+            }}
             onClickMeasureMode={() => {
               setMeasureMode((measureMode) => !measureMode);
             }}

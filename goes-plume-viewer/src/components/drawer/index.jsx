@@ -124,10 +124,7 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
         open={open}
       >
         <DrawerHeader style={{ borderBottom: "2px solid #082A64" }}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronRightIcon />
-          </IconButton>
-          <HorizontalLayout>
+          <HorizontalLayout style={{marginLeft: "1rem"}}>
             <Typography
                   variant="h6"
                   component="div"

@@ -1,21 +1,21 @@
 import IconButton from "@mui/material/IconButton";
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ReactDOM from "react-dom/client";
 import Tooltip from '@mui/material/Tooltip';
+import MenuIcon from '@mui/icons-material/Menu';
 
-function HamburgerIcon() {
+function HamburgerIcon({onClickHandler}) {
   return (
-    <Tooltip title="Open Drawer">
-      <IconButton className="menu-open-icon" >
-        <MenuOpenIcon/>
+    <Tooltip title="Toggle Drawer">
+      <IconButton className="menu-open-icon" onClick={onClickHandler}>
+        <MenuIcon/>
       </IconButton>
     </Tooltip>
   );
 }
 
 export class HamburgerControl {
-  constructor(onClick) {
-    this._onClick = onClick;
+  constructor(onHamburgerClick) {
+    this._onClick = onHamburgerClick;
     this.root = null;
     this.isMounted = true;
   }
@@ -25,9 +25,8 @@ export class HamburgerControl {
     this._container = document.createElement('div');
     this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
     const root = ReactDOM.createRoot(this._container);
-    root.render(<HamburgerIcon/>);
+    root.render(<HamburgerIcon onClickHandler={this._onClick}/>);
     this.root = root;
-    this._container.onclick = this._onClick;
     return this._container;
   }
 
