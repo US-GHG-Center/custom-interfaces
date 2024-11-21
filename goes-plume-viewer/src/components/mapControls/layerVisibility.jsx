@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -7,16 +7,27 @@ import Tooltip from '@mui/material/Tooltip';
 
 function VisibilityIconComp ({map}) {
     const [ isVisible, setIsVisible ] = useState(true);
+    let rasterLayersCurrentVisibility = useRef(); // key[string(layer-id)]: string(previous visibility status)
 
     const toggleLayers = () => {
         if (!map) return;
-        const layers = map.getStyle().layers;
-        layers.forEach(layer => {
-            if (layer.id.includes("raster-layer")) {
-                // toggle here
-                map.setLayoutProperty(layer.id, 'visibility', isVisible ? 'none' : 'visible');
-            }
-        });
+        if ( isVisible ) { // toggle to invisible
+            // from all current raster, store their current state and make it invisible
+            rasterLayersCurrentVisibility.current = {};
+            const layers = map.getStyle().layers;
+            layers.forEach(layer => {
+                if (layer.id.includes("raster-layer")) {
+                    if (!layer.layout) return;
+                    rasterLayersCurrentVisibility.current[layer.id] = layer.layout.visibility;
+                    map.setLayoutProperty(layer.id, 'visibility', 'none');
+                }
+            });
+        } else { // toggle to visible
+            // restore the previous visibility state
+            Object.keys(rasterLayersCurrentVisibility.current).forEach(layerId => {
+                map.setLayoutProperty(layerId, 'visibility', rasterLayersCurrentVisibility.current[layerId]);
+            })
+        }
         setIsVisible(!isVisible);
     }
 
