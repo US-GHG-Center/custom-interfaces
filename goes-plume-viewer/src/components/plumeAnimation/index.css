@@ -18,7 +18,7 @@ display: block;
 position: relative;
 top: 0px; 
 left: 10px; 
-font-size: 14px;
+font-size: 0.9rem;
 border-radius: 6px;
 } 
 
@@ -26,9 +26,8 @@ border-radius: 6px;
 .mapboxgl-ctrl-timeline::before {
   content: "Animate";
   display: block;
-  font-size: 14px;
-  font-weight: 800;
-  color: #0000;
+  font-size: 0.9rem;
+  color: #000000;
   margin-bottom: 4px;
 }
 
@@ -49,7 +48,9 @@ border-radius: 6px;
 /* Position the label in the top row */
 .mapboxgl-ctrl-timeline__label {
   grid-area: label;
-  font-size: 12px;
+  font-family: "Roboto","Helvetica","Arial","sans-serif";
+  font-weight: 400;
+  font-size: 0.9rem;
   color: #000000;
   line-height:0.9;
   align-items: center;
@@ -62,7 +63,6 @@ border-radius: 6px;
   grid-area: controls;
   display: flex;
   align-items: center;
-  gap: 8px;
 }
 
 /* Button styling */
