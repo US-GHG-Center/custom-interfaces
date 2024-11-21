@@ -4,7 +4,7 @@ on:
     - cron: '15 17 * * *' # Every day at 12:15 CT (5:15 PM UTC)
   workflow_dispatch:
   push:
-    branches: [ test/deployment, production ]
+    branches: [ emit/animation, test/deployment, production ]
 
 
 jobs:
@@ -24,6 +24,9 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/test/deployment" ]; then
             echo "target_branch=test/deployment" >> $GITHUB_OUTPUT
             echo "env_name=staging" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" = "refs/heads/emit/animation" ]; then
+            echo "target_branch=emit/animation" >> $GITHUB_OUTPUT
+            echo "env_name=development" >> $GITHUB_OUTPUT
           fi
       - name: Print the environment
         run: echo "The environment is ${{ steps.define_environment.outputs.env_name }}"
@@ -98,6 +101,45 @@ jobs:
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
           echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
           aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+
+      - name: Request Invalidation to AWS Cloudfront
+        uses: oneyedev/aws-cloudfront-invalidation@v1
+        with:
+          distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
+          paths: |
+            /${{ env.PUBLIC_URL }}*
+  deploy-development:
+    needs:
+      - build
+      - define-environment
+    if: needs.define-environment.outputs.target_branch == 'emit/animation'
+    environment: ${{ needs.define-environment.outputs.env_name }}
+
+    permissions:
+      id-token: write
+      contents: read
+
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Download dist folder
+        uses: actions/download-artifact@v4
+        with:
+          name: dist_folder
+          path: ./emit-ch4plume-v1/dist
+
+      - name: ConfigureAWS Credentials 
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
+          role-session-name: ${{ github.repository_owner}}
+          aws-region: us-west-2
+      
+      - name: Upload to S3
+        run: |
+          export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
+          echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
+          aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-develop/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
 
       - name: Request Invalidation to AWS Cloudfront
         uses: oneyedev/aws-cloudfront-invalidation@v1
