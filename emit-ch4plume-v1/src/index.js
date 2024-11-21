@@ -137,7 +137,7 @@ function addRaster(itemId) {
     });
 }
 
-function zoomedOrDraggedToThreshold(from){
+function zoomedOrDraggedToThreshold(){
     
     const currentZoom = map.getZoom();
     if (currentZoom >= ZOOM_THRESHOLD){
@@ -178,6 +178,8 @@ function zoomedOrDraggedToThreshold(from){
         existing_markers.forEach(marker => {
             marker.style.visibility = 'visible'; 
         });
+        const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
+        mapControls.style.right = '10px'; // Reset controls to original position
     };
 }
 
@@ -284,6 +286,9 @@ function createPlumesList(){
     additionalText.innerText = `${MARKERS_ON_VIEWPORT.length} Plumes`; 
     const legendContainer = document.getElementById("plegend");
     legendContainer.innerHTML = '';
+
+    const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
+    mapControls.style.right = '380px';
     
     MARKERS_ON_VIEWPORT.sort((a, b) => {
         const dateA = new Date(a.feature.properties['UTC Time Observed']);
@@ -530,6 +535,7 @@ function initializeDateSlider() {
 //   }
 
 function main() {
+    coverageData =   getCoverageData();
     map.on("load", async () => {  
         addMeasurementSource(map);
         document.querySelector(".toolbar").style.display = "block";
@@ -537,7 +543,7 @@ function main() {
         initializeDateSlider();
         addMeasurementLayer(map);
 
-        coverageData =  await getCoverageData();
+        //coverageData =  await getCoverageData();
         addCoverageToggleListener(map, coverageData)
         document.getElementById("loading-spinner").style.display = "none";
 

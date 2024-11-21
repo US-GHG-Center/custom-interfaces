@@ -88,9 +88,14 @@ class legendToggle {
       const legendContainer = document.getElementById("plegend-container");
       // Check if the container is currently hidden
       if (legendContainer.style.display === "none") {
-          legendContainer.style.display = "block";  
+          legendContainer.style.display = "block"; 
+          const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
+          mapControls.style.right = '380px'; 
       } else {
-          legendContainer.style.display = "none";  
+          legendContainer.style.display = "none"; 
+          //legendOuter.classList.remove('visible');
+          const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
+          mapControls.style.right = '10px'; // Reset controls to original position 
       }
     }
   }
