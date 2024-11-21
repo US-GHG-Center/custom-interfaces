@@ -16,22 +16,6 @@ function filterByDates(data, sDate, eDate, type) {
             features: filteredFeatures
         };
     }
-    if (type === "methane-stac") {
-        const start = new Date(sDate);
-        const end = new Date(eDate);
-        // Iterate over each file in the data object and filter based on the date in the filename
-        const filteredFeatures = Object.keys(data).filter(key => {
-            const item = data[key];
-            const fileDateStr = key.match(/(\d{8}T\d{6})/)[0]; // Extract the date part '20240902T130832'
-            const fileDate = new Date(fileDateStr.slice(0, 4) + '-' + fileDateStr.slice(4, 6) + '-' + fileDateStr.slice(6, 8) + 'T' + fileDateStr.slice(9, 11) + ':' + fileDateStr.slice(11, 13) + ':' + fileDateStr.slice(13, 15));
-            // Check if the file date is within the range
-            return (fileDate >= start && fileDate <= end);
-        }).map(key => data[key]); // Return the filtered objects
-        return {
-            ...data,
-            features: filteredFeatures
-        };
-    }
     if (type === "plumes") {
         const start = new Date(sDate);
         const end = new Date(eDate);
@@ -123,7 +107,7 @@ function createColorbar(VMIN, VMAX) {
   colorbar
     .style("position", "absolute")
     .style("bottom", "20px") // Adjust the top position as needed
-    .style("right", "50px") // Adjust the left position as needed
+    .style("right", "10px") // Adjust the left position as needed
     .style("background-color", "white")
     .style("padding", "12px");
 
