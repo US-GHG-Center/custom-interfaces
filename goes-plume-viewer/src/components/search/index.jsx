@@ -42,9 +42,9 @@ export function Search({ ids, handleSelectedPlumeSearch }) {
                 <TextField 
                     {...params}
                     id="outlined-basic"
-                    label="Search by Plume ID"
+                    label="Search by Plume ID or Location"
                     variant="outlined"
-                    style={{width: "100%"}}
+                    style={{width: "100%", backgroundColor: "#EEEEEE"}}
                     onChange={handleOnInputTextChange}
                     InputProps={{
                         ...params.InputProps,
