@@ -7,7 +7,7 @@ function HamburgerIcon({onClickHandler}) {
   return (
     <Tooltip title="Toggle Drawer">
       <IconButton className="menu-open-icon" onClick={onClickHandler}>
-        <MenuIcon/>
+        <MenuIcon className="map-control-icon"/>
       </IconButton>
     </Tooltip>
   );

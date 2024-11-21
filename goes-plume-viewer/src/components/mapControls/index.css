@@ -9,3 +9,7 @@
 .mapboxgl-ctrl-group{
     margin-bottom: 5px;
 }
+
+.map-control-icon {
+    color: var(--main-blue)
+}

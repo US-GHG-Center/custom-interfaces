@@ -7,7 +7,7 @@ const Home = ({onClickHandler}) => {
     return (
         <Tooltip title="Home">
             <IconButton className="menu-open-icon" onClick={onClickHandler}>
-                <HomeIcon/>
+                <HomeIcon className="map-control-icon"/>
             </IconButton>
         </Tooltip>
     );
