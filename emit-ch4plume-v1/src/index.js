@@ -535,7 +535,6 @@ function initializeDateSlider() {
 //   }
 
 function main() {
-    coverageData =   getCoverageData();
     map.on("load", async () => {  
         addMeasurementSource(map);
         document.querySelector(".toolbar").style.display = "block";
@@ -543,7 +542,8 @@ function main() {
         initializeDateSlider();
         addMeasurementLayer(map);
 
-        //coverageData =  await getCoverageData();
+
+        coverageData =  await getCoverageData();
         addCoverageToggleListener(map, coverageData)
         document.getElementById("loading-spinner").style.display = "none";
 
