@@ -11,7 +11,7 @@ export function DashboardContainer() {
     const [ searchParams ] = useSearchParams();
     const [ zoomLocation, setZoomLocation ] = useState (searchParams.get('zoom-location') || []); // let default zoom location be controlled by map component
     const [ zoomLevel, setZoomLevel ] = useState (searchParams.get('zoom-level') || null); // let default zoom level be controlled by map component
-    const [ collectionId ] = useState(searchParams.get("collection-id") || "goes-ch4-v1");
+    const [ collectionId ] = useState(searchParams.get("collection-id") || "goes-ch4plume-v1");
 
     const [ collectionItems, setCollectionItems ] = useState([]);
     const [ collectionMeta, setCollectionMeta ] = useState({});
