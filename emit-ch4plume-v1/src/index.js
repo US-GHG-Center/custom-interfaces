@@ -57,14 +57,16 @@ let startDate, endDate;
 function updateDatesandData(){
     const {s: start_date, e: end_date} = getSliderValues();
     //CURRENTCOVERAGE = filterByDates(coverageData,start_date, end_date, "coverage");
-    MARKERS_ON_MAP = filterByDates(methanMetadata,start_date, end_date, "plumes" ).features
-            .filter((f) => f.geometry.type === "Point")
-            .map((f, i) => ({
-                id: i,
-                feature: f
-            }));
+    MARKERS_ON_MAP = filterByDates(methanMetadata, start_date, end_date, "plumes").features
+    .filter((f) => f.geometry.type === "Point")
+    .map((f) => {
+        const id = f.properties["Data Download"].split('/').pop().split('.')[0]; // Extract "abc" from "http://.../abc.tif"
+        return {
+            id: id,
+            feature: f
+        };
+    });
     checkToggle(map, coverageData, start_date, end_date);
-    //if (map.getZoom()<ZOOM_THRESHOLD){addPointsOnMap(MARKERS_ON_MAP)}
     addPointsOnMap();
     zoomedOrDraggedToThreshold();
 };
@@ -75,10 +77,8 @@ function removeAllPlumeLayers() {
         const prefixes = ['raster-', 'outline-', 'fill-'];
         prefixes.forEach(prefix => {
             if (layer.id.startsWith(prefix)) {
-                console.log("removing")
                     map.removeLayer(layer.id);
                     if (map.getSource(layer.id + "-source")){
-                        console.log("removing source")
                         map.removeSource(layer.id + "-source");
                     }
             }
@@ -95,12 +95,9 @@ function removePrevPlumeLayers() {
                 const layerItemId = layer.id.replace(prefix, '');
                 if (!viewportItemIds.includes(layerItemId)) {
                     console.log(`Removing layer: ${layer.id} (not in viewportItemIds)`);
-                    console.log("removing")
                     map.removeLayer(layer.id);
                     if (map.getSource(layer.id + "-source")){
-                        console.log("removing source")
                         map.removeSource(layer.id + "-source");}
-                    console.log(`Removed source: ${layer.id + "-source"}`);
                 }
             }
         });
@@ -127,9 +124,7 @@ function addRaster(itemId) {
         tileSize: 256,
         bounds: bbox,
     });
-    console.log(TILE_URL);
     const layer_id = "raster-" + itemId
-    console.log("adding..",layer_id );
     const visibility = layerToggled ? 'visible' : 'none';
     map.addLayer({
         id: layer_id,
@@ -143,7 +138,6 @@ function addRaster(itemId) {
 }
 
 function zoomedOrDraggedToThreshold(from){
-    console.log("zoomed")
     
     const currentZoom = map.getZoom();
     if (currentZoom >= ZOOM_THRESHOLD){
@@ -182,21 +176,19 @@ function zoomedOrDraggedToThreshold(from){
         //addPointsOnMap();
         const existing_markers = document.querySelectorAll('.marker');
         existing_markers.forEach(marker => {
-            marker.style.visibility = ''; // Hides the marker while keeping it in the DOM
+            marker.style.visibility = 'visible'; 
         });
     };
 }
 
 function addOutline(polygonSourceId, polygonLayerId, polygonFeature){
     if (!map.getSource(polygonSourceId)){
-        console.log("add source polygon ", polygonSourceId);
         map.addSource(polygonSourceId, {
             type: "geojson",
             data: polygonFeature,
         });
         }
         if (!map.getLayer(`outline-${polygonLayerId}`))
-            console.log("add layer outline polygon ", "outline" +polygonLayerId);
         map.addLayer({
             'id': `outline-${polygonLayerId}`,
             'type': 'line',
@@ -208,7 +200,6 @@ function addOutline(polygonSourceId, polygonLayerId, polygonFeature){
             }
         });
         if (!map.getLayer(`fill-${polygonLayerId}`))
-            console.log("add layer fill polygon ", "fill"+polygonLayerId);
             map.addLayer({
                 'id': `fill-${polygonLayerId}`,
                 'type': 'fill',
@@ -302,7 +293,6 @@ function createPlumesList(){
     });
     
     MARKERS_ON_VIEWPORT.forEach(marker => {
-        console.log(MARKERS_ON_VIEWPORT.length);
         const properties = marker.feature.properties; 
         const itemDiv = document.createElement('div');
         const itemId = properties['Data Download'].split('/').pop().split('.')[0];
@@ -316,7 +306,6 @@ function createPlumesList(){
             addOutline(itemId + "-source",itemId, polygonFeature.feature)
         }
         if (!map.getLayer("raster-"+ itemId)){
-            console.log("adding raster")
             addRaster(itemId);
         }
     });
@@ -327,6 +316,20 @@ const activeMarkers = new Map();
 function addPointsOnMap() {
     const newMarkerIds = new Set(MARKERS_ON_MAP.map(point => point.id));
     const currentMarkerIds = new Set(activeMarkers.keys());
+    // const intersection = new Set(
+    //     [...currentMarkerIds].filter(id => newMarkerIds.has(id))
+    // );
+    // console.log("they were before and after", intersection.size);
+    
+    // const onlyInCurrent = new Set(
+    //     [...currentMarkerIds].filter(id => !newMarkerIds.has(id))
+    // );
+    // console.log("they were before but not now", onlyInCurrent.size);
+    
+    // const onlyInNew = new Set(
+    //     [...newMarkerIds].filter(id => !currentMarkerIds.has(id))
+    // );
+    // console.log("they have been newly added", onlyInNew.size);
 
     // Remove markers no longer needed
     for (const markerId of currentMarkerIds) {
@@ -336,7 +339,6 @@ function addPointsOnMap() {
             activeMarkers.delete(markerId); // Remove from activeMarkers map
         }
     }
-
     // Add new markers
     MARKERS_ON_MAP.forEach(point => {
         if (!activeMarkers.has(point.id)) {
@@ -373,10 +375,12 @@ function addPointsOnMap() {
             activeMarkers.set(point.id, { marker, element: markerEl });
         }
     });
+
 }
 
 // function addPointsOnMap(){
 //     // Removing prev markers
+    
 //     const existing_markers = document.querySelectorAll('.marker');
 //     existing_markers.forEach(marker => marker.remove());
 
@@ -546,11 +550,12 @@ function main() {
                 id: id,     
                 feature: f
             };
-        }).sort((prev, next) => {
-            const prev_date = new Date(prev.feature.properties["UTC Time Observed"]).getTime();
-            const next_date = new Date(next.feature.properties["UTC Time Observed"]).getTime();
-            return prev_date - next_date
-        });
+        })
+        // .sort((prev, next) => {
+        //     const prev_date = new Date(prev.feature.properties["UTC Time Observed"]).getTime();
+        //     const next_date = new Date(next.feature.properties["UTC Time Observed"]).getTime();
+        //     return prev_date - next_date
+        // });
         ALLPOLYGONS = methanMetadata.features
         .filter((f) => f.geometry.type === "Polygon")
         .map((f) => {
