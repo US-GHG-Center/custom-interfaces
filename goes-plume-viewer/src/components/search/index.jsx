@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import { TrieSearch } from "../../services/trieSearch";
 
@@ -40,10 +42,21 @@ export function Search({ ids, handleSelectedPlumeSearch }) {
                 <TextField 
                     {...params}
                     id="outlined-basic"
-                    label="Search by Plume ID"
+                    label="Search by Plume ID or Location"
                     variant="outlined"
-                    style={{width: "100%"}}
+                    style={{width: "100%", backgroundColor: "#EEEEEE"}}
                     onChange={handleOnInputTextChange}
+                    InputProps={{
+                        ...params.InputProps,
+                        endAdornment: (
+                            <>
+                                <InputAdornment position="end">
+                                    <SearchIcon />
+                                </InputAdornment>
+                                {params.InputProps.endAdornment}
+                            </>
+                        ),
+                    }}
                 />          
             )}
             onChange={handleOnOptionClicked}

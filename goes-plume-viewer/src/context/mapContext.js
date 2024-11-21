@@ -33,6 +33,9 @@ export const MapboxProvider = ({ children }) => {
         }
     });
 
+    map.current.dragRotate.disable();
+    map.current.touchZoomRotate.disableRotation();
+
     return () => map.current.remove();
   }, []);
 

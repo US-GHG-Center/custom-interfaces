@@ -7,7 +7,7 @@ function ChangeUnitButton({ onClick, unit }) {
   return (
     <Tooltip title="Change Measurement Unit">
       <IconButton
-        className="change-unit"
+        className="change-unit map-control-icon"
         onClick={onClick}
         style={{
           backgroundColor: "#fff",

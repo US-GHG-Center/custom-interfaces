@@ -7,8 +7,8 @@ function ClearMeasurementIcon() {
 
   return (
     <Tooltip title="Clear Measurement Selection">
-      <IconButton className="clear-icon" >
-        <ClearIcon/>
+      <IconButton className="clear-icon">
+        <ClearIcon className="map-control-icon"/>
       </IconButton>
     </Tooltip>
   );

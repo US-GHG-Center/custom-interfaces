@@ -7,7 +7,7 @@ const Restore = ({onClickHandler}) => {
     return (
         <Tooltip title="Restore Previous Region">
             <IconButton className="menu-open-icon" onClick={onClickHandler}>
-                <RestoreIcon/>
+                <RestoreIcon className="map-control-icon"/>
             </IconButton>
         </Tooltip>
     )

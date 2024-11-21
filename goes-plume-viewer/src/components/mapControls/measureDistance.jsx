@@ -8,7 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 function MeasureButton({ icon, onClick }) {
   return (
     <Tooltip title="Measurement Scale">
-      <IconButton className="measure-icon" onClick={onClick}>
+      <IconButton className="measure-icon map-control-icon" onClick={onClick}>
         {!icon ? (
           <ExpandIcon />
         ) : (
