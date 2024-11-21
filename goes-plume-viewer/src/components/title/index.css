@@ -3,8 +3,14 @@
     top: 5px;
     left: 5px;
     width: 25rem;
-    /* height: 14rem; */
+    width: 28.5rem;
     background-color: white;
     color: black;
     z-index: 999;
+}
+
+.title-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

@@ -1,7 +1,7 @@
 export const addSourceLayerToMap = (map, feature, sourceId, layerId) => {
     if (!map || (sourceExists(map, sourceId) && layerExists(map, layerId))) return;
 
-    const collection = "goes-ch4-2"; // feature.collection
+    const collection = feature.collection; // feature.collection
     const assets = "rad"; // first element in the asset json object. i.e. Object.keys(features.assets)[0]
     let VMIN = 0;
     let VMAX = 0.4;
@@ -28,11 +28,32 @@ export const addSourceLayerToMap = (map, feature, sourceId, layerId) => {
         type: "raster",
         source: sourceId,
         layout: {
-            visibility: 'none'  // Set the layer to be hidden initially
+            visibility: 'none',  // Set the layer to be hidden initially
         },
         paint: { }
     });
 }
+
+export const addSourcePolygonToMap = (map, feature, polygonSourceId, polygonLayerId) => {
+    if (!map || (sourceExists(map, polygonSourceId) && layerExists(map, polygonLayerId))) return;
+
+    map.addSource(polygonSourceId, {
+        type: "geojson",
+        data: feature
+    });
+
+    map.addLayer({
+        id: polygonLayerId,
+        type: "fill",
+        source: polygonSourceId,
+        layout: {},
+        paint: {
+            "fill-outline-color": "#20B2AA",
+            "fill-color": "transparent",
+        }
+    });
+}
+
 
 export const getSourceId = (idx) => {
     return "raster-source-" + idx;

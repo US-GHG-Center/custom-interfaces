@@ -12,11 +12,14 @@ export const fetchAllFromSTACAPI = async (STACApiUrl) => {
         requiredResult.push(...getResultArray(jsonResult));
 
         // need to pull in remaining data based on the pagination information
-        const { matched, returned } = jsonResult.context;
-        if (matched > returned) {
-          let allData = await fetchAllDataSTAC(STACApiUrl, matched);
-          requiredResult = [...allData];
-        }
+        // const { matched, returned } = jsonResult.context;
+        // if (matched > returned) {
+        //   let allData = await fetchAllDataSTAC(STACApiUrl, matched);
+        //   requiredResult = [...allData];
+        // }
+        let allData = await fetchAllDataSTAC(STACApiUrl, 500);
+        requiredResult = [...allData];
+
         return requiredResult;
       } catch (error) {
         console.error('Error fetching data:', error);
