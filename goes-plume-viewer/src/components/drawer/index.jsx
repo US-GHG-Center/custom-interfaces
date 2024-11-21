@@ -4,11 +4,10 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
-import IconButton from '@mui/material/IconButton';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
 import { PlumeCard } from '../card';
 import { useEffect, useState } from 'react';
+
+import "./index.css";
 
 const drawerWidth = "34rem";
 
@@ -123,19 +122,17 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
         anchor="right"
         open={open}
       >
-        <DrawerHeader style={{ borderBottom: "2px solid #082A64" }}>
+        <DrawerHeader className="drawer-head">
           <HorizontalLayout style={{marginLeft: "1rem"}}>
             <Typography
                   variant="h6"
                   component="div"
-                  sx={{ color: 'text.secondary' }}
             >
               { location }
             </Typography>
             <Typography
                   variant="subtitle1"
                   component="div"
-                  sx={{ color: 'text.secondary' }}
             >
               { numberOfPlumes + " Plumes"}
             </Typography>
