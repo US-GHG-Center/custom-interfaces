@@ -30,7 +30,7 @@ export const MapControls = ({
     if (!map) return;
 
     const hamburgerControl = new HamburgerControl(onClickHamburger);
-    const mapboxNavigation = new mapboxgl.NavigationControl();
+    const mapboxNavigation = new mapboxgl.NavigationControl({showCompass: false});
     const layerVisibilityControl = new LayerVisibilityControl();
     const homeControl = new HomeControl(handleResetHome);
     const restoreControl = new RestoreControl(handleResetToSelectedRegion);
