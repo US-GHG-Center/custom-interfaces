@@ -1,7 +1,7 @@
 // index.js
 import "./style.css";
 import mapboxgl  from "./map";
-import { getMapInstance, layerToggled } from "./map";
+import { getMapInstance, layerToggled , plumeListManuallyHidden} from "./map";
 import { filterByDates,
         createColorbar,
         addTimelineMarkers,
@@ -30,7 +30,7 @@ import 'mapboxgl-timeline/dist/style.css';
 
 //Global vars
 export const map = getMapInstance();
-export const ZOOM_THRESHOLD = 12;
+export const ZOOM_THRESHOLD = 10;
 const markerClicked = false
 const VMIN = 0;
 const VMAX = 1500;
@@ -38,10 +38,12 @@ const COLLECTION = "emit-ch4plume-v1";
 const ASSETS = "ch4-plume-emissions";
 const PUBLIC_URL = process.env.PUBLIC_URL || ".";
 
+
 let itemIds = Array();
 let methanMetadata = Array();
 
 let coverageData = Array();
+
 let ALLPOLYGONS = Array(); // it will be initialized once and will remain constant
 let MARKERS_ON_MAP = Array(); // this is be initialized to methanMetadata (points only) and changes if  and end_date changes
 let MARKERS_ON_VIEWPORT = Array(); // this will change with zoom, drag, start and end filter. Its value will be updated as derived from MARKERS_ON_MAP based on filters
@@ -162,9 +164,11 @@ function zoomedOrDraggedToThreshold(){
         viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
             marker.feature.properties['Data Download'].split('/').pop().split('.')[0]
         );
-        removePrevPlumeLayers( viewportItemIds);
-        createPlumesList();
-        addRasterHoverListener();
+            removePrevPlumeLayers( viewportItemIds);
+            createPlumesList();
+            addRasterHoverListener();
+
+
     }
     else{
         const legendOuter = document.getElementById("plegend-container");
@@ -278,14 +282,11 @@ function addRasterHoverListener() {
 
 function createPlumesList(){
     const legendOuter = document.getElementById("plegend-container");
-    legendOuter.style.display ='';
     const additionalText = document.getElementById('num-plumes');
     additionalText.innerText = `${MARKERS_ON_VIEWPORT.length} Plumes`; 
     const legendContainer = document.getElementById("plegend");
     legendContainer.innerHTML = '';
-
     const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
-    mapControls.style.right = '380px';
     
     MARKERS_ON_VIEWPORT.sort((a, b) => {
         const dateA = new Date(a.feature.properties['UTC Time Observed']);
@@ -293,6 +294,22 @@ function createPlumesList(){
         return dateB - dateA; // For descending order (newest first)
         // return dateA - dateB; for ascending order (oldest first)
     });
+    if (plumeListManuallyHidden){
+        legendOuter.style.display ='none';
+        mapControls.style.right = '10px';
+
+    }
+    else{
+        if (MARKERS_ON_VIEWPORT.length>0){
+        legendOuter.style.display ='';
+        mapControls.style.right = '380px';
+        }
+        else{
+            legendOuter.style.display ='none';
+            mapControls.style.right = '10px';
+        }
+
+    }
     
     MARKERS_ON_VIEWPORT.forEach(marker => {
         const properties = marker.feature.properties; 
@@ -369,7 +386,7 @@ function addPointsOnMap() {
             marker.getElement().addEventListener("click", () => {
                 map.flyTo({
                     center: [coords[0], coords[1]],
-                    zoom: ZOOM_THRESHOLD,
+                    zoom: ZOOM_THRESHOLD+1,
                 });
             });
 
@@ -445,7 +462,8 @@ async function getCoverageData() {
 
 function initializeDateSlider() {
     const firstPoint = "2022-06-06T00:00:00";
-    const lastPoint = "2024-12-06T00:00:00";
+    const today = new Date() ;
+    const lastPoint = today.toISOString().split('T')[0] + "T00:00:00";
     var minStartDate = new Date(firstPoint);
     minStartDate.setUTCHours(0, 0, 0, 0);
     var maxStopDate = new Date(lastPoint);
@@ -469,8 +487,8 @@ function initializeDateSlider() {
         $("#amount").val(
           sDate.toUTCString().slice(0, -13) + " - " + eDate.toUTCString().slice(0, -13)
         );
-        startDate = formatTimestampToDate(sDate);
-        endDate = formatTimestampToDate(eDate);
+        // startDate = formatTimestampToDate(sDate);
+        // endDate = formatTimestampToDate(eDate);
         updateDatesandData();
       }
     });
@@ -545,12 +563,15 @@ function main() {
             await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
         ).json();
 
+
         coverageData = await (
             await fetch(`${PUBLIC_URL}/data/coverage_data.json`)
         ).json();
         
 
+        
 
+        initializeDateSlider();
         // coverageData =  await getCoverageData();
         addCoverageToggleListener(map, coverageData)
         document.getElementById("loading-spinner").style.display = "none";

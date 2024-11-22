@@ -54,7 +54,7 @@ span{
 
 /* marker related styling goes here */ 
 .marker {
-background-image: url("./marker-sdf-2.png");
+background-image: url("./marker.svg");
 background-size: cover;
 width: 30px;
 height: 30px;
@@ -132,7 +132,18 @@ color: #082a64;
 text-align: left;
 margin: 0px;
 }
-
+.toolbar-summary {
+  display: block; /* Ensures it appears as a block below the heading */
+  margin-top: 0px; /* Adds space between the heading and the summary */
+  padding: 10px 0px; /* Adds padding for a box-like feel */
+  border-radius: 8px; /* Rounded corners for a softer appearance */
+  font-size: 12px; /* Slightly smaller font size for a subtitle feel */
+  line-height: 1; /* Better spacing for multiple lines of text */
+  width:100%;
+  font-weight: 400;
+  opacity: 0.8;
+  color: #082a64; 
+}
 
 .toolbar-line {
 border: none; 
@@ -202,6 +213,7 @@ strong {
   display: inline-block;
   width: 50px;
   height: 26px;
+  cursor: pointer;
 }
 
 /* Hide default checkbox */
