@@ -1,6 +1,7 @@
-export const getPopupContent = (location, utcTimeObserved) => {
+export const getPopupContent = (location, utcTimeObserved, id) => {
     return `
-        <table style="line-height: 1.4; font-size: 12px;">
+        <table style="line-height: 1.4; font-size: 11px;">
+            <tr><td><strong>ID:</strong></td><td>${id}</td></tr>
             <tr><td><strong>Location:</strong></td><td>${location}</td></tr>
             <tr><td><strong>Date:</strong></td><td>${utcTimeObserved}</td></tr>
         </table>

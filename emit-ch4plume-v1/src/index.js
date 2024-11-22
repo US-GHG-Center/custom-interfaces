@@ -349,11 +349,12 @@ function addPointsOnMap() {
 
             const location = point.feature.properties["Location"];
             const utcTimeObserved = point.feature.properties["UTC Time Observed"];
+            const id = point.feature.properties["Plume ID"];
 
             const popup = new mapboxgl.Popup({
                 closeButton: false,
                 closeOnClick: false,
-            }).setHTML(getPopupContent(location, utcTimeObserved));
+            }).setHTML(getPopupContent(location, utcTimeObserved,id));
 
             marker.setPopup(popup);
 
