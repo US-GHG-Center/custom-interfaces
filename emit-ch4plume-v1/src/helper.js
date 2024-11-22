@@ -161,7 +161,7 @@ function beforeAnimation(map){
   // document.getElementById("plegend-container").style.display ='none';
   // const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
   // mapControls.style.right = '10px'; 
-  
+
   // const start_date = document.getElementById("start_date").value;
   // const end_date = document.getElementById("end_date").value;
   // console.log("paila ko format", start_date)
@@ -240,43 +240,6 @@ function isFeatureWithinBounds(feature, bounds) {
   return turf.booleanIntersects(feature.geometry, boundingBox);
 }
 
-function initializeDateSlider() {
-  const firstPoint = "2022-06-06T00:00:00";
-  const lastPoint = "2024-06-06T00:00:00";
-
-  var minStartDate = new Date(firstPoint);
-  minStartDate.setUTCHours(0, 0, 0, 0);
-
-  var maxStopDate = new Date(lastPoint);
-  maxStopDate.setUTCHours(23, 59, 59, 0);
-
-  // Store a reference to the slider
-  dateSlider = $("#slider-range").slider({
-    range: true,
-    min: minStartDate.getTime() / 1000,  // Convert to seconds
-    max: maxStopDate.getTime() / 1000,  // Convert to seconds
-    step: 86400,  // Step size of 1 day (86400 seconds)
-    values: [minStartDate.getTime() / 1000, maxStopDate.getTime() / 1000],  // Default slider range
-    slide: function (event, ui) {
-      let startDate = new Date(ui.values[0] * 1000); // Convert to milliseconds
-      let stopDate = new Date(ui.values[1] * 1000); // Convert to milliseconds
-      startDate.setUTCHours(0, 0, 0, 0);
-      stopDate.setUTCHours(23, 59, 59, 0);
-
-      $("#amount").val(
-        startDate.toUTCString().slice(0, -13) + " - " + stopDate.toUTCString().slice(0, -13)
-      );
-    }
-  });
-
-  // Set the initial value for the date range in the text input
-  var startDate = new Date($("#slider-range").slider("values", 0) * 1000);
-  var endDate = new Date($("#slider-range").slider("values", 1) * 1000);
-
-  $("#amount").val(
-    startDate.toUTCString().slice(0, -13) + " - " + endDate.toUTCString().slice(0, -13)
-  );
-}
 function formatTimestampToDate(timestamp) {
   const d = new Date(timestamp);  // Convert the timestamp to a Date object
   
@@ -308,7 +271,6 @@ module.exports = {
     afterAnimation: afterAnimation,
     beforeAnimation: beforeAnimation,
     isFeatureWithinBounds: isFeatureWithinBounds,
-    initializeDateSlider: initializeDateSlider,
     getSliderValues: getSliderValues,
     formatTimestampToDate: formatTimestampToDate
   };
