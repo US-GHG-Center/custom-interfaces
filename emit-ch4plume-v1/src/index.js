@@ -394,7 +394,7 @@ function addPointsOnMap() {
             marker.getElement().addEventListener("click", () => {
                 map.flyTo({
                     center: [coords[0], coords[1]],
-                    zoom: ZOOM_THRESHOLD+1,
+                    zoom: ZOOM_THRESHOLD + 2,
                 });
             });
 
