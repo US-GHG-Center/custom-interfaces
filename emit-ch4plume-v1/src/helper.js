@@ -158,9 +158,10 @@ function beforeAnimation(map){
   map.scrollZoom.disable();
   map.boxZoom.disable();
 
-  document.getElementById("plegend-container").style.display ='none';
-  const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
-  mapControls.style.right = '10px'; 
+  // document.getElementById("plegend-container").style.display ='none';
+  // const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
+  // mapControls.style.right = '10px'; 
+  
   // const start_date = document.getElementById("start_date").value;
   // const end_date = document.getElementById("end_date").value;
   // console.log("paila ko format", start_date)
