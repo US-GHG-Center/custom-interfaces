@@ -141,8 +141,8 @@ margin: 0px;
   line-height: 1; /* Better spacing for multiple lines of text */
   width:100%;
   font-weight: 400;
-  opacity: 0.8;
-  color: #082a64; 
+  opacity: 1;
+  color: grey; 
 }
 
 .toolbar-line {
@@ -290,14 +290,15 @@ input:not(:checked) + .slider::after {
 /* for legend */
 .plegend-container {
 position: fixed;          
-top: 10px;           
-right: 10px;          
+top: 10px;  
+right: -360px;         
 z-index: 1000;  
 background-color: #fff;   
 padding : 10px;   
 width : 350px; 
 border-radius: 6px;
 transition: right 0.3s ease;
+display: block;
 }
 
 .mapboxgl-ctrl-top-right {

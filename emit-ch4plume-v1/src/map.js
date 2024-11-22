@@ -84,22 +84,38 @@ class LayerButtonControl extends MapControls {
 
 export var plumeListManuallyHidden = false;
 class legendToggle {
+  // onClick() {
+  //   if (map.getZoom() >= ZOOM_THRESHOLD) {
+  //     const legendContainer = document.getElementById("plegend-container");
+  //     if (legendContainer.style.display === "none") {
+  //       legendContainer.style.display = "block";
+  //       const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
+  //       mapControls.style.right = '380px';
+  //       plumeListManuallyHidden = false;
+  //     } else {
+  //       legendContainer.style.display = "none";
+  //       const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
+  //       mapControls.style.right = '10px';
+  //       plumeListManuallyHidden = true;
+  //     }
+  //   }
+  // }
   onClick() {
     if (map.getZoom() >= ZOOM_THRESHOLD) {
       const legendContainer = document.getElementById("plegend-container");
-      if (legendContainer.style.display === "none") {
-        legendContainer.style.display = "block";
-        const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
+      const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
+      if (legendContainer.style.right === '-380px' || legendContainer.style.right === '') {
+        legendContainer.style.right = '10px';
         mapControls.style.right = '380px';
         plumeListManuallyHidden = false;
       } else {
-        legendContainer.style.display = "none";
-        const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
+        legendContainer.style.right = '-380px';
         mapControls.style.right = '10px';
         plumeListManuallyHidden = true;
       }
     }
   }
+
   onAdd(map) {
       this.map = map;
       this.container = document.createElement("div");

@@ -172,7 +172,8 @@ function zoomedOrDraggedToThreshold(){
     }
     else{
         const legendOuter = document.getElementById("plegend-container");
-        legendOuter.style.display ='none';
+        //legendOuter.style.display ='none';
+        legendOuter.style.right = '-380px'; // Move off-screen
         removeAllPlumeLayers();
         //addPointsOnMap();
         const existing_markers = document.querySelectorAll('.marker');
@@ -295,17 +296,24 @@ function createPlumesList(){
         // return dateA - dateB; for ascending order (oldest first)
     });
     if (plumeListManuallyHidden){
-        legendOuter.style.display ='none';
+        // legendOuter.style.display ='none';
+        // mapControls.style.right = '10px';
+        legendOuter.style.right = '-380px'; // Move off-screen
         mapControls.style.right = '10px';
+
 
     }
     else{
         if (MARKERS_ON_VIEWPORT.length>0){
-        legendOuter.style.display ='';
+        // legendOuter.style.display ='';
+        // mapControls.style.right = '380px';
+        legendOuter.style.right = '10px'; // Move on-screen
         mapControls.style.right = '380px';
         }
         else{
-            legendOuter.style.display ='none';
+            // legendOuter.style.display ='none';
+            // mapControls.style.right = '10px';
+            legendOuter.style.right = '-380px'; // Move off-screen
             mapControls.style.right = '10px';
         }
 
@@ -685,7 +693,6 @@ isAnimation.addEventListener("change", (event) => {
             .filter(feature => isFeatureWithinBounds(feature, map.getBounds()))
             .map(feature => feature.properties.start_time)
             .filter(date => date >=  start_date && date <= end_date);
-            console.log("after", covTimes)
 
             removePrevPlumeLayers();
             timeline = new TimelineControl({
@@ -705,6 +712,7 @@ isAnimation.addEventListener("change", (event) => {
                 onChange: date => {
                     const currentStartTime = $("#slider-range").slider("values", 0);
                     const manualEndTime =  new Date(date).getTime()/1000;
+                    //console.log("start-date", Date(currentStartTime), "current-date",date);
                     $("#slider-range").slider("values", [currentStartTime, manualEndTime]);
                     updateDatesandData(); 
                     //if you dont want cummulative
