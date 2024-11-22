@@ -37,22 +37,19 @@ const VMAX = 1500;
 const COLLECTION = "emit-ch4plume-v1";
 const ASSETS = "ch4-plume-emissions";
 const PUBLIC_URL = process.env.PUBLIC_URL || ".";
-const methanMetadata = await (
-    await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
-).json();
-const itemIds = await (
-    await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
-).json();
-// let coverageData =[]
+
+let itemIds = Array();
+let methanMetadata = Array();
+
+let coverageData = Array();
 let ALLPOLYGONS = Array(); // it will be initialized once and will remain constant
 let MARKERS_ON_MAP = Array(); // this is be initialized to methanMetadata (points only) and changes if  and end_date changes
 let MARKERS_ON_VIEWPORT = Array(); // this will change with zoom, drag, start and end filter. Its value will be updated as derived from MARKERS_ON_MAP based on filters
 let POLYGONS_ON_MAP = Array(); 
-let CURRENTCOVERAGE; // Its value changes with start and end date, derived from covergaeData
 let viewportItemIds = MARKERS_ON_VIEWPORT.map(marker => 
     marker.properties['Data Download'].split('/').pop().split('.')[0]
 );
-let startDate, endDate;
+
 
 function updateDatesandData(){
     const {s: start_date, e: end_date} = getSliderValues();
@@ -541,10 +538,17 @@ function main() {
         createColorbar(VMIN, VMAX);
         initializeDateSlider();
         addMeasurementLayer(map);
+        methanMetadata = await (
+            await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
+        ).json();
+        itemIds = await (
+            await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
+        ).json();
 
-        const coverageData = await (
+        coverageData = await (
             await fetch(`${PUBLIC_URL}/data/coverage_data.json`)
         ).json();
+        
 
 
         // coverageData =  await getCoverageData();
