@@ -59,20 +59,6 @@ function checkToggle(map, coverageData, startDate, stopDate){
     }
 }
 
-// function addCoverage(map, currentCov){
-//     if (document.getElementById("showCoverage").checked) {
-//         if (map.getLayer("coverage")){
-//             //removeLayers(map, "coverage", ['coverage','outline-coverage']);
-//             removeLayers(map, "coverage", ['coverage']);
-//         }
-//         addPolygon(map, "coverage", "coverage",currentCov);
-
-//     } else {
-//         //removeLayers(map, "coverage", ['coverage','outline-coverage']);
-//         removeLayers(map, "coverage", ['coverage']);
-//     }
-// }
-
 function addCoverage(map, geojsonData, layerId, startDate, stopDate) {
     // Convert startDate and endDate to Date objects for comparison
     const start = new Date(startDate);

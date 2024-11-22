@@ -1,35 +1,18 @@
 // It has no global vars referenced
-function filterByDates(data, sDate, eDate, type) {
-    // Filter features within the date range for coverage
-    if (type === "coverage"){
-        const start = new Date(sDate+'Z');
-        const end = new Date(eDate+'Z');
-        const filteredFeatures = data.features.filter(feature => {
-            const featureStartTime = new Date(feature.properties.start_time);
-            //skip end date
-            // const featureEndTime = new Date(feature.properties.end_time);
-            // Check if the feature's time range overlaps with the given date range
-            return (featureStartTime >= start && featureStartTime <= end);
-        });
-        return {
-            ...data,
-            features: filteredFeatures
-        };
-    }
-    if (type === "plumes") {
-        const start = new Date(sDate);
-        const end = new Date(eDate);
-        // Filter geojson features based on the UTC Time Observed
-        const filteredFeatures = data.features.filter(feature => {
-            const observedTime = new Date(feature.properties["UTC Time Observed"]);
-            // Check if the observed time falls within the given date range
-            return (observedTime >= start && observedTime <= end);
-        });
-        return {
-            ...data,
-            features: filteredFeatures
-        };
-    } 
+function filterByDates(data, sDate, eDate) {
+      const start = new Date(sDate);
+      const end = new Date(eDate);
+      // Filter geojson features based on the UTC Time Observed
+      const filteredFeatures = data.features.filter(feature => {
+          const observedTime = new Date(feature.properties["UTC Time Observed"]);
+          // Check if the observed time falls within the given date range
+          return (observedTime >= start && observedTime <= end);
+      });
+      return {
+          ...data,
+          features: filteredFeatures
+      };
+
 }
 
 const d3 = require("d3");
@@ -158,14 +141,6 @@ function beforeAnimation(map){
   map.scrollZoom.disable();
   map.boxZoom.disable();
 
-  // document.getElementById("plegend-container").style.display ='none';
-  // const mapControls = document.querySelector('.mapboxgl-ctrl-top-right');
-  // mapControls.style.right = '10px'; 
-
-  // const start_date = document.getElementById("start_date").value;
-  // const end_date = document.getElementById("end_date").value;
-  // console.log("paila ko format", start_date)
-  // console.log("aba ko format", getSliderValues())
   const {s:start_date, e:end_date} = getSliderValues();
   const cov = document.getElementById("showCoverage").checked;
   preservedState = {
@@ -214,15 +189,8 @@ function afterAnimation(map, preservedState){
   document.querySelector('.autocomplete-search-box .search-box').style.opacity = '1'
   document.querySelector('.slider').style.opacity = '1';
 
-  // const dateInputs = document.querySelectorAll('input[type="datetime-local"]');
-  // dateInputs.forEach(input => {
-  //     input.disabled = false;
-  //     input.style.opacity = '1'; 
-  // });
   // Restore dates and coverage
   document.getElementById("showCoverage").checked = preservedState.coverage;
-  // document.getElementById("start_date").value = preservedState.startDate;
-  // document.getElementById("end_date").value = preservedState.endDate;
 }
 
 function isFeatureWithinBounds(feature, bounds) {
