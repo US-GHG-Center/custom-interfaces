@@ -32,7 +32,7 @@ class HomeButtonControl {
       this.container.innerHTML =
           '<div class="tools-box">' +
           '<button id="refresh">' +
-          '<span class="mapboxgl-ctrl-icon btn fa fa-refresh" aria-hidden="true" title="Reset To USA"></span>' +
+          '<span class="mapboxgl-ctrl-icon btn fa fa-home" aria-hidden="true" title="Reset To USA"></span>' +
           "</button>" +
           "</div>";
       return this.container;
@@ -192,7 +192,7 @@ export const getMapInstance = () => {
         map.addControl(zoomControl, "top-right");
         addMeasurementControls(map);
         map.addControl(new ChangeMapUnit(mapScale)); 
-        addClearControl(map);
+        //addClearControl(map);
     }
     return map;
 };
