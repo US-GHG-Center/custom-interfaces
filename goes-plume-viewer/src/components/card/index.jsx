@@ -116,19 +116,19 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
             <HorizontalLayout>
                 <CaptionValue
                     className="card-plume"
-                    caption = "Approximate Start time"
+                    caption = "Start time"
                     value = { moment.utc(startDatetime).format("MM/DD/YYYY, HH:mm:ss") + " UTC" }
                 />
                 <CaptionValue
                     className="card-plume"
-                    caption = "Approximate End time"
+                    caption = "End time"
                     value = { moment.utc(endDatetime).format("MM/DD/YYYY, HH:mm:ss") + " UTC" }
                 />
             </HorizontalLayout>
             <HorizontalLayout>
                 <CaptionValue
                     className="card-plume"
-                    caption = "Approximate Duration"
+                    caption = "Approximate Release Duration"
                     value = { formatDuration(moment.duration(duration)) }
                 />
             </HorizontalLayout>
@@ -148,7 +148,7 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
                 <CaptionValue
                     className="card-plume"
                     caption = "Approximate Total Release Mass"
-                    value = {totalReleaseMass + " Metric Tonne"}
+                    value = {totalReleaseMass + " Metric Tonnes"}
                 />
                 <CaptionValue
                     className="card-plume"
