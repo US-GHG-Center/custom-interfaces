@@ -40,12 +40,10 @@ function removeLayers(map, sourceId, layerId) {
 
 
     if (map.getLayer(layerId)) {
-        console.log("layer for cov removed")
         map.removeLayer(layerId)
     }
 
     if (map.getSource(sourceId)) {
-        console.log("source for cov removed")
         map.removeSource(sourceId);
     }
 }
