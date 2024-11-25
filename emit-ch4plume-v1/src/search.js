@@ -79,3 +79,4 @@ function updateSearchList(keyword, map, markers, zoom_level) {
 module.exports = {
     updateSearchList: updateSearchList
   };
+  
