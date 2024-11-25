@@ -22,3 +22,9 @@
     flex-direction: column;
     align-items: center;
 }
+
+.title-note {
+    border-bottom: 2px solid var(--main-blue);
+    padding: 0.9rem;
+    margin: 0 0.8rem;
+}
