@@ -18,7 +18,7 @@
 
 .colorbar-svg {
     height: 1rem;
-    width: 32rem; /* this will define the colorbar width, make it a bit small than container */
+    width: 28rem; /* this will define the colorbar width, make it a bit small than container */
 }
 
 .colorbar-scale {
