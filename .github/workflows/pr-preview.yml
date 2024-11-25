@@ -7,6 +7,8 @@ on:
       - 'emit-ch4plume-v1/**'
       - 'noaa-cpfp-point/**'
       - 'nist-interface/**'
+      - 'goes-plume-viewer/**'
+      - 'urban-dashboard/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -154,9 +156,9 @@ jobs:
 
       - name: Delete built websites from S3
         run: |
-          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ --recursive
-          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/ --recursive
-          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/ --recursive
+          for PUBLIC_URL in "${{ vars.PUBLIC_URL_EMIT }}" "${{ vars.PUBLIC_URL_NOAA }}" "${{ vars.PUBLIC_URL_NIST }}"; do
+            aws s3 rm s3://${{ env.S3_BUCKET }}${PUBLIC_URL}/${{ env.PR_STRING }}/ --recursive
+          done
 
       - name: Remove PR comment
         run: |
