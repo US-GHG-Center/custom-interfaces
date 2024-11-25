@@ -123,7 +123,7 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
         open={open}
       >
         <DrawerHeader className="drawer-head">
-          <HorizontalLayout style={{marginLeft: "1rem"}}>
+          <HorizontalLayout>
             <Typography
                   variant="h6"
                   component="div"
