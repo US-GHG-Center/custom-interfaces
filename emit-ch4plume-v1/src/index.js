@@ -474,7 +474,6 @@ function main() {
         drawplume_idList(copy_procedures);
       });
     }, 500);
-  });
 }
 
 //Add event listeners
