@@ -24,7 +24,7 @@ const HorizontalLayout = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 15px;
+    margin: 12px;
 `;
 
 const scaleUnits = {
