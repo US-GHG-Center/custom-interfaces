@@ -1,9 +1,8 @@
 .title-head {
     color: var(--main-blue);
-    text-align: center;
-    border-bottom: 2px solid var(--main-blue);
-    padding: 0.9rem;
-    margin: 0 0.8rem;
+    text-align: left;
+    padding-left: 0.9rem;
+    padding-top: 0.9rem;
 }
 
 .title-container {
@@ -21,4 +20,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.title-note {
+    border-bottom: 2px solid var(--main-blue);
+    padding: 0.9rem;
+    padding-top: 0.1rem;
 }

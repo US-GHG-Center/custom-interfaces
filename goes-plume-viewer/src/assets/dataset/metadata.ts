@@ -17,6 +17,7 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2019-04-07 19:11",
         country: "Mexico",
         administrativeDivision: "Durango",
+        duration: "2:55:00",
     },
     {
         id: "Mexico_Durango_BV1_BV1-2",
@@ -32,6 +33,7 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2019-05-21 19:16",
         country: "Mexico",
         administrativeDivision: "Durango",
+        duration: "1:45:00",
     },
     {
         id: "Mexico_Durango_BV2_BV2-1",
@@ -47,6 +49,7 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2019-04-09 21:51",
         country: "Mexico",
         administrativeDivision: "Durango",
+        duration: "4:05:00",
     },
     {
         id: "Mexico_Durango_BV2_BV2-2",
@@ -62,6 +65,7 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2019-04-10 18:21",
         country: "Mexico",
         administrativeDivision: "Durango",
+        duration: "1:50:00",
     },
     {
         id: "Mexico_Durango_BV2_BV2-3",
@@ -77,6 +81,7 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2019-04-18 20:21",
         country: "Mexico",
         administrativeDivision: "Durango",
+        duration: "3:10:00",
     },
     {
         id: "Mexico_Durango_BV2_BV2-4",
@@ -92,6 +97,7 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2019-05-11 16:11",
         country: "Mexico",
         administrativeDivision: "Durango",
+        duration: "1:10:00",
     },
     {
         id: "Mexico_Durango_BV2_BV2-5",
@@ -107,6 +113,7 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2019-05-12 19:31",
         country: "Mexico",
         administrativeDivision: "Durango",
+        duration: "3:00:00",
     },
     {
         id: "Mexico_Durango_BV4_BV4-1",
@@ -122,6 +129,7 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2019-05-16 17:31",
         country: "Mexico",
         administrativeDivision: "Durango",
+        duration: "0:40:00",
     },
     {
         id: "Mexico_Durango_BV4_BV4-2",
@@ -137,6 +145,7 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2019-05-22 18:56",
         country: "Mexico",
         administrativeDivision: "Durango",
+        duration: "1:20:00",
     },
     {
         id: "Mexico_Durango_BV4_BV4-3",
@@ -152,6 +161,7 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2019-05-23 16:06",
         country: "Mexico",
         administrativeDivision: "Durango",
+        duration: "1:40:00",
     },
     {
         id: "Mexico_Durango_BV4_BV4-4",
@@ -167,6 +177,7 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2019-05-24 17:31",
         country: "Mexico",
         administrativeDivision: "Durango",
+        duration: "2:10:00",
     },
     {
         id: "USA_Indiana_Indiana_IN-1",
@@ -182,6 +193,7 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2020-06-15 15:16",
         country: "USA",
         administrativeDivision: "Indiana",
+        duration: "1:00:00",
     },
     {
         id: "USA_Indiana_Indiana_IN-2",
@@ -197,6 +209,7 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2020-06-15 15:16",
         country: "USA",
         administrativeDivision: "Indiana",
+        duration: "1:00:00",
     },
     {
         id: "USA_Texas_Permian_PB-1",
@@ -212,5 +225,6 @@ export const PlumeMetas: PlumeMeta[] = [
         endDatetime: "2023-07-26 16:56",
         country: "USA",
         administrativeDivision: "Texas",
+        duration: "0:20:00",
     },
 ]

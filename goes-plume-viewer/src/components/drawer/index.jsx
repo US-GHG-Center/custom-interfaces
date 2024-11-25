@@ -148,13 +148,14 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
                 plumeSourceId={selectedPlumeMeta.id}
                 plumeSourceName={selectedPlumeMeta.id.replace(/_/g, " ")}
                 imageUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
-                tiffUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
+                tiffUrl={`${process.env.REACT_APP_CLOUD_BROWSE_URL}/browseui/#${collectionId}/#q=${selectedPlumeMeta.id.split("_").slice(-1)}`}
                 lon={selectedPlumeMeta.lon}
                 lat={selectedPlumeMeta.lat}
                 totalReleaseMass={selectedPlumeMeta.totalReleaseMass}
                 colEnhancements={selectedPlumeMeta.colEnhancements}
                 startDatetime={selectedPlumeMeta.startDatetime}
                 endDatetime={selectedPlumeMeta.endDatetime}
+                duration={selectedPlumeMeta.duration}
                 handleSelectedPlumeCard={handleSelectedPlumeCard}
                 hoveredPlumeId={hoveredPlumeId}
                 setHoveredPlumeId={setHoveredPlumeId}
