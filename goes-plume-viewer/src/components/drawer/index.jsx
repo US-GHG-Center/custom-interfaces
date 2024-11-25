@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 
 import "./index.css";
 
-const drawerWidth = "34rem";
+const drawerWidth = "30rem";
 
 const Main = styledmui('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme }) => ({
