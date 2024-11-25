@@ -96,7 +96,6 @@ function removePrevPlumeLayers() {
             if (layer.id.startsWith(prefix)) {
                 const layerItemId = layer.id.replace(prefix, '');
                 if (!viewportItemIds.includes(layerItemId)) {
-                    console.log(`Removing layer: ${layer.id} (not in viewportItemIds)`);
                     map.removeLayer(layer.id);
                     if (map.getSource(layer.id + "-source")){
                         map.removeSource(layer.id + "-source");}
