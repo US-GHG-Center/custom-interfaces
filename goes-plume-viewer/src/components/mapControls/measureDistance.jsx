@@ -1,19 +1,19 @@
-import React from "react";
 import IconButton from "@mui/material/IconButton";
-import ExpandIcon from "@mui/icons-material/Expand";
 import StraightenIcon from '@mui/icons-material/Straighten';
 import ReactDOM from "react-dom/client";
 import Tooltip from '@mui/material/Tooltip';
 
-function MeasureButton({ icon, onClick }) {
+function MeasureButton({ icon: iconClicked, onClick }) {
   return (
     <Tooltip title="Measurement Scale">
-      <IconButton className="measure-icon map-control-icon" onClick={onClick}>
-        {!icon ? (
-          <ExpandIcon />
-        ) : (
-          <StraightenIcon style={{ transform: "rotate(90deg)" }} />
-        )}
+      <IconButton className="measure-icon map-control-icon"
+        style={{
+          backgroundColor: !iconClicked ? "": "var(--main-blue)",
+          color: !iconClicked ? "var(--main-blue)" : "white"
+        }}
+        onClick={onClick}
+      >
+        <StraightenIcon style={{ transform: "rotate(90deg)" }} />
       </IconButton>
     </Tooltip>
   );
