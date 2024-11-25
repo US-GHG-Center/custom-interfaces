@@ -155,6 +155,7 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
                 colEnhancements={selectedPlumeMeta.colEnhancements}
                 startDatetime={selectedPlumeMeta.startDatetime}
                 endDatetime={selectedPlumeMeta.endDatetime}
+                duration={selectedPlumeMeta.duration}
                 handleSelectedPlumeCard={handleSelectedPlumeCard}
                 hoveredPlumeId={hoveredPlumeId}
                 setHoveredPlumeId={setHoveredPlumeId}

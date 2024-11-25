@@ -12,6 +12,7 @@ export interface PlumeMeta {
     tiffUrl: string,
     totalReleaseMass: string,
     colEnhancements: string,
+    duration: string,
 }
 
 export interface PlumeRegionMeta {

@@ -52,7 +52,20 @@ const CaptionValue = ({ caption, value, className }) => {
     )
 }
 
-export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDatetime, imageUrl, tiffUrl, lon, lat, totalReleaseMass, colEnhancements, handleSelectedPlumeCard, hoveredPlumeId, setHoveredPlumeId }) {
+const formatDuration = (duration) => {
+    const hours = duration.hours();
+    const minutes = duration.minutes();
+    const seconds = duration.seconds();
+
+    let result = "";
+    if ( hours > 0 ) result += `${hours} hour `;
+    if ( minutes > 0 ) result += `${minutes} minutes `;
+    if ( seconds > 0 ) result += `${seconds} seconds`;
+
+    return result;
+}
+
+export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDatetime, duration, imageUrl, tiffUrl, lon, lat, totalReleaseMass, colEnhancements, handleSelectedPlumeCard, hoveredPlumeId, setHoveredPlumeId }) {
     const [ isHovered, setIsHovered ] = useState(false);
 
     const handleCardClick = () => {
@@ -110,6 +123,13 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
                     className="card-plume"
                     caption = "Approximate End time"
                     value = { moment.utc(endDatetime).format("MM/DD/YYYY, HH:mm:ss") + " UTC" }
+                />
+            </HorizontalLayout>
+            <HorizontalLayout>
+                <CaptionValue
+                    className="card-plume"
+                    caption = "Approximate Duration"
+                    value = { formatDuration(moment.duration(duration)) }
                 />
             </HorizontalLayout>
             <HorizontalLayout>
