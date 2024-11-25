@@ -1,3 +1,4 @@
+
 // index.js
 import "./style.css";
 import mapboxgl  from "./map";
@@ -33,6 +34,7 @@ import {
 export const map = getMapInstance();
 export const ZOOM_THRESHOLD = 10;
 const markerClicked = false
+
 const VMIN = 0;
 const VMAX = 1500;
 const COLLECTION = "emit-ch4plume-v1";
@@ -44,6 +46,7 @@ let itemIds = Array();
 let methanMetadata = Array();
 
 let coverageData = Array();
+
 
 let ALLPOLYGONS = Array(); // it will be initialized once and will remain constant
 let MARKERS_ON_MAP = Array(); // this is be initialized to methanMetadata (points only) and changes if  and end_date changes
@@ -462,6 +465,16 @@ function main() {
         addPointsOnMap();
         
     });
+
+    let typingTimeout = null;
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+      $(".search-box").keyup((e) => {
+        const copy_procedures = handleSearch($(e.target).val());
+        drawplume_idList(copy_procedures);
+      });
+    }, 500);
+  });
 }
 
 //Add event listeners

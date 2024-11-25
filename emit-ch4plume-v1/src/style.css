@@ -40,8 +40,10 @@ span{
   padding:0px;
 }
 
+
 .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon {
   background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%23082A63%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpolygon%20points%3D%2214%2C7%209%2C7%209%2C2%207%2C2%207%2C7%202%2C7%202%2C9%207%2C9%207%2C14%209%2C14%209%2C9%2014%2C9%22%3E%3C%2Fpolygon%3E%3C%2Fsvg%3E");
+
 }
 
 .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
@@ -113,10 +115,12 @@ cursor: pointer;
   z-index: 2;
 }
 
+
 .autocomplete-search-box .search-result li {
   padding: 10px;
   font-size: 14px;
   color: #212529;
+
 }
 
 .autocomplete-search-box .search-result li:hover {
@@ -199,6 +203,7 @@ justify-content: space-between;
 width: 100%
 }
 
+
 /* Toggle Container Styling */
 .toggle-container {
   display: flex;
@@ -224,6 +229,7 @@ strong {
 /* Toggle Switch Container */
 .toggle-switch {
   position: relative;
+
   display: inline-block;
   width: 50px;
   height: 26px;
@@ -513,4 +519,12 @@ border-top-color: rgba(255, 255, 255, 0.7);
   width:90%;
   display: flex;
   justify-self: center;
+}
+
+#plume-id-search-box.disabled {
+  display:none;
+}
+
+.date-range.disabled {
+  display:none;
 }
