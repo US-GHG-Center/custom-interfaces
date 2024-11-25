@@ -465,15 +465,6 @@ function main() {
         addPointsOnMap();
         
     });
-
-    let typingTimeout = null;
-    clearTimeout(typingTimeout);
-    typingTimeout = setTimeout(() => {
-      $(".search-box").keyup((e) => {
-        const copy_procedures = handleSearch($(e.target).val());
-        drawplume_idList(copy_procedures);
-      });
-    }, 500);
 }
 
 //Add event listeners
