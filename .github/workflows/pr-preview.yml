@@ -120,7 +120,6 @@ jobs:
               aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${NIST_PATH}
 
               COMMENT+="- 🗼 nist-interface: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${NIST_PATH}index.html"
-            fi
             elif [ "$WEBSITE" == "goes-plume-viewer" ]; then
 
               GOES_PATH=$(echo "${{ vars.PUBLIC_URL_GOES }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
