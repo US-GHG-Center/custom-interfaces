@@ -52,9 +52,9 @@ jobs:
         working-directory: ./goes-plume-viewer
         run: |
           echo >> .env # add a new line to append the below variables
-          echo REACT_APP_MAPBOX_TOKEN="${{secrets.REACT_APP_MAPBOX_TOKEN}}" >> .env
-          echo REACT_APP_MAPBOX_STYLE_URL="${{vars.REACT_APP_MAPBOX_STYLE_URL}}" >> .env
-          echo REACT_APP_BASE_PATH="${{vars.REACT_APP_BASE_PATH_GOES}}" >> .env
+          echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> .env
+          echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> .env
+          echo REACT_APP_BASE_PATH="${{ vars.REACT_APP_BASE_PATH_GOES }}" >> .env
           yarn
           CI=false yarn build
 
