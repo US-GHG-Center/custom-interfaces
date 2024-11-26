@@ -99,7 +99,7 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
             <CardMedia
                 component="img"
                 height="100"
-                sx={{ padding: "1em", objectFit: "contain" }}
+                sx={{ padding: "1em", objectFit: "contain", minWidth: "50px" }}
                 image={imageUrl}
                 alt="Plume image"
             />
@@ -109,7 +109,7 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
         <CardContent sx={{ flex: '1 0 auto' }}>
             <HorizontalLayout>
                 <CaptionValue
-                    caption = "Plume Source Name"
+                    caption = "Plume ID"
                     value = {plumeSourceName}
                 />
             </HorizontalLayout>
@@ -159,12 +159,12 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
             <HorizontalLayout>
                 <CaptionValue
                     className="card-plume"
-                    caption = "Longitude"
+                    caption = "Approximate Release Longitude"
                     value = {Number(lon).toFixed(3)}
                 />
                 <CaptionValue
                     className="card-plume"
-                    caption = "Latitude"
+                    caption = "Approximate Release Latitude"
                     value = {Number(lat).toFixed(3)}
                 />
             </HorizontalLayout>
