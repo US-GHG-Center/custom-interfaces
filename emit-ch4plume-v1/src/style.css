@@ -70,9 +70,9 @@ cursor: pointer;
 .autocomplete-search-box {
   position: relative; /* Add this to make `.search-result` position relative to the box */
   width: 100%;
-  border: 1px solid #ced4da;
+  border: 0px solid #ced4da;
   border-radius: 5px;
-  background-color: #f8f9fa;
+  background-color: #eeeeee;
   overflow: hidden;
   z-index: 1;
 }
@@ -83,7 +83,7 @@ cursor: pointer;
   padding: 0 40px 0 10px; /* Add padding for the icon */
   font-size: 16px;
   border: none;
-  background-color: #f8f9fa;
+  background-color: #eeeeee;
   outline: none;
 }
 
