@@ -8,6 +8,7 @@ on:
       - 'noaa-cpfp-point/**'
       - 'nist-interface/**'
       - 'goes-plume-viewer/**'
+      - 'urban-dashboard/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -182,6 +183,7 @@ jobs:
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/ --recursive
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/ --recursive
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_GOES }}/${{ env.PR_STRING }}/ --recursive
+
 
       - name: Remove PR comment
         run: |
