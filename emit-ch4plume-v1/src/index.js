@@ -312,7 +312,7 @@ function createPlumesList(){
         const itemId = properties['Data Download'].split('/').pop().split('.')[0];
         itemDiv.className = "itemDiv";
         itemDiv.id = "itemDiv-"+itemId;
-        const endpoint = `https://dev.ghg.center/api/raster/collections/emit-ch4plume-v1/items/${itemId}/preview.png?bidx=1&assets=ch4-plume-emissions&rescale=1%2C1500&resampling=bilinear&colormap_name=plasma`;
+        const endpoint = `https://dev.ghg.center/api/raster/collections/emit-ch4plume-v1/items/${itemId}/preview.png?bidx=1&assets=ch4-plume-emissions&rescale=1%2C1500&resampling=bilinear&colormap_name=plasma&width=120&height=120`;
         itemDiv.innerHTML =createItemContent(marker, properties, endpoint);
         legendContainer.appendChild(itemDiv);
         const polygonFeature = ALLPOLYGONS.find((item) => item.id === itemId);
