@@ -105,8 +105,8 @@ jobs:
 
               NIST_PATH=$(echo "${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
 
-              echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./nist-interface/.env
-              echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
+              echo REACT_APP_MAPBOX_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./nist-interface/.env
+              echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
               echo REACT_APP_PUBLIC_URL="${NIST_PATH}" >> ./nist-interface/.env
 
@@ -125,8 +125,8 @@ jobs:
               GOES_PATH=$(echo "${{ vars.PUBLIC_URL_GOES }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
 
               echo >> ./goes-plume-viewer/.env # add a new line to append the below variables
-              echo REACT_APP_MAPBOX_TOKEN="${{secrets.REACT_APP_MAPBOX_TOKEN}}" >> ./goes-plume-viewer/.env
-              echo REACT_APP_MAPBOX_STYLE_URL="${{vars.REACT_APP_MAPBOX_STYLE_URL}}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_MAPBOX_TOKEN="${{secrets.MAP_ACCESS_TOKEN}}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_MAPBOX_STYLE_URL="${{secrets.MAPBOX_STYLE_URL}}" >> ./goes-plume-viewer/.env
               echo REACT_APP_BASE_PATH="${{vars.REACT_APP_BASE_PATH_GOES}}" >> ./goes-plume-viewer/.env
               echo REACT_APP_PUBLIC_URL="${GOES_PATH}" >> ./goes-plume-viewer/.env
 
