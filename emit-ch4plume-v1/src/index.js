@@ -312,7 +312,7 @@ function createPlumesList(){
         const itemId = properties['Data Download'].split('/').pop().split('.')[0];
         itemDiv.className = "itemDiv";
         itemDiv.id = "itemDiv-"+itemId;
-        const endpoint = `https://dev.ghg.center/api/raster/collections/emit-ch4plume-v1/items/${itemId}/preview.png?bidx=1&assets=ch4-plume-emissions&rescale=1%2C1500&resampling=bilinear&colormap_name=plasma`;
+        const endpoint = `https://earth.gov/ghgcenter/api/raster/collections/emit-ch4plume-v1/items/${itemId}/preview.png?bidx=1&assets=ch4-plume-emissions&rescale=1%2C1500&resampling=bilinear&colormap_name=plasma`;
         itemDiv.innerHTML =createItemContent(marker, properties, endpoint);
         legendContainer.appendChild(itemDiv);
         const polygonFeature = ALLPOLYGONS.find((item) => item.id === itemId);
@@ -397,15 +397,24 @@ function initializeDateSlider() {
       max: maxStopDate.getTime() / 1000,  // Convert to seconds
       step: 86400,  // Step size of 1 day (86400 seconds)
       values: [minStartDate.getTime() / 1000, maxStopDate.getTime() / 1000],
+      slide: function (event, ui) {
+        let sDate = new Date(ui.values[0] * 1000); // Convert to milliseconds
+        let eDate = new Date(ui.values[1] * 1000); // Convert to milliseconds
+        sDate.setUTCHours(0, 0, 0, 0);
+        eDate.setUTCHours(23, 59, 59, 0);
+        $("#amount").val(
+          sDate.toUTCString().slice(0, -13) + " - " + eDate.toUTCString().slice(0, -13)
+        );
+      },
       stop: function (event, ui) {
         let sDate = new Date(ui.values[0] * 1000); // Convert to milliseconds
         let eDate = new Date(ui.values[1] * 1000); // Convert to milliseconds
         sDate.setUTCHours(0, 0, 0, 0);
         eDate.setUTCHours(23, 59, 59, 0);
   
-        $("#amount").val(
-          sDate.toUTCString().slice(0, -13) + " - " + eDate.toUTCString().slice(0, -13)
-        );
+        // $("#amount").val(
+        //   sDate.toUTCString().slice(0, -13) + " - " + eDate.toUTCString().slice(0, -13)
+        // );
         updateDatesandData();
       }
     });

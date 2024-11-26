@@ -9,8 +9,7 @@
     position: absolute;
     top: 5px;
     left: 5px;
-    width: 25rem;
-    width: 28.5rem;
+    width: 27rem;
     background-color: white;
     color: black;
     z-index: 999;
@@ -23,7 +22,6 @@
 }
 
 .title-note {
-    border-bottom: 2px solid var(--main-blue);
-    padding: 0.9rem;
-    padding-top: 0.1rem;
+    padding: 0.3rem 0.9rem;
+    padding-bottom: 12px;
 }

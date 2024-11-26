@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 
 import "./index.css";
 
-const drawerWidth = "34rem";
+const drawerWidth = "30rem";
 
 const Main = styledmui('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme }) => ({
@@ -111,9 +111,11 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
       <Drawer
         sx={{
           width: drawerWidth,
+          marginRight: "5px",
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: drawerWidth,
+            marginRight: "5px",
             height: 'calc(100vh - var(--colorbar-height) - 3.5%)', //colobar is up 3% from bottom
             borderRadius: '3px',
           },
@@ -123,7 +125,7 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
         open={open}
       >
         <DrawerHeader className="drawer-head">
-          <HorizontalLayout style={{marginLeft: "1rem"}}>
+          <HorizontalLayout>
             <Typography
                   variant="h6"
                   component="div"
@@ -146,8 +148,8 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
               <PlumeCard
                 key={selectedPlumeMeta.id}
                 plumeSourceId={selectedPlumeMeta.id}
-                plumeSourceName={selectedPlumeMeta.id.replace(/_/g, " ")}
-                imageUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
+                plumeSourceName={selectedPlumeMeta.id}
+                imageUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}&width=250&height=250`}
                 tiffUrl={`${process.env.REACT_APP_CLOUD_BROWSE_URL}/browseui/#${collectionId}/#q=${selectedPlumeMeta.id.split("_").slice(-1)}`}
                 lon={selectedPlumeMeta.lon}
                 lat={selectedPlumeMeta.lat}

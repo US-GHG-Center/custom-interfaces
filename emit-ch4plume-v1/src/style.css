@@ -38,6 +38,7 @@ span{
   justify-content: center;
   align-items: center;
   padding:0px;
+  border-radius: 50%;
 }
 
 
@@ -69,9 +70,9 @@ cursor: pointer;
 .autocomplete-search-box {
   position: relative; /* Add this to make `.search-result` position relative to the box */
   width: 100%;
-  border: 1px solid #ced4da;
+  border: 0px solid #ced4da;
   border-radius: 5px;
-  background-color: #f8f9fa;
+  background-color: #eeeeee;
   overflow: hidden;
   z-index: 1;
 }
@@ -82,7 +83,7 @@ cursor: pointer;
   padding: 0 40px 0 10px; /* Add padding for the icon */
   font-size: 16px;
   border: none;
-  background-color: #f8f9fa;
+  background-color: #eeeeee;
   outline: none;
 }
 
@@ -100,32 +101,36 @@ cursor: pointer;
   z-index: 3; 
 }
 
+.autocomplete-search-box .search-result:empty {
+  border: 0px solid transparent;
+}
+
 .autocomplete-search-box .search-result {
   width: 100%;
   padding: 0;
   margin: 0;
   list-style-type: none;
   background-color: white;
-  border-top: 0px solid #ced4da;
+  border: 1px solid #ced4da;
   max-height: 150px;
   overflow-y: auto;
   position: relative;
-  top: 100%; /* Place dropdown directly below the input box */
-  left: 0;
+  top: 100%; 
   z-index: 2;
+  box-sizing: border-box;
 }
 
 
 .autocomplete-search-box .search-result li {
   padding: 10px;
   font-size: 14px;
-  color: #212529;
+  color: #082a64;
 
 }
 
 .autocomplete-search-box .search-result li:hover {
   background-color: #dee2e6;
-  color: #212529;
+  color: #082a64;
   cursor: pointer;
 }
 
@@ -167,6 +172,14 @@ border: none;
 border-top: 2px solid #082a64;
 margin: 15px 0; 
 }
+
+/* recommended by sandesh
+.toolbar-line {
+  border: none;
+  border-top: 2px solid gray;
+   margin: 5px 0 20px 0;
+  }
+*/
 
 /* selecting date related styling goes here */ 
 .dates {
@@ -214,11 +227,16 @@ width: 100%
 /* Label before the toggle switch */
 .custom-label {
   color: #082a64;;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: -0px; 
-  opacity:1;
   padding-top: 15px;;
+}
+.custom-label-cov{
+  font-size: 14px;
+  padding-top: 0px;
+  color: #082a64;;
+  font-weight: 500;
 }
 
 strong {
@@ -226,13 +244,14 @@ strong {
 }
 
 /* Toggle Switch Container */
+/* Toggle Switch Container */
 .toggle-switch {
   position: relative;
-
   display: inline-block;
-  width: 50px;
-  height: 26px;
+  width: 40px; /* Smaller width */
+  height: 20px; /* Smaller height */
   cursor: pointer;
+  vertical-align: middle;
 }
 
 /* Hide default checkbox */
@@ -250,23 +269,14 @@ strong {
   right: 0;
   bottom: 0;
   background-color: rgba(8, 42, 100, 0.3);
-  border-radius: 15px;
+  border-radius: 10px; /* Adjust for smaller size */
   transition: 0.4s;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 5px;
+  padding: 0 4px; /* Adjust padding */
   box-sizing: border-box;
 }
-
-/* Slider round circle */
-.slider:before {
-  content: "OFF";
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-}
-
 .slider:after {
   content: "ON";
   color: white;
@@ -274,37 +284,55 @@ strong {
   font-weight: bold;
   opacity: 0; /* Hidden by default */
 }
-
-/* Round circle on the slider */
+/* Slider round circle */
 .slider::before {
   content: "";
-  height: 18px;
-  width: 18px;
+  height: 14px; /* Smaller circle */
+  width: 14px; /* Smaller circle */
   border-radius: 50%;
   background-color: white;
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
   position: absolute;
-  bottom: 4px;
-  left: px;
+  bottom: 3px;
+  left: 3px; /* Adjust for smaller size */
+  transition: 0.4s;
+}
+/* "ON" Text */
+.slider::after {
+  content: "ON";
+  z-index: inherit;
+  color: white;
+  font-size: 10px; /* Smaller font size */
+  font-weight: bold;
+  position: absolute;
+  right: 8px; /* Adjust position for smaller toggle */
+  opacity: 0; /* Hidden by default */
   transition: 0.4s;
 }
 
-/* When checked, move the slider background and show "ON" */
+
+/* When checked, move the slider background */
 input:checked + .slider {
   background-color: #082A63;
 }
 
-input:checked + .slider:before {
-  transform: translateX(24px);
+input:checked + .slider::before {
+  transform: translateX(20px); /* Adjust based on new width */
 }
-
 input:checked + .slider::after {
   opacity: 1;
+  left:4px;
 }
 
-input:not(:checked) + .slider::after {
-  opacity: 0;
+/* Toggle Container Styling */
+.toggle-container {
+  display: flex; /* Align items horizontally */
+  align-items: center; /* Align vertically */
+  gap: 8px; /* Space between toggle and text */
+  padding-top:10px;
 }
+
+
 
 /* for legend */
 .plegend-container {
@@ -367,6 +395,7 @@ font-size: 12px;
   justify-content: center;
   align-items: center;   
   display: flex;
+  image-rendering: pixelated;
 }
 
 .image-column img {
@@ -511,7 +540,7 @@ border-top-color: rgba(255, 255, 255, 0.7);
   padding-bottom: 10px;
   padding-top: 15px;
   margin-top: 15px;
-  font-size: 12px;
+  font-size: 14px;
   background-color: #fff;
 }
 #slider-range {
