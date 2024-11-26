@@ -139,6 +139,6 @@ export const MapControls = ({
   }, [map, mapScaleUnit, measureMode]);
 
   return (
-    <div id="mapbox-custom-controls" ref={customControlContainer} style={{ right: openDrawer ? "30.5rem" : "0.5rem" }}></div>
+    <div id="mapbox-custom-controls" ref={customControlContainer} style={{ right: openDrawer ? "30.7rem" : "0.5rem" }}></div>
   );
 };

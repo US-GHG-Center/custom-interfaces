@@ -111,9 +111,11 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
       <Drawer
         sx={{
           width: drawerWidth,
+          marginRight: "5px",
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: drawerWidth,
+            marginRight: "5px",
             height: 'calc(100vh - var(--colorbar-height) - 3.5%)', //colobar is up 3% from bottom
             borderRadius: '3px',
           },
