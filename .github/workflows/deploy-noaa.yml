@@ -108,7 +108,7 @@ jobs:
         with:
           distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
           paths: |
-            /${{ env.PUBLIC_URL }}*
+            custom-interfaces/*
 
   deploy-production:
     needs:
@@ -154,4 +154,4 @@ jobs:
         with:
           distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
           paths: |
-            /${{ env.PUBLIC_URL }}*
+            custom-interfaces/*
