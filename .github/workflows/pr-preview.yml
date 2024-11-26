@@ -7,6 +7,7 @@ on:
       - 'emit-ch4plume-v1/**'
       - 'noaa-cpfp-point/**'
       - 'nist-interface/**'
+      - 'goes-plume-viewer/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -57,6 +58,9 @@ jobs:
           fi
           if grep -q 'nist-interface/' changed_files.txt; then
             CHANGED_WEBSITES+=('nist-interface')
+          fi
+          if grep -q 'goes-plume-viewer/' changed_files.txt; then
+            CHANGED_WEBSITES+=('goes-plume-viewer')
           fi
           # Convert array to comma-separated string and set it as an environment variable
           CHANGED_WEBSITES_STRING=$(IFS=, ; echo "${CHANGED_WEBSITES[*]}")
@@ -117,6 +121,31 @@ jobs:
 
               COMMENT+="- 🗼 nist-interface: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${NIST_PATH}index.html"
             fi
+            elif [ "$WEBSITE" == "goes-plume-viewer" ]; then
+
+              GOES_PATH=$(echo "${{ vars.PUBLIC_URL_GOES }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
+
+              echo >> ./goes-plume-viewer/.env # add a new line to append the below variables
+              echo REACT_APP_MAPBOX_TOKEN="${{secrets.REACT_APP_MAPBOX_TOKEN}}" >> ./goes-plume-viewer/.env
+              echo VITE_MAPBOX_TOKEN="${{secrets.REACT_APP_MAPBOX_TOKEN}}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_MAPBOX_STYLE_URL="${{vars.REACT_APP_MAPBOX_STYLE_URL}}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_STAC_API_URL="${{vars.REACT_APP_STAC_API_URL}}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_RASTER_API_URL="${{vars.REACT_APP_RASTER_API_URL}}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_CLOUD_BROWSE_URL="${{vars.REACT_APP_CLOUD_BROWSE_URL}}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_BASE_PATH="${{vars.REACT_APP_BASE_PATH_GOES}}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_PUBLIC_URL="${GOES_PATH}" >> ./goes-plume-viewer/.env
+
+              URL_VALUE=$(grep "REACT_APP_PUBLIC_URL" ./goes-plume-viewer/.env)
+              echo "The value of REACT_APP_PUBLIC_URL is: ${URL_VALUE}"
+
+              cd ./goes-plume-viewer
+              yarn
+              yarn build
+              cd ..
+              aws s3 sync goes-plume-viewer/build s3://${{ env.S3_BUCKET }}${GOES_PATH}
+
+              COMMENT+="-  🛰️ goes-plume-viewer: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${GOES_PATH}index.html"
+            fi
             echo "COMMENT=${COMMENT}" >> $GITHUB_ENV
           done
 
@@ -157,6 +186,7 @@ jobs:
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ --recursive
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/ --recursive
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/ --recursive
+          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_GOES }}/${{ env.PR_STRING }}/ --recursive
 
       - name: Remove PR comment
         run: |
