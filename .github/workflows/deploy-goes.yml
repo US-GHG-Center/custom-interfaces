@@ -1,4 +1,4 @@
-name: Deploy GOES
+name: Deploy GOES Viewer
 
 on:
   workflow_dispatch:
