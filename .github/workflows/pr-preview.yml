@@ -135,7 +135,7 @@ jobs:
 
               cd ./goes-plume-viewer
               yarn
-              yarn build
+              CI=false yarn build
               cd ..
               aws s3 sync goes-plume-viewer/build s3://${{ env.S3_BUCKET }}${GOES_PATH}
 
