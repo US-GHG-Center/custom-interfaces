@@ -53,7 +53,6 @@ jobs:
         run: |
           echo >> .env # add a new line to append the below variables
           echo REACT_APP_MAPBOX_TOKEN="${{secrets.REACT_APP_MAPBOX_TOKEN}}" >> .env
-          echo VITE_MAPBOX_TOKEN="${{secrets.REACT_APP_MAPBOX_TOKEN}}" >> .env
           echo REACT_APP_MAPBOX_STYLE_URL="${{vars.REACT_APP_MAPBOX_STYLE_URL}}" >> .env
           echo REACT_APP_STAC_API_URL="${{vars.REACT_APP_STAC_API_URL}}" >> .env
           echo REACT_APP_RASTER_API_URL="${{vars.REACT_APP_RASTER_API_URL}}" >> .env

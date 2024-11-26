@@ -127,7 +127,6 @@ jobs:
 
               echo >> ./goes-plume-viewer/.env # add a new line to append the below variables
               echo REACT_APP_MAPBOX_TOKEN="${{secrets.REACT_APP_MAPBOX_TOKEN}}" >> ./goes-plume-viewer/.env
-              echo VITE_MAPBOX_TOKEN="${{secrets.REACT_APP_MAPBOX_TOKEN}}" >> ./goes-plume-viewer/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{vars.REACT_APP_MAPBOX_STYLE_URL}}" >> ./goes-plume-viewer/.env
               echo REACT_APP_STAC_API_URL="${{vars.REACT_APP_STAC_API_URL}}" >> ./goes-plume-viewer/.env
               echo REACT_APP_RASTER_API_URL="${{vars.REACT_APP_RASTER_API_URL}}" >> ./goes-plume-viewer/.env
