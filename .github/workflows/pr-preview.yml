@@ -73,6 +73,62 @@ jobs:
           role-session-name: ${{ github.repository_owner}}
           aws-region: us-west-2
 
+      - name: Validate required variables and secrets
+        run: |
+          IFS=',' read -r -a WEBSITES <<< "${{ env.CHANGED_WEBSITES }}"
+          for WEBSITE in "${WEBSITES[@]}"; do
+            if [ "$WEBSITE" == "emit-ch4plume-v1" ]; then
+              missing_vars=()
+              # Check for required variables
+              [ -z "${{ vars.MAP_STYLE }}" ] && missing_vars+=("vars.MAP_STYLE")
+              [ -z "${{ secrets.MAP_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.MAP_ACCESS_TOKEN")
+              [ -z "${{ vars.PUBLIC_URL_EMIT }}" ] && missing_vars+=("vars.PUBLIC_URL_EMIT")
+              [ -z "${{ secrets.GEOAPIFY_APIKEY }}" ] && missing_vars+=("secrets.GEOAPIFY_APIKEY")
+              # If any variables are missing, print them and exit with an error
+              if [ ${#missing_vars[@]} -ne 0 ]; then
+                echo "Error: The following required variables are missing:"
+                printf '%s\n' "${missing_vars[@]}"
+                exit 1
+              fi
+            elif [ "$WEBSITE" == "noaa-cpfp-point" ]; then
+              missing_vars=()
+              # Check for required variables
+              [ -z "${{ vars.PUBLIC_URL_NOAA }}" ] && missing_vars+=("vars.PUBLIC_URL_NOAA")
+              [ -z "${{ secrets.MAP_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.MAP_ACCESS_TOKEN")
+              # If any variables are missing, print them and exit with an error
+              if [ ${#missing_vars[@]} -ne 0 ]; then
+                echo "Error: The following required variables are missing:"
+                printf '%s\n' "${missing_vars[@]}"
+                exit 1
+              fi
+            elif [ "$WEBSITE" == "nist-interface" ]; then
+              missing_vars=()
+              # Check for required variables
+              [ -z "${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_ACCESS_TOKEN")
+              [ -z "${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_STYLE_URL")
+              [ -z "${{ vars.FEATURES_API_URL }}" ] && missing_vars+=("vars.FEATURES_API_URL")
+              # If any variables are missing, print them and exit with an error
+              if [ ${#missing_vars[@]} -ne 0 ]; then
+                echo "Error: The following required variables are missing:"
+                printf '%s\n' "${missing_vars[@]}"
+                exit 1
+              fi
+            elif [ "$WEBSITE" == "goes-plume-viewer" ]; then
+              missing_vars=()
+              # Check for required variables
+              [ -z "${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_TOKEN")
+              [ -z "${{ vars.REACT_APP_MAPBOX_STYLE_URL }}" ] && missing_vars+=("vars.REACT_APP_MAPBOX_STYLE_URL")
+              [ -z "${{ vars.REACT_APP_BASE_PATH_GOES }}" ] && missing_vars+=("vars.REACT_APP_BASE_PATH_GOES")
+              # If any variables are missing, print them and exit with an error
+              if [ ${#missing_vars[@]} -ne 0 ]; then
+                echo "Error: The following required variables are missing:"
+                printf '%s\n' "${missing_vars[@]}"
+                exit 1
+              fi
+            fi
+          done
+        shell: bash
+
       - name: Build and deploy
         run: |
           IFS=',' read -r -a WEBSITES <<< "${{ env.CHANGED_WEBSITES }}"
@@ -125,7 +181,7 @@ jobs:
               GOES_PATH=$(echo "${{ vars.PUBLIC_URL_GOES }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
 
               echo >> ./goes-plume-viewer/.env # add a new line to append the below variables
-              echo REACT_APP_MAPBOX_TOKEN="${{secrets.REACT_APP_MAPBOX_TOKEN}}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_MAPBOX_TOKEN="${{secrets.REACT_APP_MAPBOX_ACCESS_TOKEN}}" >> ./goes-plume-viewer/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{vars.REACT_APP_MAPBOX_STYLE_URL}}" >> ./goes-plume-viewer/.env
               echo REACT_APP_BASE_PATH="${{vars.REACT_APP_BASE_PATH_GOES}}" >> ./goes-plume-viewer/.env
               echo REACT_APP_PUBLIC_URL="${GOES_PATH}" >> ./goes-plume-viewer/.env
