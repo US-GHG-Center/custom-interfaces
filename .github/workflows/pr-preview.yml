@@ -14,7 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  S3_BUCKET: ghgc-custom-interfaces-develop
+  S3_BUCKET: ghgc-dev-custom-interfaces
+  WEB_DISTRIBUTION_URL: https://dev.ghg.center
   PR_STRING: pr-preview-${{ github.event.number }}
 
 jobs:
@@ -135,7 +136,7 @@ jobs:
               cd ..
               aws s3 sync goes-plume-viewer/build s3://${{ env.S3_BUCKET }}${REACT_APP_BASE_PATH}
 
-              COMMENT+="-  🛰️ goes-plume-viewer: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${REACT_APP_BASE_PATH}/index.html"
+              COMMENT+="-  🛰️ goes-plume-viewer: ${{ env.WEB_DISTRIBUTION_URL}}${REACT_APP_BASE_PATH}/"
             fi
             echo "COMMENT=${COMMENT}" >> $GITHUB_ENV
           done
