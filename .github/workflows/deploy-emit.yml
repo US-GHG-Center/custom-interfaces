@@ -49,7 +49,27 @@ jobs:
         working-directory: ./emit-ch4plume-v1
         run: | 
           GEOAPIFY_APIKEY="${{ secrets.GEOAPIFY_APIKEY }}" node update_data.js
-      
+
+      - name: Validate required variables and secrets
+        run: |
+          missing_vars=()
+
+          # Check for required variables
+          [ -z "${{ vars.PUBLIC_URL_EMIT }}" ] && missing_vars+=("vars.PUBLIC_URL_EMIT")
+          [ -z "${{ vars.MAP_STYLE }}" ] && missing_vars+=("vars.MAP_STYLE")
+          [ -z "${{ secrets.MAP_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.MAP_ACCESS_TOKEN")
+          [ -z "${{ vars.PUBLIC_URL_EMIT }}" ] && missing_vars+=("vars.PUBLIC_URL_EMIT")
+          [ -z "${{ secrets.DEPLOYMENT_ROLE_ARN }}" ] && missing_vars+=("secrets.DEPLOYMENT_ROLE_ARN")
+          [ -z "${{ secrets.CF_DISTRIBUTION_ID }}" ] && missing_vars+=("secrets.CF_DISTRIBUTION_ID")
+
+          # If any variables are missing, print them and exit with an error
+          if [ ${#missing_vars[@]} -ne 0 ]; then
+            echo "Error: The following required variables are missing:"
+            printf '%s\n' "${missing_vars[@]}"
+            exit 1
+          fi
+        shell: bash
+
       - name: Build for production 🔧
         working-directory: ./emit-ch4plume-v1
         run: |
