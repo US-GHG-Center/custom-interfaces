@@ -117,7 +117,7 @@ jobs:
               missing_vars=()
               # Check for required variables
               [ -z "${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_TOKEN")
-              [ -z "${{ vars.REACT_APP_MAPBOX_STYLE_URL }}" ] && missing_vars+=("vars.REACT_APP_MAPBOX_STYLE_URL")
+              [ -z "${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_STYLE_URL")
               [ -z "${{ vars.REACT_APP_BASE_PATH_GOES }}" ] && missing_vars+=("vars.REACT_APP_BASE_PATH_GOES")
               # If any variables are missing, print them and exit with an error
               if [ ${#missing_vars[@]} -ne 0 ]; then
@@ -182,7 +182,7 @@ jobs:
 
               echo >> ./goes-plume-viewer/.env # add a new line to append the below variables
               echo REACT_APP_MAPBOX_TOKEN="${{secrets.REACT_APP_MAPBOX_ACCESS_TOKEN}}" >> ./goes-plume-viewer/.env
-              echo REACT_APP_MAPBOX_STYLE_URL="${{vars.REACT_APP_MAPBOX_STYLE_URL}}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_MAPBOX_STYLE_URL="${{secrets.REACT_APP_MAPBOX_STYLE_URL}}" >> ./goes-plume-viewer/.env
               echo REACT_APP_BASE_PATH="${{vars.REACT_APP_BASE_PATH_GOES}}" >> ./goes-plume-viewer/.env
               echo REACT_APP_PUBLIC_URL="${GOES_PATH}" >> ./goes-plume-viewer/.env
 
