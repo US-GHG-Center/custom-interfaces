@@ -99,7 +99,7 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
             <CardMedia
                 component="img"
                 height="100"
-                sx={{ padding: "1em", objectFit: "contain", minWidth: "50px" }}
+                sx={{ padding: "1em", objectFit: "contain", minWidth: "50px", imageRendering: "pixelated" }}
                 image={imageUrl}
                 alt="Plume image"
             />
