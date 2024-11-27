@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [ main, production, task/CICD-exception-handler ]
-    paths:
-      - goes-plume-viewer/**
+    # paths:
+    #   - goes-plume-viewer/**
 
 jobs:
   define-environment:
