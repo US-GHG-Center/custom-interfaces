@@ -128,7 +128,7 @@ export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDa
             <HorizontalLayout>
                 <CaptionValue
                     className="card-plume"
-                    caption = "Approximate Release Duration"
+                    caption = "Approximate Release Duration from Start Time"
                     value = { formatDuration(moment.duration(duration)) }
                 />
             </HorizontalLayout>
