@@ -46,6 +46,7 @@ module.exports = (env) => {
       }),
       new CopyPlugin({
         patterns: [{ from: "data", to: "data" }],
+        patterns: [{ from: "./icon.svg", to: "./" }],
       }),
     ],
   };
