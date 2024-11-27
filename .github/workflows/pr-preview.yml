@@ -126,9 +126,10 @@ jobs:
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./goes-plume-viewer/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./goes-plume-viewer/.env
               echo REACT_APP_BASE_PATH="${{ vars.REACT_APP_BASE_PATH_GOES }}/${{ env.PR_STRING }}" >> ./goes-plume-viewer/.env
-              cat .env
 
               cd ./goes-plume-viewer
+              cat .env
+              set -a; source .env; set +a
               yarn
               CI=false yarn build
               cd ..
