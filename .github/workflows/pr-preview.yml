@@ -86,6 +86,7 @@ jobs:
               echo STAGE="production" >> ./emit-ch4plume-v1/.env
               cd ./emit-ch4plume-v1
               GEOAPIFY_APIKEY="${{ secrets.GEOAPIFY_APIKEY }}" node update_data.js
+              ls -al
               npm install
               npm run deploy
               cd ..
