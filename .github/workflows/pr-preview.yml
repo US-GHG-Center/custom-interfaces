@@ -135,6 +135,8 @@ jobs:
           IFS=',' read -r -a WEBSITES <<< "${{ env.CHANGED_WEBSITES }}"
           COMMENT="### ✅ Deploy Preview for *custom-interfaces* is ready! \n \n"
           for WEBSITE in "${WEBSITES[@]}"; do
+
+            # EMIT
             if [ "$WEBSITE" == "emit-ch4plume-v1" ]; then
               echo MAP_STYLE="${{ vars.MAP_STYLE }}" >> ./emit-ch4plume-v1/.env
               echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./emit-ch4plume-v1/.env
@@ -146,8 +148,11 @@ jobs:
               npm run deploy
               cd ..
               aws s3 sync emit-ch4plume-v1/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/
-              aws s3 sync emit-ch4plume-v1/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/
+              aws s3 sync emit-ch4plume-v1/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/data/
               COMMENT+="- 🛰️ emit-ch4plume-v1: ${{ env.WEB_DISTRIBUTION_URL}}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ \n \n"
+            
+            
+            
             elif [ "$WEBSITE" == "noaa-cpfp-point" ]; then
               echo PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}" >> ./noaa-cpfp-point/.env
               echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./noaa-cpfp-point/.env
