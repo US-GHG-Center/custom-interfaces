@@ -165,6 +165,7 @@ margin: 0px;
   font-weight: 400;
   opacity: 1;
   color: grey; 
+  padding-left: 0px;
 }
 
 .toolbar-line {

@@ -23,7 +23,7 @@ export const ColorBar = () => {
         <Card id="colorbar">
             <div ref={colorBarScale} className="colorbar-scale"></div>
             <Typography variant="subtitle2" gutterBottom sx={{ marginBottom: 0 }} className="colorbar-label">
-                Maximum Methane Column Enhancement (mol/m²)
+                Methane Column Enhancement (mol/m²)
             </Typography>
         </Card>
     )
