@@ -3,7 +3,7 @@ name: Deploy GOES
 on:
   workflow_dispatch:
   push:
-    branches: [ main, production ]
+    branches: [ main, production, task/CICD-exception-handler ]
     paths:
       - goes-plume-viewer/**
 
@@ -18,6 +18,8 @@ jobs:
         id: define_environment
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "env_name=staging" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" = "refs/heads/task/CICD-exception-handler" ]; then
             echo "env_name=staging" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
             echo "env_name=production" >> $GITHUB_OUTPUT
