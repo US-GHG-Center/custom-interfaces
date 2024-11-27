@@ -48,6 +48,23 @@ jobs:
       - name: Install Yarn
         run: npm install -g yarn
 
+      - name: Validate required variables and secrets
+        run: |
+          missing_vars=()
+
+          # Check for required variables
+          [ -z "${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ] && missing_vars+=("REACT_APP_MAPBOX_ACCESS_TOKEN")
+          [ -z "${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" ] && missing_vars+=("REACT_APP_MAPBOX_STYLE_URL")
+          [ -z "${{ vars.REACT_APP_BASE_PATH_GOES }}" ] && missing_vars+=("REACT_APP_BASE_PATH_GOES")
+
+          # If any variables are missing, print them and exit with an error
+          if [ ${#missing_vars[@]} -ne 0 ]; then
+            echo "Error: The following required variables are missing:"
+            printf '%s\n' "${missing_vars[@]}"
+            exit 1
+          fi
+        shell: bash
+
       - name: Building 🔧
         working-directory: ./goes-plume-viewer
         run: |
