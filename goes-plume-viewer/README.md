@@ -1,6 +1,6 @@
 ## Pre requisities
 
-- Install node
+- Install node & npm
 - use latest node version
     - if using nvm, run `nvm use`  
 
