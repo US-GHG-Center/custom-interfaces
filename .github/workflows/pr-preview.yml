@@ -171,18 +171,17 @@ jobs:
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./nist-interface/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
-              echo REACT_APP_PUBLIC_URL="${NIST_PATH}" >> ./nist-interface/.env
+              echo PUBLIC_URL="${NIST_PATH}" >> ./nist-interface/.env
 
-              URL_VALUE=$(grep "REACT_APP_PUBLIC_URL" ./nist-interface/.env)
-              echo "The value of REACT_APP_PUBLIC_URL is: ${URL_VALUE}"
+              URL_VALUE=$(grep "PUBLIC_URL" ./nist-interface/.env)
+              echo "The value of NIST_PUBLIC_URL is: ${URL_VALUE}"
 
               cd ./nist-interface
               yarn
               yarn build
               cd ..
-              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${NIST_PATH}
-
-              COMMENT+="- 🗼 nist-interface: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${NIST_PATH}index.html"
+              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
+              COMMENT+="- 🗼 nist-interface: ${{ env.WEB_DISTRIBUTION_URL}}${NIST_PATH}/ \n \n"
             elif [ "$WEBSITE" == "goes-plume-viewer" ]; then
 
               echo >> ./goes-plume-viewer/.env # add a new line to append the below variables
@@ -201,7 +200,7 @@ jobs:
               cd ..
               aws s3 sync goes-plume-viewer/build s3://${{ env.S3_BUCKET }}${REACT_APP_BASE_PATH}
 
-              COMMENT+="- 🛰️ goes-plume-viewer: ${{ env.WEB_DISTRIBUTION_URL}}${REACT_APP_BASE_PATH}/"
+              COMMENT+="- 🛰️ goes-plume-viewer: ${{ env.WEB_DISTRIBUTION_URL}}${REACT_APP_BASE_PATH}/ \n \n"
             fi
             echo "COMMENT=${COMMENT}" >> $GITHUB_ENV
           done
