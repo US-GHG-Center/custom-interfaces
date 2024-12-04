@@ -172,7 +172,7 @@ jobs:
               yarn
               yarn build
               cd ..
-              aws s3 sync nist-interface/build s3://${{ env.WEB_DISTRIBUTION_URL}}${PUBLIC_URL}
+              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
               COMMENT+="- 🗼 nist-interface: ${{ env.WEB_DISTRIBUTION_URL}}${PUBLIC_URL}/ \n \n"
             elif [ "$WEBSITE" == "goes-plume-viewer" ]; then
 
