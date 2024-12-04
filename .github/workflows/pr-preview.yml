@@ -188,6 +188,7 @@ jobs:
               echo >> ./goes-plume-viewer/.env # add a new line to append the below variables
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./goes-plume-viewer/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_BASE_PATH="${{ vars.REACT_APP_BASE_PATH_GOES }}/${{ env.PR_STRING }}" >> ./goes-plume-viewer/.env
               echo PUBLIC_URL="${{ vars.REACT_APP_BASE_PATH_GOES }}/${{ env.PR_STRING }}" >> ./goes-plume-viewer/.env
               echo REACT_APP_STAC_API_URL="${{ vars.REACT_APP_STAC_API_URL }}" >> ./goes-plume-viewer/.env
               echo REACT_APP_RASTER_API_URL="${{ vars.REACT_APP_RASTER_API_URL }}" >> ./goes-plume-viewer/.env
@@ -200,7 +201,7 @@ jobs:
               cd ..
               aws s3 sync goes-plume-viewer/build s3://${{ env.S3_BUCKET }}${REACT_APP_BASE_PATH}
 
-              COMMENT+="-  🛰️ goes-plume-viewer: ${{ env.WEB_DISTRIBUTION_URL}}${REACT_APP_BASE_PATH}/"
+              COMMENT+="- 🛰️ goes-plume-viewer: ${{ env.WEB_DISTRIBUTION_URL}}${REACT_APP_BASE_PATH}/"
             fi
             echo "COMMENT=${COMMENT}" >> $GITHUB_ENV
           done
