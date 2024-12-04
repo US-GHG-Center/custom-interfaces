@@ -151,8 +151,6 @@ jobs:
               aws s3 sync emit-ch4plume-v1/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/data/
               COMMENT+="- 🛰️ emit-ch4plume-v1: ${{ env.WEB_DISTRIBUTION_URL}}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ \n \n"
             
-            
-            
             elif [ "$WEBSITE" == "noaa-cpfp-point" ]; then
               echo PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}" >> ./noaa-cpfp-point/.env
               echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./noaa-cpfp-point/.env
@@ -165,23 +163,17 @@ jobs:
 
               COMMENT+="- 🗼 noaa-cpfp-point: ${{ env.WEB_DISTRIBUTION_URL}}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/"
             elif [ "$WEBSITE" == "nist-interface" ]; then
-
-              NIST_PATH=$(echo "${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
-
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./nist-interface/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
-              echo REACT_APP_PUBLIC_URL="${NIST_PATH}" >> ./nist-interface/.env
-
-              URL_VALUE=$(grep "PUBLIC_URL" ./nist-interface/.env)
-              echo "The value of NIST_PUBLIC_URL is: ${URL_VALUE}"
+              echo PUBLIC_URL="${PUBLIC_URL_NIST}/${{ env.PR_STRING }}" >> ./nist-interface/.env
 
               cd ./nist-interface
               yarn
               yarn build
               cd ..
-              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
-              COMMENT+="- 🗼 nist-interface: ${{ env.WEB_DISTRIBUTION_URL}}${NIST_PATH}/ \n \n"
+              aws s3 sync nist-interface/build s3://${{ env.WEB_DISTRIBUTION_URL}}${PUBLIC_URL}
+              COMMENT+="- 🗼 nist-interface: ${{ env.WEB_DISTRIBUTION_URL}}${PUBLIC_URL}/ \n \n"
             elif [ "$WEBSITE" == "goes-plume-viewer" ]; then
 
               echo >> ./goes-plume-viewer/.env # add a new line to append the below variables
