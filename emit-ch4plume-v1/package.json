@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": ". ./.env; webpack --mode=${STAGE:-development} --env PUBLIC_URL=${PUBLIC_URL}",
+    "deploy": ". ./.env; webpack --mode=${STAGE:-development} --env PUBLIC_URL=${PUBLIC_URL}; cp -r data dist",
     "serve": "webpack serve --mode=development --port 3000"
   },
   "author": "",
