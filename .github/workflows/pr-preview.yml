@@ -169,6 +169,7 @@ jobs:
               echo PUBLIC_URL="${PUBLIC_URL_NIST}/${{ env.PR_STRING }}" >> ./nist-interface/.env
 
               cd ./nist-interface
+              set -a; source .env; set +a
               yarn
               yarn build
               cd ..
