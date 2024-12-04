@@ -171,7 +171,7 @@ jobs:
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./nist-interface/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
-              echo PUBLIC_URL="${NIST_PATH}" >> ./nist-interface/.env
+              echo REACT_APP_PUBLIC_URL="${NIST_PATH}" >> ./nist-interface/.env
 
               URL_VALUE=$(grep "PUBLIC_URL" ./nist-interface/.env)
               echo "The value of NIST_PUBLIC_URL is: ${URL_VALUE}"
@@ -193,7 +193,6 @@ jobs:
               echo REACT_APP_RASTER_API_URL="${{ vars.REACT_APP_RASTER_API_URL }}" >> ./goes-plume-viewer/.env
               echo REACT_APP_CLOUD_BROWSE_URL="${{ vars.REACT_APP_CLOUD_BROWSE_URL }}" >> ./goes-plume-viewer/.env
               cd ./goes-plume-viewer
-              cat .env
               set -a; source .env; set +a
               yarn
               CI=false yarn build
