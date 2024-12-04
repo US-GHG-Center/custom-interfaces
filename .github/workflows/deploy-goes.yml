@@ -3,7 +3,7 @@ name: Deploy GOES
 on:
   workflow_dispatch:
   push:
-    branches: [ main, production, deploy-goes-to-prod ]
+    branches: [ main, production ]
     paths:
       - goes-plume-viewer/**
 

@@ -7,7 +7,7 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
 import './App.css';
 
-const BASE_PATH = process.env.REACT_APP_BASE_PATH;
+const BASE_PATH = process.env.PUBLIC_URL;
 
 function App() {
   return (
