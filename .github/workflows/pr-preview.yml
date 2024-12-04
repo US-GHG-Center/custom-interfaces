@@ -162,11 +162,12 @@ jobs:
               aws s3 sync noaa-cpfp-point/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/data/
 
               COMMENT+="- 🗼 noaa-cpfp-point: ${{ env.WEB_DISTRIBUTION_URL}}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/"
+            
             elif [ "$WEBSITE" == "nist-interface" ]; then
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./nist-interface/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
-              echo PUBLIC_URL="${PUBLIC_URL_NIST}/${{ env.PR_STRING }}" >> ./nist-interface/.env
+              echo PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" >> ./nist-interface/.env
 
               cd ./nist-interface
               set -a; source .env; set +a
