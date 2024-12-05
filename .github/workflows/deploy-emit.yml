@@ -86,11 +86,12 @@ jobs:
           name: dist_folder
           path: ./emit-ch4plume-v1/dist
 
-  deploy-staging:
+
+  deploy:
+    name: Deploy EMIT to ${{ needs.define-environment.outputs.env_name }} 🚀
     needs:
       - build
       - define-environment
-    if: needs.define-environment.outputs.target_branch == 'main'
     environment: ${{ needs.define-environment.outputs.env_name }}
 
     permissions:
@@ -117,47 +118,7 @@ jobs:
         run: |
           export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
           echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
-          aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
-
-      - name: Request Invalidation to AWS Cloudfront
-        uses: oneyedev/aws-cloudfront-invalidation@v1
-        with:
-          distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
-          paths: |
-            /ghgcenter/custom-interfaces/*
-
-  deploy-production:
-    needs:
-      - build
-      - define-environment
-    if: needs.define-environment.outputs.target_branch == 'production'
-    environment: ${{ needs.define-environment.outputs.env_name }}
-
-    permissions:
-      id-token: write
-      contents: read
-
-    runs-on: ubuntu-latest
-    steps:
-      
-      - name: Download dist folder
-        uses: actions/download-artifact@v4
-        with:
-          name: dist_folder
-          path: ./emit-ch4plume-v1/dist
-
-      - name: ConfigureAWS Credentials 
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
-          role-session-name: ${{ github.repository_owner}}
-          aws-region: us-west-2
-      
-      - name: Upload to S3
-        run: |
-          export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
-          echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
-          aws s3 sync "./emit-ch4plume-v1/dist" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          aws s3 sync "./emit-ch4plume-v1/dist" s3://${{ vars.DEPLOYMENT_BUCKET }}/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
 
       - name: Request Invalidation to AWS Cloudfront
         uses: oneyedev/aws-cloudfront-invalidation@v1

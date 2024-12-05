@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  S3_BUCKET: ${{ vars.S3_PREVIEW_BUCKET }}
+  S3_BUCKET: ${{ vars.DEPLOYMENT_BUCKET }}
   WEB_DISTRIBUTION_URL: ${{ vars.PREVIEW_WEB_DISTRIBUTION_URL }}
   PR_STRING: pr-preview-${{ github.event.number }}
 
