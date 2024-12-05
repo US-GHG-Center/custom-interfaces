@@ -29,6 +29,10 @@
     /* height: 100%; */
 }
 
+.info-sidebar-full-height {
+    height: 100%;
+}
+
 .info-border-primary {
     border: 1px solid #082A64;
 }
