@@ -14,7 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  S3_BUCKET: ghgc-custom-interfaces-develop
+  S3_BUCKET: ${{ vars.S3_PREVIEW_BUCKET }}
+  WEB_DISTRIBUTION_URL: ${{ vars.PREVIEW_WEB_DISTRIBUTION_URL }}
   PR_STRING: pr-preview-${{ github.event.number }}
 
 jobs:
@@ -134,6 +135,8 @@ jobs:
           IFS=',' read -r -a WEBSITES <<< "${{ env.CHANGED_WEBSITES }}"
           COMMENT="### ✅ Deploy Preview for *custom-interfaces* is ready! \n \n"
           for WEBSITE in "${WEBSITES[@]}"; do
+
+            # EMIT
             if [ "$WEBSITE" == "emit-ch4plume-v1" ]; then
               echo MAP_STYLE="${{ vars.MAP_STYLE }}" >> ./emit-ch4plume-v1/.env
               echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./emit-ch4plume-v1/.env
@@ -145,7 +148,9 @@ jobs:
               npm run deploy
               cd ..
               aws s3 sync emit-ch4plume-v1/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/
-              COMMENT+="- 🛰️ emit-ch4plume-v1: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/index.html \n \n"
+              aws s3 sync emit-ch4plume-v1/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/data/
+              COMMENT+="- 🛰️ emit-ch4plume-v1: ${{ env.WEB_DISTRIBUTION_URL}}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ \n \n"
+            
             elif [ "$WEBSITE" == "noaa-cpfp-point" ]; then
               echo PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}" >> ./noaa-cpfp-point/.env
               echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./noaa-cpfp-point/.env
@@ -156,46 +161,39 @@ jobs:
               aws s3 sync noaa-cpfp-point/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/
               aws s3 sync noaa-cpfp-point/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/data/
 
-              COMMENT+="- 🗼 noaa-cpfp-point: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/index.html"
+              COMMENT+="- 🗼 noaa-cpfp-point: ${{ env.WEB_DISTRIBUTION_URL}}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/"
+            
             elif [ "$WEBSITE" == "nist-interface" ]; then
-
-              NIST_PATH=$(echo "${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
-
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./nist-interface/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
-              echo REACT_APP_PUBLIC_URL="${NIST_PATH}" >> ./nist-interface/.env
-
-              URL_VALUE=$(grep "REACT_APP_PUBLIC_URL" ./nist-interface/.env)
-              echo "The value of REACT_APP_PUBLIC_URL is: ${URL_VALUE}"
+              echo PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" >> ./nist-interface/.env
 
               cd ./nist-interface
+              set -a; source .env; set +a
               yarn
               yarn build
               cd ..
-              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${NIST_PATH}
-
-              COMMENT+="- 🗼 nist-interface: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${NIST_PATH}index.html"
+              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
+              COMMENT+="- 🗼 nist-interface: ${{ env.WEB_DISTRIBUTION_URL}}${PUBLIC_URL}/ \n \n"
             elif [ "$WEBSITE" == "goes-plume-viewer" ]; then
 
-              GOES_PATH=$(echo "${{ vars.PUBLIC_URL_GOES }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
-
               echo >> ./goes-plume-viewer/.env # add a new line to append the below variables
-              echo REACT_APP_MAPBOX_TOKEN="${{secrets.REACT_APP_MAPBOX_ACCESS_TOKEN}}" >> ./goes-plume-viewer/.env
-              echo REACT_APP_MAPBOX_STYLE_URL="${{secrets.REACT_APP_MAPBOX_STYLE_URL}}" >> ./goes-plume-viewer/.env
-              echo REACT_APP_BASE_PATH="${{vars.REACT_APP_BASE_PATH_GOES}}" >> ./goes-plume-viewer/.env
-              echo REACT_APP_PUBLIC_URL="${GOES_PATH}" >> ./goes-plume-viewer/.env
-
-              URL_VALUE=$(grep "REACT_APP_PUBLIC_URL" ./goes-plume-viewer/.env)
-              echo "The value of REACT_APP_PUBLIC_URL is: ${URL_VALUE}"
-
+              echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_BASE_PATH="${{ vars.REACT_APP_BASE_PATH_GOES }}/${{ env.PR_STRING }}" >> ./goes-plume-viewer/.env
+              echo PUBLIC_URL="${{ vars.REACT_APP_BASE_PATH_GOES }}/${{ env.PR_STRING }}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_STAC_API_URL="${{ vars.REACT_APP_STAC_API_URL }}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_RASTER_API_URL="${{ vars.REACT_APP_RASTER_API_URL }}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_CLOUD_BROWSE_URL="${{ vars.REACT_APP_CLOUD_BROWSE_URL }}" >> ./goes-plume-viewer/.env
               cd ./goes-plume-viewer
+              set -a; source .env; set +a
               yarn
               CI=false yarn build
               cd ..
-              aws s3 sync goes-plume-viewer/build s3://${{ env.S3_BUCKET }}${GOES_PATH}
+              aws s3 sync goes-plume-viewer/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
 
-              COMMENT+="-  🛰️ goes-plume-viewer: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${GOES_PATH}index.html"
+              COMMENT+="- 🛰️ goes-plume-viewer: ${{ env.WEB_DISTRIBUTION_URL}}${PUBLIC_URL}/ \n \n"
             fi
             echo "COMMENT=${COMMENT}" >> $GITHUB_ENV
           done
@@ -213,6 +211,13 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Request Invalidation to AWS Cloudfront
+        uses: oneyedev/aws-cloudfront-invalidation@v1
+        with:
+          distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
+          paths: |
+            /ghgcenter/custom-interfaces/*
 
   clean_up:
     if: ${{ github.event.action == 'closed' }}
