@@ -90,7 +90,7 @@ jobs:
           path: ./goes-plume-viewer/build
 
   deploy:
-    name: Deploy GOES tO ${{ needs.define-environment.outputs.env_name }} 🚀 
+    name: Deploy GOES to ${{ needs.define-environment.outputs.env_name }} 🚀 
     needs:
       - build
       - define-environment

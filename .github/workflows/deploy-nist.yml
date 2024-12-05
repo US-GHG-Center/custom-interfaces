@@ -86,7 +86,7 @@ jobs:
 
 
   deploy:
-    name: Deploy to ${{ needs.define-environment.outputs.env_name }} 🚀 
+    name: Deploy NIST to ${{ needs.define-environment.outputs.env_name }} 🚀 
     needs:
       - build
       - define-environment
