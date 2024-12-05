@@ -117,7 +117,7 @@ jobs:
       
       - name: Upload to S3
         run: |
-          aws s3 sync "./nist-interface/build" s3://${{ vars.DEPLOYMENT_BUCKET }}/${{ vars.REACT_APP_BASE_PATH_NIST }} --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          aws s3 sync "./nist-interface/build" s3://${{ vars.DEPLOYMENT_BUCKET }}${{ vars.REACT_APP_BASE_PATH_NIST }} --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
         env:
           BASE_PATH: ${{ vars.REACT_APP_BASE_PATH_NIST }}
 
