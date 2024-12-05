@@ -48,6 +48,25 @@ jobs:
       - name: Install Yarn
         run: npm install -g yarn
 
+
+      - name: Validate required variables and secrets
+        run: |
+          missing_vars=()
+
+          # Check for required variables
+          [ -z "${{ vars.PUBLIC_URL_NOAA }}" ] && missing_vars+=("vars.PUBLIC_URL_NOAA")
+          [ -z "${{ secrets.MAP_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.MAP_ACCESS_TOKEN")
+          [ -z "${{ secrets.DEPLOYMENT_ROLE_ARN }}" ] && missing_vars+=("secrets.DEPLOYMENT_ROLE_ARN")
+          [ -z "${{ secrets.CF_DISTRIBUTION_ID }}" ] && missing_vars+=("secrets.CF_DISTRIBUTION_ID")
+
+          # If any variables are missing, print them and exit with an error
+          if [ ${#missing_vars[@]} -ne 0 ]; then
+            echo "Error: The following required variables are missing:"
+            printf '%s\n' "${missing_vars[@]}"
+            exit 1
+          fi
+        shell: bash
+
       - name: Build for production 🔧
         working-directory: ./noaa-cpfp-point
         run: |
@@ -64,57 +83,13 @@ jobs:
           name: dist_folder
           path: ./noaa-cpfp-point/dist
 
-  deploy-staging:
+
+
+  deploy:
+    name: Deploy NOAA to ${{ needs.define-environment.outputs.env_name }} 🚀 
     needs:
       - build
       - define-environment
-    if: github.ref == 'refs/heads/main'
-    environment: ${{ needs.define-environment.outputs.env_name }}
-    
-    permissions:
-      id-token: write
-      contents: read
-
-    runs-on: ubuntu-latest
-    steps:
-      
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
-
-      - name: Download dist folder
-        uses: actions/download-artifact@v4
-        with:
-          name: dist_folder
-          path: ./noaa-cpfp-point/dist
-
-      - name: ConfigureAWS Credentials 
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
-          role-session-name: ${{ github.repository_owner}}
-          aws-region: us-west-2
-      
-      - name: Upload to S3
-        run: |
-          export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NOAA }} | sed -E 's|^https?://[^/]+/||')
-          echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
-          aws s3 sync "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
-          aws s3 sync "./noaa-cpfp-point/data" s3://ghgc-custom-interfaces-staging/${PUBLIC_URL}/data/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
-        env:
-          PUBLIC_URL: ${{ vars.PUBLIC_URL_NOAA }}
-
-      - name: Request Invalidation to AWS Cloudfront
-        uses: oneyedev/aws-cloudfront-invalidation@v1
-        with:
-          distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
-          paths: |
-            /${{ env.PUBLIC_URL }}*
-
-  deploy-production:
-    needs:
-      - build
-      - define-environment
-    if: github.ref == 'refs/heads/production'
     environment: ${{ needs.define-environment.outputs.env_name }}
 
     permissions:
@@ -142,10 +117,8 @@ jobs:
       
       - name: Upload to S3
         run: |
-          export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_NOAA }} | sed -E 's|^https?://[^/]+/||')
-          echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
-          aws s3 sync "./noaa-cpfp-point/dist" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
-          aws s3 sync "./noaa-cpfp-point/data" s3://ghgc-custom-interfaces-production/${PUBLIC_URL}/data/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          aws s3 sync "./noaa-cpfp-point/dist" s3://${{ vars.DEPLOYMENT_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          aws s3 sync "./noaa-cpfp-point/data" s3://${{ vars.DEPLOYMENT_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/data/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
         env:
           PUBLIC_URL: ${{ vars.PUBLIC_URL_NOAA }}
 
@@ -154,4 +127,4 @@ jobs:
         with:
           distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
           paths: |
-            /${{ env.PUBLIC_URL }}*
+            /ghgcenter/custom-interfaces/*

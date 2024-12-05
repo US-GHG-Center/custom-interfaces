@@ -48,6 +48,27 @@ jobs:
       - name: Install Yarn
         run: npm install -g yarn
 
+
+      - name: Validate required variables and secrets
+        run: |
+          missing_vars=()
+
+          # Check for required variables
+          [ -z "${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_ACCESS_TOKEN")
+          [ -z "${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_STYLE_URL")
+          [ -z "${{ vars.REACT_APP_BASE_PATH_URBAN }}" ] && missing_vars+=("vars.REACT_APP_BASE_PATH_URBAN")
+          [ -z "${{ secrets.DEPLOYMENT_ROLE_ARN }}" ] && missing_vars+=("secrets.DEPLOYMENT_ROLE_ARN")
+          [ -z "${{ secrets.CF_DISTRIBUTION_ID }}" ] && missing_vars+=("secrets.CF_DISTRIBUTION_ID")
+
+          # If any variables are missing, print them and exit with an error
+          if [ ${#missing_vars[@]} -ne 0 ]; then
+            echo "Error: The following required variables are missing:"
+            printf '%s\n' "${missing_vars[@]}"
+            exit 1
+          fi
+        shell: bash
+
+
       - name: Building 🔧
         working-directory: ./urban-dashboard
         run: |
@@ -64,56 +85,12 @@ jobs:
           name: build_folder
           path: ./urban-dashboard/build
 
-  deploy-staging:
+
+  deploy:
+    name: Deploy URBAN to ${{ needs.define-environment.outputs.env_name }} 🚀 
     needs:
       - build
       - define-environment
-    if: github.ref == 'refs/heads/main'
-    environment: ${{ needs.define-environment.outputs.env_name }}
-    
-    permissions:
-      id-token: write
-      contents: read
-
-    runs-on: ubuntu-latest
-    steps:
-      
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
-
-      - name: Download build folder
-        uses: actions/download-artifact@v4
-        with:
-          name: build_folder
-          path: ./urban-dashboard/build
-
-      - name: ConfigureAWS Credentials 
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
-          role-session-name: ${{ github.repository_owner}}
-          aws-region: us-west-2
-      
-      - name: Upload to S3
-        run: |
-          export BASE_PATH=${{ vars.REACT_APP_BASE_PATH_URBAN }}
-          echo "BASE_PATH=${BASE_PATH}" >> $GITHUB_ENV
-          aws s3 sync "./urban-dashboard/build" s3://ghgc-custom-interfaces-staging${BASE_PATH}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
-        env:
-          BASE_PATH: ${{ vars.REACT_APP_BASE_PATH_URBAN }}
-
-      - name: Request Invalidation to AWS Cloudfront
-        uses: oneyedev/aws-cloudfront-invalidation@v1
-        with:
-          distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
-          paths: |
-            ${{ env.BASE_PATH }}*
-
-  deploy-production:
-    needs:
-      - build
-      - define-environment
-    if: github.ref == 'refs/heads/production'
     environment: ${{ needs.define-environment.outputs.env_name }}
 
     permissions:
@@ -143,7 +120,7 @@ jobs:
         run: |
           export BASE_PATH=${{ vars.REACT_APP_BASE_PATH_URBAN }}
           echo "BASE_PATH=${BASE_PATH}" >> $GITHUB_ENV
-          aws s3 sync "./urban-dashboard/build" s3://ghgc-custom-interfaces-production${BASE_PATH}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          aws s3 sync "./urban-dashboard/build" s3://${{ vars.DEPLOYMENT_BUCKET }}${BASE_PATH}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
         env:
           BASE_PATH: ${{ vars.REACT_APP_BASE_PATH_URBAN }}
 
@@ -152,4 +129,4 @@ jobs:
         with:
           distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
           paths: |
-            ${{ env.BASE_PATH }}*
+            /ghgcenter/custom-interfaces/*
