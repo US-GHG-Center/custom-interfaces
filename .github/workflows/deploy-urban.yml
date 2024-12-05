@@ -86,7 +86,7 @@ jobs:
           path: ./urban-dashboard/build
 
 
-  deploy-production:
+  deploy:
     name: Deploy URBAN to ${{ needs.define-environment.outputs.env_name }} 🚀 
     needs:
       - build

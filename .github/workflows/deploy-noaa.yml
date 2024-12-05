@@ -85,7 +85,7 @@ jobs:
 
 
 
-  deploy-production:
+  deploy:
     name: Deploy NOAA to ${{ needs.define-environment.outputs.env_name }} 🚀 
     needs:
       - build
