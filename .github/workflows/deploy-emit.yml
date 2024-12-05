@@ -75,7 +75,6 @@ jobs:
           echo PUBLIC_URL="${{ vars.PUBLIC_URL_EMIT }}" >> .env
           echo MAP_STYLE="${{ vars.MAP_STYLE }}" >> .env
           echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
-          echo PUBLIC_URL="${{ vars.PUBLIC_URL_EMIT }}" >> .env
           echo STAGE="production" >> .env
           npm install
           npm run deploy
@@ -116,9 +115,7 @@ jobs:
       
       - name: Upload to S3
         run: |
-          export PUBLIC_URL=$(echo ${{ vars.PUBLIC_URL_EMIT }} | sed -E 's|^https?://[^/]+/||')
-          echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
-          aws s3 sync "./emit-ch4plume-v1/dist" s3://${{ vars.DEPLOYMENT_BUCKET }}${PUBLIC_URL}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          aws s3 sync "./emit-ch4plume-v1/dist" s3://${{ vars.DEPLOYMENT_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
 
       - name: Request Invalidation to AWS Cloudfront
         uses: oneyedev/aws-cloudfront-invalidation@v1
