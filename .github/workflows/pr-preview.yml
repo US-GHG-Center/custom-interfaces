@@ -7,13 +7,15 @@ on:
       - 'emit-ch4plume-v1/**'
       - 'noaa-cpfp-point/**'
       - 'nist-interface/**'
+      - 'goes-plume-viewer/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
-  S3_BUCKET: ghgc-custom-interfaces-develop
+  S3_BUCKET: ${{ vars.DEPLOYMENT_BUCKET }}
+  WEB_DISTRIBUTION_URL: ${{ vars.PREVIEW_WEB_DISTRIBUTION_URL }}
   PR_STRING: pr-preview-${{ github.event.number }}
 
 jobs:
@@ -58,6 +60,9 @@ jobs:
           if grep -q 'nist-interface/' changed_files.txt; then
             CHANGED_WEBSITES+=('nist-interface')
           fi
+          if grep -q 'goes-plume-viewer/' changed_files.txt; then
+            CHANGED_WEBSITES+=('goes-plume-viewer')
+          fi
           # Convert array to comma-separated string and set it as an environment variable
           CHANGED_WEBSITES_STRING=$(IFS=, ; echo "${CHANGED_WEBSITES[*]}")
           echo "CHANGED_WEBSITES=$CHANGED_WEBSITES_STRING" >> $GITHUB_ENV
@@ -69,11 +74,69 @@ jobs:
           role-session-name: ${{ github.repository_owner}}
           aws-region: us-west-2
 
+      - name: Validate required variables and secrets
+        run: |
+          IFS=',' read -r -a WEBSITES <<< "${{ env.CHANGED_WEBSITES }}"
+          for WEBSITE in "${WEBSITES[@]}"; do
+            if [ "$WEBSITE" == "emit-ch4plume-v1" ]; then
+              missing_vars=()
+              # Check for required variables
+              [ -z "${{ vars.MAP_STYLE }}" ] && missing_vars+=("vars.MAP_STYLE")
+              [ -z "${{ secrets.MAP_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.MAP_ACCESS_TOKEN")
+              [ -z "${{ vars.PUBLIC_URL_EMIT }}" ] && missing_vars+=("vars.PUBLIC_URL_EMIT")
+              [ -z "${{ secrets.GEOAPIFY_APIKEY }}" ] && missing_vars+=("secrets.GEOAPIFY_APIKEY")
+              # If any variables are missing, print them and exit with an error
+              if [ ${#missing_vars[@]} -ne 0 ]; then
+                echo "Error: The following required variables are missing:"
+                printf '%s\n' "${missing_vars[@]}"
+                exit 1
+              fi
+            elif [ "$WEBSITE" == "noaa-cpfp-point" ]; then
+              missing_vars=()
+              # Check for required variables
+              [ -z "${{ vars.PUBLIC_URL_NOAA }}" ] && missing_vars+=("vars.PUBLIC_URL_NOAA")
+              [ -z "${{ secrets.MAP_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.MAP_ACCESS_TOKEN")
+              # If any variables are missing, print them and exit with an error
+              if [ ${#missing_vars[@]} -ne 0 ]; then
+                echo "Error: The following required variables are missing:"
+                printf '%s\n' "${missing_vars[@]}"
+                exit 1
+              fi
+            elif [ "$WEBSITE" == "nist-interface" ]; then
+              missing_vars=()
+              # Check for required variables
+              [ -z "${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_ACCESS_TOKEN")
+              [ -z "${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_STYLE_URL")
+              [ -z "${{ vars.FEATURES_API_URL }}" ] && missing_vars+=("vars.FEATURES_API_URL")
+              # If any variables are missing, print them and exit with an error
+              if [ ${#missing_vars[@]} -ne 0 ]; then
+                echo "Error: The following required variables are missing:"
+                printf '%s\n' "${missing_vars[@]}"
+                exit 1
+              fi
+            elif [ "$WEBSITE" == "goes-plume-viewer" ]; then
+              missing_vars=()
+              # Check for required variables
+              [ -z "${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_TOKEN")
+              [ -z "${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_STYLE_URL")
+              [ -z "${{ vars.REACT_APP_BASE_PATH_GOES }}" ] && missing_vars+=("vars.REACT_APP_BASE_PATH_GOES")
+              # If any variables are missing, print them and exit with an error
+              if [ ${#missing_vars[@]} -ne 0 ]; then
+                echo "Error: The following required variables are missing:"
+                printf '%s\n' "${missing_vars[@]}"
+                exit 1
+              fi
+            fi
+          done
+        shell: bash
+
       - name: Build and deploy
         run: |
           IFS=',' read -r -a WEBSITES <<< "${{ env.CHANGED_WEBSITES }}"
           COMMENT="### ✅ Deploy Preview for *custom-interfaces* is ready! \n \n"
           for WEBSITE in "${WEBSITES[@]}"; do
+
+            # EMIT
             if [ "$WEBSITE" == "emit-ch4plume-v1" ]; then
               echo MAP_STYLE="${{ vars.MAP_STYLE }}" >> ./emit-ch4plume-v1/.env
               echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./emit-ch4plume-v1/.env
@@ -85,7 +148,9 @@ jobs:
               npm run deploy
               cd ..
               aws s3 sync emit-ch4plume-v1/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/
-              COMMENT+="- 🛰️ emit-ch4plume-v1: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/index.html \n \n"
+              aws s3 sync emit-ch4plume-v1/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/data/
+              COMMENT+="- 🛰️ emit-ch4plume-v1: ${{ env.WEB_DISTRIBUTION_URL}}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ \n \n"
+            
             elif [ "$WEBSITE" == "noaa-cpfp-point" ]; then
               echo PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}" >> ./noaa-cpfp-point/.env
               echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./noaa-cpfp-point/.env
@@ -96,26 +161,39 @@ jobs:
               aws s3 sync noaa-cpfp-point/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/
               aws s3 sync noaa-cpfp-point/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/data/
 
-              COMMENT+="- 🗼 noaa-cpfp-point: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/index.html"
+              COMMENT+="- 🗼 noaa-cpfp-point: ${{ env.WEB_DISTRIBUTION_URL}}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/"
+            
             elif [ "$WEBSITE" == "nist-interface" ]; then
-
-              NIST_PATH=$(echo "${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" | sed -E 's|^https?://[^/]+||; s|/*$|/|')
-
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./nist-interface/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
-              echo REACT_APP_PUBLIC_URL="${NIST_PATH}" >> ./nist-interface/.env
-
-              URL_VALUE=$(grep "REACT_APP_PUBLIC_URL" ./nist-interface/.env)
-              echo "The value of REACT_APP_PUBLIC_URL is: ${URL_VALUE}"
+              echo PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" >> ./nist-interface/.env
 
               cd ./nist-interface
+              set -a; source .env; set +a
               yarn
               yarn build
               cd ..
-              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${NIST_PATH}
+              aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
+              COMMENT+="- 🗼 nist-interface: ${{ env.WEB_DISTRIBUTION_URL}}${PUBLIC_URL}/ \n \n"
+            elif [ "$WEBSITE" == "goes-plume-viewer" ]; then
 
-              COMMENT+="- 🗼 nist-interface: https://${{ env.S3_BUCKET }}.s3.us-west-2.amazonaws.com${NIST_PATH}index.html"
+              echo >> ./goes-plume-viewer/.env # add a new line to append the below variables
+              echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_BASE_PATH="${{ vars.REACT_APP_BASE_PATH_GOES }}/${{ env.PR_STRING }}" >> ./goes-plume-viewer/.env
+              echo PUBLIC_URL="${{ vars.REACT_APP_BASE_PATH_GOES }}/${{ env.PR_STRING }}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_STAC_API_URL="${{ vars.REACT_APP_STAC_API_URL }}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_RASTER_API_URL="${{ vars.REACT_APP_RASTER_API_URL }}" >> ./goes-plume-viewer/.env
+              echo REACT_APP_CLOUD_BROWSE_URL="${{ vars.REACT_APP_CLOUD_BROWSE_URL }}" >> ./goes-plume-viewer/.env
+              cd ./goes-plume-viewer
+              set -a; source .env; set +a
+              yarn
+              CI=false yarn build
+              cd ..
+              aws s3 sync goes-plume-viewer/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
+
+              COMMENT+="- 🛰️ goes-plume-viewer: ${{ env.WEB_DISTRIBUTION_URL}}${PUBLIC_URL}/ \n \n"
             fi
             echo "COMMENT=${COMMENT}" >> $GITHUB_ENV
           done
@@ -133,6 +211,13 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Request Invalidation to AWS Cloudfront
+        uses: oneyedev/aws-cloudfront-invalidation@v1
+        with:
+          distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
+          paths: |
+            /ghgcenter/custom-interfaces/*
 
   clean_up:
     if: ${{ github.event.action == 'closed' }}
@@ -157,6 +242,7 @@ jobs:
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ --recursive
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/ --recursive
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/ --recursive
+          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_GOES }}/${{ env.PR_STRING }}/ --recursive
 
       - name: Remove PR comment
         run: |

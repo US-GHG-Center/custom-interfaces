@@ -3,38 +3,101 @@
   <head>
     <meta charset='utf-8' />
     <title>Interactive Emission Plumes</title>
+    <link rel="icon" href="icon.svg" />
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <link
-  href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css"
-  rel="stylesheet"
-/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
-<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
-<script src="https://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-  </head>
+
+    href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css"
+    rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+    </head>
   <body>
-    <div id='map'></div>
+    <div>
+      <div id='map'></div>
+      <div id="loading-spinner" class="loading-spinner">
+        <div class="spinner">
+      </div>
+    </div>
+
+    <div class="toolbar", id="toolbar">
+      <h1 class="toolbar-heading"> EMIT Methane Plume Viewer </h1>
+      <div>
+        <span class="toolbar-summary">
+          Using a special technique, the EMIT hyperspectral data is used to visualize large methane plumes whenever the instrument observes the surface. Due variations of the International Space Station orbit, EMIT does not have a regular observation repeat cycle.
+        </span>
+      </div>
+      <hr class="toolbar-line">
+
       <div id="plume-id-search-box" class="autocomplete-search-box">
-        <input id="plume-id-search-input" type="text" class="search-box" placeholder="Search by Plume ID and/or Location" />
+        <input id="plume-id-search-input" class="search-box" placeholder="Search by Plume ID or Location">
+        <svg class="search-icon" viewBox="0 0 24 24" width="20px" height="20px">
+          <path fill="gray" d="M23.707 22.293l-5.387-5.387A9.928 9.928 0 0 0 20 11c0-5.513-4.487-10-10-10S0 5.487 0 11s4.487 10 10 10c2.471 0 4.73-.901 6.463-2.386l5.387 5.387a1 1 0 0 0 1.414-1.414zM2 11c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8-8-3.582-8-8z"/>
+        </svg>
         <ul id="plume-id-search-list" class="search-result"></ul>
       </div>
 
 
-    <div class="marker"></div>
-    <div id="lds-roller-id" class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+      <div class="date-range">
+        <input id="amount" class="amount" type="text" disabled>
+        <div id="slider-range"></div>
+        <div class="label-container">
+          <span class="custom-label"> Start Date</span>
+          <span class="custom-label"> End Date</span>
+        </div>
+    
+      <!-- Skip Animation
+      <div class="dates">
+        <div class="label-container">
+          <span class="custom-label"> Start Date</span>
+          <span class="custom-label"> End Date</span>
+        </div>
+        <div class="label-container">
+          <input type="datetime-local" value="2022-06-06T00:00:00"
+               id="start_date">
+          <input type="datetime-local" value="2024-12-31T00:00:00"
+               id="end_date">
+        </div>
+      </div>
+      -->
+      
+        <div class="toggle-container">
+          <span class="custom-label-cov"> Show EMIT Coverage</span>
+          <label class="toggle-switch">
+            <input type="checkbox" class="toggle-input" id="showCoverage">
+            <span class="slider"></span>
+          </label>
+        </div>
 
+        <!--
+        <div class="toggle-container">
+          <span class="custom-label"> Animate</span>
+          <label class="toggle-switch">
+            <input type="checkbox" class="toggle-input" id="doAnimation">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      -->
 
-    <!-- <script src="./index.js">
-
-
-    // Code from the next step will go here.
-
-    </script> -->
-
-
-
+    <div class="plegend-container", id="plegend-container" >
+      <div class="header-container" id="header-container">
+        <span class="custom-label" id="toolbar-heading"><strong>Plume Complexes </strong></span>
+        <span class="num-plumes" id="num-plumes">0 Plumes</span>
+      </div>
+      <div><hr class="toolbar-line"> </div>
+      <div class="plumes-legend" id="plegend" >
+      </div>
+  </div>
     <script src="<%= htmlWebpackPlugin.options.publicUrl %>/bundle.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
   </body>
 </html>

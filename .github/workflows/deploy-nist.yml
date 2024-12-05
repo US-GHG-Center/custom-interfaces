@@ -48,13 +48,33 @@ jobs:
       - name: Install Yarn
         run: npm install -g yarn
 
+      - name: Validate required variables and secrets
+        run: |
+          missing_vars=()
+
+          # Check for required variables
+          [ -z "${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_ACCESS_TOKEN")
+          [ -z "${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_STYLE_URL")
+          [ -z "${{ vars.REACT_APP_BASE_PATH_NIST }}" ] && missing_vars+=("vars.REACT_APP_BASE_PATH_NIST")
+          [ -z "${{ secrets.DEPLOYMENT_ROLE_ARN }}" ] && missing_vars+=("secrets.DEPLOYMENT_ROLE_ARN")
+          [ -z "${{ secrets.CF_DISTRIBUTION_ID }}" ] && missing_vars+=("secrets.CF_DISTRIBUTION_ID")
+
+          # If any variables are missing, print them and exit with an error
+          if [ ${#missing_vars[@]} -ne 0 ]; then
+            echo "Error: The following required variables are missing:"
+            printf '%s\n' "${missing_vars[@]}"
+            exit 1
+          fi
+        shell: bash
+
       - name: Building 🔧
         working-directory: ./nist-interface
+        env:
+          PUBLIC_URL: ${{ vars.REACT_APP_BASE_PATH_NIST }}
+          REACT_APP_MAPBOX_TOKEN: ${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}
+          REACT_APP_MAPBOX_STYLE_URL: ${{  secrets.REACT_APP_MAPBOX_STYLE_URL }}
+          REACT_APP_FEATURES_API_URL: ${{ vars.FEATURES_API_URL }}
         run: |
-          echo >> .env # add a new line to append the below variables
-          echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> .env
-          echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> .env
-          echo REACT_APP_BASE_PATH="${{ vars.REACT_APP_BASE_PATH_NIST }}" >> .env
           yarn
           yarn build
 
@@ -64,56 +84,12 @@ jobs:
           name: build_folder
           path: ./nist-interface/build
 
-  deploy-staging:
+
+  deploy:
+    name: Deploy NIST to ${{ needs.define-environment.outputs.env_name }} 🚀 
     needs:
       - build
       - define-environment
-    if: github.ref == 'refs/heads/main'
-    environment: ${{ needs.define-environment.outputs.env_name }}
-    
-    permissions:
-      id-token: write
-      contents: read
-
-    runs-on: ubuntu-latest
-    steps:
-      
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
-
-      - name: Download build folder
-        uses: actions/download-artifact@v4
-        with:
-          name: build_folder
-          path: ./nist-interface/build
-
-      - name: ConfigureAWS Credentials 
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
-          role-session-name: ${{ github.repository_owner}}
-          aws-region: us-west-2
-      
-      - name: Upload to S3
-        run: |
-          export BASE_PATH=${{ vars.REACT_APP_BASE_PATH_NIST }}
-          echo "BASE_PATH=${BASE_PATH}" >> $GITHUB_ENV
-          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-staging${BASE_PATH}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
-        env:
-          BASE_PATH: ${{ vars.REACT_APP_BASE_PATH_NIST }}
-
-      - name: Request Invalidation to AWS Cloudfront
-        uses: oneyedev/aws-cloudfront-invalidation@v1
-        with:
-          distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
-          paths: |
-            ${{ env.BASE_PATH }}*
-
-  deploy-production:
-    needs:
-      - build
-      - define-environment
-    if: github.ref == 'refs/heads/production'
     environment: ${{ needs.define-environment.outputs.env_name }}
 
     permissions:
@@ -141,9 +117,7 @@ jobs:
       
       - name: Upload to S3
         run: |
-          export BASE_PATH=${{ vars.REACT_APP_BASE_PATH_NIST }}
-          echo "BASE_PATH=${BASE_PATH}" >> $GITHUB_ENV
-          aws s3 sync "./nist-interface/build" s3://ghgc-custom-interfaces-production${BASE_PATH}/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+          aws s3 sync "./nist-interface/build" s3://${{ vars.DEPLOYMENT_BUCKET }}/${{ vars.REACT_APP_BASE_PATH_NIST }} --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
         env:
           BASE_PATH: ${{ vars.REACT_APP_BASE_PATH_NIST }}
 
@@ -152,4 +126,4 @@ jobs:
         with:
           distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
           paths: |
-            ${{ env.BASE_PATH }}*
+            /ghgcenter/custom-interfaces/*

@@ -5,13 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": ". ./.env; webpack --mode=${STAGE:-development} --env PUBLIC_URL=${PUBLIC_URL}"
+    "deploy": ". ./.env; webpack --mode=${STAGE:-development} --env PUBLIC_URL=${PUBLIC_URL}; cp -r data dist",
+    "serve": "webpack serve --mode=development --port 3000"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "d3": "^7.8.5",
     "mapbox-gl": "^2.15.0",
+    "mapboxgl-timeline": "^1.0.2",
+    "materialize-css": "^1.0.0-rc.2",
     "node-geocoder": "^4.3.0",
     "path-browserify": "^1.0.1"
   },
@@ -23,6 +26,7 @@
     "html-webpack-plugin": "^5.6.0",
     "style-loader": "^3.3.3",
     "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
   }
 }
