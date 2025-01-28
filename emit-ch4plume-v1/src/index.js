@@ -379,15 +379,7 @@ function addPointsOnMap() {
 
 }
 
-function initializeDateSlider() {
-    const firstPoint = "2022-08-09T00:00:00";
-    const today = new Date() ;
-    const lastPoint = today.toISOString().split('T')[0] + "T00:00:00";
-    var minStartDate = new Date(firstPoint);
-    minStartDate.setUTCHours(0, 0, 0, 0);
-    var maxStopDate = new Date(lastPoint);
-    maxStopDate.setUTCHours(23, 59, 59, 0);
-
+function initializeDateSlider(minStartDate, maxStopDate) {
     $("#amount").val(
         minStartDate.toUTCString().slice(0, -13) + " - " + maxStopDate.toUTCString().slice(0, -13)
       );
@@ -425,7 +417,6 @@ function main() {
         addMeasurementSource(map);
         document.querySelector(".toolbar").style.display = "block";
         createColorbar(VMIN, VMAX);
-        initializeDateSlider();
         addMeasurementLayer(map);
         methanMetadata = await (
             await fetch(`${PUBLIC_URL}/data/combined_plume_metadata.json`)
@@ -434,12 +425,18 @@ function main() {
             await fetch(`${PUBLIC_URL}/data/methane_stac.geojson`)
         ).json();
 
+        // Find min and max using Math.min and Math.max
+        const utcTimes = methanMetadata.features.map(
+            (feature) => new Date(feature.properties["UTC Time Observed"])
+          );
+        const minTime = new Date(Math.min(...utcTimes))
+        const maxTime = new Date(Math.max(...utcTimes))
+        initializeDateSlider(minTime, maxTime);
 
         coverageData = await (
             await fetch(`${PUBLIC_URL}/data/coverage_data.json`)
         ).json();
 
-        initializeDateSlider();
         // coverageData =  await getCoverageData();
         addCoverageToggleListener(map, coverageData)
         document.getElementById("loading-spinner").style.display = "none";
