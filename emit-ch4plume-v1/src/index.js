@@ -380,8 +380,16 @@ function addPointsOnMap() {
 }
 
 function initializeDateSlider(minStartDate, maxStopDate) {
+    const dateFormatter = new Intl.DateTimeFormat("en-US", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        timeZone: "UTC",
+      });
+
     $("#amount").val(
-        minStartDate.toUTCString().slice(0, -13) + " - " + maxStopDate.toUTCString().slice(0, -13)
+        dateFormatter.format(minStartDate) + " - " + dateFormatter.format(maxStopDate)
       );
     const dateSlider = $("#slider-range").slider({
       range: true,
