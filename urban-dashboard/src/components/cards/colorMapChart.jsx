@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import { Chart, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import * as d3 from 'd3';
 import { Typography } from '@mui/material';
+import { DATASETS } from '../../constants';
 
 import "./index.css";
 
@@ -11,26 +12,23 @@ Chart.register(CategoryScale, LinearScale, BarElement, Title);
 export function ColorMapChart({ dataset }) {
     const title = (
         <>
-            {dataset === "vulcan" && "2021 Total CO₂ Emissions"}
-            {dataset === "gra2pes" && "July 2021 Total CO₂ Emissions"}
+            {dataset === DATASETS.VULCAN && "2021 Total CO₂ Emissions"}
+            {dataset === DATASETS.GRA2PES && "July 2021 Total CO₂ Emissions"}
         </>
     )
     const unit = (
         <>
-            {dataset === "vulcan" &&
+            {dataset === DATASETS.VULCAN &&
                 "tonne CO₂ / km² / year"
             }
             {
-                dataset === "gra2pes" && "tonne CO₂ / km² / month"
+                dataset === DATASETS.GRA2PES && "tonne CO₂ / km² / month"
             }
         </>
     )
 
     return (
         <div className="colormap-chart">
-            {/* <Typography style={{ fontSize: "14px", fontWeight: "400", lineHeight: "16.94px" }}>
-                Map Legend
-            </Typography> */}
             <Typography style={{ fontSize: '12px', color: '#082A64', textAlign: "center", fontWeight: "bold" }}>
                 {title}
             </Typography>
@@ -66,7 +64,7 @@ const GradientChart = ({ dataset }) => {
 
     useEffect(() => {
         const svg = d3.select(svgRef.current);
-        const labels = (dataset === "vulcan" ? labels_vulcan : labels_gra2pes);
+        const labels = (dataset === DATASETS.VULCAN ? labels_vulcan : labels_gra2pes);
 
         // Define the gradient
         const gradient = svg.append('defs')

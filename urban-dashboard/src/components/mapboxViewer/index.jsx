@@ -10,7 +10,6 @@ import { VULCAN_RASTER_URL, GRA2PES_RASTER_URL } from './helper';
 import './index.css';
 
 const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
-// const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
 const mapCenter = [-99.676392, 39.106667];
 
 export class MapBoxViewer extends Component {
@@ -40,7 +39,6 @@ export class MapBoxViewer extends Component {
 
         this.setState({ currentViewer: map });
 
-        // map.addControl(HomeButtonControl);
         map.addControl(new mapboxgl.NavigationControl());
 
         // add the tile sources 
@@ -102,18 +100,10 @@ export class MapBoxViewer extends Component {
         }
 
         if (prevProps.urbanRegion !== this.props.urbanRegion) {
-            console.log("urban region changed to ", this.props.urbanRegion);
-
             const urbanRegion = this.props.urbanRegions.filter(item => item.name === this.props.urbanRegion)[0];
             if (urbanRegion) {
-                console.log("selected region is: ", urbanRegion);
-                // const name = urbanRegion.center;
                 const center = urbanRegion.center;
                 const geojson = urbanRegion.geojson;
-
-                // update selected region 
-                // this.setState({ selectedUrbanRegion: name });
-                // this.props.setSelection(name);
 
                 //focus on selected region 
                 this.focusSelectedUrbanRegion(
@@ -153,7 +143,6 @@ export class MapBoxViewer extends Component {
     }
 
     plotUrbanRegions = (map, urbanRegions) => {
-        console.log("urban regions: : plot::", urbanRegions)
         urbanRegions.forEach(urbanRegion => {
             const { name, center, geojson } = urbanRegion;
             const [lon, lat] = center;
@@ -174,8 +163,6 @@ export class MapBoxViewer extends Component {
     addMarker = (map, element, name, lon, lat) => {
         let marker = new mapboxgl.Marker(element)
             .setLngLat([lon, lat])
-            // .setPopup(new mapboxgl.Popup({ offset: 25 })
-            // .setText(name)
             .addTo(map);
 
         const tooltipContent = `<strong>${name}<strong>`;
@@ -195,6 +182,8 @@ export class MapBoxViewer extends Component {
         return marker;
     }
 
+
+    //flies the map to the selected urban region
     focusSelectedUrbanRegion = (map, center, GeoJSON) => {
         const panMapToTheLeft = 0.3;
 
