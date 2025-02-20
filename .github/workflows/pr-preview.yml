@@ -8,6 +8,7 @@ on:
       - 'noaa-cpfp-point/**'
       - 'nist-interface/**'
       - 'goes-plume-viewer/**'
+      - 'urban-dashboard/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -62,6 +63,9 @@ jobs:
           fi
           if grep -q 'goes-plume-viewer/' changed_files.txt; then
             CHANGED_WEBSITES+=('goes-plume-viewer')
+          fi
+          if grep -q 'urban-dashboard/' changed_files.txt; then
+            CHANGED_WEBSITES+=('urban-dashboard')
           fi
           # Convert array to comma-separated string and set it as an environment variable
           CHANGED_WEBSITES_STRING=$(IFS=, ; echo "${CHANGED_WEBSITES[*]}")
@@ -126,6 +130,18 @@ jobs:
                 printf '%s\n' "${missing_vars[@]}"
                 exit 1
               fi
+            elif [ "$WEBSITE" == "urban-dashboard" ]; then
+              missing_vars=()
+              # Check for required variables
+              [ -z "${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_TOKEN")
+              [ -z "${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_STYLE_URL")
+              [ -z "${{ vars.REACT_APP_BASE_PATH_URBAN }}" ] && missing_vars+=("vars.REACT_APP_BASE_PATH_URBAN")
+              # If any variables are missing, print them and exit with an error
+              if [ ${#missing_vars[@]} -ne 0 ]; then
+                echo "Error: The following required variables are missing:"
+                printf '%s\n' "${missing_vars[@]}"
+                exit 1
+              fi
             fi
           done
         shell: bash
@@ -150,7 +166,6 @@ jobs:
               aws s3 sync emit-ch4plume-v1/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/
               aws s3 sync emit-ch4plume-v1/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/data/
               COMMENT+="- 🛰️ emit-ch4plume-v1: ${{ env.WEB_DISTRIBUTION_URL}}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ \n \n"
-            
             elif [ "$WEBSITE" == "noaa-cpfp-point" ]; then
               echo PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}" >> ./noaa-cpfp-point/.env
               echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./noaa-cpfp-point/.env
@@ -162,7 +177,6 @@ jobs:
               aws s3 sync noaa-cpfp-point/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/data/
 
               COMMENT+="- 🗼 noaa-cpfp-point: ${{ env.WEB_DISTRIBUTION_URL}}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/"
-            
             elif [ "$WEBSITE" == "nist-interface" ]; then
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./nist-interface/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
@@ -177,7 +191,6 @@ jobs:
               aws s3 sync nist-interface/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
               COMMENT+="- 🗼 nist-interface: ${{ env.WEB_DISTRIBUTION_URL}}${PUBLIC_URL}/ \n \n"
             elif [ "$WEBSITE" == "goes-plume-viewer" ]; then
-
               echo >> ./goes-plume-viewer/.env # add a new line to append the below variables
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./goes-plume-viewer/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./goes-plume-viewer/.env
@@ -192,8 +205,21 @@ jobs:
               CI=false yarn build
               cd ..
               aws s3 sync goes-plume-viewer/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
-
               COMMENT+="- 🛰️ goes-plume-viewer: ${{ env.WEB_DISTRIBUTION_URL}}${PUBLIC_URL}/ \n \n"
+            elif [ "$WEBSITE" == "urban-dashboard" ]; then
+              echo >> ./urban-dashboard/.env # add a new line to append the below variables
+              echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./urban-dashboard/.env
+              echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./urban-dashboard/.env
+              echo REACT_APP_BASE_PATH="${{ vars.REACT_APP_BASE_PATH_URBAN }}/${{ env.PR_STRING }}" >> ./urban-dashboard/.env
+              echo PUBLIC_URL="${{ vars.REACT_APP_BASE_PATH_URBAN }}/${{ env.PR_STRING }}" >> ./urban-dashboard/.env
+              cd ./urban-dashboard
+              set -a; source .env; set +a
+              yarn
+              CI=false yarn build
+              cd ..
+              aws s3 sync urban-dashboard/build s3://${{ env.S3_BUCKET }}${PUBLIC_URL}
+              COMMENT+="- 🛰️ urban-dashboard: ${{ env.WEB_DISTRIBUTION_URL}}${PUBLIC_URL}/ \n \n"
+
             fi
             echo "COMMENT=${COMMENT}" >> $GITHUB_ENV
           done

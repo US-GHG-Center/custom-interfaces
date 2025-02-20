@@ -19,8 +19,7 @@ export const nrtStations = [
         ghg: "co2",
         frequency: "customNRTMLO",
         chartColor: "blue",
-        useAsDataAccess: true,
-        useProxy: true,
+        useAsDataAccess: true
     },
     // {
     //     stationName: "Mauna Loa, Hawaii",
