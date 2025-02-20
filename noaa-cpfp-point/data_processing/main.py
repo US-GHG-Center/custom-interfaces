@@ -51,58 +51,37 @@ def main():
         files = get_file_names(src_dir)
         for filename in files:
             src_filepath = src_dir + filename
-            dest_filepath = json_dest_dirs[idx] + json_filename(filename)
-            csv_to_json(src_filepath, dest_filepath)
+            dest_filepath = json_dest_dirs[idx]
+            extact_viz_json(src_filepath, dest_filepath)
 
-    print("Converted the .txt data to visualization ready JSON.")
+    print("Converted the .txt data to visualization ready csv.")
 
     # Fill-up missing datasets #
-    # From the src_dir, get the list of files with missing frequency data. Convert them and store them in the dest dir  
-    for idx, src_dir in enumerate(insitu_src_dirs):
-        insitu_files_wo_daily_data = get_insitu_filename_wo_daily_data(src_dir)
-        insitu_files_wo_monthly_data = get_insitu_filename_wo_monthly_data(src_dir)
+    # From the src_dir, get the list of files with missing frequency data. Convert them and store them in the dest dir 
+
+    for idx, dest_dir in enumerate(insitu_dest_dirs):
+        insitu_files_wo_daily_data = get_insitu_filename_wo_daily_data(dest_dir)
+        insitu_files_wo_monthly_data = get_insitu_filename_wo_monthly_data(dest_dir)
+        print("insitu files wo daily data",len(insitu_files_wo_daily_data))
+        print("insitu files wo monthly data",len(insitu_files_wo_daily_data))
 
         # generate for missing daily data
         # For each filenames, use their hourly counterpart and then convert it to daily
         for missed_file in insitu_files_wo_daily_data:
-            src_filepath = src_dir + missed_file
-            dest_filepath = insitu_dest_dirs[idx] + insitu_daily_filename(missed_file) 
-            hourly_to_daily_converter(src_filepath, dest_filepath)
+            #convert missed_file to the format of 
+            src_filepath = dest_dir + missed_file
+            daily_aggregate(src_filepath)
 
         # generate for missing monthly data
         # For each filenames, use their hourly counterpart and then convert it to monthly
         for missed_file in insitu_files_wo_monthly_data:
             src_filepath = src_dir + missed_file
-            dest_filepath = insitu_dest_dirs[idx] + insitu_monthly_filename(missed_file) 
-            hourly_to_monthly_converter(src_filepath, dest_filepath)
+            monthly_aggregate(src_filepath)
 
     print("Missing values filled using aggregation of granular data. Converted to visualization ready JSON.")
 
 # helper
     
-def csv_to_json(src_filepath, dest_filepath):
-    """
-    Converts data from a .txt file to visualization ready JSON format.
-
-    Args:
-        src_filepath (str): The file path to the source CSV styled .txt file.
-        dest_filepath (str): The file path to save the resulting JSON file.
-
-    Returns:
-        None
-
-    Raises:
-        Any errors encountered during the conversion process.
-
-    Example:
-        csv_to_json("input.txt", "output.json")
-    """
-    print(f"Processing... {src_filepath}")
-    json_list = extact_viz_json(src_filepath)
-    with open(dest_filepath, "w", encoding="utf-8") as file:
-        json.dump(json_list, file)
-        print(f"Completed writing {dest_filepath}")
-
 def hourly_to_daily_converter(src_filepath, dest_filepath):
     """
     Converts data from hourly granularity to daily granularity and saves it as a visualization ready JSON file.

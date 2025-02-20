@@ -4,7 +4,16 @@ import sys
 import json
 import pandas as pd
 
-def extact_viz_json(filepath):
+time_mapping = {
+    "hour": "hourly",
+    "day": "daily",
+    "daily": "daily",
+    "month": "monthly",
+    "year": "yearly",
+    "event": "event",
+}
+
+def extact_viz_json(filepath, dest_filepath):
     """
     Reads data from a .txt file, extracts necessary data for visualization, and returns a list of JSON objects that can be readily visualized in chart.
 
@@ -48,18 +57,44 @@ def extact_viz_json(filepath):
             # seperate table body and head to form dataframe
             table_head = data[0]
             table_body = data[1:]
+            if len(table_head) < 10:
+                print("skipped : ",filepath)
+                return 
             dataframe = pd.DataFrame(table_body, columns=table_head)
             dataframe['value'] = dataframe['value'].astype(float)
             # Filter data
             mask = (dataframe["qcflag"] == "...") & (dataframe["value"] != 0) & (dataframe["value"] != -999)
             filtered_df = dataframe[mask].reset_index(drop=True)
-            processed_df = filtered_df[['datetime', 'value']]
-            # dict formation, needed for frontend [{date: , value: }]
-            json_list = []
-            for _, row in processed_df.iterrows():
-                json_obj = {'date': row['datetime'], 'value': row['value']}
-                json_list.append(json_obj)
-            return json_list
+            country = [line for line in file_content_list[:header_lines] if " site_country " in line][0].split(':')[-1].replace(' ','')
+
+            measuring_instr = filepath.split('/')[-3]
+            methodology = filepath.split('/')[-2]
+            gas = filepath.split('/')[-4]
+            station = filtered_df.site_code.values[0]
+            time = filepath.split('/')[-1].split('.')[0].split('_')[-1].lower()
+            time = next((value for key, value in time_mapping.items() if key in time), time)
+
+            filename = f"noaa_glm_{measuring_instr}_{methodology}_{station}_{country}_{gas}_{time}.csv"
+
+            # filtered_df['country'] = country
+            # filtered_df['measuring_instr'] = measuring_instr
+            # filtered_df['methodology'] = methodology
+            # filtered_df['gas'] = gas
+            # filtered_df['station'] = station
+
+            filtered_df[['datetime', 'value','latitude','longitude', 'country']].to_csv(dest_filepath+filename, index=False)
+            # return {"filename" : filename,
+            #         "data" : filtered_df[['datetime', 'value','latitude','longitude']] }
+            # # dict formation, needed for frontend [{date: , value: }]
+            # json_list = []
+            # for _, row in processed_df.iterrows():
+            #     json_obj = {'date': row['datetime'], 'value': row['value'],
+            #                 'latitude': row['latitude'],'longitude': row['longitude'],
+            #                 'country': row['country'],'measuring_instr': row['measuring_instr'],
+            #                 'methodology': row['methodology'],'gas': row['gas'],
+            #                 'station': row['station']}
+            #     json_list.append(json_obj)
+            # return json_list
     except FileNotFoundError:
         return "File not found"
     except Exception as e:

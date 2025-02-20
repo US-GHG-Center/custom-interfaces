@@ -37,38 +37,48 @@ def daily_aggregate(filepath):
         aggregated_data = daily_aggregate("/path/to/data_file.txt")
     """
     try:
-        with open(filepath, "r", encoding="utf-8") as file:
-            file_content_str = file.read()
-            # split the string text based on new line
-            file_content_list = file_content_str.split("\n")
-            # get the header lines. its mentioned in the file's first line.
-            header_lines = file_content_list[0].split(":")[-1]
-            header_lines = int(header_lines)
-            # Slice the non header part of the data. and the last empty element
-            str_datas = file_content_list[header_lines - 1: -1]
-            data = [data.replace("\n", "").split(" ") for data in str_datas]
-            # seperate table body and head to form dataframe
-            table_head = data[0]
-            table_body = data[1:]
-            dataframe = pd.DataFrame(table_body, columns=table_head)
-            dataframe['value'] = dataframe['value'].astype(float)
-            # Filter data
-            mask = (dataframe["qcflag"] == "...") & (dataframe["value"] != 0) & (dataframe["value"] != -999)
-            filtered_df = dataframe[mask].reset_index(drop=True)
-            # Aggregate data (hourly into daily)
-            aggregated_df = filtered_df.groupby(['year', 'month', 'day'])['value'].mean().reset_index()
-            aggregated_df['value'] = aggregated_df['value'].round(2)
-            # necessary columns, processed df
-            aggregated_df['datetime'] = pd.to_datetime(aggregated_df[['year', 'month', 'day']])
-            aggregated_df['datetime'] = aggregated_df['datetime'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
-            processed_df = aggregated_df[['datetime', 'value']]
-            processed_df = processed_df.sort_values(by='datetime')
-            # dict formation, needed for frontend [{date: , value: }]
-            json_list = []
-            for _, row in processed_df.iterrows():
-                json_obj = {'date': row['datetime'], 'value': row['value']}
-                json_list.append(json_obj)
-            return json_list
+        dataframe = pd.DataFrame(filepath)
+        aggregated_df = dataframe.groupby(['datetime'])['value'].agg(value = ("value", "mean"),
+                                                                latitude=("latitude", "first"),
+                                                                longitude=("longitude", "first")).reset_index()
+        aggregated_df = aggregated_df.sort_values(by='datetime')
+
+        filename = filepath.replace("hourly", "daily")
+        # print(f"Aggregating and writing daily file : {filename} ")
+        aggregated_df.to_csv(filename, index=False)
+
+        # with open(filepath, "r", encoding="utf-8") as file:
+        #     file_content_str = file.read()
+        #     # split the string text based on new line
+        #     file_content_list = file_content_str.split("\n")
+        #     # get the header lines. its mentioned in the file's first line.
+        #     header_lines = file_content_list[0].split(":")[-1]
+        #     header_lines = int(header_lines)
+        #     # Slice the non header part of the data. and the last empty element
+        #     str_datas = file_content_list[header_lines - 1: -1]
+        #     data = [data.replace("\n", "").split(" ") for data in str_datas]
+        #     # seperate table body and head to form dataframe
+        #     table_head = data[0]
+        #     table_body = data[1:]
+        #     dataframe = pd.DataFrame(table_body, columns=table_head)
+        #     dataframe['value'] = dataframe['value'].astype(float)
+        #     # Filter data
+        #     mask = (dataframe["qcflag"] == "...") & (dataframe["value"] != 0) & (dataframe["value"] != -999)
+        #     filtered_df = dataframe[mask].reset_index(drop=True)
+        #     # Aggregate data (hourly into daily)
+        #     aggregated_df = filtered_df.groupby(['year', 'month', 'day'])['value'].mean().reset_index()
+        #     aggregated_df['value'] = aggregated_df['value'].round(2)
+        #     # necessary columns, processed df
+        #     aggregated_df['datetime'] = pd.to_datetime(aggregated_df[['year', 'month', 'day']])
+        #     aggregated_df['datetime'] = aggregated_df['datetime'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+        #     processed_df = aggregated_df[['datetime', 'value']]
+        #     processed_df = processed_df.sort_values(by='datetime')
+        #     # dict formation, needed for frontend [{date: , value: }]
+        #     json_list = []
+        #     for _, row in processed_df.iterrows():
+        #         json_obj = {'date': row['datetime'], 'value': row['value']}
+        #         json_list.append(json_obj)
+        #     return json_list
     except FileNotFoundError:
         return "File not found"
     except Exception as e:
@@ -108,38 +118,52 @@ def monthly_aggregate(filepath):
         aggregated_data = monthly_aggregate("/path/to/data_file.txt")
     """
     try:
-        with open(filepath, "r", encoding="utf-8") as file:
-            file_content_str = file.read()
-            # split the string text based on new line
-            file_content_list = file_content_str.split("\n")
-            # get the header lines. its mentioned in the file's first line.
-            header_lines = file_content_list[0].split(":")[-1]
-            header_lines = int(header_lines)
-            # Slice the non header part of the data. and the last empty element
-            str_datas = file_content_list[header_lines - 1: -1]
-            data = [data.replace("\n", "").split(" ") for data in str_datas]
-            # seperate table body and head to form dataframe
-            table_head = data[0]
-            table_body = data[1:]
-            dataframe = pd.DataFrame(table_body, columns=table_head)
-            dataframe['value'] = dataframe['value'].astype(float)
-            # Filter data
-            mask = (dataframe["qcflag"] == "...") & (dataframe["value"] != 0) & (dataframe["value"] != -999)
-            filtered_df = dataframe[mask].reset_index(drop=True)
-            # Aggregate data (hourly into monthly)
-            aggregated_df = filtered_df.groupby(['year', 'month'])['value'].mean().reset_index()
-            aggregated_df['value'] = aggregated_df['value'].round(2)
-            # necessary columns, processed df
-            aggregated_df['datetime'] = pd.to_datetime(aggregated_df[['year', 'month']].assign(day=1))
-            aggregated_df['datetime'] = aggregated_df['datetime'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
-            processed_df = aggregated_df[['datetime', 'value']]
-            processed_df = processed_df.sort_values(by='datetime')
-            # dict formation, needed for frontend [{date: , value: }]
-            json_list = []
-            for _, row in processed_df.iterrows():
-                json_obj = {'date': row['datetime'], 'value': row['value']}
-                json_list.append(json_obj)
-            return json_list
+        dataframe = pd.DataFrame(filepath)
+        dataframe['year'] = dataframe['datetime'].dt.year
+        dataframe['month'] = dataframe['datetime'].dt.month
+        aggregated_df = dataframe.groupby([['year', 'month']]).agg(value = ("value", "mean"),
+                                                                latitude=("latitude", "first"),
+                                                                longitude=("longitude", "first")).reset_index()
+        aggregated_df = aggregated_df.sort_values(by='datetime')
+        processed_df = aggregated_df[['datetime', 'value']]
+        processed_df = processed_df.sort_values(by='datetime')
+
+        filename = filepath.replace("hourly", "monthly")
+        # print(f"Aggregating and writing monthly file : {filename} ")
+        processed_df.to_csv(filename, index=False)
+
+        # with open(filepath, "r", encoding="utf-8") as file:
+        #     file_content_str = file.read()
+        #     # split the string text based on new line
+        #     file_content_list = file_content_str.split("\n")
+        #     # get the header lines. its mentioned in the file's first line.
+        #     header_lines = file_content_list[0].split(":")[-1]
+        #     header_lines = int(header_lines)
+        #     # Slice the non header part of the data. and the last empty element
+        #     str_datas = file_content_list[header_lines - 1: -1]
+        #     data = [data.replace("\n", "").split(" ") for data in str_datas]
+        #     # seperate table body and head to form dataframe
+        #     table_head = data[0]
+        #     table_body = data[1:]
+        #     dataframe = pd.DataFrame(table_body, columns=table_head)
+        #     dataframe['value'] = dataframe['value'].astype(float)
+        #     # Filter data
+        #     mask = (dataframe["qcflag"] == "...") & (dataframe["value"] != 0) & (dataframe["value"] != -999)
+        #     filtered_df = dataframe[mask].reset_index(drop=True)
+        #     # Aggregate data (hourly into monthly)
+        #     aggregated_df = filtered_df.groupby(['year', 'month'])['value'].mean().reset_index()
+        #     aggregated_df['value'] = aggregated_df['value'].round(2)
+        #     # necessary columns, processed df
+        #     aggregated_df['datetime'] = pd.to_datetime(aggregated_df[['year', 'month']].assign(day=1))
+        #     aggregated_df['datetime'] = aggregated_df['datetime'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+        #     processed_df = aggregated_df[['datetime', 'value']]
+        #     processed_df = processed_df.sort_values(by='datetime')
+        #     # dict formation, needed for frontend [{date: , value: }]
+        #     json_list = []
+        #     for _, row in processed_df.iterrows():
+        #         json_obj = {'date': row['datetime'], 'value': row['value']}
+        #         json_list.append(json_obj)
+        #     return json_list
     except FileNotFoundError:
         return "File not found"
     except Exception as e:

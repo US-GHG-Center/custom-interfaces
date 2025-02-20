@@ -16,13 +16,12 @@ def get_insitu_filename_wo_daily_data(base_dir):
         filenames = get_insitu_filename_wo_daily_data("/path/to/base_directory")
     """
     files = os.listdir(base_dir)
-    splitted_filenames = [file_name.split("_") for file_name in files]
+    splitted_filenames = [file_name.split('.')[-2].split("_") for file_name in files]
     labelled_filename_hash = get_labelled_filename_hash(splitted_filenames)
 
     df_filename = pd.DataFrame(labelled_filename_hash)
-    grouped_df = df_filename.groupby(by="station")
-    filtered_grouped_df = grouped_df.filter(lambda x: "DailyData.txt" not in x["frequency"].values)
-    df_filename_wo_daily_data = filtered_grouped_df[['ghg', 'station', 'medium-type']].drop_duplicates() # ghg > station > medium > type, that doesnot have daily data.
+
+    df_filename_wo_daily_data = df_filename.groupby(["noaa","glm","station","country","gas", "methodology", "measuring_instr"]).agg(has_daily = ("time", lambda x: 1 if "daily" in x else 0)).query("has_daily==0").reset_index()
     # check if the df_name not having daily data, has hourly data. and then convert.
     df_filename_wo_daily_data['file_wo_daily_data'] = df_filename_wo_daily_data.apply(combine_to_name, axis=1)
     hourly_file_wo_daily_data = df_filename_wo_daily_data['file_wo_daily_data'].tolist()
@@ -42,16 +41,15 @@ def get_insitu_filename_wo_monthly_data(base_dir):
         filenames = get_insitu_filename_wo_monthly_data("/path/to/base_directory")
     """
     files = os.listdir(base_dir)
-    splitted_filenames = [file_name.split("_") for file_name in files]
+    splitted_filenames = [file_name.split('.')[-2].split("_") for file_name in files]
     labelled_filename_hash = get_labelled_filename_hash(splitted_filenames)
 
     df_filename = pd.DataFrame(labelled_filename_hash)
-    grouped_df = df_filename.groupby(by="station")
-    filtered_grouped_df = grouped_df.filter(lambda x: "MonthlyData.txt" not in x["frequency"].values)
-    df_filename_wo_monthly_data = filtered_grouped_df[['ghg', 'station', 'medium-type']].drop_duplicates() # ghg > station > medium > type, that doesnot have daily data.
-    # check if the df_name not having daily data, has hourly data. and then convert.
-    df_filename_wo_monthly_data['file_wo_daily_data'] = df_filename_wo_monthly_data.apply(combine_to_name, axis=1)
-    hourly_file_wo_monthly_data = df_filename_wo_monthly_data['file_wo_daily_data'].tolist()
+
+    df_filename_wo_monthly_data = df_filename.groupby(["noaa","glm","station","country","gas", "methodology", "measuring_instr"]).agg(has_monthly = ("time", lambda x: 1 if "monthly" in x else 0)).query("has_monthly==0").reset_index()
+    # check if the df_name not having monthly data, has hourly data. and then convert.
+    df_filename_wo_monthly_data['file_wo_monthly_data'] = df_filename_wo_monthly_data.apply(combine_to_name, axis=1)
+    hourly_file_wo_monthly_data = df_filename_wo_monthly_data['file_wo_monthly_data'].tolist()
     return hourly_file_wo_monthly_data
 
 # helpers
@@ -69,7 +67,7 @@ def get_labelled_filename_hash(split_filenames):
     Example:
         labelled_filenames = get_labelled_filename_hash(["filename1.txt", "filename2.txt"])
     """
-    labels = ["ghg", "station", "medium-type", "_", "_", "frequency"]
+    labels = ["noaa", "glm", "measuring_instr", "methodology", "station", "country", "gas", "time"]
     result = []
     for filename in split_filenames:
         temp = {}
@@ -93,7 +91,7 @@ def combine_to_name(row):
         filename = combine_to_name({"ghg": "co2", "station": "crv", "medium-type": "tower"})
     """
     # ref: co2_crv_tower-insitu_1_ccgg_HourlyData.txt
-    return f"{row['ghg']}_{row['station']}_{row['medium-type']}_1_ccgg_HourlyData.txt"
+    return f"{row['noaa']}_{row['glm']}_{row['measuring_instr']}_{row['methodology']}_{row['station']}_{row['country']}_{row['gas']}_hourly.csv"
 
 def get_file_names(base_dir):
     """
