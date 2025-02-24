@@ -20,8 +20,7 @@ def get_insitu_filename_wo_daily_data(base_dir):
     labelled_filename_hash = get_labelled_filename_hash(splitted_filenames)
 
     df_filename = pd.DataFrame(labelled_filename_hash)
-
-    df_filename_wo_daily_data = df_filename.groupby(["noaa","glm","station","country","gas", "methodology", "measuring_instr"]).agg(has_daily = ("time", lambda x: 1 if "daily" in x else 0)).query("has_daily==0").reset_index()
+    df_filename_wo_daily_data = df_filename.groupby(["noaa","glm","station","country","gas", "methodology", "measuring_instr"]).agg(has_daily = ("time", lambda x:int('daily' in x.values))).query("has_daily==0").reset_index()
     # check if the df_name not having daily data, has hourly data. and then convert.
     df_filename_wo_daily_data['file_wo_daily_data'] = df_filename_wo_daily_data.apply(combine_to_name, axis=1)
     hourly_file_wo_daily_data = df_filename_wo_daily_data['file_wo_daily_data'].tolist()
@@ -46,7 +45,7 @@ def get_insitu_filename_wo_monthly_data(base_dir):
 
     df_filename = pd.DataFrame(labelled_filename_hash)
 
-    df_filename_wo_monthly_data = df_filename.groupby(["noaa","glm","station","country","gas", "methodology", "measuring_instr"]).agg(has_monthly = ("time", lambda x: 1 if "monthly" in x else 0)).query("has_monthly==0").reset_index()
+    df_filename_wo_monthly_data = df_filename.groupby(["noaa","glm","station","country","gas", "methodology", "measuring_instr"]).agg(has_monthly = ("time", lambda x:int('month' in x.values))).query("has_monthly==0").reset_index()
     # check if the df_name not having monthly data, has hourly data. and then convert.
     df_filename_wo_monthly_data['file_wo_monthly_data'] = df_filename_wo_monthly_data.apply(combine_to_name, axis=1)
     hourly_file_wo_monthly_data = df_filename_wo_monthly_data['file_wo_monthly_data'].tolist()

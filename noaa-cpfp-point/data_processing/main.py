@@ -46,24 +46,24 @@ def main():
 
     # Convert the files in the src_dir and store them in the dest dir.
     txt_src_dirs = data_src_dirs+insitu_src_dirs
-    json_dest_dirs = data_dest_dirs+insitu_dest_dirs
+    csv_dest_dirs = data_dest_dirs+insitu_dest_dirs
     for idx, src_dir in enumerate(txt_src_dirs):
         files = get_file_names(src_dir)
         for filename in files:
             src_filepath = src_dir + filename
-            dest_filepath = json_dest_dirs[idx]
+            dest_filepath = csv_dest_dirs[idx]
             extact_viz_json(src_filepath, dest_filepath)
 
     print("Converted the .txt data to visualization ready csv.")
 
     # Fill-up missing datasets #
     # From the src_dir, get the list of files with missing frequency data. Convert them and store them in the dest dir 
-
+    
     for idx, dest_dir in enumerate(insitu_dest_dirs):
         insitu_files_wo_daily_data = get_insitu_filename_wo_daily_data(dest_dir)
         insitu_files_wo_monthly_data = get_insitu_filename_wo_monthly_data(dest_dir)
-        print("insitu files wo daily data",len(insitu_files_wo_daily_data))
-        print("insitu files wo monthly data",len(insitu_files_wo_daily_data))
+        print(f"insitu files wo daily data: {dest_dir}",len(insitu_files_wo_daily_data))
+        print(f"insitu files wo monthly data: {dest_dir}",len(insitu_files_wo_daily_data))
 
         # generate for missing daily data
         # For each filenames, use their hourly counterpart and then convert it to daily
@@ -75,10 +75,12 @@ def main():
         # generate for missing monthly data
         # For each filenames, use their hourly counterpart and then convert it to monthly
         for missed_file in insitu_files_wo_monthly_data:
-            src_filepath = src_dir + missed_file
+            src_filepath = dest_dir + missed_file
             monthly_aggregate(src_filepath)
 
     print("Missing values filled using aggregation of granular data. Converted to visualization ready JSON.")
+
+    get_summary(txt_src_dirs, csv_dest_dirs)
 
 # helper
     
@@ -178,6 +180,20 @@ def json_filename(filename):
     splitted_filename = filename.split(".")
     splitted_filename[1] = "json"
     return ".".join(splitted_filename)
+
+def get_summary(data_src_dirs, data_dest_dirs):
+
+    print("SUMMARY: \n")
+
+    for src, dest  in  zip(data_src_dirs, data_dest_dirs): 
+        index1 = src.split("/raw/")[-1]
+        number_of_files1 = len(get_file_names(src))
+
+        index2 = dest.split("/processed/")[-1]
+        number_of_files2 = len(get_file_names(dest))
+
+        print(f"RAW: {index1}, Number of files: {number_of_files1}")
+        print(f"PROCESSED: {index2}, Number of files: {number_of_files2}")
 
 if __name__ == "__main__":
     main()

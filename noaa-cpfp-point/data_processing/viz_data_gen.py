@@ -57,15 +57,19 @@ def extact_viz_json(filepath, dest_filepath):
             # seperate table body and head to form dataframe
             table_head = data[0]
             table_body = data[1:]
-            if len(table_head) < 10:
-                print("skipped : ",filepath)
-                return 
             dataframe = pd.DataFrame(table_body, columns=table_head)
             dataframe['value'] = dataframe['value'].astype(float)
+
+            dataframe['datetime'] = pd.to_datetime(dataframe['datetime'])
+            dataframe = dataframe.sort_values(by='datetime')
+            dataframe['datetime'] = dataframe['datetime'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+
             # Filter data
             mask = (dataframe["qcflag"] == "...") & (dataframe["value"] != 0) & (dataframe["value"] != -999)
             filtered_df = dataframe[mask].reset_index(drop=True)
             country = [line for line in file_content_list[:header_lines] if " site_country " in line][0].split(':')[-1].replace(' ','')
+            if country == 'N/A':
+                country = 'None' 
 
             measuring_instr = filepath.split('/')[-3]
             methodology = filepath.split('/')[-2]
@@ -76,25 +80,17 @@ def extact_viz_json(filepath, dest_filepath):
 
             filename = f"noaa_glm_{measuring_instr}_{methodology}_{station}_{country}_{gas}_{time}.csv"
 
-            # filtered_df['country'] = country
+            filtered_df['country'] = country
             # filtered_df['measuring_instr'] = measuring_instr
             # filtered_df['methodology'] = methodology
             # filtered_df['gas'] = gas
             # filtered_df['station'] = station
 
-            filtered_df[['datetime', 'value','latitude','longitude', 'country']].to_csv(dest_filepath+filename, index=False)
-            # return {"filename" : filename,
-            #         "data" : filtered_df[['datetime', 'value','latitude','longitude']] }
-            # # dict formation, needed for frontend [{date: , value: }]
-            # json_list = []
-            # for _, row in processed_df.iterrows():
-            #     json_obj = {'date': row['datetime'], 'value': row['value'],
-            #                 'latitude': row['latitude'],'longitude': row['longitude'],
-            #                 'country': row['country'],'measuring_instr': row['measuring_instr'],
-            #                 'methodology': row['methodology'],'gas': row['gas'],
-            #                 'station': row['station']}
-            #     json_list.append(json_obj)
-            # return json_list
+            try:
+                filtered_df[['datetime', 'value', 'latitude', 'longitude', 'country']].to_csv(dest_filepath+filename )
+            except Exception as e:
+                print("Error while saving:", e)
+
     except FileNotFoundError:
         return "File not found"
     except Exception as e:
