@@ -15,7 +15,8 @@ def gdf_to_geojson(gdf):
                 'datetime': row['datetime'],
                 'value': row['value'],
                 'latitude': row['latitude'],
-                'longitude': row['longitude']
+                'longitude': row['longitude'],
+                'country': row['country']
             },
             'geometry': {
                 'type': 'Point',
@@ -41,7 +42,8 @@ def process_csv_files():
             'datetime': df['datetime'].tolist(),
             'value': df['value'].tolist(),
             'latitude': df["latitude"].iloc[0],
-            'longitude': df["longitude"].iloc[0]
+            'longitude': df["longitude"].iloc[0],
+            'country': df["country"].iloc[0]
         }
         
         # Create a GeoDataFrame with a single row
