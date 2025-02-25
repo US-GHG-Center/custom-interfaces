@@ -13,7 +13,7 @@ time_mapping = {
     "event": "event",
 }
 
-def extact_viz_json(filepath, dest_filepath):
+def extact_viz_json(filepath, dest_filepath, f):
     """
     Reads data from a .txt file, extracts necessary data for visualization, and returns a list of JSON objects that can be readily visualized in chart.
 
@@ -45,6 +45,8 @@ def extact_viz_json(filepath, dest_filepath):
     """
     try:
         with open(filepath, "r", encoding="utf-8") as file:
+            if f == "ch4_inx_surface-pfp_1_ccgg_event.txt":
+                print("here")
             file_content_str = file.read()
             # split the string text based on new line
             file_content_list = file_content_str.split("\n")
@@ -63,13 +65,40 @@ def extact_viz_json(filepath, dest_filepath):
             dataframe['datetime'] = pd.to_datetime(dataframe['datetime'])
             dataframe = dataframe.sort_values(by='datetime')
             dataframe['datetime'] = dataframe['datetime'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+            if f == "ch4_inx_surface-pfp_1_ccgg_event.txt":
+                print("df banyo")
+
+            # Helper function to extract metadata safely
+            def get_metadata_value(key, default="None"):
+                try:
+                    return [line.split(":")[-1].strip() for line in file_content_list[:header_lines] if key in line][0]
+                except IndexError:
+                    return default
+
+
+
 
             # Filter data
             mask = (dataframe["qcflag"] == "...") & (dataframe["value"] != 0) & (dataframe["value"] != -999)
             filtered_df = dataframe[mask].reset_index(drop=True)
-            country = [line for line in file_content_list[:header_lines] if " site_country " in line][0].split(':')[-1].replace(' ','')
-            if country == 'N/A':
-                country = 'None' 
+
+            # Extract metadata with fallback to "None"
+            site_country = get_metadata_value(" site_country ")
+            country = site_country.replace(' ', '') if site_country != "N/A" else "None"
+            site_name = get_metadata_value(" site_name ")
+            site_elevation = get_metadata_value(" site_elevation ")
+            site_elevation_unit = get_metadata_value(" site_elevation_unit ")
+
+            # site_country = [line for line in file_content_list[:header_lines] if " site_country " in line][0].split(':')[-1].strip()
+            # country = site_country.replace(' ','')
+            # site_name = [line for line in file_content_list[:header_lines] if " site_name " in line][0].split(':')[-1].strip()
+            # site_elevation = [line for line in file_content_list[:header_lines] if " site_elevation " in line][0].split(':')[-1].strip()
+            # site_elevation_unit = [line for line in file_content_list[:header_lines] if " site_elevation_unit " in line][0].split(':')[-1].strip()
+            # if country == 'N/A':
+            #     country = 'None' 
+            
+            if f == "ch4_inx_surface-pfp_1_ccgg_event.txt":
+                print("calculated", country, site_country, site_name, site_elevation, site_elevation_unit)
 
             measuring_instr = filepath.split('/')[-3]
             methodology = filepath.split('/')[-2]
@@ -78,16 +107,20 @@ def extact_viz_json(filepath, dest_filepath):
             time = filepath.split('/')[-1].split('.')[0].split('_')[-1].lower()
             time = next((value for key, value in time_mapping.items() if key in time), time)
 
-            filename = f"noaa_glm_{measuring_instr}_{methodology}_{station}_{country}_{gas}_{time}.csv"
 
-            filtered_df['country'] = country
-            # filtered_df['measuring_instr'] = measuring_instr
-            # filtered_df['methodology'] = methodology
-            # filtered_df['gas'] = gas
+            filename = f"noaa_glm_{measuring_instr}_{methodology}_{station}_{country}_{gas}_{time}.csv"
+            
+            if f == "ch4_inx_surface-pfp_1_ccgg_event.txt":
+                print("calculated", country, site_country, site_name, site_elevation, site_elevation_unit)
+
+            filtered_df['site_country'] = site_country
+            filtered_df['site_name'] = site_name
+            filtered_df['site_elevation'] = site_elevation
+            filtered_df['site_elevation_unit'] = site_elevation_unit
             # filtered_df['station'] = station
 
             try:
-                filtered_df[['datetime', 'value', 'latitude', 'longitude', 'country']].to_csv(dest_filepath+filename )
+                filtered_df[['datetime', 'value', 'latitude', 'longitude', 'site_country','site_name','site_elevation','site_elevation_unit']].to_csv(dest_filepath+filename )
             except Exception as e:
                 print("Error while saving:", e)
 
