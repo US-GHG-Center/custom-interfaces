@@ -7,6 +7,7 @@ import { dataTransformationPlume, dataTransformationPlumeRegion, dataTransformat
 import { PlumeMetas } from '../../assets/dataset/metadata.ts';
 
 export function DashboardContainer() {
+
     // get the query params
     const [ searchParams ] = useSearchParams();
     const [ zoomLocation, setZoomLocation ] = useState (searchParams.get('zoom-location') || []); // let default zoom location be controlled by map component
