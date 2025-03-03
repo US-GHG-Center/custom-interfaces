@@ -173,6 +173,7 @@ export const getMapInstance = () => {
             style: MAP_STYLE,
             center: [-98, 39],
             zoom: 4,
+            projection: 'mercator',
         });
 
         // Disable map rotation using right-click drag and touch gestures
