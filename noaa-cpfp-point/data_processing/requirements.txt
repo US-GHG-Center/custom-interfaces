@@ -1,2 +1,8 @@
 pandas
 geopandas
+geopandas
+shapely
+fiona
+pyproj
+gdal
+rasterio
