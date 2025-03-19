@@ -45,6 +45,7 @@ jobs:
         run: |
           cd ./noaa-cpfp-point/data_processing
           pip install -r ./requirements.txt
+          pip install geopandas 
           python3 ./main.py
           python3 ./convert_to_geojson.py
 
@@ -72,7 +73,6 @@ jobs:
           DATASET_DAG_NAME: ${{ vars.DATASET_DAG_NAME }} 
         run: |
           pip install -r ./scripts/requirements.txt
-          pip install geopandas 
           python3 ./scripts/ingest_collection.py ./scripts/NOAA-dag-config.json
 
       - name: Set current date as env variable
