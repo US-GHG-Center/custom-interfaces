@@ -50,8 +50,6 @@ def main():
     for idx, src_dir in enumerate(txt_src_dirs):
         files = get_file_names(src_dir)
         for filename in files:
-            if filename == "ch4_inx_surface-pfp_1_ccgg_event.txt":
-                print("aayo hai -------")
             src_filepath = src_dir + filename
             dest_filepath = csv_dest_dirs[idx]
             extact_viz_json(src_filepath, dest_filepath, filename)

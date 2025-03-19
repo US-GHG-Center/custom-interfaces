@@ -3,6 +3,9 @@
 import sys
 import json
 import pandas as pd
+import geopandas as gpd
+from shapely.geometry import Point
+
 
 time_mapping = {
     "hour": "hourly",
@@ -45,8 +48,6 @@ def extact_viz_json(filepath, dest_filepath, f):
     """
     try:
         with open(filepath, "r", encoding="utf-8") as file:
-            if f == "ch4_inx_surface-pfp_1_ccgg_event.txt":
-                print("here")
             file_content_str = file.read()
             # split the string text based on new line
             file_content_list = file_content_str.split("\n")
@@ -65,8 +66,6 @@ def extact_viz_json(filepath, dest_filepath, f):
             dataframe['datetime'] = pd.to_datetime(dataframe['datetime'])
             dataframe = dataframe.sort_values(by='datetime')
             dataframe['datetime'] = dataframe['datetime'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
-            if f == "ch4_inx_surface-pfp_1_ccgg_event.txt":
-                print("df banyo")
 
             # Helper function to extract metadata safely
             def get_metadata_value(key, default="None"):
@@ -96,9 +95,6 @@ def extact_viz_json(filepath, dest_filepath, f):
             # site_elevation_unit = [line for line in file_content_list[:header_lines] if " site_elevation_unit " in line][0].split(':')[-1].strip()
             # if country == 'N/A':
             #     country = 'None' 
-            
-            if f == "ch4_inx_surface-pfp_1_ccgg_event.txt":
-                print("calculated", country, site_country, site_name, site_elevation, site_elevation_unit)
 
             measuring_instr = filepath.split('/')[-3]
             methodology = filepath.split('/')[-2]
@@ -109,9 +105,6 @@ def extact_viz_json(filepath, dest_filepath, f):
 
 
             filename = f"noaa_glm_{measuring_instr}_{methodology}_{station}_{country}_{gas}_{time}.csv"
-            
-            if f == "ch4_inx_surface-pfp_1_ccgg_event.txt":
-                print("calculated", country, site_country, site_name, site_elevation, site_elevation_unit)
 
             filtered_df['site_country'] = site_country
             filtered_df['site_name'] = site_name
