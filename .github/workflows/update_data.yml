@@ -45,15 +45,8 @@ jobs:
         run: |
           cd ./noaa-cpfp-point/data_processing
           pip install -r ./requirements.txt
-          pip install geopandas 
           python3 ./main.py
           python3 ./convert_to_geojson.py
-          
-      
-        - name: Print the environment
-        run: |
-          "env_name=development" >> $GITHUB_OUTPUT
-          echo "The environment is ${{ env.env_name }}"
 
       - name: ConfigureAWS Credentials 
         uses: aws-actions/configure-aws-credentials@v4
@@ -67,6 +60,9 @@ jobs:
         # only overwrites files that have changed, deletes file that exist in S3 but not locally
         run: |
           aws s3 sync ./noaa-cpfp-point/data/geojson s3://${{ vars.DEPLOYMENT_BUCKET }}/NOAA_features_API/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+
+      - name : Remove local files
+        run: |
           rm -rf ./noaa-cpfp-point/data
 
       - name: Ingest collections to Features API - dev
