@@ -16,7 +16,7 @@ def ingest_features(dag_config_file):
     # vector_ingest_dag = os.getenv("DATASET_DAG_NAME", "veda_ingest_vector")
     # username = os.getenv("SM2A_ADMIN_USERNAME", "admin")
     # password = os.getenv("SM2A_ADMIN_PASSWORD", "G8V2a9h1")
-    base_api_ul = "sm2a.dev.ghg.center"
+    base_api_url = "sm2a.dev.ghg.center"
     vector_ingest_dag = "veda_ingest_vector"
     username = "admin"
     password = "G8V2a9h1"
