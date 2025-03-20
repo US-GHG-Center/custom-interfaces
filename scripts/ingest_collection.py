@@ -12,10 +12,14 @@ def ingest_features(dag_config_file):
         payload = json.load(file)
     print("DAG Config", payload)
 
-    base_api_url = os.getenv("SM2A_API_URL", "sm2a.dev.ghg.center")
-    vector_ingest_dag = os.getenv("DATASET_DAG_NAME", "veda_ingest_vector")
-    username = os.getenv("SM2A_ADMIN_USERNAME", "admin")
-    password = os.getenv("SM2A_ADMIN_PASSWORD", "G8V2a9h1")
+    # base_api_url = os.getenv("SM2A_API_URL", "sm2a.dev.ghg.center")
+    # vector_ingest_dag = os.getenv("DATASET_DAG_NAME", "veda_ingest_vector")
+    # username = os.getenv("SM2A_ADMIN_USERNAME", "admin")
+    # password = os.getenv("SM2A_ADMIN_PASSWORD", "G8V2a9h1")
+    base_api_ul = "sm2a.dev.ghg.center"
+    vector_ingest_dag = "veda_ingest_vector"
+    username = "admin"
+    password = "G8V2a9h1"
 
     print("base_api_url", base_api_url)
     print("vector_ingest_dag", vector_ingest_dag)
