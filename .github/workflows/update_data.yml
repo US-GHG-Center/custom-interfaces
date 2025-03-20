@@ -74,10 +74,10 @@ jobs:
           SM2A_API_URL: ${{ vars.DEV_SM2A_API_URL }} # sm2a.dev.ghg.center
           DATASET_DAG_NAME: ${{ vars.DATASET_DAG_NAME }} 
         run: |
-            export SM2A_ADMIN_USERNAME="${SM2A_ADMIN_USERNAME}"
-            export SM2A_ADMIN_PASSWORD="${SM2A_ADMIN_PASSWORD}"
-            export SM2A_API_URL="${SM2A_API_URL}"
-            export DATASET_DAG_NAME="${DATASET_DAG_NAME}"
+          export SM2A_ADMIN_USERNAME="${SM2A_ADMIN_USERNAME}"
+          export SM2A_ADMIN_PASSWORD="${SM2A_ADMIN_PASSWORD}"
+          export SM2A_API_URL="${SM2A_API_URL}"
+          export DATASET_DAG_NAME="${DATASET_DAG_NAME}"
 
           pip install -r ./scripts/requirements.txt
           python3 ./scripts/ingest_collection.py ./scripts/NOAA-dag-config.json
