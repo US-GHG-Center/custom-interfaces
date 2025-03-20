@@ -44,7 +44,7 @@ jobs:
       - name: Run data preprocessing and aggregation on the downloaded data
         run: |
           cd ./noaa-cpfp-point/data_processing
-          pip install -r ./requirements.txt
+          pip install pandas geopandas shapely
           python3 ./main.py
           python3 ./convert_to_geojson.py
 
