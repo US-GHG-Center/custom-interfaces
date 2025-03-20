@@ -35,35 +35,35 @@ jobs:
         shell: bash
 
       # Downloads and extracts the files to the respective directory
-      - name: Run the data download script
-        run: |
-          cd ./noaa-cpfp-point
-          ./download.sh
+      # - name: Run the data download script
+      #   run: |
+      #     cd ./noaa-cpfp-point
+      #     ./download.sh
 
       # Runs the data preprocessing and aggregation on the extracted files
-      - name: Run data preprocessing and aggregation on the downloaded data
-        run: |
-          cd ./noaa-cpfp-point/data_processing
-          pip install pandas geopandas shapely
-          python3 ./main.py
-          python3 ./convert_to_geojson.py
+      # - name: Run data preprocessing and aggregation on the downloaded data
+      #   run: |
+      #     cd ./noaa-cpfp-point/data_processing
+      #     pip install pandas geopandas shapely
+      #     python3 ./main.py
+      #     python3 ./convert_to_geojson.py
 
-      - name: ConfigureAWS Credentials 
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
-          role-session-name: ${{ github.repository_owner}}
-          aws-region: us-west-2
+      # - name: ConfigureAWS Credentials 
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     role-to-assume: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
+      #     role-session-name: ${{ github.repository_owner}}
+      #     aws-region: us-west-2
 
       # Upload the transformed files to a s3 location and remove the folder after that
-      - name: Upload to S3
-        # only overwrites files that have changed, deletes file that exist in S3 but not locally
-        run: |
-          aws s3 sync ./noaa-cpfp-point/data/geojson s3://${{ vars.DEPLOYMENT_BUCKET }}/NOAA_features_API/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
+      # - name: Upload to S3
+      #   # only overwrites files that have changed, deletes file that exist in S3 but not locally
+      #   run: |
+      #     aws s3 sync ./noaa-cpfp-point/data/geojson s3://${{ vars.DEPLOYMENT_BUCKET }}/NOAA_features_API/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
 
-      - name : Remove local files
-        run: |
-          rm -rf ./noaa-cpfp-point/data
+      # - name : Remove local files
+      #   run: |
+      #     rm -rf ./noaa-cpfp-point/data
 
       - name: Ingest collections to Features API - dev
         id: ingest-collections
