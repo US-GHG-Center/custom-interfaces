@@ -67,8 +67,8 @@ jobs:
 
       - name: Ingest collections to Features API - dev
         id: ingest-collections-dev
+        environment: development
         run: |
-          echo "env_name=development" >> $GITHUB_OUTPUT
           export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           export SM2A_ADMIN_USERNAME="${{ secrets.DEV_SM2A_ADMIN_USERNAME }}"
           export SM2A_ADMIN_PASSWORD="${{ secrets.DEV_SM2A_ADMIN_PASSWORD }}"
