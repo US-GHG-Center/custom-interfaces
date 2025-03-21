@@ -42,7 +42,11 @@ jobs:
       now: ${{ env.NOW }}
 
   ingest-data-dev:
+
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     needs: preprocess-data
     environment: development 
 
@@ -81,6 +85,9 @@ jobs:
     
   # ingest-data-staging:
   #   runs-on: ubuntu-latest
+  #   permissions:
+      # id-token: write
+      # contents: read
   #   needs: preprocess-data
   #   environment: staging 
 
@@ -119,6 +126,9 @@ jobs:
     
   # ingest-data-prod:
   #   runs-on: ubuntu-latest
+  #   permissions:
+      # id-token: write
+      # contents: read
   #   needs: preprocess-data
   #   environment: production 
 
