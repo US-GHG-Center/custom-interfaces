@@ -6,47 +6,48 @@ on:
     workflow_dispatch: # Can be run manually if needed
 
 jobs:
-  update-data:
-    runs-on: ubuntu-latest
+  # preprocess-data:
+  #   runs-on: ubuntu-latest
 
-    permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push the
-      # added or changed files to the repository and create a pull request
-      contents: write
-      pull-requests: write
+  #   permissions:
+  #     contents: write
+  #     pull-requests: write
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Validate required variables and secrets
+  #       run: |
+  #         missing_vars=()
+  #         [ -z "${{ secrets.GITHUB_TOKEN }}" ] && missing_vars+=("secrets.GITHUB_TOKEN")
+  #         if [ ${#missing_vars[@]} -ne 0 ]; then
+  #           echo "Error: The following required variables are missing:"
+  #           printf '%s\n' "${missing_vars[@]}"
+  #           exit 1
+  #         fi
+  #       shell: bash
+
+  #     # Runs data preprocessing and aggregation
+  #     - name: Run data preprocessing and aggregation
+  #       run: |
+  #         cd ./noaa-cpfp-point/data_processing
+  #         pip install pandas geopandas shapely
+  #         python3 ./main.py
+  #         python3 ./convert_to_geojson.py
+
+  #     - name: Set current date as env variable
+  #       run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+  #   outputs:
+  #     now: ${{ env.NOW }}
+
+  ingest-data-dev:
+    runs-on: ubuntu-latest
+    needs: preprocess-data
+    environment: development  # ✅ Only this job has an environment
 
     steps:
       - uses: actions/checkout@v4
-
-      # checks if the required env variables and secrets are present
-      - name: Validate required variables and secrets
-        run: |
-          missing_vars=()
-
-          # Check for required variables
-          [ -z "${{ secrets.GITHUB_TOKEN }}" ] && missing_vars+=("secrets.GITHUB_TOKEN")
-
-          # If any variables are missing, print them and exit with an error
-          if [ ${#missing_vars[@]} -ne 0 ]; then
-            echo "Error: The following required variables are missing:"
-            printf '%s\n' "${missing_vars[@]}"
-            exit 1
-          fi
-        shell: bash
-
-      # Downloads and extracts the files to the respective directory
-      # - name: Run the data download script
-      #   run: |
-      #     cd ./noaa-cpfp-point
-      #     ./download.sh
-
-      # Runs the data preprocessing and aggregation on the extracted files
-      # - name: Run data preprocessing and aggregation on the downloaded data
-      #   run: |
-      #     cd ./noaa-cpfp-point/data_processing
-      #     pip install pandas geopandas shapely
-      #     python3 ./main.py
-      #     python3 ./convert_to_geojson.py
 
       # - name: ConfigureAWS Credentials 
       #   uses: aws-actions/configure-aws-credentials@v4
@@ -61,13 +62,13 @@ jobs:
       #   run: |
       #     aws s3 sync ./noaa-cpfp-point/data/geojson s3://${{ vars.DEPLOYMENT_BUCKET }}/NOAA_features_API/ --cache-control max-age=30,must-revalidate,s-maxage=604800 --delete
 
+    
       # - name : Remove local files
       #   run: |
       #     rm -rf ./noaa-cpfp-point/data
 
       - name: Ingest collections to Features API - dev
         id: ingest-collections-dev
-        environment: development
         run: |
           export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           export SM2A_ADMIN_USERNAME="${{ secrets.DEV_SM2A_ADMIN_USERNAME }}"
@@ -79,30 +80,23 @@ jobs:
 
           pip install -r ./scripts/requirements.txt
           python3 ./scripts/ingest_collection.py ./scripts/NOAA-dag-config.json
+    
+  # ingest-data-staging:
+  #   runs-on: ubuntu-latest
+  #   needs: preprocess-data
+  #   environment: staging  # ✅ Only this job has an environment
 
-      # - name: Ingest collections to Features API - staging
-      #   id: ingest-collections-staging
-      #   run: |
-      #     export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
-      #     export SM2A_ADMIN_USERNAME="${{ secrets.STAGING_SM2A_ADMIN_USERNAME }}"
-      #     export SM2A_ADMIN_PASSWORD="${{ secrets.STAGING_SM2A_ADMIN_PASSWORD }}"
-      #     export SM2A_API_URL="${{ vars.STAGING_SM2A_API_URL }}"
-      #     export DATASET_DAG_NAME="${{ vars.DATASET_DAG_NAME }}"
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Ingest collections to Features API - staging
+  #       id: ingest-collections-staging
+  #       run: |
+  #         export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
+  #         export SM2A_ADMIN_USERNAME="${{ secrets.STAGING_SM2A_ADMIN_USERNAME }}"
+  #         export SM2A_ADMIN_PASSWORD="${{ secrets.STAGING_SM2A_ADMIN_PASSWORD }}"
+  #         export SM2A_API_URL="${{ vars.STAGING_SM2A_API_URL }}"
+  #         export DATASET_DAG_NAME="${{ vars.DATASET_DAG_NAME }}"
 
-      #     pip install -r ./scripts/requirements.txt
-      #     python3 ./scripts/ingest_collection.py ./scripts/NOAA-dag-config.json
+  #         pip install -r ./scripts/requirements.txt
+  #         python3 ./scripts/ingest_collection.py ./scripts/NOAA-dag-config.json
 
-      # - name: Ingest collections to Features API - prod
-      #   id: ingest-collections-prod
-      #   run: |
-      #     export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
-      #     export SM2A_ADMIN_USERNAME="${{ secrets.PROD_SM2A_ADMIN_USERNAME }}"
-      #     export SM2A_ADMIN_PASSWORD="${{ secrets.PROD_SM2A_ADMIN_PASSWORD }}"
-      #     export SM2A_API_URL="${{ vars.PROD_SM2A_API_URL }}"
-      #     export DATASET_DAG_NAME="${{ vars.DATASET_DAG_NAME }}"
-
-      #     pip install -r ./scripts/requirements.txt
-      #     python3 ./scripts/ingest_collection.py ./scripts/NOAA-dag-config.json
-
-      - name: Set current date as env variable
-        run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
