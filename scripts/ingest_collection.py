@@ -44,7 +44,7 @@ def ingest_features(dag_config_file):
 
     dag_payload = {"conf": payload}
     body = {
-        **dagpayload,
+        **dag_payload,
         "dag_run_id": f"{vector_ingest_dag}-{uuid.uuid4()}",
         "note": "Run from GitHub Actions  NOAA-Custom-Interface",
     }
