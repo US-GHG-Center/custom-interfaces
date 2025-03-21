@@ -1,4 +1,4 @@
-""" Module providing a function to generate a chart-visualization-ready JSON dataset """
+""" Module providing a function to generate a chart-visualization-ready dataset """
 
 import sys
 import json
@@ -18,14 +18,10 @@ time_mapping = {
 
 def extact_viz_json(filepath, dest_filepath, f):
     """
-    Reads data from a .txt file, extracts necessary data for visualization, and returns a list of JSON objects that can be readily visualized in chart.
+    Reads data from a .txt file, extracts necessary data for visualization, and write it into csv file.
 
     Parameters:
         filepath (str): The path to the file containing the data to be converted.
-
-    Returns:
-        list: A list of dictionaries representing necessary visualization JSON data, with each dictionary containing
-              'date' and 'value' keys.
 
     Description:
         This function reads data from a .txt file, and returns a list of JSON objects.
@@ -33,15 +29,11 @@ def extact_viz_json(filepath, dest_filepath, f):
         - Reads the content of the file.
         - Extracts the header lines from the file to determine the structure of the data.
         - Processes the data into a DataFrame.
-        - Converts the aggregated data into a list of JSON objects, where each object contains 'date' and 'value' keys.
+        - Converts the aggregated data into a dataframe.
 
     Exceptions:
         - FileNotFoundError: If the specified file is not found.
         - Exception: If any other exception occurs during the processing, the exception message is returned.
-
-    Note:
-        - The input file is expected to have a .txt format with header lines indicating the structure of the data.
-        - The returned JSON list is suitable for use in frontend applications to visualize the aggregated data.
 
     Example:
         extrated_json = extact_viz_json("/path/to/data_file.txt")
@@ -73,9 +65,6 @@ def extact_viz_json(filepath, dest_filepath, f):
                     return [line.split(":")[-1].strip() for line in file_content_list[:header_lines] if key in line][0]
                 except IndexError:
                     return default
-
-
-
 
             # Filter data
             mask = (dataframe["qcflag"] == "...") & (dataframe["value"] != 0) & (dataframe["value"] != -999)

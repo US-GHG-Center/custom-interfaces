@@ -51,7 +51,6 @@ def get_insitu_filename_wo_monthly_data(base_dir):
     hourly_file_wo_monthly_data = df_filename_wo_monthly_data['file_wo_monthly_data'].tolist()
     return hourly_file_wo_monthly_data
 
-# helpers
 
 def get_labelled_filename_hash(split_filenames):
     """
@@ -63,8 +62,6 @@ def get_labelled_filename_hash(split_filenames):
     Returns:
         list: A list of dictionaries containing labelled parts from dismanteled filename.
 
-    Example:
-        labelled_filenames = get_labelled_filename_hash(["filename1.txt", "filename2.txt"])
     """
     labels = ["noaa", "glm", "measuring_instr", "methodology", "station", "country", "gas", "time"]
     result = []
@@ -86,10 +83,7 @@ def combine_to_name(row):
     Returns:
         str: The combined filename string.
 
-    Example:
-        filename = combine_to_name({"ghg": "co2", "station": "crv", "medium-type": "tower"})
     """
-    # ref: co2_crv_tower-insitu_1_ccgg_HourlyData.txt
     return f"{row['noaa']}_{row['glm']}_{row['measuring_instr']}_{row['methodology']}_{row['station']}_{row['country']}_{row['gas']}_hourly.csv"
 
 def get_file_names(base_dir):

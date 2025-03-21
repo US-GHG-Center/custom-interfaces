@@ -1,4 +1,4 @@
-""" Module providing a function to processes data from various source directories and convert them to visualization ready JSON format. """
+""" Module providing a function to processes data from various source directories and convert them to csv format. """
 import os
 import json
 from viz_data_gen import extact_viz_json
@@ -7,12 +7,12 @@ from utils import get_insitu_filename_wo_daily_data, get_insitu_filename_wo_mont
 
 def main():
     """
-    Processes data from various source directories and converts them to visualization ready JSON format.
+    Processes data from various source directories and converts them to  JSON format.
     Raw insitu data is converted to processed data with specific directories for GHG (Green House Gases).
 
     This function performs the following tasks:
     1. Creates destination directories for processed data if they do not exist.
-    2. Converts CSV files in source directories to JSON format and stores them in the corresponding destination directories.
+    2. Converts txt files in source directories to csv format and stores them in the corresponding destination directories.
     3. Fills up missing datasets by aggregating granular data (e.g., hourly data to daily or monthly data).
 
     Returns:
@@ -29,7 +29,7 @@ def main():
     insitu_dest_dirs = ["../data/processed/co2/insitu/surface/", "../data/processed/co2/insitu/tower/",
                 "../data/processed/ch4/insitu/surface/", "../data/processed/ch4/insitu/tower/"]
 
-    # dirs that only need general .txt to .json conversion.
+    # dirs that only need general .txt to .csv conversion.
     data_src_dirs = ["../data/raw/co2/pfp/surface/", "../data/raw/co2/flask/surface/", "../data/raw/ch4/pfp/surface/", "../data/raw/ch4/flask/surface/"]
     data_dest_dirs = ["../data/processed/co2/pfp/surface/", "../data/processed/co2/flask/surface/", "../data/processed/ch4/pfp/surface/", "../data/processed/ch4/flask/surface/"]
 
@@ -54,7 +54,7 @@ def main():
             dest_filepath = csv_dest_dirs[idx]
             extact_viz_json(src_filepath, dest_filepath, filename)
 
-    print("Converted the .txt data to visualization ready csv.")
+    print("Converted the .txt data to csv.")
 
     # Fill-up missing datasets #
     # From the src_dir, get the list of files with missing frequency data. Convert them and store them in the dest dir 
@@ -78,15 +78,14 @@ def main():
             src_filepath = dest_dir + missed_file
             monthly_aggregate(src_filepath)
 
-    print("Missing values filled using aggregation of granular data. Converted to visualization ready JSON.")
+    print("Missing values filled using aggregation of granular data. Converted to csv.")
 
     get_summary(txt_src_dirs, csv_dest_dirs)
 
-# helper
     
 def hourly_to_daily_converter(src_filepath, dest_filepath):
     """
-    Converts data from hourly granularity to daily granularity and saves it as a visualization ready JSON file.
+    Converts data from hourly granularity to daily granularity and saves it as a csv file.
 
     Args:
         src_filepath (str): The file path to the source data with hourly granularity.
@@ -109,7 +108,7 @@ def hourly_to_daily_converter(src_filepath, dest_filepath):
 
 def hourly_to_monthly_converter(src_filepath, dest_filepath):
     """
-    Converts data from hourly granularity to monthly granularity and saves it as a visualization ready JSON file.
+    Converts data from hourly granularity to monthly granularity and saves it as a csv file.
 
     Args:
         src_filepath (str): The file path to the source data with hourly granularity.
