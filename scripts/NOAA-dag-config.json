@@ -1,6 +1,6 @@
 {
     "bucket": "ghgc-data-store-develop",
-    "collection": "",
+    "collection": "cicd",
     "extra_flags": [
         "-overwrite"
     ],
