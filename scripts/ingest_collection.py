@@ -38,15 +38,22 @@ def ingest_features(dag_config_file):
         "Authorization": "Basic " + api_token,
     }
 
-    # Ensure 'collection' is handled properly
-    payload["dag_run_id"] = f"{vector_ingest_dag}-{uuid.uuid4()}"
-    payload["note"] = "Run from GitHub Actions NOAA-Custom-Interface"
+    # # Ensure 'collection' is handled properly
+    # payload["dag_run_id"] = f"{vector_ingest_dag}-{uuid.uuid4()}"
+    # payload["note"] = "Run from GitHub Actions NOAA-Custom-Interface"
+
+    dag_payload = {"conf": payload}
+    body = {
+        **dagpayload,
+        "dag_run_id": f"{vector_ingest_dag}-{uuid.uuid4()}",
+        "note": "Run from GitHub Actions  NOAA-Custom-Interface",
+    }
 
     http_conn = http.client.HTTPSConnection(base_api_url)
     http_conn.request(
         "POST",
         f"/api/v1/dags/{vector_ingest_dag}/dagRuns",
-        json.dumps(payload),
+        json.dumps(body),
         headers,
     )
     response = http_conn.getresponse()
