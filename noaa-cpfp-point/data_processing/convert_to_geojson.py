@@ -46,7 +46,8 @@ def process_csv_files():
     print("Total files to be converted to geojson: ", len(glob.glob(os.path.join(script_dir, "../data/processed/**/*.csv"), recursive=True)))
     for file in glob.glob(os.path.join(script_dir, "../data/processed/**/*.csv"), recursive=True):
         df = pd.read_csv(file)
-        site_code = file.split("/")[-1].split(".")[0][4]
+        site_code = file.split("/")[-1].split(".")[0].split("_")[4]
+        print("look",site_code)
         if check_if_excluded(site_code):
             print(f"Excluding {file} from further processing")
         else:
