@@ -38,10 +38,7 @@ def gdf_to_geojson(gdf):
 
 def check_if_excluded(site_name):
     excluded_sites = ["LAC", "INX", "BWD", "NEB", "NWB", "TMD", "SPF", "KLM", "MKO", "MLO", "HFM"]
-    return  site_name in excluded_sites:
-
-    
-
+    return  (site_name.lower() in excluded_sites) or (site_name.upper() in excluded_sites)
 
 def process_csv_files():
     # Process all CSV files recursively

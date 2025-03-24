@@ -13,9 +13,6 @@ def process_csv_files():
     site_dict = {}
     print(len(glob.glob("data/processed/**/*.csv", recursive=True)))
     for file in glob.glob("data/processed/**/*.csv", recursive=True):
-
-        
-
         tmp = pd.read_csv(file)
         gas = file.split("/")[-1].split("_")[6]
         methodology = file.split("/")[-1].split("_")[3]
