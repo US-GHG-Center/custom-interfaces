@@ -46,15 +46,12 @@ def process_csv_files():
         # Concatenate with the existing DataFrame
         df = pd.concat([df, new_row], ignore_index=True)
 
-
-    print(df)
     df = df.groupby('site_code').agg(site_name = ("site_name","first"),
                                     site_country=  ("site_country","first"),
                                     site_elevation= ("site_elevation","first"),
                                     site_elevation_unit= ("site_elevation_unit","first"),
                                     latitude= ("latitude","first"),
                                     longitude= ("longitude","first")).reset_index()
-    print(df)
     df = df[~df['site_code'].isin(excluded_sites)]
     print(df)
     df.to_csv("data/station_metadata.csv")
