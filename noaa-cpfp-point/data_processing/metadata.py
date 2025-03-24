@@ -54,7 +54,10 @@ def process_csv_files():
                                     longitude= ("longitude","first")).reset_index()
     df = df[~df['site_code'].isin(excluded_sites)]
     print(df)
-    df.to_csv("data/station_metadata.csv")
+    # Convert to GeoDataFrame
+    gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude), crs="EPSG:4326")
+    # Save as GeoJSON
+    gdf.to_file("data/geojson/noaa_glm_station_metadata.geojson", driver="GeoJSON")
 
 # Main function
 def main():
