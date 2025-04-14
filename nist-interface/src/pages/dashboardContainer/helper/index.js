@@ -40,6 +40,7 @@ export const extractMetaData = async (collections) => {
 export const getMetaDataDictionary = (collectionsMetaData) => {
     const Dict = {};
     collectionsMetaData.forEach((metaData) => {
+        if (!("station_code" in metaData)) return;
         let stationCode = metaData["station_code"].toUpperCase();
         if (!(stationCode in Dict)) {
             Dict[stationCode] = { ...metaData };
