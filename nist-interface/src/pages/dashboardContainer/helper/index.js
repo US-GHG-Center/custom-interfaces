@@ -22,7 +22,7 @@ export const extractMetaData = async (collections) => {
     // convention for metadata collection_id: public.<agency>_<data_category>_<region>_metadata
     // example: public.nist_testbed_lam_metadata
     let metaCollection = collections.map(collection => {
-        if (collection && collection.id && collection.id.includes("metadata")) {
+        if (collection && collection.id && collection.id.includes("metadata") && collection.id.includes("nist")) {
             return collection;
         }
         return null;
@@ -40,6 +40,7 @@ export const extractMetaData = async (collections) => {
 export const getMetaDataDictionary = (collectionsMetaData) => {
     const Dict = {};
     collectionsMetaData.forEach((metaData) => {
+        if (!("station_code" in metaData)) return;
         let stationCode = metaData["station_code"].toUpperCase();
         if (!(stationCode in Dict)) {
             Dict[stationCode] = { ...metaData };
