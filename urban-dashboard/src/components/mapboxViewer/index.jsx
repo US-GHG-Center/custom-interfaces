@@ -102,11 +102,8 @@ export class MapBoxViewer extends Component {
         }
 
         if (prevProps.urbanRegion !== this.props.urbanRegion) {
-            console.log("urban region changed to ", this.props.urbanRegion);
-
             const urbanRegion = this.props.urbanRegions.filter(item => item.name === this.props.urbanRegion)[0];
             if (urbanRegion) {
-                console.log("selected region is: ", urbanRegion);
                 // const name = urbanRegion.center;
                 const center = urbanRegion.center;
                 const geojson = urbanRegion.geojson;
@@ -153,7 +150,6 @@ export class MapBoxViewer extends Component {
     }
 
     plotUrbanRegions = (map, urbanRegions) => {
-        console.log("urban regions: : plot::", urbanRegions)
         urbanRegions.forEach(urbanRegion => {
             const { name, center, geojson } = urbanRegion;
             const [lon, lat] = center;
