@@ -25,7 +25,7 @@ export const StackedAreaChart = ({ selection }) => {
     //function to format filepath according to city selection
     const formatFilePath = (city) => {
         const formattedCity = city.replace('/', '-').replace(/\s+/g, '_');
-        return `./data/vulcan/${formattedCity}_PLACE_AggregatedSectors_2013_2021.json`;
+        return `${process.env.PUBLIC_URL}/data/vulcan/${formattedCity}_PLACE_AggregatedSectors_2013_2021.json`;
     }
 
     const colorMap = useMemo(() => ({
@@ -234,7 +234,7 @@ const GasEmissionsBySectorCard = ({ selection }) => {
     //function to format filepath according to city selection
     const formatFilePath = (city) => {
         const formattedCity = city.replace('/', '-').replace(/\s+/g, '_');
-        return `./data/gra2pes/${formattedCity}_2021_Month07_species_sectoral_breakdown_conservative.json`;
+        return `${process.env.PUBLIC_URL}/data/gra2pes/${formattedCity}_2021_Month07_species_sectoral_breakdown_conservative.json`;
     }
 
     useEffect(() => {
