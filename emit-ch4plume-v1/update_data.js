@@ -1,7 +1,7 @@
 // import fs
 const fs = require("fs");
 const COMBINED_METADATA_ENDPOINT = "https://earth.jpl.nasa.gov/emit-mmgis-lb/Missions/EMIT/Layers/coverage/combined_plume_metadata.json";
-const STAC_ENDPOINT = "https://earth.gov/ghgcenter/api/stac/collections/emit-ch4plume-v1/items?limit=500";
+const STAC_ENDPOINT = "https://earth.gov/ghgcenter/api/stac/collections/emit-ch4plume-v1/items?limit=10000";
 const LAT_LON_TO_COUNTRY_ENDPOINT = "https://api.geoapify.com/v1/geocode/reverse"; //?lat=33.81&lon=-101.92&format=json"
 const APIKEY = process.env.GEOAPIFY_APIKEY;
 const COVERAGE_FILE_URL = "https://earth.jpl.nasa.gov/emit-mmgis/Missions/EMIT/Layers/coverage/coverage_pub.json";
@@ -72,6 +72,7 @@ async function similarrity_location_lookup(lat, lon) {
     let floor_lat = Number(lat.toFixed(1));
     let floor_lon = Number(lon.toFixed(1));
     let location = ""
+    const sleep_time = 250;
     if (lon_lat_lookup[`${floor_lat}-${floor_lon}`] == undefined) {
         try {
             const response = await fetch(`${LAT_LON_TO_COUNTRY_ENDPOINT}?lat=${lat}&lon=${lon}&&apiKey=${APIKEY}`);
@@ -80,8 +81,8 @@ async function similarrity_location_lookup(lat, lon) {
             let sub_location = location_prpoperties["city"] || location_prpoperties["county"] || "Unknown";
             let state = location_prpoperties["state"] ? `${location_prpoperties["state"]}, ` : ""
             location = `${sub_location}, ${state}${location_prpoperties["country"]}`;
-            console.log("Sleeping some seconds");
-            await sleep(250);
+            console.log(`Sleeping for ${sleep_time}ms to avoid rate limiting...`);
+            await sleep(sleep_time);
         } catch (error) {
             console.error(`Error fetching location for ${lat}, ${lon}:`, error);
             location = "Unknown";
