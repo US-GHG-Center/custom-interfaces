@@ -13,7 +13,7 @@
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2024), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1968-2023,  Version: 2024-07-30, https://doi.org/10.15138/wkgj-f215
+# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1968-2024,  Version: 2025-03-13, https://doi.org/10.15138/wkgj-f215
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -39,7 +39,7 @@
 # site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
 # site_utc2lst : 1.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
-# dataset_creation_date : 2024-07-30T08:28:36.338781
+# dataset_creation_date : 2025-03-13T01:58:48.044564
 # dataset_num : 7
 # dataset_name : co2_ask_surface-flask_1_ccgg_event
 # dataset_parameter : co2
@@ -52,7 +52,7 @@
 # dataset_comment : For more information about these data, please see https://gml.noaa.gov/aftp/data/trace_gases/co2/flask/README_co2_surface-flask_ccgg.html
 # dataset_calibration_scale : CO2_X2019
 # dataset_start_date : 1995-09-12T10:47:00Z
-# dataset_stop_date : 2023-12-31T11:14:00Z
+# dataset_stop_date : 2024-03-24T12:15:00Z
 # dataset_usage_description : Please cite the product's citation when using data from this dataset. Relevant literature references for this dataset are listed below for convenience.
 # dataset_provider_license : These data were produced by NOAA and are not subject to copyright protection in the United States. NOAA waives any potential copyright and related rights in these data worldwide through the Creative Commons Zero 1.0 Universal Public Domain Dedication (CC0-1.0).
 # dataset_reference_total_listed : 1
@@ -2470,3 +2470,23 @@ ASK 2023 12 25 9 33 0 2023-12-25T09:33:00Z 2023.9819121004566 151-99 423.55 0.04
 ASK 2023 12 25 9 33 0 2023-12-25T09:33:00Z 2023.9819121004566 2971-99 423.49 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 531495 PC2 2024-03-26T10:45:51 ...
 ASK 2023 12 31 11 14 0 2023-12-31T11:14:00Z 2023.9985426179605 5253-99 423.89 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 531492 PC2 2024-03-26T11:00:10 ...
 ASK 2023 12 31 11 14 0 2023-12-31T11:14:00Z 2023.9985426179605 5879-99 423.93 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 531493 PC2 2024-03-26T11:14:30 ...
+ASK 2024 1 4 15 3 0 2024-01-04T15:03:00Z 2024.0099100637524 4376-99 422.92 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 532410 PC2 2024-04-02T18:22:33 ..P
+ASK 2024 1 4 15 3 0 2024-01-04T15:03:00Z 2024.0099100637524 5222-99 422.84 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 532409 PC2 2024-04-02T18:08:06 ..P
+ASK 2024 1 14 16 35 0 2024-01-14T16:35:00Z 2024.0374070279295 1626-99 422.81 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 532412 PC2 2024-04-02T18:51:31 ..P
+ASK 2024 1 14 16 35 0 2024-01-14T16:35:00Z 2024.0374070279295 2051-99 422.8 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 532411 PC2 2024-04-02T18:37:00 ..P
+ASK 2024 1 22 11 7 0 2024-01-22T11:07:00Z 2024.0586426077716 4774-99 423.91 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 532601 PC2 2024-04-12T16:52:51 ..P
+ASK 2024 1 22 11 7 0 2024-01-22T11:07:00Z 2024.0586426077716 5190-99 423.97 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 532602 PC2 2024-04-12T17:07:09 ..P
+ASK 2024 1 28 15 22 0 2024-01-28T15:22:00Z 2024.0755198846387 1368-99 424.15 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 532604 PC2 2024-04-12T17:35:44 ..P
+ASK 2024 1 28 15 22 0 2024-01-28T15:22:00Z 2024.0755198846387 3997-99 424.2 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 532603 PC2 2024-04-12T17:21:26 ..P
+ASK 2024 2 5 9 32 0 2024-02-05T09:32:00Z 2024.0967137219186 2161-99 426.19 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 533616 PC2 2024-05-01T13:46:01 .SP
+ASK 2024 2 5 9 32 0 2024-02-05T09:32:00Z 2024.0967137219186 3852-99 426.26 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 533617 PC2 2024-05-01T14:00:20 .SP
+ASK 2024 2 11 9 46 0 2024-02-11T09:46:00Z 2024.1131337279903 1998-99 424.51 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 533587 PC2 2024-04-26T13:10:25 ..P
+ASK 2024 2 11 9 46 0 2024-02-11T09:46:00Z 2024.1131337279903 2021-99 424.47 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 533586 PC2 2024-04-26T12:55:57 ..P
+ASK 2024 2 18 10 31 0 2024-02-18T10:31:00Z 2024.132344793564 2153-99 425.93 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 541653 PC2 2024-10-09T12:43:16 ..P
+ASK 2024 2 18 10 31 0 2024-02-18T10:31:00Z 2024.132344793564 3639-99 425.98 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 541654 PC2 2024-10-09T12:59:10 ..P
+ASK 2024 2 25 11 15 0 2024-02-25T11:15:00Z 2024.1515539617487 2311-99 426.05 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 541659 PC2 2024-10-09T14:34:15 ..P
+ASK 2024 2 25 11 15 0 2024-02-25T11:15:00Z 2024.1515539617487 4382-99 425.99 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 541660 PC2 2024-10-09T14:18:18 ..P
+ASK 2024 3 18 10 11 0 2024-03-18T10:11:00Z 2024.2115418184578 3818-99 426.72 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 541655 PC2 2024-10-09T14:50:12 ..P
+ASK 2024 3 18 10 11 0 2024-03-18T10:11:00Z 2024.2115418184578 4027-99 426.8 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 541656 PC2 2024-10-09T15:06:12 ..P
+ASK 2024 3 24 12 15 0 2024-03-24T12:15:00Z 2024.2281705373407 2651-99 425.84 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 541658 PC2 2024-10-09T15:38:20 ..P
+ASK 2024 3 24 12 15 0 2024-03-24T12:15:00Z 2024.2281705373407 5291-99 425.78 0.041 23.2625 5.6322 2715.0 2710.0 5.0 P 541657 PC2 2024-10-09T15:22:19 ..P
