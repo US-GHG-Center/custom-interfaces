@@ -130,10 +130,12 @@ async function main() {
         delete feature.properties["DAAC Scene Numbers"];
     });
     methane_stac_data.features = await processFeatures(methane_stac_data.features);
+    fs.mkdirSync("./data", { recursive: true });
     fs.writeFileSync("./data/combined_plume_metadata.json", JSON.stringify(methane_stac_data, null, 2));
     // fetch data from https://ghg.center/api/stac/collections/emit-ch4plume-v1/items?limit=1000
     const methane_stac_geojson = await get_methane_geojson();
     // Write the data to a file
+    fs.mkdirSync("./data", { recursive: true });
     fs.writeFileSync("./data/methane_stac.geojson", JSON.stringify(methane_stac_geojson, null, 2));
     // Download and process the coverage file
     await fetchAndProcessCoverage();
