@@ -1,6 +1,7 @@
 // import fs
 const fs = require("fs");
 const COMBINED_METADATA_ENDPOINT = "https://earth.jpl.nasa.gov/emit-mmgis-lb/Missions/EMIT/Layers/coverage/combined_plume_metadata.json";
+// TODO update STAC limit to 500 when the next offset is fixed in STAC API
 const STAC_ENDPOINT = "https://earth.gov/ghgcenter/api/stac/collections/emit-ch4plume-v1/items?limit=10000";
 const LAT_LON_TO_COUNTRY_ENDPOINT = "https://api.geoapify.com/v1/geocode/reverse"; //?lat=33.81&lon=-101.92&format=json"
 const APIKEY = process.env.GEOAPIFY_APIKEY;
