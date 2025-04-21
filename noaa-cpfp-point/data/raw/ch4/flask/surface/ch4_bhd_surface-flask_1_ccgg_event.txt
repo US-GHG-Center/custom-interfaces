@@ -13,7 +13,7 @@
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2024), Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1983-2023,  Version: 2024-07-30, https://doi.org/10.15138/VNCZ-M766
+# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1983-2024,  Version: 2025-03-13, https://doi.org/10.15138/VNCZ-M766
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -39,7 +39,7 @@
 # site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
 # site_utc2lst : 12.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
-# dataset_creation_date : 2024-07-30T08:28:36.338781
+# dataset_creation_date : 2025-03-13T01:58:48.044564
 # dataset_num : 97
 # dataset_name : ch4_bhd_surface-flask_1_ccgg_event
 # dataset_parameter : ch4
@@ -52,7 +52,7 @@
 # dataset_comment : For more information about these data, please see https://gml.noaa.gov/aftp/data/trace_gases/ch4/flask/README_ch4_surface-flask_ccgg.html
 # dataset_calibration_scale : CH4_X2004A
 # dataset_start_date : 1999-10-14T00:44:00Z
-# dataset_stop_date : 2023-12-14T02:16:00Z
+# dataset_stop_date : 2024-11-14T22:28:00Z
 # dataset_usage_description : Please cite the product's citation when using data from this dataset. Relevant literature references for this dataset are listed below for convenience.
 # dataset_provider_license : These data were produced by NOAA and are not subject to copyright protection in the United States. NOAA waives any potential copyright and related rights in these data worldwide through the Creative Commons Zero 1.0 Universal Public Domain Dedication (CC0-1.0).
 # dataset_reference_total_listed : 1
@@ -890,3 +890,23 @@ BHD 2023 11 23 23 28 0 2023-11-23T23:28:00Z 2023.8958295281584 1820-99 1885.6 0.
 BHD 2023 11 23 23 28 0 2023-11-23T23:28:00Z 2023.8958295281584 217-99 1886.07 0.575 -41.4083 174.871 95.0 85.0 10.0 N 532266 PC2 2024-03-26T11:57:31 ..C
 BHD 2023 12 14 2 16 0 2023-12-14T02:16:00Z 2023.9509436834094 2361-99 1878.83 0.575 -41.4083 174.871 95.0 85.0 10.0 N 534493 PC2 2024-05-10T13:56:56 ..C
 BHD 2023 12 14 2 16 0 2023-12-14T02:16:00Z 2023.9509436834094 3637-99 1878.5 0.575 -41.4083 174.871 95.0 85.0 10.0 N 534494 PC2 2024-05-10T14:11:24 ...
+BHD 2024 2 8 0 43 0 2024-02-08T00:43:00Z 2024.1039067243473 4449-99 1860.7 0.575 -41.4083 174.871 95.0 85.0 10.0 N 534495 PC2 2024-05-10T14:25:57 ..P
+BHD 2024 2 8 0 43 0 2024-02-08T00:43:00Z 2024.1039067243473 5512-99 1860.71 0.575 -41.4083 174.871 95.0 85.0 10.0 N 534496 PC2 2024-05-10T14:40:25 ..P
+BHD 2024 2 28 22 9 0 2024-02-28T22:09:00Z 2024.1609915755919 3600-99 1860.76 0.575 -41.4083 174.871 95.0 85.0 10.0 N 534500 PC2 2024-05-10T15:38:24 ..P
+BHD 2024 2 28 22 9 0 2024-02-28T22:09:00Z 2024.1609915755919 696-99 1861.12 0.575 -41.4083 174.871 95.0 85.0 10.0 N 534499 PC2 2024-05-10T15:23:54 ..P
+BHD 2024 3 5 21 2 0 2024-03-05T21:02:00Z 2024.177257893139 1042-99 1866.47 0.575 -41.4083 174.871 95.0 85.0 10.0 N 534497 PC2 2024-05-10T14:54:57 ..P
+BHD 2024 3 5 21 2 0 2024-03-05T21:02:00Z 2024.177257893139 3909-99 1866.39 0.575 -41.4083 174.871 95.0 85.0 10.0 N 534498 PC2 2024-05-10T15:09:27 ..P
+BHD 2024 4 11 0 38 0 2024-04-11T00:38:00Z 2024.2760283849423 2138-99 1877.02 0.575 -41.4083 174.871 95.0 85.0 10.0 N 538601 PC2 2024-08-08T15:24:57 ..P
+BHD 2024 4 11 0 38 0 2024-04-11T00:38:00Z 2024.2760283849423 781-99 1877.03 0.575 -41.4083 174.871 95.0 85.0 10.0 N 538600 PC2 2024-08-08T15:08:47 ..P
+BHD 2024 5 1 23 59 0 2024-05-01T23:59:00Z 2024.333331435944 5109-99 1868.7 0.575 -41.4083 174.871 95.0 85.0 10.0 N 538599 PC2 2024-08-08T14:52:37 ..P
+BHD 2024 5 1 23 59 0 2024-05-01T23:59:00Z 2024.333331435944 5915-99 1868.22 0.575 -41.4083 174.871 95.0 85.0 10.0 N 538598 PC2 2024-08-08T14:36:29 ..P
+BHD 2024 5 8 23 34 0 2024-05-08T23:34:00Z 2024.3524096842743 2748-99 1864.48 0.575 -41.4083 174.871 95.0 85.0 10.0 N 538609 PC2 2024-08-09T11:20:59 ..P
+BHD 2024 5 8 23 34 0 2024-05-08T23:34:00Z 2024.3524096842743 833-99 1864.54 0.575 -41.4083 174.871 95.0 85.0 10.0 N 538608 PC2 2024-08-09T11:04:50 ..P
+BHD 2024 5 22 0 35 0 2024-05-22T00:35:00Z 2024.3880445506982 4100-99 1879.93 0.575 -41.4083 174.871 95.0 85.0 10.0 N 538610 PC2 2024-08-09T11:37:09 ..P
+BHD 2024 5 22 0 35 0 2024-05-22T00:35:00Z 2024.3880445506982 4894-99 1879.51 0.575 -41.4083 174.871 95.0 85.0 10.0 N 538611 PC2 2024-08-09T11:53:19 ..P
+BHD 2024 6 25 23 16 0 2024-06-25T23:16:00Z 2024.4835230722526 321-99 1885.48 0.575 -41.4083 174.871 95.0 85.0 10.0 N 538612 PC2 2024-08-09T12:41:41 ..P
+BHD 2024 6 25 23 16 0 2024-06-25T23:16:00Z 2024.4835230722526 330-99 1884.46 0.575 -41.4083 174.871 95.0 85.0 10.0 N 538613 PC2 2024-08-09T12:57:54 ..P
+BHD 2024 7 3 1 7 0 2024-07-03T01:07:00Z 2024.5028593655131 1073-99 1886.83 0.575 -41.4083 174.871 95.0 85.0 10.0 N 538606 PC2 2024-08-09T12:09:30 ..P
+BHD 2024 7 3 1 7 0 2024-07-03T01:07:00Z 2024.5028593655131 1569-99 1886.59 0.575 -41.4083 174.871 95.0 85.0 10.0 N 538607 PC2 2024-08-09T12:25:34 ..P
+BHD 2024 11 14 22 28 0 2024-11-14T22:28:00Z 2024.8714101396479 2772-99 1897.5 -999.999 -41.4083 174.871 95.0 85.0 10.0 N 547596 PIC-032 2025-03-03T16:01:10 ..P
+BHD 2024 11 14 22 28 0 2024-11-14T22:28:00Z 2024.8714101396479 5091-99 1897.55 -999.999 -41.4083 174.871 95.0 85.0 10.0 N 547595 PIC-032 2025-03-03T15:46:44 ..P

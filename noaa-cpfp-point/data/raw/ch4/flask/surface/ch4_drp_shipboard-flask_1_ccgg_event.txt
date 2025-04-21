@@ -13,7 +13,7 @@
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2024), Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1983-2023,  Version: 2024-07-30, https://doi.org/10.15138/VNCZ-M766
+# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1983-2024,  Version: 2025-03-13, https://doi.org/10.15138/VNCZ-M766
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -39,7 +39,7 @@
 # site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
 # site_utc2lst : -4.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
-# dataset_creation_date : 2024-07-30T08:28:36.338781
+# dataset_creation_date : 2025-03-13T01:58:48.044564
 # dataset_num : 110
 # dataset_name : ch4_drp_shipboard-flask_1_ccgg_event
 # dataset_parameter : ch4
@@ -52,7 +52,7 @@
 # dataset_comment : For more information about these data, please see https://gml.noaa.gov/aftp/data/trace_gases/ch4/flask/README_ch4_surface-flask_ccgg.html
 # dataset_calibration_scale : CH4_X2004A
 # dataset_start_date : 2003-04-07T13:54:00Z
-# dataset_stop_date : 2023-12-22T23:27:00Z
+# dataset_stop_date : 2024-04-13T11:30:00Z
 # dataset_usage_description : Please cite the product's citation when using data from this dataset.
 # dataset_provider_license : These data were produced by NOAA and are not subject to copyright protection in the United States. NOAA waives any potential copyright and related rights in these data worldwide through the Creative Commons Zero 1.0 Universal Public Domain Dedication (CC0-1.0).
 # dataset_reference_total_listed : 0
@@ -863,10 +863,10 @@ DRP 2023 4 30 8 17 0 2023-04-30T08:17:00Z 2023.3269729832573 3710-99 1863.65 0.5
 DRP 2023 5 9 7 3 0 2023-05-09T07:03:00Z 2023.3514897260275 3446-99 1977.87 0.575 -59.0167 -63.7 10.0 0.0 10.0 N 523124 PC2 2023-09-19T13:05:25 C..
 DRP 2023 5 9 7 3 0 2023-05-09T07:03:00Z 2023.3514897260275 5806-99 1983.16 0.575 -59.0167 -63.7 10.0 0.0 10.0 N 523125 PC2 2023-09-19T13:20:07 C..
 DRP 2023 6 24 11 15 0 2023-06-24T11:15:00Z 2023.4779965753426 2356-99 1873.87 0.575 -59.0 -64.0333 10.0 0.0 10.0 N 523123 PC2 2023-09-19T14:04:19 ...
-DRP 2023 7 9 2 38 0 2023-07-09T02:38:00Z 2023.518108828006 1716-99 1877.0 0.575 -53.8833 47.7667 10.0 0.0 10.0 N 523663 PC2 2023-09-20T10:22:30 ...
-DRP 2023 7 9 2 38 0 2023-07-09T02:38:00Z 2023.518108828006 472-99 1877.31 0.575 -53.85 47.7667 10.0 0.0 10.0 N 523664 PC2 2023-09-20T10:07:49 ...
-DRP 2023 7 27 11 53 0 2023-07-27T11:53:00Z 2023.5684798325724 5022-99 1880.7 0.575 -58.8167 47.9333 10.0 0.0 10.0 N 523661 PC2 2023-09-20T10:37:09 ...
-DRP 2023 7 27 11 53 0 2023-07-27T11:53:00Z 2023.5684798325724 5370-99 1880.86 0.575 -58.8167 47.9333 10.0 0.0 10.0 N 523662 PC2 2023-09-20T10:51:48 ...
+DRP 2023 7 9 2 38 0 2023-07-09T02:38:00Z 2023.518108828006 1716-99 1877.0 0.575 -53.8648 -47.7689 10.0 0.0 10.0 N 523663 PC2 2023-09-20T10:22:30 ...
+DRP 2023 7 9 2 38 0 2023-07-09T02:38:00Z 2023.518108828006 472-99 1877.31 0.575 -53.8648 -47.7689 10.0 0.0 10.0 N 523664 PC2 2023-09-20T10:07:49 ...
+DRP 2023 7 27 11 53 0 2023-07-27T11:53:00Z 2023.5684798325724 5022-99 1880.7 0.575 -53.8092 -47.9323 10.0 0.0 10.0 N 523661 PC2 2023-09-20T10:37:09 ...
+DRP 2023 7 27 11 53 0 2023-07-27T11:53:00Z 2023.5684798325724 5370-99 1880.86 0.575 -53.8092 -47.9323 10.0 0.0 10.0 N 523662 PC2 2023-09-20T10:51:48 ...
 DRP 2023 10 9 13 57 0 2023-10-09T13:57:00Z 2023.771455479452 5596-99 1887.44 0.575 -59.0167 -63.6333 10.0 0.0 10.0 N 527323 PC2 2023-12-12T13:12:17 ...
 DRP 2023 10 9 13 57 0 2023-10-09T13:57:00Z 2023.771455479452 689-99 1887.38 0.575 -59.0167 -63.6333 10.0 0.0 10.0 N 527324 PC2 2023-12-12T12:57:49 ...
 DRP 2023 10 22 6 29 0 2023-10-22T06:29:00Z 2023.8062195585997 1347-99 1887.3 0.575 -59.0 -63.7167 10.0 0.0 10.0 N 527321 PC2 2023-12-12T17:16:28 ...
@@ -877,3 +877,9 @@ DRP 2023 12 8 1 33 0 2023-12-08T01:33:00Z 2023.9344235159817 2475-99 1876.93 0.5
 DRP 2023 12 8 1 33 0 2023-12-08T01:33:00Z 2023.9344235159817 4698-99 1876.83 0.575 -59.49 -63.5467 10.0 0.0 10.0 N 529357 PC2 2024-01-30T12:50:28 ...
 DRP 2023 12 22 23 27 0 2023-12-22T23:27:00Z 2023.9752796803652 276-99 1873.35 0.575 -59.0132 -63.4254 10.0 0.0 10.0 N 531195 PC2 2024-03-26T18:11:04 ...
 DRP 2023 12 22 23 27 0 2023-12-22T23:27:00Z 2023.9752796803652 5757-99 1873.32 0.575 -59.0132 -63.4254 10.0 0.0 10.0 N 531196 PC2 2024-03-26T18:25:28 ...
+DRP 2024 1 28 20 9 0 2024-01-28T20:09:00Z 2024.076064435337 1114-99 1862.52 0.575 -59.0012 -63.4131 10.0 0.0 10.0 N 531193 PC2 2024-03-27T10:40:33 ..P
+DRP 2024 1 28 20 9 0 2024-01-28T20:09:00Z 2024.076064435337 4643-99 1862.44 0.575 -59.0012 -63.4131 10.0 0.0 10.0 N 531194 PC2 2024-03-27T10:54:55 ..P
+DRP 2024 4 3 1 35 0 2024-04-03T01:35:00Z 2024.254278612629 2233-99 1859.08 0.575 -59.0168 -63.4088 10.0 0.0 10.0 N 535840 PC2 2024-06-12T13:26:05 ..P
+DRP 2024 4 3 1 35 0 2024-04-03T01:35:00Z 2024.254278612629 2644-99 1859.24 0.575 -59.0168 -63.4088 10.0 0.0 10.0 N 535841 PC2 2024-06-12T13:41:32 ..P
+DRP 2024 4 13 11 30 0 2024-04-13T11:30:00Z 2024.28272996357 296-99 1862.47 0.575 -58.9136 -62.9947 10.0 0.0 10.0 N 535838 PC2 2024-06-12T12:55:06 ..P
+DRP 2024 4 13 11 30 0 2024-04-13T11:30:00Z 2024.28272996357 3425-99 1862.35 0.575 -58.9136 -62.9947 10.0 0.0 10.0 N 535839 PC2 2024-06-12T13:10:35 ..P
