@@ -92,7 +92,33 @@ export class CustomMKODataPreprocessor extends DataPreprocessor {
         .filter((line) => line[this.qc] == "...")
         .filter((line) => line[this.value] !== "-999.99")
         .filter((line) => line[this.value] !== "0")
-        return filteredData;
+        // mko only existed between November 29, 2022 through July 4, 2023
+        let clippedData = this.dataClip(filteredData)
+        return clippedData;
+    }
+
+    dataClip(data) {
+        // considering the data is sorted by date.
+        // mko only existed between 11/29/2022 through 7/4/2023
+        // remove all except them
+        let left = -1;
+        let right = -1;
+        for (let i=0; i < data.length; i++) {
+            let idxData = data[i]
+            if (Number(idxData[1]) === 2022 && Number(idxData[2]) === 11 && Number(idxData[3]) === 29) {
+                left = i;
+            }
+            if (Number(idxData[1]) === 2023 && Number(idxData[2]) === 7 && Number(idxData[3]) === 4) {
+                right = i;
+            }
+        }
+        if (left == -1) {
+            left = 0;
+        }
+        if (right == -1) {
+            right = data.length - 1;
+        }
+        return data.slice(left, right+1)
     }
 
     getDataIndex(dataArr) {
