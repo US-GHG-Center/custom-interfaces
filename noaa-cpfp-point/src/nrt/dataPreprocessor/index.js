@@ -110,6 +110,7 @@ export class CustomMKODataPreprocessor extends DataPreprocessor {
             }
             if (Number(idxData[1]) === 2023 && Number(idxData[2]) === 7 && Number(idxData[3]) === 4) {
                 right = i;
+                break;
             }
         }
         if (left == -1) {
