@@ -13,7 +13,7 @@
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1968-2024,  Version: 2025-03-13, https://doi.org/10.15138/wkgj-f215
+# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1968-2024,  Version: 2025-04-26, https://doi.org/10.15138/wkgj-f215
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -39,7 +39,7 @@
 # site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
 # site_utc2lst : 1.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
-# dataset_creation_date : 2025-03-13T01:58:48.044564
+# dataset_creation_date : 2025-04-26T12:49:21.678589
 # dataset_num : 43
 # dataset_name : co2_lmp_surface-flask_1_ccgg_event
 # dataset_parameter : co2
@@ -52,7 +52,7 @@
 # dataset_comment : For more information about these data, please see https://gml.noaa.gov/aftp/data/trace_gases/co2/flask/README_co2_surface-flask_ccgg.html
 # dataset_calibration_scale : CO2_X2019
 # dataset_start_date : 2006-10-12T13:42:00Z
-# dataset_stop_date : 2024-11-08T16:25:00Z
+# dataset_stop_date : 2025-01-31T16:00:00Z
 # dataset_usage_description : Please cite the product's citation when using data from this dataset. Relevant literature references for this dataset are listed below for convenience.
 # dataset_provider_license : These data were produced by NOAA and are not subject to copyright protection in the United States. NOAA waives any potential copyright and related rights in these data worldwide through the Creative Commons Zero 1.0 Universal Public Domain Dedication (CC0-1.0).
 # dataset_reference_total_listed : 1
@@ -1774,7 +1774,22 @@ LMP 2024 10 11 14 13 0 2024-10-11T14:13:00Z 2024.7775747571343 1348-99 423.09 0.
 LMP 2024 10 11 14 13 0 2024-10-11T14:13:00Z 2024.7775747571343 4699-99 423.15 0.041 35.5181 12.6322 50.0 45.0 5.0 G 543663 PC2 2024-12-24T12:54:19 ..P
 LMP 2024 10 18 14 50 0 2024-10-18T14:50:00Z 2024.7967706435945 1771-99 424.85 0.041 35.5181 12.6322 50.0 45.0 5.0 G 543664 PC2 2024-12-24T13:37:18 ..P
 LMP 2024 10 18 14 50 0 2024-10-18T14:50:00Z 2024.7967706435945 2674-99 424.84 0.041 35.5181 12.6322 50.0 45.0 5.0 G 543665 PC2 2024-12-24T13:51:41 ..P
-LMP 2024 10 25 15 0 0 2024-10-25T15:00:00Z 2024.8159153005465 1571-99 423.69 -999.999 35.5181 12.6322 50.0 45.0 5.0 G 545787 PIC-032 2025-02-01T16:55:12 ..P
-LMP 2024 10 25 15 0 0 2024-10-25T15:00:00Z 2024.8159153005465 5210-99 423.77 -999.999 35.5181 12.6322 50.0 45.0 5.0 G 545788 PIC-032 2025-02-01T17:09:34 ..P
-LMP 2024 11 8 16 25 0 2024-11-08T16:25:00Z 2024.854327944748 1255-99 425.07 -999.999 35.5181 12.6322 50.0 45.0 5.0 G 545785 PIC-032 2025-02-26T18:56:52 ..P
-LMP 2024 11 8 16 25 0 2024-11-08T16:25:00Z 2024.854327944748 756-99 425.1 -999.999 35.5181 12.6322 50.0 45.0 5.0 G 545786 PIC-032 2025-02-26T18:42:25 ..P
+LMP 2024 10 25 15 0 0 2024-10-25T15:00:00Z 2024.8159153005465 1571-99 423.69 0.041 35.5181 12.6322 50.0 45.0 5.0 G 545787 PIC-032 2025-02-01T16:55:12 ..P
+LMP 2024 10 25 15 0 0 2024-10-25T15:00:00Z 2024.8159153005465 5210-99 423.77 0.041 35.5181 12.6322 50.0 45.0 5.0 G 545788 PIC-032 2025-02-01T17:09:34 ..P
+LMP 2024 11 8 16 25 0 2024-11-08T16:25:00Z 2024.854327944748 1255-99 425.07 0.041 35.5181 12.6322 50.0 45.0 5.0 G 545785 PIC-032 2025-02-26T18:56:52 ..P
+LMP 2024 11 8 16 25 0 2024-11-08T16:25:00Z 2024.854327944748 756-99 425.1 0.041 35.5181 12.6322 50.0 45.0 5.0 G 545786 PIC-032 2025-02-26T18:42:25 ..P
+LMP 2024 11 15 16 52 0 2024-11-15T16:52:00Z 2024.8735048573162 5655-99 429.81 0.041 35.5181 12.6322 50.0 45.0 5.0 G 545827 PIC-032 2025-03-19T11:15:56 ..P
+LMP 2024 11 22 15 43 0 2024-11-22T15:43:00Z 2024.8924996205221 3203-99 427.25 0.041 35.5181 12.6322 50.0 45.0 5.0 G 545825 PIC-032 2025-03-19T13:24:39 ..P
+LMP 2024 11 22 15 43 0 2024-11-22T15:43:00Z 2024.8924996205221 4715-99 427.09 0.041 35.5181 12.6322 50.0 45.0 5.0 G 545826 PIC-032 2025-03-19T13:39:03 ..P
+LMP 2024 12 6 14 41 0 2024-12-06T14:41:00Z 2024.9306333485124 1110-99 430.96 0.041 35.5181 12.6322 50.0 45.0 5.0 G 548708 PIC-032 2025-03-24T15:58:12 ..P
+LMP 2024 12 6 14 41 0 2024-12-06T14:41:00Z 2024.9306333485124 5046-99 430.95 0.041 35.5181 12.6322 50.0 45.0 5.0 G 548709 PIC-032 2025-03-24T16:12:40 ..P
+LMP 2024 12 13 15 55 0 2024-12-13T15:55:00Z 2024.9498994383728 4448-99 428.64 0.041 35.5181 12.6322 50.0 45.0 5.0 G 548711 PIC-032 2025-03-24T16:41:33 ..P
+LMP 2024 12 13 15 55 0 2024-12-13T15:55:00Z 2024.9498994383728 779-99 428.59 0.041 35.5181 12.6322 50.0 45.0 5.0 G 548710 PIC-032 2025-03-24T16:27:07 ..P
+LMP 2024 12 20 15 25 0 2024-12-20T15:25:00Z 2024.9689681997572 3453-99 428.95 0.041 35.5181 12.6322 50.0 45.0 5.0 G 548707 PIC-032 2025-03-24T15:43:41 ..P
+LMP 2024 12 20 15 25 0 2024-12-20T15:25:00Z 2024.9689681997572 631-99 429.04 0.041 35.5181 12.6322 50.0 45.0 5.0 G 548706 PIC-032 2025-03-24T15:29:14 ..P
+LMP 2025 1 10 16 52 0 2025-01-10T16:52:00Z 2025.026582952816 3638-99 430.83 0.041 35.5181 12.6322 50.0 45.0 5.0 G 548712 PIC-032 2025-03-24T16:55:59 ..P
+LMP 2025 1 10 16 52 0 2025-01-10T16:52:00Z 2025.026582952816 4585-99 430.86 0.041 35.5181 12.6322 50.0 45.0 5.0 G 548713 PIC-032 2025-03-24T17:10:25 ..P
+LMP 2025 1 24 16 54 0 2025-01-24T16:54:00Z 2025.0649429223745 3643-99 432.04 0.041 35.5181 12.6322 50.0 45.0 5.0 G 548702 PIC-032 2025-04-15T12:52:44 ..P
+LMP 2025 1 24 16 54 0 2025-01-24T16:54:00Z 2025.0649429223745 3718-99 432.05 0.041 35.5181 12.6322 50.0 45.0 5.0 G 548703 PIC-032 2025-04-15T13:07:31 ..P
+LMP 2025 1 31 16 0 0 2025-01-31T16:00:00Z 2025.08401826484 4376-99 430.17 0.041 35.5181 12.6322 50.0 45.0 5.0 G 548704 PIC-032 2025-04-15T13:22:15 ..P
+LMP 2025 1 31 16 0 0 2025-01-31T16:00:00Z 2025.08401826484 5222-99 430.09 0.041 35.5181 12.6322 50.0 45.0 5.0 G 548705 PIC-032 2025-04-15T13:37:06 ..P
