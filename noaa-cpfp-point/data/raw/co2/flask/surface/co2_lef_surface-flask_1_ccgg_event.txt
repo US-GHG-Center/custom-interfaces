@@ -13,7 +13,7 @@
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1968-2024,  Version: 2025-03-13, https://doi.org/10.15138/wkgj-f215
+# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1968-2024,  Version: 2025-04-26, https://doi.org/10.15138/wkgj-f215
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -39,7 +39,7 @@
 # site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
 # site_utc2lst : -6.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
-# dataset_creation_date : 2025-03-13T01:58:48.044564
+# dataset_creation_date : 2025-04-26T12:49:21.678589
 # dataset_num : 40
 # dataset_name : co2_lef_surface-flask_1_ccgg_event
 # dataset_parameter : co2
@@ -52,7 +52,7 @@
 # dataset_comment : For more information about these data, please see https://gml.noaa.gov/aftp/data/trace_gases/co2/flask/README_co2_surface-flask_ccgg.html
 # dataset_calibration_scale : CO2_X2019
 # dataset_start_date : 1994-11-29T20:20:00Z
-# dataset_stop_date : 2024-12-11T19:45:00Z
+# dataset_stop_date : 2025-03-11T19:17:00Z
 # dataset_usage_description : Please cite the product's citation when using data from this dataset. Relevant literature references for this dataset are listed below for convenience.
 # dataset_provider_license : These data were produced by NOAA and are not subject to copyright protection in the United States. NOAA waives any potential copyright and related rights in these data worldwide through the Creative Commons Zero 1.0 Universal Public Domain Dedication (CC0-1.0).
 # dataset_reference_total_listed : 1
@@ -2897,7 +2897,13 @@ LEF 2024 10 15 17 16 0 2024-10-15T17:16:00Z 2024.788850941105 2450-99 423.54 0.0
 LEF 2024 10 15 17 16 0 2024-10-15T17:16:00Z 2024.788850941105 5150-99 423.71 0.041 45.9451 -90.2732 868.0 472.0 396.0 N 542679 PC2 2024-11-19T11:54:22 ..P
 LEF 2024 11 7 17 41 0 2024-11-07T17:41:00Z 2024.8517399058894 172-99 436.06 0.041 45.9451 -90.2732 868.0 472.0 396.0 N 543669 PC2 2024-12-24T14:48:50 ..P
 LEF 2024 11 7 17 41 0 2024-11-07T17:41:00Z 2024.8517399058894 4596-99 436.33 0.041 45.9451 -90.2732 868.0 472.0 396.0 N 543668 PC2 2024-12-24T14:34:32 ..P
-LEF 2024 11 25 20 22 0 2024-11-25T20:22:00Z 2024.9012257134184 3155-99 434.97 -999.999 45.9451 -90.2732 868.0 472.0 396.0 N 545821 PIC-032 2025-01-28T17:38:43 ..P
-LEF 2024 11 25 20 22 0 2024-11-25T20:22:00Z 2024.9012257134184 483-99 434.93 -999.999 45.9451 -90.2732 868.0 472.0 396.0 N 545820 PIC-032 2025-01-28T17:24:22 ..P
-LEF 2024 12 11 19 45 0 2024-12-11T19:45:00Z 2024.9448713570127 1928-99 432.62 -999.999 45.9451 -90.2732 868.0 472.0 396.0 N 545822 PIC-032 2025-01-29T10:29:08 ..P
-LEF 2024 12 11 19 45 0 2024-12-11T19:45:00Z 2024.9448713570127 3118-99 432.64 -999.999 45.9451 -90.2732 868.0 472.0 396.0 N 545823 PIC-032 2025-01-29T10:43:34 ..P
+LEF 2024 11 25 20 22 0 2024-11-25T20:22:00Z 2024.9012257134184 3155-99 434.97 0.041 45.9451 -90.2732 868.0 472.0 396.0 N 545821 PIC-032 2025-01-28T17:38:43 ..P
+LEF 2024 11 25 20 22 0 2024-11-25T20:22:00Z 2024.9012257134184 483-99 434.93 0.041 45.9451 -90.2732 868.0 472.0 396.0 N 545820 PIC-032 2025-01-28T17:24:22 ..P
+LEF 2024 12 11 19 45 0 2024-12-11T19:45:00Z 2024.9448713570127 1928-99 432.62 0.041 45.9451 -90.2732 868.0 472.0 396.0 N 545822 PIC-032 2025-01-29T10:29:08 ..P
+LEF 2024 12 11 19 45 0 2024-12-11T19:45:00Z 2024.9448713570127 3118-99 432.64 0.041 45.9451 -90.2732 868.0 472.0 396.0 N 545823 PIC-032 2025-01-29T10:43:34 ..P
+LEF 2025 1 6 17 5 0 2025-01-06T17:05:00Z 2025.015648782344 1565-99 432.82 0.041 45.9451 -90.2732 868.0 472.0 396.0 N 547575 PIC-032 2025-04-14T12:16:01 ..P
+LEF 2025 1 6 17 5 0 2025-01-06T17:05:00Z 2025.015648782344 3940-99 432.77 0.041 45.9451 -90.2732 868.0 472.0 396.0 N 547576 PIC-032 2025-04-14T12:30:48 ..P
+LEF 2025 1 24 18 14 0 2025-01-24T18:14:00Z 2025.065095129376 399-99 434.31 0.041 45.9451 -90.2732 868.0 472.0 396.0 N 547577 PIC-032 2025-04-14T12:45:35 C.P
+LEF 2025 1 24 18 14 0 2025-01-24T18:14:00Z 2025.065095129376 4953-99 433.62 0.041 45.9451 -90.2732 868.0 472.0 396.0 N 547578 PIC-032 2025-04-14T13:00:21 C.P
+LEF 2025 3 11 19 17 0 2025-03-11T19:17:00Z 2025.19124238965 1431-99 432.82 0.041 45.9451 -90.2732 868.0 472.0 396.0 N 549654 PIC-032 2025-04-14T13:44:32 ..P
+LEF 2025 3 11 19 17 0 2025-03-11T19:17:00Z 2025.19124238965 2852-99 432.85 0.041 45.9451 -90.2732 868.0 472.0 396.0 N 549655 PIC-032 2025-04-14T13:59:21 ..P
