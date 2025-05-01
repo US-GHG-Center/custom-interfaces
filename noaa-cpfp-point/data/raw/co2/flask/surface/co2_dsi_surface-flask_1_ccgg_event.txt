@@ -13,7 +13,7 @@
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1968-2024,  Version: 2025-03-13, https://doi.org/10.15138/wkgj-f215
+# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1968-2024,  Version: 2025-04-26, https://doi.org/10.15138/wkgj-f215
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -39,7 +39,7 @@
 # site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
 # site_utc2lst : 8.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
-# dataset_creation_date : 2025-03-13T01:58:48.044564
+# dataset_creation_date : 2025-04-26T12:49:21.678589
 # dataset_num : 25
 # dataset_name : co2_dsi_surface-flask_1_ccgg_event
 # dataset_parameter : co2
@@ -52,7 +52,7 @@
 # dataset_comment : For more information about these data, please see https://gml.noaa.gov/aftp/data/trace_gases/co2/flask/README_co2_surface-flask_ccgg.html
 # dataset_calibration_scale : CO2_X2019
 # dataset_start_date : 2010-03-05T01:51:00Z
-# dataset_stop_date : 2024-10-02T00:19:00Z
+# dataset_stop_date : 2025-02-05T00:30:00Z
 # dataset_usage_description : Please cite the product's citation when using data from this dataset. Relevant literature references for this dataset are listed below for convenience.
 # dataset_provider_license : These data were produced by NOAA and are not subject to copyright protection in the United States. NOAA waives any potential copyright and related rights in these data worldwide through the Creative Commons Zero 1.0 Universal Public Domain Dedication (CC0-1.0).
 # dataset_reference_total_listed : 1
@@ -1528,3 +1528,23 @@ DSI 2024 9 25 0 17 0 2024-09-25T00:17:00Z 2024.7322726927748 1656-99 422.1 0.041
 DSI 2024 9 25 0 17 0 2024-09-25T00:17:00Z 2024.7322726927748 3727-99 421.31 0.041 20.6992 116.7297 8.0 3.0 5.0 G 543310 PC2 2024-11-12T16:53:54 C.P
 DSI 2024 10 2 0 19 0 2024-10-02T00:19:00Z 2024.7514021706133 1048-99 438.05 0.041 20.6992 116.7297 8.0 3.0 5.0 G 543307 PC2 2024-11-12T16:10:37 C.P
 DSI 2024 10 2 0 19 0 2024-10-02T00:19:00Z 2024.7514021706133 1682-99 438.73 0.041 20.6992 116.7297 8.0 3.0 5.0 G 543308 PC2 2024-11-12T16:25:05 C.P
+DSI 2024 10 9 0 28 0 2024-10-09T00:28:00Z 2024.7705449301761 1070-99 432.27 0.041 20.6992 116.7297 8.0 3.0 5.0 G 547020 PIC-032 2025-03-20T17:46:32 ..P
+DSI 2024 10 9 0 28 0 2024-10-09T00:28:00Z 2024.7705449301761 5262-99 432.53 0.041 20.6992 116.7297 8.0 3.0 5.0 G 547021 PIC-032 2025-03-20T18:00:58 ..P
+DSI 2024 10 16 0 8 0 2024-10-16T00:08:00Z 2024.7896326654522 1708-99 447.96 0.041 20.6992 116.7297 8.0 3.0 5.0 G 547022 PIC-032 2025-03-20T16:48:57 C.P
+DSI 2024 10 16 0 8 0 2024-10-16T00:08:00Z 2024.7896326654522 2110-99 431.59 0.041 20.6992 116.7297 8.0 3.0 5.0 G 547023 PIC-032 2025-03-20T17:03:21 C.P
+DSI 2024 10 23 0 0 0 2024-10-23T00:00:00Z 2024.808743169399 2172-99 434.48 0.041 20.6992 116.7297 8.0 3.0 5.0 G 546754 PIC-032 2025-03-21T18:25:26 ..P
+DSI 2024 10 23 0 0 0 2024-10-23T00:00:00Z 2024.808743169399 4887-99 434.63 0.041 20.6992 116.7297 8.0 3.0 5.0 G 546753 PIC-032 2025-03-21T18:10:58 ..P
+DSI 2024 10 30 0 35 0 2024-10-30T00:35:00Z 2024.8279352610807 1390-99 429.44 0.041 20.6992 116.7297 8.0 3.0 5.0 G 546751 PIC-032 2025-03-21T17:42:01 ..P
+DSI 2024 10 30 0 35 0 2024-10-30T00:35:00Z 2024.8279352610807 869-99 429.33 0.041 20.6992 116.7297 8.0 3.0 5.0 G 546752 PIC-032 2025-03-21T17:56:28 ..P
+DSI 2024 11 6 0 10 0 2024-11-06T00:10:00Z 2024.847013509411 1613-99 431.44 0.041 20.6992 116.7297 8.0 3.0 5.0 G 548060 PIC-032 2025-03-21T09:30:56 ..P
+DSI 2024 11 6 0 10 0 2024-11-06T00:10:00Z 2024.847013509411 3144-99 431.53 0.041 20.6992 116.7297 8.0 3.0 5.0 G 548061 PIC-032 2025-03-21T09:45:23 ..P
+DSI 2024 11 15 0 41 0 2024-11-15T00:41:00Z 2024.8716624924105 2343-99 430.93 0.041 20.6992 116.7297 8.0 3.0 5.0 G 548058 PIC-032 2025-03-21T09:59:58 ..P
+DSI 2024 11 15 0 41 0 2024-11-15T00:41:00Z 2024.8716624924105 5913-99 430.83 0.041 20.6992 116.7297 8.0 3.0 5.0 G 548059 PIC-032 2025-03-21T10:14:23 ..P
+DSI 2025 1 16 0 30 0 2025-01-16T00:30:00Z 2025.0411529680366 4649-99 438.86 0.041 20.6992 116.7297 8.0 3.0 5.0 G 549562 PIC-032 2025-04-16T11:36:51 ..P
+DSI 2025 1 16 0 30 0 2025-01-16T00:30:00Z 2025.0411529680366 5908-99 438.92 0.041 20.6992 116.7297 8.0 3.0 5.0 G 549563 PIC-032 2025-04-16T11:51:37 ..P
+DSI 2025 1 22 0 27 0 2025-01-22T00:27:00Z 2025.0575856164382 4982-99 429.4 0.041 20.6992 116.7297 8.0 3.0 5.0 G 549613 PIC-032 2025-04-22T11:08:30 ..P
+DSI 2025 1 22 0 27 0 2025-01-22T00:27:00Z 2025.0575856164382 893-99 429.27 0.041 20.6992 116.7297 8.0 3.0 5.0 G 549612 PIC-032 2025-04-22T10:53:50 ..P
+DSI 2025 1 29 0 35 0 2025-01-29T00:35:00Z 2025.0767789193303 2290-99 432.48 0.041 20.6992 116.7297 8.0 3.0 5.0 G 549564 PIC-032 2025-04-21T14:16:16 ..P
+DSI 2025 1 29 0 35 0 2025-01-29T00:35:00Z 2025.0767789193303 4311-99 432.58 0.041 20.6992 116.7297 8.0 3.0 5.0 G 549565 PIC-032 2025-04-21T14:31:08 ..P
+DSI 2025 2 5 0 30 0 2025-02-05T00:30:00Z 2025.0959474885844 2781-99 438.58 0.041 20.6992 116.7297 8.0 3.0 5.0 G 549567 PIC-032 2025-04-16T12:21:05 ..P
+DSI 2025 2 5 0 30 0 2025-02-05T00:30:00Z 2025.0959474885844 29-99 438.7 0.041 20.6992 116.7297 8.0 3.0 5.0 G 549566 PIC-032 2025-04-16T12:06:21 ..P

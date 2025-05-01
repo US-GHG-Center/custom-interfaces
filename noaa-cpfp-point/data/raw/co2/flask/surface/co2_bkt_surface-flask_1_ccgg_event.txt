@@ -13,7 +13,7 @@
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1968-2024,  Version: 2025-03-13, https://doi.org/10.15138/wkgj-f215
+# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1968-2024,  Version: 2025-04-26, https://doi.org/10.15138/wkgj-f215
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -39,7 +39,7 @@
 # site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
 # site_utc2lst : 7.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
-# dataset_creation_date : 2025-03-13T01:58:48.044564
+# dataset_creation_date : 2025-04-26T12:49:21.678589
 # dataset_num : 12
 # dataset_name : co2_bkt_surface-flask_1_ccgg_event
 # dataset_parameter : co2
@@ -2050,6 +2050,14 @@ BKT 2024 10 29 7 0 0 2024-10-29T07:00:00Z 2024.8259335154828 3205-99 418.16 0.04
 BKT 2024 10 29 7 0 0 2024-10-29T07:00:00Z 2024.8259335154828 958-99 418.61 0.041 -0.202 100.318 875.0 845.0 30.0 G 545793 PC2 2025-01-14T13:10:00 ..P
 BKT 2024 11 5 7 0 0 2024-11-05T07:00:00Z 2024.845059198543 3970-99 419.86 0.041 -0.202 100.318 875.0 845.0 30.0 G 545795 PC2 2025-01-14T13:38:45 C.P
 BKT 2024 11 5 7 0 0 2024-11-05T07:00:00Z 2024.845059198543 5794-99 420.86 0.041 -0.202 100.318 875.0 845.0 30.0 G 545796 PC2 2025-01-14T13:53:13 C.P
+BKT 2024 11 12 7 0 0 2024-11-12T07:00:00Z 2024.864184881603 2698-99 412.03 0.041 -0.202 100.318 875.0 845.0 30.0 G 545805 PIC-032 2025-04-08T19:07:08 C.P
+BKT 2024 11 12 7 0 0 2024-11-12T07:00:00Z 2024.864184881603 4260-99 413.15 0.041 -0.202 100.318 875.0 845.0 30.0 G 545806 PIC-032 2025-04-08T19:21:53 C.P
+BKT 2024 11 19 7 0 0 2024-11-19T07:00:00Z 2024.8833105646631 3845-99 417.47 0.041 -0.202 100.318 875.0 845.0 30.0 G 545807 PIC-032 2025-04-08T18:37:40 C.P
+BKT 2024 11 19 7 0 0 2024-11-19T07:00:00Z 2024.8833105646631 4535-99 416.51 0.041 -0.202 100.318 875.0 845.0 30.0 G 545808 PIC-032 2025-04-08T18:52:27 C.P
+BKT 2024 11 26 7 0 0 2024-11-26T07:00:00Z 2024.9024362477232 2023-99 420.18 0.041 -0.202 100.318 875.0 845.0 30.0 G 545699 PIC-032 2025-04-08T12:44:06 C.P
+BKT 2024 11 26 7 0 0 2024-11-26T07:00:00Z 2024.9024362477232 5551-99 421.13 0.041 -0.202 100.318 875.0 845.0 30.0 G 545700 PIC-032 2025-04-08T12:58:52 C.P
+BKT 2024 12 3 7 0 0 2024-12-03T07:00:00Z 2024.9215619307834 1226-99 413.16 0.041 -0.202 100.318 875.0 845.0 30.0 G 545701 PIC-032 2025-04-08T13:13:37 C.P
+BKT 2024 12 3 7 0 0 2024-12-03T07:00:00Z 2024.9215619307834 4305-99 414.07 0.041 -0.202 100.318 875.0 845.0 30.0 G 545702 PIC-032 2025-04-08T13:28:20 C.P
 BKT 2024 12 10 7 0 0 2024-12-10T07:00:00Z 2024.9406876138432 2291-99 421.81 0.041 -0.202 100.318 875.0 845.0 30.0 G 545799 PC2 2025-01-14T14:36:20 ..P
 BKT 2024 12 10 7 0 0 2024-12-10T07:00:00Z 2024.9406876138432 3552-99 421.96 0.041 -0.202 100.318 875.0 845.0 30.0 G 545800 PC2 2025-01-14T14:50:45 ..P
 BKT 2024 12 17 7 0 0 2024-12-17T07:00:00Z 2024.9598132969033 2064-99 420.38 0.041 -0.202 100.318 875.0 845.0 30.0 G 545798 PC2 2025-01-14T14:21:58 C.P

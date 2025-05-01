@@ -13,7 +13,7 @@
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1983-2024,  Version: 2025-03-13, https://doi.org/10.15138/VNCZ-M766
+# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1983-2024,  Version: 2025-04-26, https://doi.org/10.15138/VNCZ-M766
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -39,7 +39,7 @@
 # site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
 # site_utc2lst : 4.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
-# dataset_creation_date : 2025-03-13T01:58:48.044564
+# dataset_creation_date : 2025-04-26T12:49:21.678589
 # dataset_num : 154
 # dataset_name : ch4_sey_surface-flask_1_ccgg_event
 # dataset_parameter : ch4
@@ -52,7 +52,7 @@
 # dataset_comment : For more information about these data, please see https://gml.noaa.gov/aftp/data/trace_gases/ch4/flask/README_ch4_surface-flask_ccgg.html
 # dataset_calibration_scale : CH4_X2004A
 # dataset_start_date : 1983-05-12T10:30:00Z
-# dataset_stop_date : 2024-11-22T06:08:00Z
+# dataset_stop_date : 2025-02-14T06:16:00Z
 # dataset_usage_description : Please cite the product's citation when using data from this dataset. Relevant literature references for this dataset are listed below for convenience.
 # dataset_provider_license : These data were produced by NOAA and are not subject to copyright protection in the United States. NOAA waives any potential copyright and related rights in these data worldwide through the Creative Commons Zero 1.0 Universal Public Domain Dedication (CC0-1.0).
 # dataset_reference_total_listed : 1
@@ -4136,3 +4136,27 @@ SEY 2024 11 8 10 17 0 2024-11-08T10:17:00Z 2024.8536297055252 2139-99 1883.52 0.
 SEY 2024 11 8 10 17 0 2024-11-08T10:17:00Z 2024.8536297055252 5472-99 1883.47 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 544974 PC2 2025-01-10T14:57:08 ..P
 SEY 2024 11 22 6 8 0 2024-11-22T06:08:00Z 2024.8914086217364 1464-99 1884.77 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 544978 PC2 2025-01-10T15:54:43 ..P
 SEY 2024 11 22 6 8 0 2024-11-22T06:08:00Z 2024.8914086217364 643-99 1884.7 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 544977 PC2 2025-01-10T15:40:21 ..P
+SEY 2024 11 29 10 21 0 2024-11-29T10:21:00Z 2024.9110143442622 117-99 1879.03 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548562 PIC-032 2025-03-25T18:20:50 ..P
+SEY 2024 11 29 10 21 0 2024-11-29T10:21:00Z 2024.9110143442622 723-99 1879.19 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548563 PIC-032 2025-03-25T18:35:17 ..P
+SEY 2024 12 6 6 41 0 2024-12-06T06:41:00Z 2024.9297226017 2690-99 1879.05 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548564 PIC-032 2025-03-25T18:49:43 ..P
+SEY 2024 12 6 6 41 0 2024-12-06T06:41:00Z 2024.9297226017 4048-99 1879.2 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548565 PIC-032 2025-03-25T19:04:11 ..P
+SEY 2024 12 13 6 30 0 2024-12-13T06:30:00Z 2024.948827413479 1702-99 1984.83 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548579 PIC-032 2025-03-25T15:23:39 ..P
+SEY 2024 12 13 6 30 0 2024-12-13T06:30:00Z 2024.948827413479 251-99 1984.59 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548578 PIC-032 2025-03-25T15:09:13 ..P
+SEY 2024 12 20 11 1 0 2024-12-20T11:01:00Z 2024.9684672890103 2577-99 1944.21 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548580 PIC-032 2025-03-25T15:38:03 ..P
+SEY 2024 12 20 11 1 0 2024-12-20T11:01:00Z 2024.9684672890103 4797-99 1944.49 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548581 PIC-032 2025-03-25T15:52:27 ..P
+SEY 2024 12 27 10 14 0 2024-12-27T10:14:00Z 2024.9875037947784 429-99 1969.71 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548570 PIC-032 2025-04-01T15:25:24 ..P
+SEY 2024 12 27 10 14 0 2024-12-27T10:14:00Z 2024.9875037947784 5265-99 1970.57 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548571 PIC-032 2025-04-01T15:39:46 ..P
+SEY 2025 1 3 5 48 0 2025-01-03T05:48:00Z 2025.0061415525115 410-99 1971.65 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548573 PIC-032 2025-04-01T16:08:39 ..P
+SEY 2025 1 3 5 48 0 2025-01-03T05:48:00Z 2025.0061415525115 73-99 1971.66 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548572 PIC-032 2025-04-01T15:54:12 ..P
+SEY 2025 1 10 5 50 0 2025-01-10T05:50:00Z 2025.0253234398783 2361-99 1909.89 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548576 PIC-032 2025-03-25T14:40:24 ..P
+SEY 2025 1 10 5 50 0 2025-01-10T05:50:00Z 2025.0253234398783 4826-99 1909.48 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548577 PIC-032 2025-03-25T14:54:49 ..P
+SEY 2025 1 17 6 11 0 2025-01-17T06:11:00Z 2025.0445414764079 1473-99 2001.35 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548575 PIC-032 2025-03-25T14:26:00 ..P
+SEY 2025 1 17 6 11 0 2025-01-17T06:11:00Z 2025.0445414764079 836-99 2001.22 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548574 PIC-032 2025-03-25T14:11:35 ..P
+SEY 2025 1 24 6 27 0 2025-01-24T06:27:00Z 2025.06375 2245-99 1984.68 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548560 PIC-032 2025-03-25T17:52:03 C.P
+SEY 2025 1 24 6 27 0 2025-01-24T06:27:00Z 2025.06375 3560-99 1986.28 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548561 PIC-032 2025-03-25T18:06:26 ..P
+SEY 2025 1 31 6 3 0 2025-01-31T06:03:00Z 2025.0828824200914 2154-99 1980.02 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548558 PIC-032 2025-03-25T17:23:12 ..P
+SEY 2025 1 31 6 3 0 2025-01-31T06:03:00Z 2025.0828824200914 4704-99 1984.6 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548559 PIC-032 2025-03-25T17:37:37 ..P
+SEY 2025 2 7 9 54 0 2025-02-07T09:54:00Z 2025.1025 3654-99 1965.85 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548567 PIC-032 2025-04-01T14:42:04 ..P
+SEY 2025 2 7 9 54 0 2025-02-07T09:54:00Z 2025.1025 798-99 1965.83 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548566 PIC-032 2025-04-01T14:27:37 ..P
+SEY 2025 2 14 6 16 0 2025-02-14T06:16:00Z 2025.1212633181126 301-99 1991.45 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548568 PIC-032 2025-04-01T14:56:30 ..P
+SEY 2025 2 14 6 16 0 2025-02-14T06:16:00Z 2025.1212633181126 4017-99 1990.82 0.575 -4.6824 55.5325 7.0 2.0 5.0 G 548569 PIC-032 2025-04-01T15:10:58 ..P

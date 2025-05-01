@@ -13,7 +13,7 @@
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1968-2024,  Version: 2025-03-13, https://doi.org/10.15138/wkgj-f215
+# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1968-2024,  Version: 2025-04-26, https://doi.org/10.15138/wkgj-f215
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -40,7 +40,7 @@
 # site_utc2lst : -6.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
 # site_url : http://www.arm.gov/sites/sgp
-# dataset_creation_date : 2025-03-13T01:58:48.044564
+# dataset_creation_date : 2025-04-26T12:49:21.678589
 # dataset_num : 66
 # dataset_name : co2_sgp_surface-flask_1_ccgg_event
 # dataset_parameter : co2
@@ -2739,7 +2739,7 @@ SGP 2024 10 24 19 0 0 2024-10-24T19:00:00Z 2024.8136384335155 1653-99 424.86 0.0
 SGP 2024 10 24 19 0 0 2024-10-24T19:00:00Z 2024.8136384335155 3122-99 424.87 0.041 36.607 -97.489 374.0 314.0 60.0 G 544008 PC2 2024-12-04T11:52:51 ..P
 SGP 2024 10 31 19 0 0 2024-10-31T19:00:00Z 2024.8327641165756 3180-99 429.17 0.041 36.607 -97.489 374.0 314.0 60.0 G 544009 PC2 2024-12-04T12:07:12 ..P
 SGP 2024 10 31 19 0 0 2024-10-31T19:00:00Z 2024.8327641165756 4695-99 429.1 0.041 36.607 -97.489 374.0 314.0 60.0 G 544010 PC2 2024-12-04T12:21:33 ..P
-SGP 2024 11 7 20 0 0 2024-11-07T20:00:00Z 2024.8520036429873 5505-99 441.95 -999.999 36.607 -97.489 374.0 314.0 60.0 G 544740 PIC-032 2025-01-24T13:11:54 ..P
-SGP 2024 11 7 20 0 0 2024-11-07T20:00:00Z 2024.8520036429873 5585-99 442.04 -999.999 36.607 -97.489 374.0 314.0 60.0 G 544741 PIC-032 2025-01-24T13:26:17 ..P
-SGP 2024 11 14 20 0 0 2024-11-14T20:00:00Z 2024.8711293260474 2138-99 428.43 -999.999 36.607 -97.489 374.0 314.0 60.0 G 544742 PIC-032 2025-01-24T13:40:42 ..P
-SGP 2024 11 14 20 0 0 2024-11-14T20:00:00Z 2024.8711293260474 4001-99 428.42 -999.999 36.607 -97.489 374.0 314.0 60.0 G 544743 PIC-032 2025-01-24T13:55:07 ..P
+SGP 2024 11 7 20 0 0 2024-11-07T20:00:00Z 2024.8520036429873 5505-99 441.95 0.041 36.607 -97.489 374.0 314.0 60.0 G 544740 PIC-032 2025-01-24T13:11:54 ..P
+SGP 2024 11 7 20 0 0 2024-11-07T20:00:00Z 2024.8520036429873 5585-99 442.04 0.041 36.607 -97.489 374.0 314.0 60.0 G 544741 PIC-032 2025-01-24T13:26:17 ..P
+SGP 2024 11 14 20 0 0 2024-11-14T20:00:00Z 2024.8711293260474 2138-99 428.43 0.041 36.607 -97.489 374.0 314.0 60.0 G 544742 PIC-032 2025-01-24T13:40:42 ..P
+SGP 2024 11 14 20 0 0 2024-11-14T20:00:00Z 2024.8711293260474 4001-99 428.42 0.041 36.607 -97.489 374.0 314.0 60.0 G 544743 PIC-032 2025-01-24T13:55:07 ..P
