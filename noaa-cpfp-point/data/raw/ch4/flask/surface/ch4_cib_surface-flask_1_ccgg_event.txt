@@ -13,7 +13,7 @@
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1983-2024,  Version: 2025-03-13, https://doi.org/10.15138/VNCZ-M766
+# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Methane Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1983-2024,  Version: 2025-04-26, https://doi.org/10.15138/VNCZ-M766
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -39,7 +39,7 @@
 # site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
 # site_utc2lst : 1.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
-# dataset_creation_date : 2025-03-13T01:58:48.044564
+# dataset_creation_date : 2025-04-26T12:49:21.678589
 # dataset_num : 106
 # dataset_name : ch4_cib_surface-flask_1_ccgg_event
 # dataset_parameter : ch4
@@ -52,7 +52,7 @@
 # dataset_comment : For more information about these data, please see https://gml.noaa.gov/aftp/data/trace_gases/ch4/flask/README_ch4_surface-flask_ccgg.html
 # dataset_calibration_scale : CH4_X2004A
 # dataset_start_date : 2009-05-05T10:35:00Z
-# dataset_stop_date : 2024-12-12T10:15:00Z
+# dataset_stop_date : 2025-02-28T10:20:00Z
 # dataset_usage_description : Please cite the product's citation when using data from this dataset. Relevant literature references for this dataset are listed below for convenience.
 # dataset_provider_license : These data were produced by NOAA and are not subject to copyright protection in the United States. NOAA waives any potential copyright and related rights in these data worldwide through the Creative Commons Zero 1.0 Universal Public Domain Dedication (CC0-1.0).
 # dataset_reference_total_listed : 1
@@ -1509,7 +1509,19 @@ CIB 2024 11 7 10 20 0 2024-11-07T10:20:00Z 2024.8509031572555 1561-99 2043.92 0.
 CIB 2024 11 7 10 20 0 2024-11-07T10:20:00Z 2024.8509031572555 5782-99 2044.43 0.575 41.81 -4.93 850.0 845.0 5.0 G 544480 PC2 2025-01-06T17:12:32 ..P
 CIB 2024 11 22 9 30 0 2024-11-22T09:30:00Z 2024.8917918943534 3030-99 2020.83 0.575 41.81 -4.93 850.0 845.0 5.0 G 544778 PC2 2024-12-23T16:11:10 ..P
 CIB 2024 11 22 9 30 0 2024-11-22T09:30:00Z 2024.8917918943534 3619-99 2020.86 0.575 41.81 -4.93 850.0 845.0 5.0 G 544779 PC2 2024-12-23T16:25:29 ..P
-CIB 2024 11 29 9 40 0 2024-11-29T09:40:00Z 2024.9109365513054 5831-99 2141.85 -999.999 41.81 -4.93 850.0 845.0 5.0 G 545650 PIC-032 2025-01-28T13:34:25 ..P
-CIB 2024 11 29 9 40 0 2024-11-29T09:40:00Z 2024.9109365513054 5832-99 2138.51 -999.999 41.81 -4.93 850.0 845.0 5.0 G 545651 PIC-032 2025-01-28T13:48:47 ..P
-CIB 2024 12 12 10 15 0 2024-12-12T10:15:00Z 2024.9465220856102 125-99 2068.28 -999.999 41.81 -4.93 850.0 845.0 5.0 G 545648 PIC-032 2025-01-28T13:05:37 ..P
-CIB 2024 12 12 10 15 0 2024-12-12T10:15:00Z 2024.9465220856102 126-99 2068.34 -999.999 41.81 -4.93 850.0 845.0 5.0 G 545649 PIC-032 2025-01-28T13:20:00 ..P
+CIB 2024 11 29 9 40 0 2024-11-29T09:40:00Z 2024.9109365513054 5831-99 2141.85 0.575 41.81 -4.93 850.0 845.0 5.0 G 545650 PIC-032 2025-01-28T13:34:25 ..P
+CIB 2024 11 29 9 40 0 2024-11-29T09:40:00Z 2024.9109365513054 5832-99 2138.51 0.575 41.81 -4.93 850.0 845.0 5.0 G 545651 PIC-032 2025-01-28T13:48:47 ..P
+CIB 2024 12 12 10 15 0 2024-12-12T10:15:00Z 2024.9465220856102 125-99 2068.28 0.575 41.81 -4.93 850.0 845.0 5.0 G 545648 PIC-032 2025-01-28T13:05:37 ..P
+CIB 2024 12 12 10 15 0 2024-12-12T10:15:00Z 2024.9465220856102 126-99 2068.34 0.575 41.81 -4.93 850.0 845.0 5.0 G 545649 PIC-032 2025-01-28T13:20:00 ..P
+CIB 2024 12 18 10 10 0 2024-12-18T10:10:00Z 2024.9629060412872 2553-99 2449.93 0.575 41.81 -4.93 850.0 845.0 5.0 G 547086 PIC-032 2025-04-08T20:06:01 C.P
+CIB 2024 12 18 10 10 0 2024-12-18T10:10:00Z 2024.9629060412872 3733-99 2462.4 0.575 41.81 -4.93 850.0 845.0 5.0 G 547087 PIC-032 2025-04-08T20:20:44 C.P
+CIB 2025 1 16 9 15 0 2025-01-16T09:15:00Z 2025.042151826484 5492-99 2005.51 0.575 41.81 -4.93 850.0 845.0 5.0 G 547085 PIC-032 2025-04-08T19:51:20 ..P
+CIB 2025 1 16 9 15 0 2025-01-16T09:15:00Z 2025.042151826484 824-99 2005.31 0.575 41.81 -4.93 850.0 845.0 5.0 G 547084 PIC-032 2025-04-08T19:36:35 ..P
+CIB 2025 1 30 9 30 0 2025-01-30T09:30:00Z 2025.0805365296803 3113-99 2025.52 0.575 41.81 -4.93 850.0 845.0 5.0 G 548338 PIC-032 2025-04-15T09:11:42 ..P
+CIB 2025 1 30 9 30 0 2025-01-30T09:30:00Z 2025.0805365296803 5052-99 2025.33 0.575 41.81 -4.93 850.0 845.0 5.0 G 548339 PIC-032 2025-04-15T09:26:24 ..P
+CIB 2025 2 13 9 30 0 2025-02-13T09:30:00Z 2025.118892694064 3980-99 2066.53 0.575 41.81 -4.93 850.0 845.0 5.0 G 548340 PIC-032 2025-04-15T09:41:06 ..P
+CIB 2025 2 13 9 30 0 2025-02-13T09:30:00Z 2025.118892694064 4146-99 2067.64 0.575 41.81 -4.93 850.0 845.0 5.0 G 548341 PIC-032 2025-04-15T09:55:48 ..P
+CIB 2025 2 20 9 15 0 2025-02-20T09:15:00Z 2025.138042237443 280-99 2067.73 0.575 41.81 -4.93 850.0 845.0 5.0 G 548720 PIC-032 2025-04-21T19:40:22 ..P
+CIB 2025 2 20 9 15 0 2025-02-20T09:15:00Z 2025.138042237443 3257-99 2067.65 0.575 41.81 -4.93 850.0 845.0 5.0 G 548721 PIC-032 2025-04-21T19:55:06 ..P
+CIB 2025 2 28 10 20 0 2025-02-28T10:20:00Z 2025.1600837138508 2476-99 2047.07 0.575 41.81 -4.93 850.0 845.0 5.0 G 548718 PIC-032 2025-04-21T17:42:33 ..P
+CIB 2025 2 28 10 20 0 2025-02-28T10:20:00Z 2025.1600837138508 4640-99 2047.36 0.575 41.81 -4.93 850.0 845.0 5.0 G 548719 PIC-032 2025-04-21T17:57:18 ..P
