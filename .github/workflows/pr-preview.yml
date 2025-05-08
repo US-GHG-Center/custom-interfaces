@@ -182,6 +182,7 @@ jobs:
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_FEATURES_API_URL="${{ vars.FEATURES_API_URL }}" >> ./nist-interface/.env
               echo PUBLIC_URL="${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}" >> ./nist-interface/.env
+              cat ./nist-interface/.env
 
               cd ./nist-interface
               set -a; source .env; set +a
