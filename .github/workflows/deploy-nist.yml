@@ -3,7 +3,7 @@ name: Deploy Nist
 on:
   workflow_dispatch:
   push:
-    branches: [ main, production, development ]
+    branches: [ main, production, test-NIST-INFLUX-data-update ]
     paths:
       - nist-interface/**
 
