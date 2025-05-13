@@ -16,4 +16,3 @@ run `yarn`
 ## Bundle using webpack
 
 run `yarn build`
-
