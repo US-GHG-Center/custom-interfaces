@@ -21,7 +21,7 @@ jobs:
             echo "env_name=staging" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
             echo "env_name=production" >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref }}" = "test-NIST-INFLUX-data-update" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/test-NIST-INFLUX-data-update" ]; then
             echo "env_name=development" >> $GITHUB_OUTPUT
           fi
       - name: Print the environment
