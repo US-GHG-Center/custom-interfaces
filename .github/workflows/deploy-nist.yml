@@ -3,7 +3,7 @@ name: Deploy Nist
 on:
   workflow_dispatch:
   push:
-    branches: [ main, production ]
+    branches: [ main, production, development ]
     paths:
       - nist-interface/**
 
@@ -21,6 +21,8 @@ jobs:
             echo "env_name=staging" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/production" ]; then
             echo "env_name=production" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" = "test-NIST-INFLUX-data-update" ]; then
+            echo "env_name=development" >> $GITHUB_OUTPUT
           fi
       - name: Print the environment
         run: echo "The environment is ${{ steps.define_environment.outputs.env_name }}"
