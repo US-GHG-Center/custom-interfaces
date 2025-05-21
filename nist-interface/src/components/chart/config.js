@@ -9,6 +9,29 @@ Chart.register(annotationPlugin);
 
 export const ghgBlue = "#082A63";
 
+export const noDataPlugin = {
+  id: "noDataPlugin",
+  beforeDraw: (chart) => {
+    const { data } = chart;
+    const hasData = data?.labels?.length && data.datasets?.[0]?.data?.length;
+    const noData =
+      chart.config?.options?.plugins?.noDataMessage?.enabled && !hasData;
+
+    if (noData) {
+      const ctx = chart.ctx;
+      const { width, height } = chart;
+      ctx.save();
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "#999";
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillText("No data available", width / 2, height / 2);
+      ctx.restore();
+    }
+  },
+};
+
 export const plugin = {
   id: "corsair",
   defaults: {
@@ -23,6 +46,14 @@ export const plugin = {
     };
   },
   afterEvent: (chart, args) => {
+     const isEnabled =
+      chart?.config?.options?.plugins?.corsair?.enabled !== false &&
+      chart?.config?.options?.plugins?.noDataMessage?.enabled !== true;
+
+    if (!isEnabled) {
+      chart.corsair.draw = false;
+      return;
+    }
     const { inChartArea } = args;
     const { x, y } = args.event;
 
@@ -102,6 +133,9 @@ export const options = {
   plugins: {
     corsair: {
       // color: 'black',
+    },
+    noDataMessage: {
+      enabled: false,
     },
     zoom: {
       zoom: {
