@@ -6,7 +6,7 @@ import { faXmark, faRotateLeft, faCircleInfo } from '@fortawesome/free-solid-svg
 import { LoadingSpinner } from '../loading';
 import { fetchAllFromFeaturesAPI } from "../../services/api";
 
-import { plugin, options } from './config';
+import { plugin, options,noDataPlugin } from './config';
 import { dataPreprocess, getYAxisLabel, getChangedGHGStationId, getStationCode, isChartZoomed } from "./helper";
 import './index.css';
 
@@ -23,6 +23,7 @@ export class ConcentrationChart extends Component {
       showChartInstructions: true,
       chartDataIsLoading: false,
       dataAccessLink: "",
+      noData: false,
     };
     this.dataPreprocess = dataPreprocess;
     this.getYAxisLabel = getYAxisLabel;
@@ -72,8 +73,14 @@ export class ConcentrationChart extends Component {
     this.chart = new Chart(this.chartCanvas, {
       type: 'line',
       data: dataset,
-      options: options,
-      plugins: [plugin]
+      options: {
+        ...options,
+        plugins: {
+          ...options.plugins,
+          noDataMessage: { enabled: this.state.noData },
+        },
+      },
+      plugins: [plugin, noDataPlugin],
     });
 
     this.chart.options.scales.y.title.text = dataPointLabel;
@@ -86,7 +93,7 @@ export class ConcentrationChart extends Component {
     }
 
     this.prepareChart();
-  }
+  };
 
   prepareChart = () => {
     let currentStationId = this.getChangedGHGStationId(this.props.selectedStationId, this.props.ghg);
@@ -97,19 +104,23 @@ export class ConcentrationChart extends Component {
     this.fetchStationData(currentStationId).then(data => {
       const { time, concentration } = data;
       // Post data fetch, check if the chart title needs to be modified (for race conditions when multiple stations are clicked).
-      this.changeTitle(currentStationId);
-      this.updateChart(concentration, time);
-      this.setInitialScaleLimits();
+      const noData = !time.length;
+      this.setState({ noData }, () => {
+        this.changeTitle(currentStationId);
+        this.updateChart(concentration, time, noData);
+      });
+      if (!noData) this.setInitialScaleLimits();
     });
-  }
+  };
 
-  updateChart = (data, label) => {
+  updateChart = (data, label, noData) => {
     if (this.chart) {
       // first reset the zoom
       this.chart.resetZoom();
       this.chart.options.plugins.tooltip.enabled = false;
 
       let labelY = this.getYAxisLabel(this.props.ghg);
+      this.chart.options.plugins.noDataMessage.enabled = noData;
       this.chart.data.datasets[0].label = labelY;
       this.chart.options.scales.y.title.text = labelY;
 
@@ -188,28 +199,28 @@ export class ConcentrationChart extends Component {
     return (
       <Box id="chart-box" style={this.props.style}>
           <div id="chart-container" style={{width: "100%", height:"100%"}}>
-            <div id="chart-tools">
-              <div id="chart-tools-left">
-                <div id="chart-instructions-container">
-                  <div className="icon-and-instructions">
-                    <FontAwesomeIcon
-                      icon={faCircleInfo}
-                      // style={{margin: "12px"}}
+          <div id="chart-tools">
+            <div id="chart-tools-left">
+              <div id="chart-instructions-container">
+                <div className="icon-and-instructions">
+                  <FontAwesomeIcon
+                    icon={faCircleInfo}
+                    // style={{margin: "12px"}}
                       onMouseEnter={() => this.setState({showChartInstructions: true})}
                       onMouseLeave={() => this.setState({showChartInstructions: false})}
-                    />
+                  />
                     {this.state.showChartInstructions && <div id="chart-instructions">
                       <p>1. Click and drag, scroll or pinch on the chart to zoom in.</p>
                       <p>2. Hover over data points when zoomed in to see the values.</p>
                       <p>3. Click on the rectangle boxes on the side to toggle chart.</p>
                     </div>
                     }
-                  </div>
                 </div>
               </div>
-              <div id="chart-tools-right">
+            </div>
+            <div id="chart-tools-right">
                 { this.state.dataAccessLink && <a id="data-access-link" href={this.state.dataAccessLink} target="_blank" rel='noreferrer'>Data Access Link ↗</a> }
-                <div id="chart-controls">
+              <div id="chart-controls">
                   <FontAwesomeIcon id="zoom-reset-button" icon={faRotateLeft} title="Reset Zoom" onClick={this.handleRefresh}/>
                   <FontAwesomeIcon id="chart-close-button" icon={faXmark} title="Close" onClick={this.handleClose}/>
                 </div>
@@ -218,13 +229,13 @@ export class ConcentrationChart extends Component {
             {
               this.state.chartDataIsLoading && <LoadingSpinner />
             }
-            <canvas
+          <canvas
               id = "chart"
               className='fullWidth'
               style={{width: "100%", height: "100%"}}
               ref={chartCanvas => (this.chartCanvas = chartCanvas)}
-            />
-          </div>
+          />
+        </div>
       </Box>
     );
   }
