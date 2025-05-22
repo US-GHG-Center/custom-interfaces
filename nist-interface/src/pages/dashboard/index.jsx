@@ -11,63 +11,63 @@ import "./index.css";
 
 export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode, setSelectedGHG, zoomLevel, stationMetadata }) {
   const [ displayChart, setDisplayChart ] = useState(false);
-
+  
+  const logo = new URL("../../nist.png", import.meta.url);
   useEffect(() => {
     if (selectedStationId) {
       setDisplayChart(true);
     }
   }, [selectedStationId]); // only on selectedStationId prop change
-
   return (
     <Box className="fullSize">
         <Title ghg={ghg} agency={agency} region={region}/>
-        <img src={process.env.PUBLIC_URL + "/nist.png"} alt="NIST" className='logo'/>
+        <img src={logo} alt="NIST" className='logo'/>
         <PanelGroup direction='vertical' className='panel-wrapper'>
-          <Panel
+        <Panel
             id='map-panel'
-            maxSize={100}
-            defaultSize={100}
-            minSize={25}
+          maxSize={100}
+          defaultSize={100}
+          minSize={25}
             className='panel'
-            order={1}
-          >
-            <div id="dashboard-map-container">
+          order={1}
+        >
+          <div id="dashboard-map-container">
               { stations && <MapBoxViewer
-                              stations={stations}
-                              region={region}
-                              agency={agency}
-                              stationCode={stationCode}
-                              zoomLevel={zoomLevel}
-                              setSelection={setSelectedStationId}
-                              setDisplayChart={setDisplayChart}
-                              displayChart={displayChart}
+                stations={stations}
+                region={region}
+                agency={agency}
+                stationCode={stationCode}
+                zoomLevel={zoomLevel}
+                setSelection={setSelectedStationId}
+                setDisplayChart={setDisplayChart}
+                displayChart={displayChart}
                             />}
               { displayChart && <SelectGHG selectedGHG={ghg} setSelectedGHG={setSelectedGHG} /> }
-            </div>
-          </Panel>
+          </div>
+        </Panel>
               { displayChart &&
-                <>
-                  <PanelResizeHandle className='resize-handle'>
-                    <DragHandleIcon title="Resize"/>
-                  </PanelResizeHandle>
-                  <Panel
+          <>
+            <PanelResizeHandle className="resize-handle">
+              <DragHandleIcon title="Resize" />
+            </PanelResizeHandle>
+            <Panel
                     id='chart-panel'
-                    maxSize={75}
-                    minSize={40}
+              maxSize={75}
+              minSize={40}
                     className='panel panel-timeline'
-                    order={2}
-                  >
-                    <ConcentrationChart
-                      selectedStationId={selectedStationId}
-                      setSelectedStationId={setSelectedStationId}
-                      stationMetadata={stationMetadata}
-                      ghg={ghg}
-                      setDisplayChart={setDisplayChart}
-                    />
-                  </Panel>
-                </>
+              order={2}
+            >
+              <ConcentrationChart
+                selectedStationId={selectedStationId}
+                setSelectedStationId={setSelectedStationId}
+                stationMetadata={stationMetadata}
+                ghg={ghg}
+                setDisplayChart={setDisplayChart}
+              />
+            </Panel>
+          </>
               }
-        </PanelGroup>
+      </PanelGroup>
     </Box>
   );
 }
