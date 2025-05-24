@@ -10,9 +10,12 @@ import { plugin, options } from './config';
 import { dataPreprocess, getYAxisLabel, getChangedGHGStationId, getStationCode, isChartZoomed } from "./helper";
 import './index.css';
 
-const collectionItemURL = (collectionId) => {
-  return `${process.env.REACT_APP_FEATURES_API_URL}/collections/${collectionId}/items?is_max_height_data=True`;
-}
+const collectionItemURL = (collectionId, config) => {
+  const accessToken = config?.featuresApiUrl
+    ? config.featuresApiUrl
+    : process.env.REACT_APP_FEATURES_API_URL;
+  return `${accessToken}/collections/${collectionId}/items?is_max_height_data=True`;
+};
 
 export class ConcentrationChart extends Component {
   constructor(props) {

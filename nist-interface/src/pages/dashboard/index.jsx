@@ -9,7 +9,8 @@ import { SelectGHG } from '../../components/dropdown';
 
 import "./index.css";
 
-export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode, setSelectedGHG, zoomLevel, stationMetadata }) {
+export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode, setSelectedGHG, zoomLevel, stationMetadata, config })
+{
   const [ displayChart, setDisplayChart ] = useState(false);
   
   const logo = new URL("../../nist.png", import.meta.url);
@@ -41,8 +42,12 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
                 setSelection={setSelectedStationId}
                 setDisplayChart={setDisplayChart}
                 displayChart={displayChart}
-                            />}
-              { displayChart && <SelectGHG selectedGHG={ghg} setSelectedGHG={setSelectedGHG} /> }
+                config={config}
+              />
+            }
+            {displayChart && (
+              <SelectGHG selectedGHG={ghg} setSelectedGHG={setSelectedGHG} />
+            )}
           </div>
         </Panel>
               { displayChart &&
@@ -63,6 +68,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
                 stationMetadata={stationMetadata}
                 ghg={ghg}
                 setDisplayChart={setDisplayChart}
+                config={config}
               />
             </Panel>
           </>
