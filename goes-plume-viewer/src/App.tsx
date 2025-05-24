@@ -1,11 +1,11 @@
-import { Fragment } from 'react';
+import { Fragment } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import CssBaseline from '@mui/material/CssBaseline';
-import { DashboardContainer } from './pages/dashboardContainer';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import CssBaseline from "@mui/material/CssBaseline";
+import { GoesInterface } from "./pages/goesInterface";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
-import './App.css';
+import "./App.css";
 
 const BASE_PATH = process.env.PUBLIC_URL;
 
@@ -16,8 +16,12 @@ function App() {
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <BrowserRouter basename={BASE_PATH}>
           <Routes>
-            <Route path="/" element={<DashboardContainer />}>
-            </Route>
+            <Route
+              path="/"
+              element={
+                <GoesInterface/>
+              }
+            ></Route>
           </Routes>
         </BrowserRouter>
       </LocalizationProvider>

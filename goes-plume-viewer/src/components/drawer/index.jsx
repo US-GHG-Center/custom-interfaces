@@ -60,10 +60,16 @@ const HorizontalLayout = styled.div`
     margin-bottom: 5px;
 `;
 
-export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, collectionId, metaDataTree, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId}) {
+export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, collectionId, metaDataTree, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId,config}) {
   const [ selectedPlumeMetas, setSelectedPlumeMetas ] = useState([]);
   const [ location, setLocation ] = useState("USA");
-  const [ numberOfPlumes, setNumberOfPlumes ] = useState(0);
+  const [numberOfPlumes, setNumberOfPlumes] = useState(0);
+   const rasterApiUrl = config?.rasterApiUrl
+    ? config.rasterApiUrl
+     : process.env.REACT_APP_RASTER_API_URL;
+   const cloudBrowseUrl = config?.cloudBrowseUrl
+    ? config.cloudBrowseUrl
+    : process.env.REACT_APP_RASTER_API_URL;
 
   let VMIN = 0;
   let VMAX = 0.4;
@@ -151,8 +157,8 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
                 key={selectedPlumeMeta.id}
                 plumeSourceId={selectedPlumeMeta.id}
                 plumeSourceName={selectedPlumeMeta.id}
-                imageUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
-                tiffUrl={`${process.env.REACT_APP_CLOUD_BROWSE_URL}/browseui/#${collectionId}/#q=${selectedPlumeMeta.id.split("_").slice(-1)}`}
+                imageUrl={`${rasterApiUrl}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
+                tiffUrl={`${cloudBrowseUrl}/browseui/#${collectionId}/#q=${selectedPlumeMeta.id.split("_").slice(-1)}`}
                 lon={selectedPlumeMeta.lon}
                 lat={selectedPlumeMeta.lat}
                 totalReleaseMass={selectedPlumeMeta.totalReleaseMass}

@@ -1,4 +1,4 @@
-export const addSourceLayerToMap = (map, feature, sourceId, layerId) => {
+export const addSourceLayerToMap = (map, feature, sourceId, layerId,rasterApiUrl) => {
     if (!map || (sourceExists(map, sourceId) && layerExists(map, layerId))) return;
 
     const collection = feature.collection; // feature.collection
@@ -9,7 +9,7 @@ export const addSourceLayerToMap = (map, feature, sourceId, layerId) => {
     let itemId = feature.id;
 
     const TILE_URL =
-        `${process.env.REACT_APP_RASTER_API_URL}/collections/${collection}/items/${itemId}/tiles/WebMercatorQuad/{z}/{x}/{y}@1x` +
+        `${rasterApiUrl}/collections/${collection}/items/${itemId}/tiles/WebMercatorQuad/{z}/{x}/{y}@1x` +
         "?assets=" + assets +
         "&bidx=1" +
         "&colormap_name=" + colorMap +
