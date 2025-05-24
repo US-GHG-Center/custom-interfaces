@@ -12,6 +12,7 @@ import "./index.css";
 export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode, setSelectedGHG, zoomLevel, stationMetadata }) {
   const [ displayChart, setDisplayChart ] = useState(false);
   
+  config,
   const logo = new URL("../../nist.png", import.meta.url);
   useEffect(() => {
     if (selectedStationId) {
@@ -43,6 +44,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
                 displayChart={displayChart}
                             />}
               { displayChart && <SelectGHG selectedGHG={ghg} setSelectedGHG={setSelectedGHG} /> }
+                config={config}
           </div>
         </Panel>
               { displayChart &&
@@ -63,6 +65,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
                 stationMetadata={stationMetadata}
                 ghg={ghg}
                 setDisplayChart={setDisplayChart}
+                config={config}
               />
             </Panel>
           </>

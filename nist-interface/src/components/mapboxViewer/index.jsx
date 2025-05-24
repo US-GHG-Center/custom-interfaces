@@ -34,14 +34,24 @@ export class MapBoxViewer extends Component {
         this.getZoomLevel = getZoomLevel;
         this.getMarkerColor = getMarkerColor;
         this.getMarkerSVG = getMarkerSVG;
-    }
-
-    componentDidMount() {
-        mapboxgl.accessToken = accessToken;
-        let mapboxStyleUrl = 'mapbox://styles/mapbox/streets-v12';
-        if (mapboxStyleBaseUrl) {
-            let styleId = BASEMAP_STYLES.findIndex(style => style.id === BASEMAP_ID_DEFAULT);
-            mapboxStyleUrl = `${mapboxStyleBaseUrl}/${BASEMAP_STYLES[styleId].mapboxId}`;
+    const config = this.props.config;
+    const accessToken = config?.mapboxToken
+      ? config.mapboxToken
+      : process.env.REACT_APP_MAPBOX_TOKEN;
+    const mapboxStyleBaseUrl = config?.mapboxStyle
+      ? config.mapboxStyle
+      : process.env.REACT_APP_MAPBOX_STYLE_URL;
+    mapboxgl.accessToken = accessToken;
+    let mapboxStyleUrl = "mapbox://styles/mapbox/streets-v12";
+    if (mapboxStyleBaseUrl) {
+      let styleId = BASEMAP_STYLES.findIndex(
+        (style) => style.id === BASEMAP_ID_DEFAULT
+      );
+      mapboxStyleUrl = `${mapboxStyleBaseUrl}/${
+        config?.basemapStyle
+          ? config.basemapStyle
+          : BASEMAP_STYLES[styleId].mapboxId
+      }`;
         }
 
         const map = new mapboxgl.Map({
