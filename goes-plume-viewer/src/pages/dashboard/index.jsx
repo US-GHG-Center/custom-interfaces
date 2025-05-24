@@ -32,7 +32,7 @@ const scaleUnits = {
   MILES: "mi",
 };
 
-export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
+export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData,config }) {
   // states for data
   const [ regions, setRegions ] = useState([]); // store all available regions
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
@@ -161,7 +161,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
   return (
     <Box className="fullSize">
       <div id="dashboard-map-container">
-        <MainMap>
+        <MainMap config={config}>
           <Title>
             <HorizontalLayout>
               <Search
@@ -191,6 +191,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
             handleLayerClick={handleSelectedPlume}
             hoveredPlumeId={hoveredPlumeId}
             setHoveredPlumeId={setHoveredPlumeId}
+            config={config}
           />
           <MapControls
             openDrawer={openDrawer}
@@ -231,6 +232,7 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
           handleSelectedPlumeCard={handleSelectedPlume}
           hoveredPlumeId={hoveredPlumeId}
           setHoveredPlumeId={setHoveredPlumeId}
+          config={config}
         />
       </div>
       <ColorBar/>

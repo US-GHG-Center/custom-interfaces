@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useMapbox } from "../../context/mapContext";
 import { addSourceLayerToMap, addSourcePolygonToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
 
-export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId }) => {
+export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId,config }) => {
     const { map } = useMapbox();
 
     useEffect(() => {
@@ -12,9 +12,12 @@ export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId, set
         const rasterSourceId = getSourceId("raster"+plumeId);
         const rasterLayerId = getLayerId("raster"+plumeId);
         const polygonSourceId = getSourceId("polygon"+plumeId);
-        const polygonLayerId = getLayerId("polygon"+plumeId);
+        const polygonLayerId = getLayerId("polygon" + plumeId);
+        const rasterApiUrl = config?.rasterApiUrl
+            ? config.rasterApiUrl
+            : process.env.REACT_APP_RASTER_API_URL;
 
-        addSourceLayerToMap(map, feature, rasterSourceId, rasterLayerId);
+        addSourceLayerToMap(map, feature, rasterSourceId, rasterLayerId,rasterApiUrl);
         addSourcePolygonToMap(map, feature, polygonSourceId, polygonLayerId);
 
         const onClickHandler = (e) => {
@@ -74,12 +77,12 @@ export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId, set
 }
 
 
-export const MapLayers = ({ plumes, hoveredPlumeId, showPlumeLayers, handleLayerClick, setHoveredPlumeId }) => {
+export const MapLayers = ({ plumes, hoveredPlumeId, showPlumeLayers, handleLayerClick, setHoveredPlumeId,config }) => {
     const { map } = useMapbox();
     if (!map || !plumes.length) return;
 
     return (<>
-        {showPlumeLayers && plumes && plumes.length && plumes.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick} hoveredPlumeId={hoveredPlumeId} setHoveredPlumeId={setHoveredPlumeId}></MapLayer>)}
+        {showPlumeLayers && plumes && plumes.length && plumes.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick} hoveredPlumeId={hoveredPlumeId} setHoveredPlumeId={setHoveredPlumeId} config={config}></MapLayer>)}
         </>
     );
 }

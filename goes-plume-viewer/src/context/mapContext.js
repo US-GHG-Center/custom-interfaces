@@ -5,9 +5,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 const MapboxContext = createContext();
 
-const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
-const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
-
 export const MapboxProvider = ({ children, config }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
