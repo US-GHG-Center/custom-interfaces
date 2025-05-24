@@ -1,6 +1,6 @@
 {
   "name": "test01-goes",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "GOES Methane Plume Viewer interface library",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
