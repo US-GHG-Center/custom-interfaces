@@ -1,0 +1,180 @@
+{
+    "labels": [
+        "1990",
+        "1992",
+        "1994",
+        "1996",
+        "1998",
+        "2000",
+        "2002",
+        "2004",
+        "2006",
+        "2008",
+        "2010",
+        "2012",
+        "2014"
+    ],
+    "datasets": [
+        {
+            "label": "Agriculture",
+            "data": [
+                600,
+                650,
+                700,
+                680,
+                690,
+                700,
+                710,
+                720,
+                730,
+                740,
+                750,
+                760,
+                770
+            ],
+            "backgroundColor": "orange",
+            "borderColor": "orange",
+            "stack": "Stack 0",
+            "fill": true,
+            "tension": 0.4
+        },
+        {
+            "label": "Commercial",
+            "data": [
+                500,
+                520,
+                530,
+                540,
+                550,
+                560,
+                570,
+                580,
+                590,
+                600,
+                610,
+                620,
+                630
+            ],
+            "backgroundColor": "yellow",
+            "borderColor": "yellow",
+            "stack": "Stack 0",
+            "fill": true,
+            "tension": 0.4
+        },
+        {
+            "label": "Residential",
+            "data": [
+                400,
+                420,
+                430,
+                440,
+                450,
+                460,
+                470,
+                480,
+                490,
+                500,
+                510,
+                520,
+                530
+            ],
+            "backgroundColor": "red",
+            "borderColor": "red",
+            "stack": "Stack 0",
+            "fill": true,
+            "tension": 0.4
+        },
+        {
+            "label": "Industry",
+            "data": [
+                5000,
+                5100,
+                5150,
+                5200,
+                5250,
+                5300,
+                5350,
+                5400,
+                5450,
+                5500,
+                5550,
+                5600,
+                5650
+            ],
+            "backgroundColor": "green",
+            "borderColor": "green",
+            "stack": "Stack 1",
+            "fill": true,
+            "tension": 0.4
+        },
+        {
+            "label": "Transportation",
+            "data": [
+                3000,
+                3100,
+                3200,
+                3300,
+                3400,
+                3500,
+                3600,
+                3700,
+                3800,
+                3900,
+                4000,
+                4100,
+                4200
+            ],
+            "backgroundColor": "teal",
+            "borderColor": "teal",
+            "stack": "Stack 2",
+            "fill": true,
+            "tension": 0.4
+        },
+        {
+            "label": "Electricity generation",
+            "data": [
+                2000,
+                2050,
+                2100,
+                2150,
+                2200,
+                2250,
+                2300,
+                2350,
+                2400,
+                2450,
+                2500,
+                2550,
+                2600
+            ],
+            "backgroundColor": "magenta",
+            "borderColor": "magenta",
+            "stack": "Stack 3",
+            "fill": true,
+            "tension": 0.4
+        },
+        {
+            "label": "Land use, land-use change, and forestry (sinks)",
+            "data": [
+                0,
+                -200,
+                -400,
+                -600,
+                -800,
+                -1000,
+                -1200,
+                -1400,
+                -1600,
+                -1800,
+                -2000,
+                -2200,
+                -2400
+            ],
+            "backgroundColor": "purple",
+            "borderColor": "purple",
+            "stack": "Stack 4",
+            "fill": true,
+            "tension": 0.4
+        }
+    ]
+}

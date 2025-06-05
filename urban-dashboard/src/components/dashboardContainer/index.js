@@ -14,7 +14,7 @@ export function DashboardContainer() {
 
     useEffect(() => {
         const fetchUrbanRegions = async () => {
-            const regions = await generateUrbanRegions();
+            const regions = [];
             setUrbanRegions(regions);
         }
 

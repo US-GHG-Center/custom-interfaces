@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Select, MenuItem, Typography, Box } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { AVAILABLE_REGIONS } from '../../../assets/geojson';
+import { AVAILABLE_REGIONS } from '../../../../static';
 
 function DropdownIconComponent(props) {
   return (

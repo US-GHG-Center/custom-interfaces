@@ -2,6 +2,9 @@
   "name": "urban_dashboard",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "lib"
+  ],
   "homepage": ".",
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -24,14 +27,14 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.24.1",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.0"
+    "web-vitals": "^2.1.0",
+    "dotenv-cli": "^8.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "dotenv --node ./run-parcel.js build build",
+    "clean": "rm -rf node_modules dist build yarn.lock .parcel-cache && yarn cache clean",
+    "start": "dotenv --node ./run-parcel.js start",
+    "build:lib": "yarn workspace test01-urban build"
   },
   "eslintConfig": {
     "extends": [
@@ -50,5 +53,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "parcel": "^2.15.1",
+    "parcel-reporter-static-files-copy": "^1.5.3",
+    "typescript": ">=3.0.0"
   }
 }
