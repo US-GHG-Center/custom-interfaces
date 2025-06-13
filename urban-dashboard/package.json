@@ -1,8 +1,20 @@
 {
   "name": "urban_dashboard",
   "version": "1.0.0",
-  "private": true,
   "homepage": ".",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/lib/main.js",
+  "source": "src/components/index.js",
+  "module": "dist/lib/module.js",
+  "targets": {
+    "urban-dashboard-app": {
+      "source": "public/index.html",
+      "context": "browser"
+    }
+  },
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
@@ -20,18 +32,23 @@
     "font-awesome-icons": "^1.6.0",
     "mapbox-gl": "^3.5.1",
     "material-ui-popup-state": "^5.1.2",
+    "ncp": "^2.0.0",
+    "parcel": "^2.13.3",
+    "parcel-resolver-tspaths": "^0.0.9",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.24.1",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.0"
+    "web-vitals": "^2.1.0",
+    "@swc/helpers": "^0.5.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "parcel",
+    "build": "parcel build",
+    "postbuild": "ncp ./public ./dist --filter '**/*.*'",
+    "build-lib": "parcel build ./src/lib/index.ts --dist-dir dist/lib",
+    "postbuild-lib": "ncp ./public ./dist/lib --filter '**/*.*'",
+    "clean": "rm -rf node_modules dist dist-lib build yarn.lock .parcel-cache && yarn cache clean"
   },
   "eslintConfig": {
     "extends": [
@@ -50,5 +67,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@parcel/packager-raw-url": "2.15.2",
+    "@parcel/transformer-webmanifest": "2.15.2"
   }
 }
