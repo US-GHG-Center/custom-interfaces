@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 
-import { MapBoxViewer } from '../mapboxViewer';
 import { InfoSidebar } from '../infoSidebar';
+import MapBoxViewerWrapper from '../mapboxViewer/MapboxViewerWrapper';
 
 export function Dashboard({ dataset, urbanRegions }) {
   const [urbanRegion, setUrbanRegion] = useState("");
@@ -22,7 +22,7 @@ export function Dashboard({ dataset, urbanRegions }) {
         handleZoomOut={handleZoomOut}
         dataset={dataset}
       />
-      <MapBoxViewer
+      <MapBoxViewerWrapper
         urbanRegions={urbanRegions}
         urbanRegion={urbanRegion}
         setSelection={setUrbanRegion}

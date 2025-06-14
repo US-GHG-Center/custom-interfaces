@@ -1,1 +1,2 @@
-export {DashboardContainer} from '../components/dashboardContainer'
+export { UrbanDashboard } from "../components/urbanDashboard";
+export type { UrbanDashboardConfig } from "../context/configContext/types";

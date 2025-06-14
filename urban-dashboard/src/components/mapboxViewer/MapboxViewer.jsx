@@ -8,10 +8,7 @@ import Box from "@mui/material/Box";
 import { VULCAN_RASTER_URL, GRA2PES_RASTER_URL } from "./helper";
 
 import "./index.css";
-
-const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
-// const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
-const mapCenter = [-99.676392, 39.106667];
+import { useConfig } from "../../context/configContext";
 
 export class MapBoxViewer extends Component {
   constructor(props) {
@@ -23,15 +20,15 @@ export class MapBoxViewer extends Component {
   }
 
   plotMap() {
-    mapboxgl.accessToken = accessToken;
-    let mapboxStyleUrl = "mapbox://styles/covid-nasa/cldu1cb8f00ds01p6gi583w1m";
-
+    const { config } = this.props;
+    mapboxgl.accessToken = config?.mapboxToken;
+    let mapboxStyleUrl = `${config?.mapboxStyle}/${config?.basemapStyle}`;
     const map = new mapboxgl.Map({
       container: "mapbox-container",
       projection: "mercator",
       style: mapboxStyleUrl,
-      center: mapCenter, // Center of the USA
-      zoom: 4, // Adjust zoom level to fit the USA
+      center: config?.defaultZoomLocation,
+      zoom: config?.defaultZoomLevel,
       zoomControl: true,
       pitchWithRotate: false,
       dragRotate: false,

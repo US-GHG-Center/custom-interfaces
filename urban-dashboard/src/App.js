@@ -5,10 +5,10 @@ import {
   Route
 } from "react-router-dom";
 
-import { DashboardContainer } from './components/dashboardContainer';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import './App.css';
+import { UrbanDashboard } from './components/urbanDashboard';
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
       <CssBaseline />
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Routes>
-          <Route path="/" element={<DashboardContainer />}>
+          <Route path="/" element={<UrbanDashboard />}>
           </Route>
         </Routes>
       </BrowserRouter>
