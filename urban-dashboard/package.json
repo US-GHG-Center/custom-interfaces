@@ -1,6 +1,6 @@
 {
   "name": "urban_dashboard",
-  "version": "1.10.18",
+  "version": "1.10.20",
   "homepage": ".",
   "private": false,
   "publishConfig": {
@@ -10,6 +10,9 @@
   "source": "src/lib/index.ts",
   "module": "dist/lib/module.js",
   "types": "dist/lib/types/index.d.ts",
+  "files": [
+    "dist/lib"
+  ],
   "targets": {
     "urban-dashboard-app": {
       "source": "public/index.html",
