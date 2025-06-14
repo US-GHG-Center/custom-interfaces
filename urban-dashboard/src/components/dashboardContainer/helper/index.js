@@ -1,26 +1,25 @@
 import { AVAILABLE_REGIONS } from "../../../assets/geojson";
 import { CITY_CENTERS } from "../../../assets/geojson";
+import { CITY_GEOJSON } from "../../../assets/geojson/cityGeojson";
 
 export const generateUrbanRegions = async () => {
   const URBAN_REGIONS_ARR = [];
 
-  const fetchPromises = AVAILABLE_REGIONS.map((city) => {
-    //get file name
-    const fileName = city.replace(/ /g, "_").replace(/\//g, "-") + ".json";
-    console.log({ fileName });
+  for (const city of AVAILABLE_REGIONS) {
+    const key = city.replace(/ /g, "_").replace(/\//g, "-");
+    const geojson = CITY_GEOJSON[key];
 
-    return fetch(`/data/cities/${fileName}`)
-      .then((resp) => resp.json())
-      .then((geojson) => {
-        URBAN_REGIONS_ARR.push({
-          name: city,
-          geojson: geojson,
-          center: CITY_CENTERS[city],
-        });
-      })
-      .catch((err) => console.log(`error loading GEOJSON for ${city} : `, err));
-  });
+    if (!geojson) {
+      console.warn(`⚠️ GeoJSON not found for ${city} (key: ${key})`);
+      continue;
+    }
 
-  await Promise.all(fetchPromises);
+    URBAN_REGIONS_ARR.push({
+      name: city,
+      geojson,
+      center: CITY_CENTERS[city],
+    });
+  }
+
   return URBAN_REGIONS_ARR;
 };

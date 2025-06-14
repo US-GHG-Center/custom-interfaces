@@ -1,0 +1,63 @@
+import Austin_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Austin_PLACE_AggregatedSectors_2013_2021.json';
+import Baltimore_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Baltimore_PLACE_AggregatedSectors_2013_2021.json';
+import Boston_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Boston_PLACE_AggregatedSectors_2013_2021.json';
+import Charlotte_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Charlotte_PLACE_AggregatedSectors_2013_2021.json';
+import Chicago_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Chicago_PLACE_AggregatedSectors_2013_2021.json';
+import Columbus_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Columbus_PLACE_AggregatedSectors_2013_2021.json';
+import Dallas_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Dallas_PLACE_AggregatedSectors_2013_2021.json';
+import Denver_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Denver_PLACE_AggregatedSectors_2013_2021.json';
+import Detroit_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Detroit_PLACE_AggregatedSectors_2013_2021.json';
+import El_Paso_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/El_Paso_PLACE_AggregatedSectors_2013_2021.json';
+import Fort_Worth_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Fort_Worth_PLACE_AggregatedSectors_2013_2021.json';
+import Houston_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Houston_PLACE_AggregatedSectors_2013_2021.json';
+import Indianapolis_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Indianapolis_PLACE_AggregatedSectors_2013_2021.json';
+import Jacksonville_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Jacksonville_PLACE_AggregatedSectors_2013_2021.json';
+import Las_Vegas_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Las_Vegas_PLACE_AggregatedSectors_2013_2021.json';
+import Los_Angeles_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Los_Angeles_PLACE_AggregatedSectors_2013_2021.json';
+import Louisville_Jefferson_County_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Louisville-Jefferson_County_PLACE_AggregatedSectors_2013_2021.json';
+import Memphis_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Memphis_PLACE_AggregatedSectors_2013_2021.json';
+import Nashville_Davidson_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Nashville-Davidson_PLACE_AggregatedSectors_2013_2021.json';
+import New_York_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/New_York_PLACE_AggregatedSectors_2013_2021.json';
+import Oklahoma_City_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Oklahoma_City_PLACE_AggregatedSectors_2013_2021.json';
+import Philadelphia_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Philadelphia_PLACE_AggregatedSectors_2013_2021.json';
+import Phoenix_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Phoenix_PLACE_AggregatedSectors_2013_2021.json';
+import Portland_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Portland_PLACE_AggregatedSectors_2013_2021.json';
+import San_Antonio_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/San_Antonio_PLACE_AggregatedSectors_2013_2021.json';
+import San_Diego_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/San_Diego_PLACE_AggregatedSectors_2013_2021.json';
+import San_Francisco_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/San_Francisco_PLACE_AggregatedSectors_2013_2021.json';
+import San_Jose_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/San_Jose_PLACE_AggregatedSectors_2013_2021.json';
+import Seattle_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Seattle_PLACE_AggregatedSectors_2013_2021.json';
+import Washington_PLACE_AggregatedSectors_2013_2021 from '../data/vulcan/Washington_PLACE_AggregatedSectors_2013_2021.json';
+
+export const VULCAN_GEOJSON: Record<string, any> = {
+  "Austin_PLACE_AggregatedSectors_2013_2021": Austin_PLACE_AggregatedSectors_2013_2021,
+  "Baltimore_PLACE_AggregatedSectors_2013_2021": Baltimore_PLACE_AggregatedSectors_2013_2021,
+  "Boston_PLACE_AggregatedSectors_2013_2021": Boston_PLACE_AggregatedSectors_2013_2021,
+  "Charlotte_PLACE_AggregatedSectors_2013_2021": Charlotte_PLACE_AggregatedSectors_2013_2021,
+  "Chicago_PLACE_AggregatedSectors_2013_2021": Chicago_PLACE_AggregatedSectors_2013_2021,
+  "Columbus_PLACE_AggregatedSectors_2013_2021": Columbus_PLACE_AggregatedSectors_2013_2021,
+  "Dallas_PLACE_AggregatedSectors_2013_2021": Dallas_PLACE_AggregatedSectors_2013_2021,
+  "Denver_PLACE_AggregatedSectors_2013_2021": Denver_PLACE_AggregatedSectors_2013_2021,
+  "Detroit_PLACE_AggregatedSectors_2013_2021": Detroit_PLACE_AggregatedSectors_2013_2021,
+  "El_Paso_PLACE_AggregatedSectors_2013_2021": El_Paso_PLACE_AggregatedSectors_2013_2021,
+  "Fort_Worth_PLACE_AggregatedSectors_2013_2021": Fort_Worth_PLACE_AggregatedSectors_2013_2021,
+  "Houston_PLACE_AggregatedSectors_2013_2021": Houston_PLACE_AggregatedSectors_2013_2021,
+  "Indianapolis_PLACE_AggregatedSectors_2013_2021": Indianapolis_PLACE_AggregatedSectors_2013_2021,
+  "Jacksonville_PLACE_AggregatedSectors_2013_2021": Jacksonville_PLACE_AggregatedSectors_2013_2021,
+  "Las_Vegas_PLACE_AggregatedSectors_2013_2021": Las_Vegas_PLACE_AggregatedSectors_2013_2021,
+  "Los_Angeles_PLACE_AggregatedSectors_2013_2021": Los_Angeles_PLACE_AggregatedSectors_2013_2021,
+  "Louisville-Jefferson_County_PLACE_AggregatedSectors_2013_2021": Louisville_Jefferson_County_PLACE_AggregatedSectors_2013_2021,
+  "Memphis_PLACE_AggregatedSectors_2013_2021": Memphis_PLACE_AggregatedSectors_2013_2021,
+  "Nashville-Davidson_PLACE_AggregatedSectors_2013_2021": Nashville_Davidson_PLACE_AggregatedSectors_2013_2021,
+  "New_York_PLACE_AggregatedSectors_2013_2021": New_York_PLACE_AggregatedSectors_2013_2021,
+  "Oklahoma_City_PLACE_AggregatedSectors_2013_2021": Oklahoma_City_PLACE_AggregatedSectors_2013_2021,
+  "Philadelphia_PLACE_AggregatedSectors_2013_2021": Philadelphia_PLACE_AggregatedSectors_2013_2021,
+  "Phoenix_PLACE_AggregatedSectors_2013_2021": Phoenix_PLACE_AggregatedSectors_2013_2021,
+  "Portland_PLACE_AggregatedSectors_2013_2021": Portland_PLACE_AggregatedSectors_2013_2021,
+  "San_Antonio_PLACE_AggregatedSectors_2013_2021": San_Antonio_PLACE_AggregatedSectors_2013_2021,
+  "San_Diego_PLACE_AggregatedSectors_2013_2021": San_Diego_PLACE_AggregatedSectors_2013_2021,
+  "San_Francisco_PLACE_AggregatedSectors_2013_2021": San_Francisco_PLACE_AggregatedSectors_2013_2021,
+  "San_Jose_PLACE_AggregatedSectors_2013_2021": San_Jose_PLACE_AggregatedSectors_2013_2021,
+  "Seattle_PLACE_AggregatedSectors_2013_2021": Seattle_PLACE_AggregatedSectors_2013_2021,
+  "Washington_PLACE_AggregatedSectors_2013_2021": Washington_PLACE_AggregatedSectors_2013_2021,
+};
