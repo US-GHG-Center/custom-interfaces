@@ -1,6 +1,6 @@
 {
   "name": "urban_dashboard",
-  "version": "1.10.13",
+  "version": "1.10.14",
   "homepage": ".",
   "private": false,
   "publishConfig": {
@@ -9,6 +9,7 @@
   "main": "dist/lib/main.js",
   "source": "src/components/index.js",
   "module": "dist/lib/module.js",
+  "types": "dist/lib/types/index.d.ts",
   "targets": {
     "urban-dashboard-app": {
       "source": "public/index.html",
@@ -68,6 +69,12 @@
   },
   "devDependencies": {
     "@parcel/packager-raw-url": "2.15.2",
-    "@parcel/transformer-webmanifest": "2.15.2"
+    "@parcel/packager-ts": "2.15.2",
+    "@parcel/transformer-typescript-types": "2.15.2",
+    "@parcel/transformer-webmanifest": "2.15.2",
+    "@types/node": "^24.0.1",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "typescript": ">=3.0.0"
   }
 }
