@@ -45,9 +45,7 @@
   "scripts": {
     "start": "parcel",
     "build": "parcel build",
-    "postbuild": "ncp ./public ./dist --filter '**/*.*'",
     "build-lib": "parcel build ./src/lib/index.ts --dist-dir dist/lib",
-    "postbuild-lib": "ncp ./public ./dist/lib --filter '**/*.*'",
     "clean": "rm -rf node_modules dist dist-lib build yarn.lock .parcel-cache && yarn cache clean"
   },
   "eslintConfig": {
