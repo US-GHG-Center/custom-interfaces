@@ -1,13 +1,13 @@
 {
   "name": "urban_dashboard",
-  "version": "1.10.17",
+  "version": "1.10.18",
   "homepage": ".",
   "private": false,
   "publishConfig": {
     "access": "public"
   },
   "main": "dist/lib/main.js",
-  "source": "src/components/index.ts",
+  "source": "src/lib/index.ts",
   "module": "dist/lib/module.js",
   "types": "dist/lib/types/index.d.ts",
   "targets": {
@@ -46,7 +46,7 @@
   "scripts": {
     "start": "parcel",
     "build": "parcel build",
-    "build-lib": "parcel build ./src/index.ts --dist-dir dist/lib",
+    "build-lib": "parcel build ./src/lib/index.ts --dist-dir dist/lib",
     "clean": "rm -rf node_modules dist dist-lib build yarn.lock .parcel-cache && yarn cache clean"
   },
   "eslintConfig": {
