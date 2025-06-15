@@ -1,6 +1,6 @@
 {
   "name": "test01-nist",
-  "version": "1.0.0",
+  "version": "1.10.23",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -45,6 +45,7 @@
     "chartjs-plugin-annotation": "^3.0.1",
     "chartjs-plugin-zoom": "^2.0.1",
     "date-fns": "^3.6.0",
+    "dotenv-cli": "^8.0.0",
     "luxon": "^3.5.0",
     "mapbox-gl": "^3.5.1",
     "material-ui-popup-state": "^5.1.2",
@@ -56,8 +57,7 @@
     "react-loader-spinner": "^6.1.6",
     "react-resizable-panels": "^2.1.1",
     "react-router-dom": "^6.24.1",
-    "web-vitals": "^2.1.0",
-    "dotenv-cli": "^8.0.0"
+    "web-vitals": "^2.1.0"
   },
   "devDependencies": {
     "@parcel/packager-raw-url": "2.15.2",
