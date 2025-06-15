@@ -6,12 +6,12 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "build/lib/main.js",
+  "main": "dist/main.js",
   "source": "src/lib/index.ts",
-  "module": "build/lib/module.js",
-  "types": "build/lib/types/index.d.ts",
+  "module": "dist/module.js",
+  "types": "dist/types/index.d.ts",
   "files": [
-    "build"
+    "dist"
   ],
   "targets": {
     "urban-dashboard-app": {
@@ -48,8 +48,8 @@
   },
   "scripts": {
     "start": "parcel",
-    "build": "parcel build",
-    "build-lib": "parcel build ./src/lib/index.ts --dist-dir build",
+    "build": "parcel build --dist-dir build",
+    "build-lib": "parcel build ./src/lib/index.ts --dist-dir dist",
     "clean": "rm -rf node_modules dist  build yarn.lock .parcel-cache && yarn cache clean"
   },
   "eslintConfig": {
