@@ -14,7 +14,7 @@ import {
 import { Line, Pie } from "react-chartjs-2";
 import { Typography, Grid, Box } from "@mui/material";
 import "./index.css";
-import { GRA2PES_GEOJSON } from "../../assets/geojson/gra2PesGeoJson";
+import { GRA2PES_GEOJSON } from "../../assets/geojson/gra2pesGeoJson";
 import { VULCAN_GEOJSON } from "../../assets/geojson/vulcanGeoJson";
 
 ChartJS.register(
