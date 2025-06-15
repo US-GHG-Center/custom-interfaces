@@ -1,18 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import Box from '@mui/material/Box';
-import DragHandleIcon from '@mui/icons-material/DragHandle';
-import { MapBoxViewer } from '../../components/mapboxViewer';
-import { Title } from '../../components/title';
-import { ConcentrationChart } from '../../components/chart';
-import { SelectGHG } from '../../components/dropdown';
-
+import React, { useEffect, useState } from "react";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import Box from "@mui/material/Box";
+import DragHandleIcon from "@mui/icons-material/DragHandle";
+import { Title } from "../../components/title";
+import { SelectGHG } from "../../components/dropdown";
 import "./index.css";
+import MapBoxViewerWrapper from "../../components/mapboxViewer";
+import ConcentrationChartWrapper from "../../components/chart";
 
-export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode, setSelectedGHG, zoomLevel, stationMetadata, config })
-{
-  const [ displayChart, setDisplayChart ] = useState(false);
-  
+export function Dashboard({
+  stations,
+  selectedStationId,
+  setSelectedStationId,
+  ghg,
+  agency,
+  region,
+  stationCode,
+  setSelectedGHG,
+  zoomLevel,
+  stationMetadata,
+}) {
+  const [displayChart, setDisplayChart] = useState(false);
   const logo = new URL("../../nist.png", import.meta.url);
   useEffect(() => {
     if (selectedStationId) {
@@ -21,19 +29,20 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
   }, [selectedStationId]); // only on selectedStationId prop change
   return (
     <Box className="fullSize">
-        <Title ghg={ghg} agency={agency} region={region}/>
-        <img src={logo} alt="NIST" className='logo'/>
-        <PanelGroup direction='vertical' className='panel-wrapper'>
+      <Title ghg={ghg} agency={agency} region={region} />
+      <img src={logo} alt="NIST" className="logo" />
+      <PanelGroup direction="vertical" className="panel-wrapper">
         <Panel
-            id='map-panel'
+          id="map-panel"
           maxSize={100}
           defaultSize={100}
           minSize={25}
-            className='panel'
+          className="panel"
           order={1}
         >
           <div id="dashboard-map-container">
-              { stations && <MapBoxViewer
+            {stations && (
+              <MapBoxViewerWrapper
                 stations={stations}
                 region={region}
                 agency={agency}
@@ -42,37 +51,35 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
                 setSelection={setSelectedStationId}
                 setDisplayChart={setDisplayChart}
                 displayChart={displayChart}
-                config={config}
               />
-            }
+            )}
             {displayChart && (
               <SelectGHG selectedGHG={ghg} setSelectedGHG={setSelectedGHG} />
             )}
           </div>
         </Panel>
-              { displayChart &&
+        {displayChart && (
           <>
             <PanelResizeHandle className="resize-handle">
               <DragHandleIcon title="Resize" />
             </PanelResizeHandle>
             <Panel
-                    id='chart-panel'
+              id="chart-panel"
               maxSize={75}
               minSize={40}
-                    className='panel panel-timeline'
+              className="panel panel-timeline"
               order={2}
             >
-              <ConcentrationChart
+              <ConcentrationChartWrapper
                 selectedStationId={selectedStationId}
                 setSelectedStationId={setSelectedStationId}
                 stationMetadata={stationMetadata}
                 ghg={ghg}
                 setDisplayChart={setDisplayChart}
-                config={config}
               />
             </Panel>
           </>
-              }
+        )}
       </PanelGroup>
     </Box>
   );

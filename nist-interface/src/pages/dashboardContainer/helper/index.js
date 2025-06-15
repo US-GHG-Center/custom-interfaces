@@ -49,11 +49,7 @@ export const extractMetaData = async (collections, config) => {
     })
     .filter((elem) => elem);
   let resultPromise = metaCollection.map((collection) => {
-    let url = `${
-      config?.featuresApiUrl
-        ? config.featuresApiUrl
-        : process.env.REACT_APP_FEATURES_API_URL
-    }/collections/${collection.id}/items`;
+    let url = `${config?.featuresApiUrl}/collections/${collection.id}/items`;
     return fetchAllFromFeaturesAPI(url);
   });
   let metaDataCollectionItems = await Promise.all(resultPromise);
