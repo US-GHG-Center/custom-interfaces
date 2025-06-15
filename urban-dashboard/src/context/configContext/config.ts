@@ -6,13 +6,13 @@ import { UrbanDashboardConfig } from "./types";
  */
 
 const defaultConfig: UrbanDashboardConfig = {
-  stacApiUrl: process.env.REACT_APP_STAC_API_URL || "",
-  rasterApiUrl: process.env.REACT_APP_RASTER_API_URL || "",
   publicUrl: process.env.PUBLIC_URL || "",
   mapboxToken: process.env.REACT_APP_MAPBOX_TOKEN || "",
   mapboxStyle: process.env.REACT_APP_MAPBOX_STYLE_URL || "",
   featuresApiUrl: process.env.REACT_APP_FEATURES_API_URL || "",
-  basemapStyle: process.env.REACT_APP_BASEMAP_STYLES_MAPBOX_ID || "",
+  basemapStyle:
+    process.env.REACT_APP_BASEMAP_STYLES_MAPBOX_ID ||
+    "cldu1cb8f00ds01p6gi583w1m",
   defaultZoomLocation: [-99.676392, 39.106667],
   defaultZoomLevel: 4,
 };
@@ -45,8 +45,6 @@ export const validateConfig = (
   config: UrbanDashboardConfig
 ): ValidationResult => {
   const requiredFields: (keyof UrbanDashboardConfig)[] = [
-    "stacApiUrl",
-    "rasterApiUrl",
     "mapboxToken",
     "mapboxStyle",
     "basemapStyle",
