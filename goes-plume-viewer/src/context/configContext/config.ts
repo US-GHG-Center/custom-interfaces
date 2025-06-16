@@ -1,19 +1,18 @@
-import { GoesInterfaceConfig } from "../pages/goesInterface/types";
+import { GoesInterfaceConfig } from "../../pages/goesInterface/types";
 
 /**
- * Default configuration for the EMIT Interface
+ * Default configuration for the GOES Interface
  * These values will be used if no user configuration is provided
  */
 
 const defaultConfig: GoesInterfaceConfig = {
-  stacApiUrl: "https://earth.gov/ghgcenter/api/stac",
-  rasterApiUrl: "https://earth.gov/ghgcenter/api/raster",
-  cloudBrowseUrl: "https://data.ghg.center/browseui",
-  publicUrl: "/ghgcenter/custom-interfaces/goes-plume-viewer",
-  mapboxToken:
-    "pk.eyJ1IjoiY292aWQtbmFzYSIsImEiOiJjbGNxaWdqdXEwNjJnM3VuNDFjM243emlsIn0.NLbvgae00NUD5K64CD6ZyA",
-  mapboxStyle: "mapbox://styles/covid-nasa",
-  basemapStyle:"cldu1cb8f00ds01p6gi583w1m",
+  stacApiUrl: process.env.REACT_APP_STAC_API_URL || "",
+  rasterApiUrl: process.env.REACT_APP_RASTER_API_URL || "",
+  cloudBrowseUrl: process.env.REACT_APP_CLOUD_BROWSE_URL || "",
+  publicUrl: process.env.PUBLIC_URL || "",
+  mapboxToken: process.env.REACT_APP_MAPBOX_TOKEN || "",
+  mapboxStyle: process.env.REACT_APP_MAPBOX_STYLE_URL || "",
+  basemapStyle: process.env.REACT_APP_BASEMAP_STYLES_MAPBOX_ID || "",
   defaultZoomLocation: [-98.771556, 32.967243],
   defaultZoomLevel: 4,
   defaultCollectionId: "goes-ch4plume-v1",
@@ -52,11 +51,15 @@ export const validateConfig = (
     "mapboxToken",
     "defaultCollectionId",
     "mapboxStyle",
-    "basemapStyle"
+    "basemapStyle",
   ];
 
-  const missingFields = requiredFields.filter((field) => !config[field]);
-
+  const missingFields = requiredFields.filter(
+    (field) =>
+      config[field] === undefined ||
+      config[field] === null ||
+      config[field] === ""
+  );
   if (missingFields.length > 0) {
     return { result: false, missingFields };
   }

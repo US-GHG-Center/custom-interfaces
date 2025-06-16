@@ -1,10 +1,10 @@
 import { MapboxProvider } from "../../context/mapContext";
 
-const MainMap = ({children,config}) => {
+const MainMap = ({ children }) => {
   return (
-    <MapboxProvider config={config}>
+    <MapboxProvider>
       {/* Other components that need access to the map */}
-      { children }
+      {children}
     </MapboxProvider>
   );
 };
