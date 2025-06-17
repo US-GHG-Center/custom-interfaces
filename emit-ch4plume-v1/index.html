@@ -54,7 +54,7 @@
           <span class="custom-label"> End Date</span>
         </div>
     
-      <!-- Skip Animation
+<!--
       <div class="dates">
         <div class="label-container">
           <span class="custom-label"> Start Date</span>
@@ -67,7 +67,7 @@
                id="end_date">
         </div>
       </div>
-      -->
+-->
       
         <div class="toggle-container">
           <span class="custom-label-cov"> Show EMIT Coverage</span>
@@ -77,7 +77,7 @@
           </label>
         </div>
 
-        <!--
+      <div id="animate" style="display: none;">
         <div class="toggle-container">
           <span class="custom-label"> Animate</span>
           <label class="toggle-switch">
@@ -86,7 +86,8 @@
           </label>
         </div>
       </div>
-      -->
+    </div>
+
 
     <div class="plegend-container", id="plegend-container" >
       <div class="header-container" id="header-container">
@@ -98,6 +99,6 @@
       </div>
   </div>
     <script src="<%= htmlWebpackPlugin.options.publicUrl %>/bundle.js"></script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>  
   </body>
 </html>

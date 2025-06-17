@@ -13,6 +13,8 @@ import { filterByDates,
 import { checkToggle,addCoverageToggleListener } from "./coverage";
 import { updateSearchList } from "./search";
 import { getPopupContent,createItemContent } from "./content"; 
+import TimelineControl from 'mapboxgl-timeline';
+import 'mapboxgl-timeline/dist/style.css';
 import {
     //variables
     distancePoints,
@@ -513,71 +515,77 @@ if (
     createMeasuringLine(e, map);
 }
 });
+// Check animation feature flag 
+const urlParams = new URLSearchParams(window.location.search);
+const isFeatureXEnabled = urlParams.get('animate') === 'true';
+if (isFeatureXEnabled) {
+  document.getElementById('animate').style.display = 'block';
+}
 
 // Skip animation
-// const isAnimation = document.getElementById("doAnimation");
-// let timeline;
-// let preservedState= {};
-// isAnimation.addEventListener("change", (event) => {
-//     if (event.target.checked) {
-//         if (map.getZoom() >= ZOOM_THRESHOLD) {
-//             const {start_date, end_date, cov}= beforeAnimation(map);
-//             preservedState = {
-//                 startDate:start_date,
-//                 endDate: end_date,
-//                 coverage: cov,
-//             };
-//             document.getElementById("showCoverage").checked = true;
-//             const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
-//             const covTimes = coverageData.features
-//             .filter(feature => isFeatureWithinBounds(feature, map.getBounds()))
-//             .map(feature => feature.properties.start_time)
-//             .filter(date => date >=  start_date && date <= end_date);
+const isAnimation = document.getElementById("doAnimation");
+let timeline;
+let preservedState= {};
+isAnimation.addEventListener("change", (event) => {
+    if (event.target.checked) {
+        if (map.getZoom() >= ZOOM_THRESHOLD) {
+            const {start_date, end_date, cov}= beforeAnimation(map);
+            preservedState = {
+                startDate:start_date,
+                endDate: end_date,
+                coverage: cov,
+            };
+            document.getElementById("showCoverage").checked = true;
+            const utcTimesObserved = MARKERS_ON_VIEWPORT.map(item => item.feature.properties['UTC Time Observed']);
+            const covTimes = coverageData.features
+            .filter(feature => isFeatureWithinBounds(feature, map.getBounds()))
+            .map(feature => feature.properties.start_time)
+            .filter(date => date >=  start_date && date <= end_date);
 
-//             removePrevPlumeLayers();
-//             timeline = new TimelineControl({
-//                 placeholder: 'Plumes',
-//                 className: 'timeline-control' ,
-//                 start: start_date,
-//                 end: end_date,
-//                 format: (date) => {
-//                     const formattedDate = new Date(date).toLocaleDateString('en-US', {
-//                         year: 'numeric', 
-//                         month: 'short', 
-//                         day: 'numeric'
-//                     });
-//                     return `From ${formattedDate} - 30 days prior`;
-//                 },         
-//                 step: 1000 * 3600 * 24* 30, // 30 days interval
-//                 onChange: date => {
-//                     const currentStartTime = $("#slider-range").slider("values", 0);
-//                     const manualEndTime =  new Date(date).getTime()/1000;
-//                     $("#slider-range").slider("values", [currentStartTime, manualEndTime]);
-//                     updateDatesandData(); 
-//                     //if you dont want cummulative
-//                     const currentEndTime = $("#slider-range").slider("values", 1);
-//                     const manualStartTime= currentEndTime;
-//                     $("#slider-range").slider("values", [manualStartTime, currentEndTime]);
-//                 },
-//             });
-//             const timelineElement = timeline.onAdd(map);
-//             document.getElementById('toolbar').appendChild(timelineElement);
-//             addTimelineMarkers(covTimes, start_date, end_date, '#ddd', -5, 8,4, 0);
-//             addTimelineMarkers(utcTimesObserved, start_date, end_date,"#20068f", 10, 4,4,50);
-//         } 
-//         else 
-//         {
-//             alert(`Your Zoom level is ${map.getZoom()}. Please increase zoom level to ${ZOOM_THRESHOLD} around the area you want to animate!!`);
-//             document.getElementById("doAnimation").checked= false;
+            removePrevPlumeLayers();
+            timeline = new TimelineControl({
+                placeholder: 'Plumes',
+                className: 'timeline-control' ,
+                start: start_date,
+                end: end_date,
+                format: (date) => {
+                    const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: 'numeric'
+                    });
+                    return `From ${formattedDate} - 30 days prior`;
+                },         
+                step: 1000 * 3600 * 24* 30, // 30 days interval
+                onChange: date => {
+                    const currentStartTime = $("#slider-range").slider("values", 0);
+                    const manualEndTime =  new Date(date).getTime()/1000;
+                    $("#slider-range").slider("values", [currentStartTime, manualEndTime]);
+                    updateDatesandData(); 
+                    //if you dont want cummulative
+                    const currentEndTime = $("#slider-range").slider("values", 1);
+                    const manualStartTime= currentEndTime;
+                    $("#slider-range").slider("values", [manualStartTime, currentEndTime]);
+                },
+            });
+            const timelineElement = timeline.onAdd(map);
+            document.getElementById('toolbar').appendChild(timelineElement);
+            addTimelineMarkers(covTimes, start_date, end_date, '#ddd', -5, 8,4, 0);
+            addTimelineMarkers(utcTimesObserved, start_date, end_date,"#20068f", 10, 4,4,50);
+        } 
+        else 
+        {
+            alert(`Your Zoom level is ${map.getZoom()}. Please increase zoom level to ${ZOOM_THRESHOLD} around the area you want to animate!!`);
+            document.getElementById("doAnimation").checked= false;
 
-//         }
-//     } else {
-//         afterAnimation(map, preservedState);
-//         updateDatesandData();
-//         if (timeline) {
-//             map.removeControl(timeline);
-//             timeline = null; // Reset timeline to allow recreation
-//         }
-//     }
-// })
+        }
+    } else {
+        afterAnimation(map, preservedState);
+        updateDatesandData();
+        if (timeline) {
+            map.removeControl(timeline);
+            timeline = null; // Reset timeline to allow recreation
+        }
+    }
+})
 main();
