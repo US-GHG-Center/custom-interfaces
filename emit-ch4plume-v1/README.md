@@ -59,7 +59,8 @@ Note: if you want to enable the emit animation feature, use the feature flag in 
 
 # Interactive Emission Plumes
 
-![alt text](image-1.png)
+<img width="1722" alt="image" src="https://github.com/user-attachments/assets/de950c3c-7d20-4000-9037-47b1acda71f8" />
+
 
 See https://earth.gov/ghgcenter/data-catalog/emit-ch4plume-v1
 
