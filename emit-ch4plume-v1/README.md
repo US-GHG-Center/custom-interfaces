@@ -54,10 +54,13 @@ This will serve in the default port `port 3000`
 
 See the app in `http://localhost:3000/dist/`
 
+Note: if you want to enable the emit animation feature, use the feature flag in the url params: http://localhost:3000/?animate=true
+
 
 # Interactive Emission Plumes
 
-![image](https://github.com/US-GHG-Center/custom-interfaces/assets/3404817/896306f9-2d05-4793-b6a6-a1d829392b66)
+<img width="1722" alt="image" src="https://github.com/user-attachments/assets/de950c3c-7d20-4000-9037-47b1acda71f8" />
+
 
 See https://earth.gov/ghgcenter/data-catalog/emit-ch4plume-v1
 
