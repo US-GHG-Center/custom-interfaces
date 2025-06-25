@@ -5,11 +5,12 @@ import { NistInterfaceConfig } from "../../pages/nistInterface/types";
  * These values will be used if no user configuration is provided
  */
 const defaultConfig: NistInterfaceConfig = {
-  publicUrl: process.env.PUBLIC_URL || "",
   mapboxToken: process.env.REACT_APP_MAPBOX_TOKEN || "",
   mapboxStyle: process.env.REACT_APP_MAPBOX_STYLE_URL || "",
   featuresApiUrl: process.env.REACT_APP_FEATURES_API_URL || "",
-  basemapStyle: process.env.REACT_APP_BASEMAP_STYLES_MAPBOX_ID || "",
+  basemapStyle:
+    process.env.REACT_APP_BASEMAP_STYLES_MAPBOX_ID ||
+    "cldu1cb8f00ds01p6gi583w1m",
 };
 /**
  * Merges user configuration with default configuration
