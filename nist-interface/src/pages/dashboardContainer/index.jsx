@@ -10,7 +10,7 @@ import {
 import { fetchAllFromFeaturesAPI } from "../../services/api.js";
 import { useConfig } from "../../context/configContext/index.jsx";
 
-export function DashboardContainer() {
+export function DashboardContainer({ defaultZoomLevel }) {
   const [selectedStationId, setSelectedStationId] = useState("");
   const [stations, setStations] = useState([]);
   const [stationMetadata, setStationMetadata] = useState({});
@@ -23,7 +23,9 @@ export function DashboardContainer() {
   const [region] = useState(searchParams.get("region") || ""); // lam or nec
   const [ghg, setSelectedGHG] = useState(searchParams.get("ghg") || "co2"); // co2 or ch4
   const [stationCode] = useState(searchParams.get("station-code") || ""); // buc, smt, etc
-  const [zoomLevel] = useState(searchParams.get("zoom-level")); // let default zoom level controlled by map component
+  const [zoomLevel] = useState(
+    searchParams.get("zoom-level") || defaultZoomLevel
+  ); // let default zoom level controlled by map component
 
   useEffect(() => {
     const fetchStationData = async () => {

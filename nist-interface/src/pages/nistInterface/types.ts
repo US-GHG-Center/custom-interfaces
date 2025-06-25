@@ -3,6 +3,9 @@ export interface NistInterfaceConfig {
   mapboxStyle: string;
   basemapStyle: string;
   featuresApiUrl: string;
-  publicUrl: string;
 }
 
+export interface NistInterface {
+  config?: Partial<NistInterfaceConfig>;
+  defaultZoomLevel: number;
+}

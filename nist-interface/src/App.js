@@ -5,14 +5,17 @@ import { NistInterface } from "./pages/nistInterface";
 import "./App.css";
 
 const BASE_PATH = process.env.PUBLIC_URL;
-
+const defaultZoomLevel = 4;
 function App() {
   return (
     <Fragment>
       <CssBaseline />
       <BrowserRouter basename={BASE_PATH}>
         <Routes>
-          <Route path="/" element={<NistInterface />}></Route>
+          <Route
+            path="/"
+            element={<NistInterface defaultZoomLevel={defaultZoomLevel} />}
+          ></Route>
         </Routes>
       </BrowserRouter>
     </Fragment>
