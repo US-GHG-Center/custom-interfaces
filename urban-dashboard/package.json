@@ -1,6 +1,6 @@
 {
-  "name": "urban_dashboard",
-  "version": "0.1.0",
+  "name": "test01-urban",
+  "version": "0.1.2",
   "homepage": ".",
   "private": false,
   "publishConfig": {
@@ -42,17 +42,12 @@
     "web-vitals": "^2.1.0"
   },
   "peerDependencies": {
+    "@mui/material": "^5.16.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@mui/material": "^5.16.1"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "@mui/material": "^5.16.1",
-    "dotenv-cli": "^8.0.0",
-    "parcel": "2.15.2",
-    "parcel-resolver-tspaths": "0.0.9",
     "@parcel/packager-raw-url": "2.15.2",
     "@parcel/packager-ts": "2.15.2",
     "@parcel/transformer-typescript-types": "2.15.2",
@@ -60,6 +55,11 @@
     "@types/node": "^24.0.1",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "dotenv-cli": "^8.0.0",
+    "parcel": "2.15.2",
+    "parcel-resolver-tspaths": "0.0.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "typescript": "^4.4.2"
   },
   "scripts": {
