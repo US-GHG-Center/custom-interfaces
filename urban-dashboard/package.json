@@ -1,6 +1,6 @@
 {
-  "name": "test01-urban",
-  "version": "0.1.5",
+  "name": "urban-dashboard",
+  "version": "0.1.0",
   "homepage": ".",
   "private": false,
   "publishConfig": {
