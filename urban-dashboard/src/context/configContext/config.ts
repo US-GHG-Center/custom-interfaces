@@ -1,4 +1,4 @@
-import { UrbanDashboardConfig } from "./types";
+import { UrbanDashboardConfig } from "../../components/urbanDashboard/types";
 
 /**
  * Default configuration for the Urban Interface
@@ -13,8 +13,6 @@ const defaultConfig: UrbanDashboardConfig = {
   basemapStyle:
     process.env.REACT_APP_BASEMAP_STYLES_MAPBOX_ID ||
     "cldu1cb8f00ds01p6gi583w1m",
-  defaultZoomLocation: [-99.676392, 39.106667],
-  defaultZoomLevel: 4,
 };
 
 /**

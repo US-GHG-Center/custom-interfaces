@@ -20,15 +20,15 @@ export class MapBoxViewer extends Component {
   }
 
   plotMap() {
-    const { config } = this.props;
+    const { config, zoomLevel, zoomLocation } = this.props;
     mapboxgl.accessToken = config?.mapboxToken;
     let mapboxStyleUrl = `${config?.mapboxStyle}/${config?.basemapStyle}`;
     const map = new mapboxgl.Map({
       container: "mapbox-container",
       projection: "mercator",
       style: mapboxStyleUrl,
-      center: config?.defaultZoomLocation,
-      zoom: config?.defaultZoomLevel,
+      center: zoomLocation,
+      zoom: zoomLevel,
       zoomControl: true,
       pitchWithRotate: false,
       dragRotate: false,

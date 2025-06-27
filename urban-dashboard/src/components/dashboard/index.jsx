@@ -4,10 +4,9 @@ import Box from '@mui/material/Box';
 import { InfoSidebar } from '../infoSidebar';
 import MapBoxViewerWrapper from '../mapboxViewer/MapboxViewerWrapper';
 
-export function Dashboard({ dataset, urbanRegions }) {
+export function Dashboard({ dataset, urbanRegions, zoomLevel, zoomLocation }) {
   const [urbanRegion, setUrbanRegion] = useState("");
   const [zoomOut, setZoomOut] = useState(false);
-
   const handleZoomOut = () => {
     setZoomOut(!zoomOut);
   };
@@ -28,6 +27,8 @@ export function Dashboard({ dataset, urbanRegions }) {
         setSelection={setUrbanRegion}
         zoomOut={zoomOut}
         dataset={dataset}
+        zoomLevel={zoomLevel}
+        zoomLocation={zoomLocation}
       />
     </Box>
   );

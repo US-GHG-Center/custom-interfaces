@@ -7,11 +7,16 @@ import Box from '@mui/material/Box';
 import { generateUrbanRegions } from './helper';
 import { Dashboard } from "../dashboard";
 
-export function DashboardContainer() {
+export function DashboardContainer({ defaultZoomLevel, defaultZoomLocation }) {
     const [searchParams] = useSearchParams();
     const [dataset] = useState(searchParams.get("dataset") || "gra2pes"); //vulcan, gra2pes (default)
     const [urbanRegions, setUrbanRegions] = useState([]);
-
+    const [zoomLevel, setZoomLevel] = useState(
+        searchParams.get('zoom-level') || defaultZoomLevel
+    );
+    const [zoomLocation, setZoomLocation] = useState(
+        searchParams.get('zoom-location') || defaultZoomLocation
+    );
     useEffect(() => {
         const fetchUrbanRegions = async () => {
             const regions = await generateUrbanRegions();
@@ -35,6 +40,8 @@ export function DashboardContainer() {
                 </Box>
             ) : (
                 <Dashboard
+                    zoomLevel={zoomLevel}
+                    zoomLocation={zoomLocation}
                     dataset={dataset}
                     urbanRegions={urbanRegions}
                 />
