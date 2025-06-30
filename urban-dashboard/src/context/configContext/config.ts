@@ -6,7 +6,6 @@ import { UrbanDashboardConfig } from "../../components/urbanDashboard/types";
  */
 
 const defaultConfig: UrbanDashboardConfig = {
-  publicUrl: process.env.PUBLIC_URL || "",
   mapboxToken: process.env.REACT_APP_MAPBOX_TOKEN || "",
   mapboxStyle: process.env.REACT_APP_MAPBOX_STYLE_URL || "",
   featuresApiUrl: process.env.REACT_APP_FEATURES_API_URL || "",

@@ -1,10 +1,9 @@
 export interface UrbanDashboardConfig {
   mapboxToken: string;
   mapboxStyle: string;
-  publicUrl: string;
   basemapStyle: string;
   featuresApiUrl: string;
-  dataUrl:string
+  dataUrl: string;
 }
 
 export interface UrbanDashboard {
