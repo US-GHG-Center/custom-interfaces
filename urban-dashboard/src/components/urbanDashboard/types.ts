@@ -4,6 +4,7 @@ export interface UrbanDashboardConfig {
   publicUrl: string;
   basemapStyle: string;
   featuresApiUrl: string;
+  dataUrl:string
 }
 
 export interface UrbanDashboard {

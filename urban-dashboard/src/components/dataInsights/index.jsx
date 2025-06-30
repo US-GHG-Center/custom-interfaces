@@ -14,9 +14,8 @@ import {
 import { Line, Pie } from "react-chartjs-2";
 import { Typography, Grid, Box } from "@mui/material";
 import "./index.css";
-import { GRA2PES_GEOJSON } from "../../assets/geojson/gra2pesGeoJson";
-import { VULCAN_GEOJSON } from "../../assets/geojson/vulcanGeoJson";
-
+import { getVulcanData, getGra2pesData } from './helper/index'
+import { useConfig } from "../../context/configContext";
 ChartJS.register(
   LineElement,
   PointElement,
@@ -27,6 +26,7 @@ ChartJS.register(
   Filler,
   ArcElement
 );
+
 
 //For VULCAN sectoral stack plot
 export const StackedAreaChart = ({ selection }) => {
@@ -40,26 +40,9 @@ export const StackedAreaChart = ({ selection }) => {
       },
     ],
   });
-
+  const { config } = useConfig()
   //function to format filepath according to city selection
 
-  const formatCityKey = (city) => {
-    return (
-      city.replace("/", "-").replace(/\s+/g, "_") +
-      "_2021_Month07_species_sectoral_breakdown_conservative"
-    );
-  };
-
-  const getVulcanData = (city) => {
-    const cityKey = formatCityKey(city);
-    const data = VULCAN_GEOJSON[cityKey];
-
-    if (!data) {
-      console.warn(`⚠️ No data found for city key: ${cityKey}`);
-    }
-
-    return data;
-  };
 
   const colorMap = useMemo(
     () => ({
@@ -134,66 +117,69 @@ export const StackedAreaChart = ({ selection }) => {
   };
 
   useEffect(() => {
-    const jsonData = getVulcanData(selection);
-    const years = jsonData.map((item) => item.YEAR);
+    const fetchData = async () => {
+      const jsonData = await getVulcanData(selection, config);
+      const years = jsonData.map((item) => item.YEAR);
 
-    // Define the datasets for each category
-    const datasets = [
-      {
-        label: "Aviation",
-        data: jsonData.map((item) => item["Aviation"] / 1000),
-        borderColor: colorMap["Aviation"].borderColor,
-        backgroundColor: colorMap["Aviation"].backgroundColor,
-        fill: true,
-      },
-      {
-        label: "Industry",
-        data: jsonData.map((item) => item["Industry"] / 1000),
-        borderColor: colorMap["Industry"].borderColor,
-        backgroundColor: colorMap["Industry"].backgroundColor,
-        fill: true,
-      },
-      {
-        label: "Commercial",
-        data: jsonData.map((item) => item["Commercial"] / 1000),
-        borderColor: colorMap["Commercial"].borderColor,
-        backgroundColor: colorMap["Commercial"].backgroundColor,
-        fill: true,
-      },
-      {
-        label: "Power",
-        data: jsonData.map((item) => item["Power"] / 1000),
-        borderColor: colorMap["Power"].borderColor,
-        backgroundColor: colorMap["Power"].backgroundColor,
-        fill: true,
-      },
-      {
-        label: "Onroad",
-        data: jsonData.map((item) => item["Onroad"] / 1000),
-        borderColor: colorMap["Onroad"].borderColor,
-        backgroundColor: colorMap["Onroad"].backgroundColor,
-        fill: true,
-      },
-      {
-        label: "Residential",
-        data: jsonData.map((item) => item["Residential"] / 1000),
-        borderColor: colorMap["Residential"].borderColor,
-        backgroundColor: colorMap["Residential"].backgroundColor,
-        fill: true,
-      },
-      {
-        label: "Railroad",
-        data: jsonData.map((item) => item["Railroad"] / 1000),
-        borderColor: colorMap["Railroad"].borderColor,
-        backgroundColor: colorMap["Railroad"].backgroundColor,
-        fill: true,
-      },
-    ];
+      // Define the datasets for each category
+      const datasets = [
+        {
+          label: "Aviation",
+          data: jsonData.map((item) => item["Aviation"] / 1000),
+          borderColor: colorMap["Aviation"].borderColor,
+          backgroundColor: colorMap["Aviation"].backgroundColor,
+          fill: true,
+        },
+        {
+          label: "Industry",
+          data: jsonData.map((item) => item["Industry"] / 1000),
+          borderColor: colorMap["Industry"].borderColor,
+          backgroundColor: colorMap["Industry"].backgroundColor,
+          fill: true,
+        },
+        {
+          label: "Commercial",
+          data: jsonData.map((item) => item["Commercial"] / 1000),
+          borderColor: colorMap["Commercial"].borderColor,
+          backgroundColor: colorMap["Commercial"].backgroundColor,
+          fill: true,
+        },
+        {
+          label: "Power",
+          data: jsonData.map((item) => item["Power"] / 1000),
+          borderColor: colorMap["Power"].borderColor,
+          backgroundColor: colorMap["Power"].backgroundColor,
+          fill: true,
+        },
+        {
+          label: "Onroad",
+          data: jsonData.map((item) => item["Onroad"] / 1000),
+          borderColor: colorMap["Onroad"].borderColor,
+          backgroundColor: colorMap["Onroad"].backgroundColor,
+          fill: true,
+        },
+        {
+          label: "Residential",
+          data: jsonData.map((item) => item["Residential"] / 1000),
+          borderColor: colorMap["Residential"].borderColor,
+          backgroundColor: colorMap["Residential"].backgroundColor,
+          fill: true,
+        },
+        {
+          label: "Railroad",
+          data: jsonData.map((item) => item["Railroad"] / 1000),
+          borderColor: colorMap["Railroad"].borderColor,
+          backgroundColor: colorMap["Railroad"].backgroundColor,
+          fill: true,
+        },
+      ];
 
-    setChartData({
-      labels: years,
-      datasets: datasets,
-    });
+      setChartData({
+        labels: years,
+        datasets: datasets,
+      });
+    }
+    fetchData()
   }, [selection, colorMap]);
 
   const options = {
@@ -238,6 +224,7 @@ export const StackedAreaChart = ({ selection }) => {
 
 // GRA2PES Emissions by Sector
 const GasEmissionsBySectorCard = ({ selection }) => {
+  const { config } = useConfig()
   const [data, setData] = useState({
     labels: [],
     datasets: [
@@ -296,46 +283,31 @@ const GasEmissionsBySectorCard = ({ selection }) => {
     { color: "rgb(120, 111, 166)", label: "Residential + Commercial" },
   ];
 
-  const formatCityKey = (city) => {
-    return (
-      city.replace("/", "-").replace(/\s+/g, "_") +
-      "_2021_Month07_species_sectoral_breakdown_conservative"
-    );
-  };
-
-  const getCityData = (city) => {
-    const cityKey = formatCityKey(city);
-    const data = GRA2PES_GEOJSON[cityKey];
-
-    if (!data) {
-      console.warn(`⚠️ No data found for city key: ${cityKey}`);
-    }
-
-    return data;
-  };
 
   useEffect(() => {
-    const json = getCityData(selection);
-    // const gases = json.map(entry => entry.Species);
-    const sectorsData = json.map((entry) => {
-      return {
-        label: entry.Species,
-        data: sectors.map((sector) => parseFloat(entry[sector])),
-        backgroundColor: [
-          "rgb(99, 205, 218)", // Color for "Industrial"
-          "rgb(247, 215, 148)", // Color for "Onroad Transportation"
-          "rgb(119, 139, 235)", // Color for "Power"
-          "rgb(231, 127, 103)", // Color for "Nonroad Transportation"
-          "rgb(207, 106, 135)", // Color for "Other"
-          "rgb(120, 111, 166)", // Color for "Residential + Commercial"
-        ],
-      };
-    });
+    const fetchData = async () => {
+      const json = await getGra2pesData(selection, config);
+      const sectorsData = json.map((entry) => {
+        return {
+          label: entry.Species,
+          data: sectors.map((sector) => parseFloat(entry[sector])),
+          backgroundColor: [
+            "rgb(99, 205, 218)", // Color for "Industrial"
+            "rgb(247, 215, 148)", // Color for "Onroad Transportation"
+            "rgb(119, 139, 235)", // Color for "Power"
+            "rgb(231, 127, 103)", // Color for "Nonroad Transportation"
+            "rgb(207, 106, 135)", // Color for "Other"
+            "rgb(120, 111, 166)", // Color for "Residential + Commercial"
+          ],
+        };
+      });
 
-    setData({
-      labels: sectors,
-      datasets: sectorsData,
-    });
+      setData({
+        labels: sectors,
+        datasets: sectorsData,
+      });
+    }
+    fetchData()
   }, [selection, sectors]);
 
   const Legend = () => {

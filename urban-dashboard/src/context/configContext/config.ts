@@ -13,6 +13,9 @@ const defaultConfig: UrbanDashboardConfig = {
   basemapStyle:
     process.env.REACT_APP_BASEMAP_STYLES_MAPBOX_ID ||
     "cldu1cb8f00ds01p6gi583w1m",
+  dataUrl:
+    process.env.REACT_APP_DATA_URL ||
+    "https://raw.githubusercontent.com/US-GHG-Center/urban_dashboard_data/main/data",
 };
 
 /**
@@ -47,6 +50,7 @@ export const validateConfig = (
     "mapboxStyle",
     "basemapStyle",
     "featuresApiUrl",
+    "dataUrl",
   ];
 
   const missingFields = requiredFields.filter(
