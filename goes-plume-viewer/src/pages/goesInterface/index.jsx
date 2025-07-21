@@ -3,6 +3,7 @@ import { DashboardContainer } from "../dashboardContainer";
 import { ConfigProvider } from "../../context/configContext"
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import CssBaseline from "@mui/material/CssBaseline";
 
 
 
@@ -14,6 +15,7 @@ export function GoesInterface({
 }) {
   return (
     <ConfigProvider userConfig={config}>
+      <CssBaseline />
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <DashboardContainer
           defaultCollectionId={defaultCollectionId}

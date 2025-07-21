@@ -1,6 +1,5 @@
 import { Fragment } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import CssBaseline from "@mui/material/CssBaseline";
+import { BrowserRouter, Routes, Route } from "react-router-dom"; 
 import { GoesInterface } from "./pages/goesInterface";
 import "./App.css";
 
@@ -11,7 +10,6 @@ const defaultCollectionId = "goes-ch4plume-v1";
 function App() {
   return (
     <Fragment>
-      <CssBaseline />
       <BrowserRouter basename={BASE_PATH}>
         <Routes>
           <Route
