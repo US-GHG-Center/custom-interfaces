@@ -9,7 +9,6 @@ const defaultZoomLevel = 4;
 function App() {
   return (
     <Fragment>
-      <CssBaseline />
       <BrowserRouter basename={BASE_PATH}>
         <Routes>
           <Route
