@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
-
 import { Dashboard } from "../dashboard/index.jsx";
 import {
   extractStationCollections,
@@ -10,22 +8,27 @@ import {
 import { fetchAllFromFeaturesAPI } from "../../services/api.js";
 import { useConfig } from "../../context/configContext/index.jsx";
 
-export function DashboardContainer({ defaultZoomLevel }) {
+export function DashboardContainer({
+  defaultZoomLevel,
+  agency,
+  dataCategory,
+  region,
+  ghg,
+  stationCode,
+}) {
   const [selectedStationId, setSelectedStationId] = useState("");
   const [stations, setStations] = useState([]);
   const [stationMetadata, setStationMetadata] = useState({});
   const { config } = useConfig();
 
   // get the query params
-  const [searchParams] = useSearchParams();
-  const [agency] = useState(searchParams.get("agency") || "nist"); // nist, noaa, or nasa
-  const [dataCategory] = useState(searchParams.get("data-category") || ""); // testbed
-  const [region] = useState(searchParams.get("region") || ""); // lam or nec
-  const [ghg, setSelectedGHG] = useState(searchParams.get("ghg") || "co2"); // co2 or ch4
-  const [stationCode] = useState(searchParams.get("station-code") || ""); // buc, smt, etc
-  const [zoomLevel] = useState(
-    searchParams.get("zoom-level") || defaultZoomLevel
-  ); // let default zoom level controlled by map component
+
+  const [agency] = useState(agency || "nist"); // nist, noaa, or nasa
+  const [dataCategory] = useState(dataCategory || ""); // testbed
+  const [region] = useState(region || ""); // lam or nec
+  const [ghg, setSelectedGHG] = useState(ghg || "co2"); // co2 or ch4
+  const [stationCode] = useState(stationCode || ""); // buc, smt, etc
+  const [zoomLevel] = useState(defaultZoomLevel || 4); // let default zoom level controlled by map component
 
   useEffect(() => {
     const fetchStationData = async () => {

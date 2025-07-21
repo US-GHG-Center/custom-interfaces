@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
-import { NistInterface } from "./pages/nistInterface";
+import { NistInterface, NistInterfaceContainer } from "./pages/nistInterface";
 import "./App.css";
 
 const BASE_PATH = process.env.PUBLIC_URL;
@@ -13,7 +13,9 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<NistInterface defaultZoomLevel={defaultZoomLevel} />}
+            element={
+              <NistInterfaceContainer defaultZoomLevel={defaultZoomLevel} />
+            }
           ></Route>
         </Routes>
       </BrowserRouter>
