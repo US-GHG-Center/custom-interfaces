@@ -1,6 +1,6 @@
 {
-  "name": "nist-interface",
-  "version": "0.1.0",
+  "name": "test01-nist",
+  "version": "0.1.2",
   "private": false,
   "publishConfig": {
     "access": "public"
