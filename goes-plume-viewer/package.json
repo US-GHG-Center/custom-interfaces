@@ -1,6 +1,6 @@
 {
   "name": "test01-goes",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "GOES Methane Plume Viewer interface library",
   "private": false,
   "publishConfig": {
