@@ -1,6 +1,6 @@
 import { Fragment } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom"; 
-import { GoesInterface } from "./pages/goesInterface";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { GoesInterfaceContainer } from "./pages/goesInterface";
 import "./App.css";
 
 const BASE_PATH = process.env.PUBLIC_URL;
@@ -15,7 +15,7 @@ function App() {
           <Route
             path="/"
             element={
-              <GoesInterface
+              <GoesInterfaceContainer
                 defaultCollectionId={defaultCollectionId}
                 defaultZoomLocation={defaultZoomLocation}
                 defaultZoomLevel={defaultZoomLevel}
