@@ -13,7 +13,7 @@ export function Dashboard({ dataset, urbanRegions, zoomLevel, zoomLocation }) {
 
   return (
     <Box
-      className="fullSize">
+      className="fullSize dashboard">
       <InfoSidebar
         urbanRegions={urbanRegions}
         selection={urbanRegion}
