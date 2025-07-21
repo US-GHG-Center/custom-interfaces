@@ -1,13 +1,26 @@
 import React from "react";
 import { DashboardContainer } from "../dashboardContainer";
-import { ConfigProvider } from "../../context/configContext";
+import { ConfigProvider } from "../../context/configContext"
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
-export function GoesInterface({ config = {}, defaultCollectionId,
+
+
+export function GoesInterface({
+  config = {},
+  defaultCollectionId,
   defaultZoomLocation,
-  defaultZoomLevel }) {
+  defaultZoomLevel,
+}) {
   return (
     <ConfigProvider userConfig={config}>
-      <DashboardContainer defaultCollectionId={defaultCollectionId} defaultZoomLocation={defaultZoomLocation} defaultZoomLevel={defaultZoomLevel} />
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <DashboardContainer
+          defaultCollectionId={defaultCollectionId}
+          defaultZoomLocation={defaultZoomLocation}
+          defaultZoomLevel={defaultZoomLevel}
+        />
+      </LocalizationProvider>
     </ConfigProvider>
   );
 }
