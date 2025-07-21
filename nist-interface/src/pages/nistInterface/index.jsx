@@ -19,11 +19,11 @@ export function NistInterface({
       <CssBaseline />
       <DashboardContainer
         defaultZoomLevel={defaultZoomLevel}
-        stationCode={stationCode}
-        ghg={ghg}
-        region={region}
-        dataCategory={dataCategory}
-        agency={agency}
+        defaultStationCode={stationCode}
+        defaultGhg={ghg}
+        defaultRegion={region}
+        defaultDataCategory={dataCategory}
+        defaultAgency={agency}
       />
     </ConfigProvider>
   );

@@ -10,11 +10,11 @@ import { useConfig } from "../../context/configContext/index.jsx";
 
 export function DashboardContainer({
   defaultZoomLevel,
-  agency,
-  dataCategory,
-  region,
-  ghg,
-  stationCode,
+  defaultAgency,
+  defaultDataCategory,
+  defaultRegion,
+  defaultGhg,
+  defaultStationCode,
 }) {
   const [selectedStationId, setSelectedStationId] = useState("");
   const [stations, setStations] = useState([]);
@@ -23,11 +23,11 @@ export function DashboardContainer({
 
   // get the query params
 
-  const [agency] = useState(agency || "nist"); // nist, noaa, or nasa
-  const [dataCategory] = useState(dataCategory || ""); // testbed
-  const [region] = useState(region || ""); // lam or nec
-  const [ghg, setSelectedGHG] = useState(ghg || "co2"); // co2 or ch4
-  const [stationCode] = useState(stationCode || ""); // buc, smt, etc
+  const [agency] = useState(defaultAgency || "nist"); // nist, noaa, or nasa
+  const [dataCategory] = useState(defaultDataCategory || ""); // testbed
+  const [region] = useState(defaultRegion || ""); // lam or nec
+  const [ghg, setSelectedGHG] = useState(defaultGhg || "co2"); // co2 or ch4
+  const [stationCode] = useState(defaultStationCode || ""); // buc, smt, etc
   const [zoomLevel] = useState(defaultZoomLevel || 4); // let default zoom level controlled by map component
 
   useEffect(() => {
