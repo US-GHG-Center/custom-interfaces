@@ -13,23 +13,25 @@ export function Dashboard({ dataset, urbanRegions, zoomLevel, zoomLocation }) {
 
   return (
     <Box
-      className="fullSize dashboard">
-      <InfoSidebar
-        urbanRegions={urbanRegions}
-        selection={urbanRegion}
-        setSelection={setUrbanRegion}
-        handleZoomOut={handleZoomOut}
-        dataset={dataset}
-      />
-      <MapBoxViewerWrapper
-        urbanRegions={urbanRegions}
-        urbanRegion={urbanRegion}
-        setSelection={setUrbanRegion}
-        zoomOut={zoomOut}
-        dataset={dataset}
-        zoomLevel={zoomLevel}
-        zoomLocation={zoomLocation}
-      />
+      className="fullSize">
+      <div className="dashboard-container">
+        <InfoSidebar
+          urbanRegions={urbanRegions}
+          selection={urbanRegion}
+          setSelection={setUrbanRegion}
+          handleZoomOut={handleZoomOut}
+          dataset={dataset}
+        />
+        <MapBoxViewerWrapper
+          urbanRegions={urbanRegions}
+          urbanRegion={urbanRegion}
+          setSelection={setUrbanRegion}
+          zoomOut={zoomOut}
+          dataset={dataset}
+          zoomLevel={zoomLevel}
+          zoomLocation={zoomLocation}
+        />
+      </div>
     </Box>
   );
 }
