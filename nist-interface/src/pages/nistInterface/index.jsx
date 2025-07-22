@@ -36,7 +36,7 @@ export function NistInterfaceContainer({defaultZoomLevel}) {
   const region = searchParams.get("region"); // lam or nec
   const ghg = searchParams.get("ghg"); // co2 or ch4
   const stationCode = searchParams.get("station-code"); // buc, smt, etc
-  const [zoomLevel] = useState(searchParams.get("zoom-level")||defaultZoomLevel)
+  const zoomLevel= searchParams.get("zoom-level")||defaultZoomLevel
   return (
     <NistInterface
       defaultZoomLevel={zoomLevel}
@@ -45,6 +45,7 @@ export function NistInterfaceContainer({defaultZoomLevel}) {
       region={region}
       dataCategory={dataCategory}
       agency={agency}
+      
     />
   );
 }
