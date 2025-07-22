@@ -3,7 +3,7 @@ import { DashboardContainer } from "../dashboardContainer";
 import { ConfigProvider } from "../../context/configContext";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useSearchParams } from "react-router-dom";
-import { zoom } from "chartjs-plugin-zoom";
+
 
 export function NistInterface({
   config = {},
