@@ -9,13 +9,11 @@ const defaultConfig: GoesInterfaceConfig = {
   stacApiUrl: process.env.REACT_APP_STAC_API_URL || "",
   rasterApiUrl: process.env.REACT_APP_RASTER_API_URL || "",
   cloudBrowseUrl: process.env.REACT_APP_CLOUD_BROWSE_URL || "",
-  publicUrl: process.env.PUBLIC_URL || "",
   mapboxToken: process.env.REACT_APP_MAPBOX_TOKEN || "",
   mapboxStyle: process.env.REACT_APP_MAPBOX_STYLE_URL || "",
-  basemapStyle: process.env.REACT_APP_BASEMAP_STYLES_MAPBOX_ID || "",
-  defaultZoomLocation: [-98.771556, 32.967243],
-  defaultZoomLevel: 4,
-  defaultCollectionId: "goes-ch4plume-v1",
+  basemapStyle:
+    process.env.REACT_APP_BASEMAP_STYLES_MAPBOX_ID ||
+    "cldu1cb8f00ds01p6gi583w1m",
 };
 
 /**
@@ -49,7 +47,6 @@ export const validateConfig = (
     "stacApiUrl",
     "rasterApiUrl",
     "mapboxToken",
-    "defaultCollectionId",
     "mapboxStyle",
     "basemapStyle",
   ];

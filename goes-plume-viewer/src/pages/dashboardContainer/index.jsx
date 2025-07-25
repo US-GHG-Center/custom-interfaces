@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
-
 import { Dashboard } from "../dashboard/index.jsx";
 import { fetchAllFromSTACAPI } from "../../services/api";
 import {
@@ -13,19 +11,17 @@ import {
 import { PlumeMetas } from "../../assets/dataset/metadata.ts";
 import { useConfig } from "../../context/configContext/index.jsx";
 
-export function DashboardContainer() {
+export function DashboardContainer({
+  defaultCollectionId,
+  defaultZoomLocation,
+  defaultZoomLevel,
+}) {
   const { config } = useConfig();
   // get the query params
-  const [searchParams] = useSearchParams();
-  const [zoomLocation, setZoomLocation] = useState(
-    searchParams.get("zoom-location") || config?.defaultZoomLocation
-  ); // let default zoom location be controlled by map component
-  const [zoomLevel, setZoomLevel] = useState(
-    searchParams.get("zoom-level") || config?.defaultZoomLevel
-  ); // let default zoom level be controlled by map component
-  const [collectionId] = useState(
-    searchParams.get("collection-id") || config?.defaultCollectionId
-  );
+
+  const [zoomLocation, setZoomLocation] = useState(defaultZoomLocation); // let default zoom location be controlled by map component
+  const [zoomLevel, setZoomLevel] = useState(defaultZoomLevel); // let default zoom level be controlled by map component
+  const [collectionId] = useState(defaultCollectionId);
 
   const [collectionItems, setCollectionItems] = useState([]);
   const [collectionMeta, setCollectionMeta] = useState({});

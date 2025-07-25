@@ -17,7 +17,6 @@ if (!publicUrl) {
 let parcelCommand;
 
 const mode = process.argv[2];
-console.log({ mode });
 switch (mode) {
   case 'build':
     parcelCommand = `parcel build --public-url "${publicUrl}" --dist-dir ${buildDir}`;
