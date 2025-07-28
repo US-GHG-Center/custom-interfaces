@@ -52,12 +52,11 @@ export const StackedAreaChart = ({ selection }) => {
                             }}
                         />
                         <Typography sx={{
-                            fontSize: "12px",
-                            color: "#1B2631",
+                            fontSize: "14px",
+                            color: '#1b1b1b',
                             whiteSpace: "normal",
                             overflowWrap: "break-word",
                             maxWidth: "88px",
-                            fontFamily: "Inter"
                         }}>{label}</Typography>
                     </Grid>
                 ))}
@@ -280,12 +279,11 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                             }}
                         />
                         <Typography sx={{
-                            fontSize: "11px",
-                            color: "#1B2631",
+                            fontSize: "14px",
+                            color: "#1b1b1b",
                             whiteSpace: "normal",
                             overflowWrap: "break-word",
-                            maxWidth: "88px",
-                            fontFamily: "Inter"
+                            maxWidth: "90px",
                         }}>{item.label}</Typography>
                     </Grid>
                 ))}
@@ -310,9 +308,8 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                                     }} options={options} />
                                 </div>
                                 <Typography sx={{
-                                    fontSize: "11px",
-                                    color: "#1B2631",
-                                    fontFamily: "Inter",
+                                    fontSize: "14px",
+                                    color: "#1b1b1b",
                                     margin: "5px 0 5px 0",
                                     // marginBottom: "5px"
                                 }}>
@@ -335,7 +332,7 @@ const VulcanInsightsCard = ({ selection }) => {
     return (
         <>
             <div className="dataset-card">
-                <h2>{title}</h2>
+                <h3>{title}</h3>
                 <p>
                     {description}
                 </p>
@@ -355,7 +352,7 @@ const Gra2pesInsightsCard = ({ selection }) => {
     return (
         <>
             <div className="dataset-card">
-                <h2>{title}</h2>
+                <h3>{title}</h3>
                 <p>
                     {description}
                 </p>
