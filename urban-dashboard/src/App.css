@@ -44,11 +44,11 @@ html,
 body,
 #root {
   height: 100%;
-  font-family: 'Public', 'sans';
+  font-family: 'Public Sans';
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'DM Sans', sans;
+  font-family: 'DM Sans';
 }
 
 .fullSize {

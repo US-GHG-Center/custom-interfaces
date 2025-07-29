@@ -56,7 +56,8 @@ export const StackedAreaChart = ({ selection }) => {
                             color: '#1b1b1b',
                             whiteSpace: "normal",
                             overflowWrap: "break-word",
-                            maxWidth: "88px",
+                            maxWidth: "100px",
+                            wordBreak: "break-word", 
                         }}>{label}</Typography>
                     </Grid>
                 ))}
@@ -283,7 +284,8 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                             color: "#1b1b1b",
                             whiteSpace: "normal",
                             overflowWrap: "break-word",
-                            maxWidth: "90px",
+                            maxWidth: "100px",
+                            wordBreak: "break-word", 
                         }}>{item.label}</Typography>
                     </Grid>
                 ))}
