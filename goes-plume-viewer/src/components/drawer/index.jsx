@@ -8,37 +8,38 @@ import { PlumeCard } from '../card';
 import { useEffect, useState } from 'react';
 
 import "./index.css";
+import { useConfig } from "../../context/configContext";
 
 const drawerWidth = "30rem";
 
 const Main = styledmui('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
+  flexGrow: 1,
+  padding: theme.spacing(3),
     transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginRight: -drawerWidth,
-    /**
-     * This is necessary to enable the selection of content. In the DOM, the stacking order is determined
-     * by the order of appearance. Following this rule, elements appearing later in the markup will overlay
-     * those that appear earlier. Since the Drawer comes after the Main content, this adjustment ensures
-     * proper interaction with the underlying content.
-     */
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginRight: -drawerWidth,
+  /**
+   * This is necessary to enable the selection of content. In the DOM, the stacking order is determined
+   * by the order of appearance. Following this rule, elements appearing later in the markup will overlay
+   * those that appear earlier. Since the Drawer comes after the Main content, this adjustment ensures
+   * proper interaction with the underlying content.
+   */
     position: 'relative',
-    variants: [
-      {
-        props: ({ open }) => open,
-        style: {
+  variants: [
+    {
+      props: ({ open }) => open,
+      style: {
           transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-          }),
-          marginRight: 0,
-        },
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginRight: 0,
       },
-    ],
+    },
+  ],
   }),
 );
 
@@ -52,18 +53,32 @@ const DrawerHeader = styledmui('div')(({ theme }) => ({
 }));
 
 const HorizontalLayout = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 5px;
-    margin-bottom: 5px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 5px;
+  margin-bottom: 5px;
 `;
 
-export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, collectionId, metaDataTree, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId}) {
-  const [ selectedPlumeMetas, setSelectedPlumeMetas ] = useState([]);
-  const [ location, setLocation ] = useState("USA");
-  const [ numberOfPlumes, setNumberOfPlumes ] = useState(0);
+export function PersistentDrawerRight({
+  open,
+  setOpen,
+  selectedPlumes,
+  plumeMetaData,
+  collectionId,
+  metaDataTree,
+  plumesMap,
+  handleSelectedPlumeCard,
+  setHoveredPlumeId,
+  hoveredPlumeId,
+}) {
+  const [selectedPlumeMetas, setSelectedPlumeMetas] = useState([]);
+  const [location, setLocation] = useState("USA");
+  const [numberOfPlumes, setNumberOfPlumes] = useState(0);
+  const { config } = useConfig();
+  const rasterApiUrl = config?.rasterApiUrl;
+  const cloudBrowseUrl = config?.cloudBrowseUrl;
 
   let VMIN = 0;
   let VMAX = 0.4;
@@ -129,16 +144,16 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
         <DrawerHeader className="drawer-head">
           <HorizontalLayout>
             <Typography
-                  variant="h6"
-                  component="div"
-                  fontWeight="bold"
+              variant="h6"
+              component="div"
+              fontWeight="bold"
                   className='drawer-head-content'
             >
               { location }
             </Typography>
             <Typography
-                  variant="subtitle1"
-                  component="div"
+              variant="subtitle1"
+              component="div"
                   className='drawer-head-content'
             >
               { numberOfPlumes + " Plumes"}
@@ -147,23 +162,23 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
         </DrawerHeader>
           { !!selectedPlumeMetas.length &&
             selectedPlumeMetas.map(selectedPlumeMeta => (
-              <PlumeCard
-                key={selectedPlumeMeta.id}
-                plumeSourceId={selectedPlumeMeta.id}
-                plumeSourceName={selectedPlumeMeta.id}
-                imageUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
-                tiffUrl={`${process.env.REACT_APP_CLOUD_BROWSE_URL}/browseui/#${collectionId}/#q=${selectedPlumeMeta.id.split("_").slice(-1)}`}
-                lon={selectedPlumeMeta.lon}
-                lat={selectedPlumeMeta.lat}
-                totalReleaseMass={selectedPlumeMeta.totalReleaseMass}
-                colEnhancements={selectedPlumeMeta.colEnhancements}
-                startDatetime={selectedPlumeMeta.startDatetime}
-                endDatetime={selectedPlumeMeta.endDatetime}
-                duration={selectedPlumeMeta.duration}
-                handleSelectedPlumeCard={handleSelectedPlumeCard}
-                hoveredPlumeId={hoveredPlumeId}
-                setHoveredPlumeId={setHoveredPlumeId}
-              />
+            <PlumeCard
+              key={selectedPlumeMeta.id}
+              plumeSourceId={selectedPlumeMeta.id}
+              plumeSourceName={selectedPlumeMeta.id}
+                imageUrl={`${rasterApiUrl}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
+                tiffUrl={`${cloudBrowseUrl}/browseui/#${collectionId}/#q=${selectedPlumeMeta.id.split("_").slice(-1)}`}
+              lon={selectedPlumeMeta.lon}
+              lat={selectedPlumeMeta.lat}
+              totalReleaseMass={selectedPlumeMeta.totalReleaseMass}
+              colEnhancements={selectedPlumeMeta.colEnhancements}
+              startDatetime={selectedPlumeMeta.startDatetime}
+              endDatetime={selectedPlumeMeta.endDatetime}
+              duration={selectedPlumeMeta.duration}
+              handleSelectedPlumeCard={handleSelectedPlumeCard}
+              hoveredPlumeId={hoveredPlumeId}
+              setHoveredPlumeId={setHoveredPlumeId}
+            />
             ))
           }
       </Drawer>
