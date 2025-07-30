@@ -1,5 +1,5 @@
 {
-  "name": "nist-interface",
+  "name": "custom-interface-nist",
   "version": "0.0.1",
   "private": false,
   "publishConfig": {

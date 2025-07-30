@@ -56,7 +56,7 @@ Once your environment variables are set, use the following commands:
 
 ## Bundling as a Library
 
-You can package `nist-interface` as a reusable library for distribution via the [npm registry](https://www.npmjs.com/).
+You can package `custom-interface-nist` as a reusable library for distribution via the [npm registry](https://www.npmjs.com/).
 
 ### 1. Build the Library
 
@@ -109,9 +109,9 @@ NIST interface can also be used as a library within other React applications.
 Install the library via npm or yarn:
 
 ```bash
-npm install nist-interface
+npm install custom-interface-nist
 # or
-yarn add nist-interface
+yarn add custom-interface-nist
 ```
 
 ## Usage
@@ -119,7 +119,7 @@ yarn add nist-interface
 ### Import NIST Interface:
 
 ```JavaScript
-import { NistInterface } from 'nist-interface';
+import { NistInterface } from 'custom-interface-nist';
 ```
 
 ### Create a Configuration Variable:
@@ -137,13 +137,25 @@ const defaultConfig = {
 ### Add some default map configuration to start with
 
 ```Javascript
-const defaultZoomLevel = number
+const defaultZoomLevel?:number = 4;
+const agency?: string = 'nist';
+const dataCategory?: string;
+const region?: string  = 'nec'
+const ghg?: string = 'co2'
+const stationCode?: string = 'buc';
 ```
 
 ### Use the CloudBrowse Component:
 
 ```JavaScript
-  <NistInterface config={defaultConfig} defaultZoomLevel={defaultZoomLevel} />
+  <NistInterface 
+    config={defaultConfig}
+    agency={agency}
+    stationCode={stationCode}
+    ghg={ghg}
+    region={region}
+    dataCategory={dataCategory}
+    defaultZoomLevel={defaultZoomLevel} />
 ```
 
 #### Note: Configuration settings can also be provided directly in the host React application's .env file. For example:

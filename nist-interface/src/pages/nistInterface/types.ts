@@ -8,4 +8,9 @@ export interface NistInterfaceConfig {
 export interface NistInterface {
   config?: Partial<NistInterfaceConfig>;
   defaultZoomLevel: number;
+  agency?: string;
+  dataCategory?: string;
+  region?: string;
+  ghg?: string;
+  stationCode?: string;
 }
