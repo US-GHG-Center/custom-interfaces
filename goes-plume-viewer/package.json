@@ -82,7 +82,7 @@
     "@parcel/transformer-webmanifest": "^2.15.2",
     "@types/jest": "^27.0.1",
     "@types/node": "^24.0.1",
-    "@types/react": ":^19.1.8",
+    "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "dotenv-cli": "^8.0.0",
     "parcel": "^2.15.2",
