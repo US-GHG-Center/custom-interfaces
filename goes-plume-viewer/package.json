@@ -1,5 +1,5 @@
 {
-  "name": "goes-interface",
+  "name": "custom-interface-goes",
   "version": "0.0.1",
   "description": "GOES Methane Plume Viewer interface library",
   "private": false,

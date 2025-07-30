@@ -60,7 +60,7 @@ Once your environment variables are set, use the following commands:
 
 ## Bundling as a Library
 
-You can package `goes-interface` as a reusable library for distribution via the [npm registry](https://www.npmjs.com/).
+You can package `custom-interface-goes` as a reusable library for distribution via the [npm registry](https://www.npmjs.com/).
 
 ### 1. Build the Library
 
@@ -97,7 +97,7 @@ npm publish
 **Note:**
 
 > - Make sure your package name is unique if it's public.
-> - Consider using [scoped packages](https://docs.npmjs.com/cli/v10/using-npm/scope) (e.g., `@your-org/goes-interface`) for organization or private packages.
+> - Consider using [scoped packages](https://docs.npmjs.com/cli/v10/using-npm/scope) (e.g., `@your-org/custom-interface-goes`) for organization or private packages.
 > - For more details, see the [npm publishing guide](https://docs.npmjs.com/cli/v10/commands/npm-publish).
 
 ---
@@ -113,9 +113,9 @@ Goes interface can also be used as a library within other React applications.
 Install the library via npm or yarn:
 
 ```bash
-npm install goes-interface
+npm install custom-interface-goes
 # or
-yarn add goes-interface
+yarn add custom-interface-goes
 ```
 
 ## Usage
@@ -123,7 +123,7 @@ yarn add goes-interface
 ### Import Goes Interface :
 
 ```JavaScript
-import { GoesInterface } from 'goes-interface';
+import { GoesInterface } from 'custom-interface-goes';
 ```
 
 ### Create a Configuration Variable:
@@ -139,19 +139,14 @@ const defaultConfig = {
   basemapStyle: "",
 };
 
-const defaultZoomLocation = [number,number];
-const defaultZoomLevel = number;
-const defaultCollectionId = "goes-ch4plume-v1";
-
-
 ```
 
 ### Add some default map configuration to start with
 
 ```Javascript
-const defaultZoomLocation = [number,number];
-const defaultZoomLevel = number;
-const defaultCollectionId = "goes-ch4plume-v1";
+const defaultZoomLocation:[number,number] = [-98.771556, 32.967243];
+const defaultZoomLevel:number = 4;
+const defaultCollectionId:string = "goes-ch4plume-v1";
 
 ```
 
