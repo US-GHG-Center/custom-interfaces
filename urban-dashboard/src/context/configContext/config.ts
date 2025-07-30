@@ -8,7 +8,6 @@ import { UrbanDashboardConfig } from "../../components/urbanDashboard/types";
 const defaultConfig: UrbanDashboardConfig = {
   mapboxToken: process.env.REACT_APP_MAPBOX_TOKEN || "",
   mapboxStyle: process.env.REACT_APP_MAPBOX_STYLE_URL || "",
-  featuresApiUrl: process.env.REACT_APP_FEATURES_API_URL || "",
   basemapStyle:
     process.env.REACT_APP_BASEMAP_STYLES_MAPBOX_ID ||
     "cldu1cb8f00ds01p6gi583w1m",
@@ -48,7 +47,6 @@ export const validateConfig = (
     "mapboxToken",
     "mapboxStyle",
     "basemapStyle",
-    "featuresApiUrl",
     "dataUrl",
   ];
 
