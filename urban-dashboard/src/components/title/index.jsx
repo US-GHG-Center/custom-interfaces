@@ -13,7 +13,7 @@ export function Title({ children, selection, setSelection, handleZoomOut }) {
             {!selection && (
                 <>
                     <div className="title-card-title">
-                        <Typography variant='h5' sx={{ fontFamily: "Inter" }}>
+                        <Typography variant='h5'>
                             <span>Urban Dashboard</span>
                         </Typography>
                     </div>
@@ -32,7 +32,7 @@ export function Title({ children, selection, setSelection, handleZoomOut }) {
                                 <FontAwesomeIcon
                                     onClick={handleZoomOut}
                                     icon={faArrowLeft}
-                                    style={{ color: "#082A64", fontSize: 20, cursor: "pointer" }}
+                                    style={{ color: "#222fbf", fontSize: 20, cursor: "pointer" }}
                                 />
                             </Tooltip>
                         </div>
