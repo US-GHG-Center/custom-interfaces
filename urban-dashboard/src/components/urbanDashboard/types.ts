@@ -9,4 +9,5 @@ export interface UrbanDashboard {
   config?: Partial<UrbanDashboardConfig>;
   defaultZoomLocation: [number, number];
   defaultZoomLevel: number;
+  defaultDataset?: string;
 }

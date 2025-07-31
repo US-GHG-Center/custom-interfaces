@@ -59,7 +59,7 @@ Once your environment variables are set, use the following commands:
 
 ## Bundling as a Library
 
-You can package `urban-dashboard` as a reusable library for distribution via the [npm registry](https://www.npmjs.com/).
+You can package `custom-interface-urban` as a reusable library for distribution via the [npm registry](https://www.npmjs.com/).
 
 ### 1. Build the Library
 
@@ -96,7 +96,7 @@ npm publish
 **Note:**
 
 > - Make sure your package name is unique if it's public.
-> - Consider using [scoped packages](https://docs.npmjs.com/cli/v10/using-npm/scope) (e.g., `@your-org/urban-dashboard`) for organization or private packages.
+> - Consider using [scoped packages](https://docs.npmjs.com/cli/v10/using-npm/scope) (e.g., `@your-org/custom-interface-urban`) for organization or private packages.
 > - For more details, see the [npm publishing guide](https://docs.npmjs.com/cli/v10/commands/npm-publish).
 
 ---
@@ -112,9 +112,9 @@ Urban interface can also be used as a library within other React applications.
 Install the library via npm or yarn:
 
 ```bash
-npm install urban-dashboard
+npm install custom-interface-urban
 # or
-yarn add urban-dashboard
+yarn add custom-interface-urban
 ```
 
 ## Usage
@@ -122,7 +122,7 @@ yarn add urban-dashboard
 ### Import Urban Dashboard :
 
 ```JavaScript
-import { UrbanDashboard } from 'urban-dashboard';
+import { UrbanDashboard } from 'custom-interface-urban';
 ```
 
 ### Create a Configuration Variable:
@@ -144,8 +144,9 @@ const urbanConfig = {
 ### Add some default map configuration to start with
 
 ```Javascript
-const defaultZoomLocation = [number,number];
-const defaultZoomLevel = number;
+const defaultZoomLocation:[number,number] = [-98.771556, 32.967243];
+const defaultZoomLevel: number = 4;
+const defaultDataset: string = 'vulcan'
 ```
 
 ### Use the CloudBrowse Component:
@@ -155,6 +156,7 @@ const defaultZoomLevel = number;
     config={urbanConfig}
     defaultZoomLevel={defaultZoomLevel}
     defaultZoomLocation={defaultZoomLocation}
+    defaultDataset={defaultDataset}
       />
 ```
 
