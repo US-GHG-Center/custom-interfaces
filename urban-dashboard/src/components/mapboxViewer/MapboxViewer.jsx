@@ -1,15 +1,11 @@
 import { Component } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-
 import { VULCAN_RASTER_URL, GRA2PES_RASTER_URL } from "./helper";
-
 import "./index.css";
-import { useConfig } from "../../context/configContext";
-
+import defaultZoomLocation from '../../App'
 export class MapBoxViewer extends Component {
   constructor(props) {
     super(props);
@@ -152,7 +148,7 @@ export class MapBoxViewer extends Component {
       // Zoom out and fly back to center and remove all the geoJSON layers
       const currentMap = this.state.currentViewer;
       currentMap.flyTo({
-        center: mapCenter,
+        center: [-98.771556, 32.967243],
         zoom: 4,
         speed: 1.2,
         curve: 1.42,
