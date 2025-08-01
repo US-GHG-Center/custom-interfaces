@@ -23,7 +23,7 @@ Create a copy of the `.env.local-sample` file and name it `.env`. Populate it wi
 REACT_APP_MAPBOX_TOKEN='xxxxxxxxxx'
 REACT_APP_MAPBOX_STYLE_URL='mapbox://styles/xxxxxxxxx'
 REACT_APP_FEATURES_API_URL='xxxxxxxxxx'
-REACT_APP_BASE_PATH='xxxxxxx'
+REACT_APP_BASEMAP_STYLES_MAPBOX_ID='xxxxxxx'
 ```
 
 ### Installation and Running
@@ -138,11 +138,11 @@ const defaultConfig = {
 
 ```Javascript
 const defaultZoomLevel?:number = 4;
-const agency?: string = 'nist';
-const dataCategory?: string;
-const region?: string  = 'nec'
-const ghg?: string = 'co2'
-const stationCode?: string = 'buc';
+const agency?:string = 'nist';
+const dataCategory?:string;
+const region?:string  = 'nec'
+const ghg?:string = 'co2'
+const stationCode?:string = 'buc';
 ```
 
 ### Use the CloudBrowse Component:
@@ -161,10 +161,10 @@ const stationCode?: string = 'buc';
 #### Note: Configuration settings can also be provided directly in the host React application's .env file. For example:
 
 ```
-  mapboxToken:"xxxxxxxxxxxxxx",
-  mapboxStyle: "xxxxxxxxxxxxxx",
-  basemapStyle: "xxxxxxxxxxxxxx",
-  featuresApiUrl: "xxxxxxxxxxxxxx",
+REACT_APP_MAPBOX_TOKEN='xxxxxxxxxx'
+REACT_APP_MAPBOX_STYLE_URL='mapbox://styles/xxxxxxxxx'
+REACT_APP_FEATURES_API_URL='xxxxxxxxxx'
+REACT_APP_BASEMAP_STYLES_MAPBOX_ID='xxxxxxx'
 ```
 
 ## Peer Dependencies
