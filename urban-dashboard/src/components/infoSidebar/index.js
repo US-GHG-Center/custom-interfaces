@@ -26,7 +26,7 @@ export function InfoSidebar({
     }
 
     return (
-        <div>
+        <>
             <div className={"info-sidebar " + (selection ? 'info-sidebar-full-height' : '')}>
                 <div>
                     <Title
@@ -78,6 +78,6 @@ export function InfoSidebar({
             <ColorMapChart dataset={dataset} />
 
 
-        </div>
+        </>
     )
 }

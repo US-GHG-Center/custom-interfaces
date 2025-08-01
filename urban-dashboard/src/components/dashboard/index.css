@@ -1,4 +1,9 @@
 .dashboard {
-    display: block;
-    position: static;
+  display: block;
+  position: static;
+}
+.dashboard-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }

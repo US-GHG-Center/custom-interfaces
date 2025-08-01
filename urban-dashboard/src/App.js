@@ -1,23 +1,25 @@
-import { Fragment } from 'react';
-import {
-  BrowserRouter,
-  Routes,
-  Route
-} from "react-router-dom";
+import { Fragment } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import { UrbanDashboardContainer } from "./components/urbanDashboard";
 
-import { DashboardContainer } from './components/dashboardContainer';
-import CssBaseline from '@mui/material/CssBaseline';
-
-import './App.css';
+const defaultZoomLocation = [-98.771556, 32.967243];
+const defaultZoomLevel = 4;
 
 function App() {
   return (
     <Fragment>
-      <CssBaseline />
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Routes>
-          <Route path="/" element={<DashboardContainer />}>
-          </Route>
+          <Route
+            path="/"
+            element={
+              <UrbanDashboardContainer
+                defaultZoomLevel={defaultZoomLevel}
+                defaultZoomLocation={defaultZoomLocation}
+              />
+            }
+          ></Route>
         </Routes>
       </BrowserRouter>
     </Fragment>
