@@ -5,7 +5,8 @@ const COMBINED_METADATA_ENDPOINT = "https://earth.jpl.nasa.gov/emit-mmgis-lb/Mis
 const STAC_ENDPOINT = "https://earth.gov/ghgcenter/api/stac/collections/emit-ch4plume-v1/items?limit=10000";
 const LAT_LON_TO_COUNTRY_ENDPOINT = "https://api.geoapify.com/v1/geocode/reverse"; //?lat=33.81&lon=-101.92&format=json"
 const APIKEY = process.env.GEOAPIFY_APIKEY;
-const COVERAGE_FILE_URL = "https://earth.jpl.nasa.gov/emit-mmgis/Missions/EMIT/Layers/coverage/coverage_pub.json";
+const COVERAGE_FILE_URL = "https://earth.jpl.nasa.gov/emit-mmgis-lb/API/geodatasets/get?layer=coverage&type=geojson&maxy=83.87025634393777&maxx=213.4849548339844&miny=-74.30066604346104&minx=-176.74942016601565&crsCode=3857&zoom=2&starttime=2021-08-10T01%3A21%3A48.895Z&startProp=start_time&endtime=2025-08-14T00%3A56%3A45.452Z&endProp=end_time"
+// const COVERAGE_FILE_URL = "https://earth.jpl.nasa.gov/emit-mmgis/Missions/EMIT/Layers/coverage/coverage_pub.json";
 var lon_lat_lookup = {};
 
 const get_methane_geojson = async () => {
