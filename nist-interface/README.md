@@ -139,7 +139,7 @@ const defaultConfig = {
 ```Javascript
 const defaultZoomLevel?:number = 4;
 const agency?:string = 'nist';
-const dataCategory?:string;
+const dataCategory?:string = 'testbed';
 const region?:string  = 'nec'
 const ghg?:string = 'co2'
 const stationCode?:string = 'buc';
