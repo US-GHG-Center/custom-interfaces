@@ -22,13 +22,7 @@ export const Title = ({ children }) => {
             >
                 The Geostationary Operational Environmental Satellites collect images of the surface every 5 minutes. Only very large emission events can be detected, but plume expansion is easy to see over time. More plumes will be added soon.
             </Typography>
-            <Divider
-                sx={{
-                    borderColor: "var(--main-blue)",
-                    borderWidth: "1px",
-                    margin: "0.3rem 1.4rem",
-                }}
-            />
+            <Divider className='title-divider'/>
             <div className="title-content">
                 { children }
             </div>

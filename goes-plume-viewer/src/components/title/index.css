@@ -25,3 +25,9 @@
     padding: 0.3rem 0.9rem;
     padding-bottom: 12px;
 }
+
+.title-divider {
+    border: 1px solid #d0d0d0;
+    border-width: 1px;
+    margin: 0.3rem 1.4rem !important;
+}
