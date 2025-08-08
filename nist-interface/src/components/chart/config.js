@@ -7,7 +7,7 @@ import 'chartjs-adapter-luxon';
 Chart.register(zoomPlugin);
 Chart.register(annotationPlugin);
 
-export const ghgBlue = "#082A63";
+export const ghgBlue = "#222fbf";
 
 export const noDataPlugin = {
   id: "noDataPlugin",
@@ -23,7 +23,7 @@ export const noDataPlugin = {
       ctx.save();
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.font = "16px Arial";
+      ctx.font = "16px Public Sans, sans-serif";
       ctx.fillStyle = "#999";
       ctx.clearRect(0, 0, width, height);
       ctx.fillText("No data available", width / 2, height / 2);
@@ -160,7 +160,7 @@ export const options = {
       },
       font: {
         size: 24,
-        family: "Inter",
+        family: "DM Sans, sans-serif",
       },
       color: ghgBlue,
     },
