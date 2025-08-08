@@ -6,7 +6,7 @@ export const Title = ({ children }) => {
     return (
         <Paper className="title-container">
             <Typography
-                variant="h6"
+                variant="h5"
                 component="div"
                 className="title-head"
                 fontWeight="bold"
