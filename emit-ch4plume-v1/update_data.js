@@ -41,7 +41,6 @@ async function fetchAndProcessCoverage() {
         const api = `${COVERAGE_FILE_URL}&endtime=${time}`
         const response = await fetch(api);
         const coverageData = await response.json();
-
         const roundCoordinates = (geometry) => {
             if (geometry && geometry.coordinates) {
                 geometry.coordinates = geometry.coordinates.map(polygon =>
@@ -52,7 +51,6 @@ async function fetchAndProcessCoverage() {
             }
             return geometry;
         };
-
         // Build a valid GeoJSON object
         const processedCoverage = {
             "type": "FeatureCollection",
@@ -63,11 +61,11 @@ async function fetchAndProcessCoverage() {
                 "geometry": roundCoordinates(feature.geometry)
             }))
         };
-
         fs.writeFileSync("./data/coverage_data.json", JSON.stringify(processedCoverage, null, 2));
         console.log("Coverage data saved successfully.");
     } catch (error) {
-        console.error("Error fetching or processing coverage data:", error);
+        console.error("Error fetching or processing coverage data: ", error);
+        process.exit(1)
     }
 }
 
