@@ -55,3 +55,8 @@ html, body, #root {
 .fullWidth {
   width: 100%;
 }
+
+:root {
+  --main-blue: #222fbf;
+  --heading-gray: #1b1b1b;
+}

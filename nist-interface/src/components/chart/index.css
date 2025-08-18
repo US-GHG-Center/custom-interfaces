@@ -15,6 +15,7 @@
 }
 
 #chart-tools {
+    color: #3d4551;
     position: absolute;
     width: 100%;
     display: flex;
