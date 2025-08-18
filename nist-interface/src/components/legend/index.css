@@ -27,7 +27,7 @@
     text-align: left;
     font-family: 'DM Sans', sans-serif;
     font-weight: 600;
-    color: var(--main-blue);
+    color: var(--heading-gray);
 }
 
 #legend-line {
