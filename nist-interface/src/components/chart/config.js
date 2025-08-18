@@ -7,7 +7,7 @@ import 'chartjs-adapter-luxon';
 Chart.register(zoomPlugin);
 Chart.register(annotationPlugin);
 
-export const ghgBlue = "#222fbf";
+export const ghgBlue = "var(--heading-gray)";
 
 export const noDataPlugin = {
   id: "noDataPlugin",
