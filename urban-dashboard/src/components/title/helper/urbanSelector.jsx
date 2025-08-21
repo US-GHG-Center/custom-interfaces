@@ -13,7 +13,7 @@ function DropdownIconComponent(props) {
         icon={faChevronDown}
         {...props}
         style={{
-          color: "#222fbf",
+          color: "#3d4551",
           fontSize: 20,
           cursor: "pointer",
           verticalAlign: "middle"
@@ -78,7 +78,7 @@ export function UrbanSelector({ urbanRegion, setUrbanRegion }) {
             <Box display="flex" alignItems="center">
               <Typography sx={{
                 mr: 3,
-                color: "#222fbf",
+                color: "#1B1B1B",
                 fontSize: "14px",
                 cursor: "pointer"
               }}>{region}</Typography>

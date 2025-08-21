@@ -281,7 +281,7 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                         />
                         <Typography sx={{
                             fontSize: "14px",
-                            color: "#1b1b1b",
+                            color: "#3d4551",
                             whiteSpace: "normal",
                             overflowWrap: "break-word",
                             maxWidth: "100px",
@@ -311,7 +311,7 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                                 </div>
                                 <Typography sx={{
                                     fontSize: "14px",
-                                    color: "#1b1b1b",
+                                    color: "#3d4551",
                                     margin: "5px 0 5px 0",
                                     // marginBottom: "5px"
                                 }}>

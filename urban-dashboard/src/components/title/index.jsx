@@ -32,7 +32,7 @@ export function Title({ children, selection, setSelection, handleZoomOut }) {
                                 <FontAwesomeIcon
                                     onClick={handleZoomOut}
                                     icon={faArrowLeft}
-                                    style={{ color: "#222fbf", fontSize: 20, cursor: "pointer" }}
+                                    style={{ color: "#3d4551", fontSize: 20, cursor: "pointer" }}
                                 />
                             </Tooltip>
                         </div>

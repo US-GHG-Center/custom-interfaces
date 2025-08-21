@@ -31,7 +31,7 @@ export function ColorMapChart({ dataset }) {
             {/* <Typography style={{ fontSize: "14px", fontWeight: "400", lineHeight: "16.94px" }}>
                 Map Legend
             </Typography> */}
-            <Typography style={{ fontSize: '14px', color: '#222fbf', textAlign: "center", fontWeight: "bold" }}>
+            <Typography style={{ fontSize: '14px', color: '#1B1B1B', textAlign: "center", fontWeight: "bold" }}>
                 {title}
             </Typography>
             <div style={{ marginTop: 10 }}>
