@@ -20,11 +20,11 @@ import { MeasurementLayer } from '../../components/measurementLayer';
 
 
 const HorizontalLayout = styled.div`
-    width: 90%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 12px;
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 12px;
 `;
 
 const scaleUnits = {
@@ -32,7 +32,17 @@ const scaleUnits = {
   MILES: "mi",
 };
 
-export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
+export function Dashboard({
+  dataTree,
+  collectionId,
+  metaDataTree,
+  plumeMetaData,
+  zoomLocation,
+  setZoomLocation,
+  zoomLevel,
+  setZoomLevel,
+  loadingData,
+}) {
   // states for data
   const [ regions, setRegions ] = useState([]); // store all available regions
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
@@ -143,8 +153,8 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setPlumes(plumes);
     setRegions(regions);
     setPlumeIds(plumeIds); // for search
-  // the reference to datatree is in current, so see changes with respect to that
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // the reference to datatree is in current, so see changes with respect to that
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataTree.current]);
 
   useEffect(() => {
@@ -153,8 +163,8 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
     setSelectedPlumes(plumes);
     setPlumesForAnimation([]); // reset the animation
     setShowPlumeLayers(true); // all the available plumes layers should be visible when region is selected
-  // the reference to datatree is in current, so see changes with respect to that
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // the reference to datatree is in current, so see changes with respect to that
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataTree.current, selectedRegionId]);
 
   // JSX

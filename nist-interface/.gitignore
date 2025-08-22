@@ -2,3 +2,11 @@
 node_modules/
 build/
 .DS_Store
+
+.parcel-*
+dist/
+build/
+.env
+yarn.lock
+.parcel-*
+
