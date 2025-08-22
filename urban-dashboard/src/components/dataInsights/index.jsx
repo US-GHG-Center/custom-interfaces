@@ -53,7 +53,7 @@ export const StackedAreaChart = ({ selection }) => {
                         />
                         <Typography sx={{
                             fontSize: "14px",
-                            color: '#1b1b1b',
+                            color: '#3d4551',
                             whiteSpace: "normal",
                             overflowWrap: "break-word",
                             maxWidth: "100px",
