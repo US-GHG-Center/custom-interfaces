@@ -15,7 +15,7 @@ export function Grap2pesDatasetCard() {
 
     return (
         <div className="dataset-card">
-            <h2>{title}</h2>
+            <h3>{title}</h3>
             <p>
                 {description}
                 <a target="opener" href="https://earth.gov/ghgcenter/data-catalog/gra2pes-ghg-monthgrid-v1"> Click here for more details.</a>
@@ -30,7 +30,7 @@ export function VulcanDatasetCard() {
 
     return (
         <div className="dataset-card">
-            <h2>{title}</h2>
+            <h3>{title}</h3>
             <p>
                 {description}
                 <a target="opener" href="https://earth.gov/ghgcenter/data-catalog/vulcan-ffco2-yeargrid-v4"> Click here for more details.</a>

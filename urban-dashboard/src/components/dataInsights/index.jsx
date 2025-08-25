@@ -100,12 +100,12 @@ export const StackedAreaChart = ({ selection }) => {
             />
             <Typography
               sx={{
-                fontSize: "12px",
-                color: "#1B2631",
+                fontSize: "14px",
+                color: '#3d4551',
                 whiteSpace: "normal",
                 overflowWrap: "break-word",
-                maxWidth: "88px",
-                fontFamily: "Inter",
+                maxWidth: "100px",
+                wordBreak: "break-word", 
               }}
             >
               {label}
@@ -332,12 +332,12 @@ const GasEmissionsBySectorCard = ({ selection }) => {
             />
             <Typography
               sx={{
-                fontSize: "11px",
-                color: "#1B2631",
+                fontSize: "14px",
+                color: "#3d4551",
                 whiteSpace: "normal",
                 overflowWrap: "break-word",
-                maxWidth: "88px",
-                fontFamily: "Inter",
+                maxWidth: "100px",
+                wordBreak: "break-word",
               }}
             >
               {item.label}
@@ -369,9 +369,8 @@ const GasEmissionsBySectorCard = ({ selection }) => {
                 </div>
                 <Typography
                   sx={{
-                    fontSize: "11px",
-                    color: "#1B2631",
-                    fontFamily: "Inter",
+                    fontSize: "14px",
+                    color: "#3d4551",
                     margin: "5px 0 5px 0",
                     // marginBottom: "5px"
                   }}
@@ -392,36 +391,45 @@ const VulcanInsightsCard = ({ selection }) => {
   const description =
     "Different sectors emit different amounts of CO₂ based on fossil fuel type and use. Long-term data offers a view of how sectors change over time.";
 
-  return (
-    <>
-      <div className="dataset-card">
-        <h2>{title}</h2>
-        <p>{description}</p>
-      </div>
-      <div className="stacked-chart-container">
-        <StackedAreaChart selection={selection} />
-      </div>
-    </>
-  );
-};
+    return (
+        <>
+            <div className="dataset-card">
+                <h3>{title}</h3>
+                <p>
+                    {description}
+                </p>
+            </div>
+            <div className="stacked-chart-container">
+                <StackedAreaChart selection={selection} />
+            </div>
+
+        </>
+    )
+}
 
 const Gra2pesInsightsCard = ({ selection }) => {
   const title = "Emissions by Sector";
   const description =
     "Emissions for different sectors vary due to different types of fossil fuel use.";
 
-  return (
-    <>
-      <div className="dataset-card">
-        <h2>{title}</h2>
-        <p>{description}</p>
-      </div>
-      <div>
-        <GasEmissionsBySectorCard selection={selection} />
-      </div>
-    </>
-  );
-};
+    return (
+        <>
+            <div className="dataset-card">
+                <h3>{title}</h3>
+                <p>
+                    {description}
+                </p>
+            </div>
+            <div>
+                <GasEmissionsBySectorCard selection={selection} />
+            </div>
+
+        </>
+    )
+}
+
+
+
 
 export function DataInsightsCard({ dataset, selection }) {
   return (
