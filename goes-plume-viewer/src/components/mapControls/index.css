@@ -11,5 +11,5 @@
 }
 
 .map-control-icon {
-    color: #808080
+    color: var(--light-grey);
 }
