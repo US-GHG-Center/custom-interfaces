@@ -8,8 +8,8 @@ function MeasureButton({ icon: iconClicked, onClick }) {
     <Tooltip title="Measurement Scale">
       <IconButton className="measure-icon map-control-icon"
         style={{
-          backgroundColor: !iconClicked ? "": "var(--main-blue)",
-          color: !iconClicked ? "var(--main-blue)" : "white"
+          backgroundColor: !iconClicked ? "": "var(--light-grey)",
+          color: !iconClicked ? "var(--light-grey)" : "white"
         }}
         onClick={onClick}
       >

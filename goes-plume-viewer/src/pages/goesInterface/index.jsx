@@ -5,6 +5,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useSearchParams } from "react-router-dom";
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import theme from '../../../theme.js'
 
 export function GoesInterface({
   config = {},
@@ -15,13 +17,15 @@ export function GoesInterface({
   return (
     <ConfigProvider userConfig={config}>
       <CssBaseline />
-      <LocalizationProvider dateAdapter={AdapterMoment}>
-        <DashboardContainer
-          defaultCollectionId={defaultCollectionId}
-          defaultZoomLocation={defaultZoomLocation}
-          defaultZoomLevel={defaultZoomLevel}
-        />
-      </LocalizationProvider>
+      <ThemeProvider theme={theme}>
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+          <DashboardContainer
+            defaultCollectionId={defaultCollectionId}
+            defaultZoomLocation={defaultZoomLocation}
+            defaultZoomLevel={defaultZoomLevel}
+          />
+        </LocalizationProvider>
+      </ThemeProvider>
     </ConfigProvider>
   );
 }

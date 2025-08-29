@@ -57,6 +57,22 @@ export function Search({ ids, handleSelectedPlumeSearch }) {
                             </>
                         ),
                     }}
+                    InputLabelProps={{
+                        style: { color: 'grey' },
+                    }}
+                    sx={{
+                        "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                            borderColor: "grey !important"
+                        },
+                        "&:hover fieldset": {
+                            borderColor: "grey !important"
+                        },
+                        "&.Mui-focused fieldset": {
+                            borderColor: "grey !important"
+                        }
+                        }
+                    }}
                 />          
             )}
             onChange={handleOnOptionClicked}
