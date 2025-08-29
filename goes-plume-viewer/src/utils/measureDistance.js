@@ -62,7 +62,7 @@ const labelLayer = {
   source: "measureLabel",
   layout: {
     "text-field": ["get", "description"],
-    "text-font": ["DM Sans"],
+    "text-font": ["Open Sans Bold"],
     "text-size": 13,
     "text-letter-spacing": 0.1,
     "text-justify": "center",
