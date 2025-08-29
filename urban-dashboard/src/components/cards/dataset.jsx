@@ -1,4 +1,5 @@
 import "./index.css";
+import Typography from '@mui/material/Typography';
 
 export function DatasetCard({ dataset }) {
     return (
@@ -15,7 +16,10 @@ export function Grap2pesDatasetCard() {
 
     return (
         <div className="dataset-card">
-            <h2>{title}</h2>
+            <Typography variant='h5' sx={{ mt: 1, mb: 1 }}>
+                <span>{title}</span>
+            </Typography>
+
             <p>
                 {description}
                 <a target="opener" href="https://earth.gov/ghgcenter/data-catalog/gra2pes-ghg-monthgrid-v1"> Click here for more details.</a>
@@ -30,7 +34,9 @@ export function VulcanDatasetCard() {
 
     return (
         <div className="dataset-card">
-            <h2>{title}</h2>
+            <Typography variant='h5' sx={{ mt: 1, mb: 1 }}>
+                <span>{title}</span>
+            </Typography>
             <p>
                 {description}
                 <a target="opener" href="https://earth.gov/ghgcenter/data-catalog/vulcan-ffco2-yeargrid-v4"> Click here for more details.</a>
