@@ -8,12 +8,12 @@
 # ------------------------------------------------------------->>>>
 # DESCRIPTION
 #
-# dataset_description: Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, starting in 1968
+# dataset_description: Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Global Greenhouse Gas Reference Network, Carbon Cycle Cooperative Global Air Sampling Network: 1967 - Present
 #
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Lan, X., J.W. Mund, A.M. Crotwell, K.W. Thoning, E. Moglia, M. Madronich, K. Baugh, G. Petron, M.J. Crotwell, D. Neff, S. Wolter, T. Mefford and S. DeVogel (2025), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Carbon Cycle Cooperative Global Air Sampling Network, 1968-2024,  Version: 2025-04-26, https://doi.org/10.15138/wkgj-f215
+# dataset_citation: Lan, X., G. Petron,  K. Baugh, A.M. Crotwell, M.J. Crotwell, S. DeVogel, M. Madronich, J. Mauss, T. Mefford, E. Moglia, S. Morris, J.W. Mund, A. Searle,  K.W. Thoning, S. Wolter  and J. Miller (2025), Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Global Greenhouse Gas Reference Network, Carbon Cycle Cooperative Global Air Sampling Network: 1967 - Present, Version: 2025-08-15, https://doi.org/10.15138/wkgj-f215
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -39,7 +39,7 @@
 # site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
 # site_utc2lst : -4.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
-# dataset_creation_date : 2025-04-26T12:49:21.678589
+# dataset_creation_date : 2025-08-15T13:48:06.496334
 # dataset_num : 24
 # dataset_name : co2_drp_shipboard-flask_1_ccgg_event
 # dataset_parameter : co2
@@ -52,7 +52,7 @@
 # dataset_comment : For more information about these data, please see https://gml.noaa.gov/aftp/data/trace_gases/co2/flask/README_co2_surface-flask_ccgg.html
 # dataset_calibration_scale : CO2_X2019
 # dataset_start_date : 2003-04-07T13:54:00Z
-# dataset_stop_date : 2025-01-29T07:56:00Z
+# dataset_stop_date : 2024-12-28T03:11:00Z
 # dataset_usage_description : Please cite the product's citation when using data from this dataset. Relevant literature references for this dataset are listed below for convenience.
 # dataset_provider_license : These data were produced by NOAA and are not subject to copyright protection in the United States. NOAA waives any potential copyright and related rights in these data worldwide through the Creative Commons Zero 1.0 Universal Public Domain Dedication (CC0-1.0).
 # dataset_reference_total_listed : 1
@@ -891,13 +891,11 @@ DRP 2023 12 8 1 33 0 2023-12-08T01:33:00Z 2023.9344235159817 2475-99 417.57 0.04
 DRP 2023 12 8 1 33 0 2023-12-08T01:33:00Z 2023.9344235159817 4698-99 417.67 0.041 -59.49 -63.5467 10.0 0.0 10.0 N 529357 PC2 2024-01-30T12:50:28 ...
 DRP 2023 12 22 23 27 0 2023-12-22T23:27:00Z 2023.9752796803652 276-99 417.45 0.041 -59.0132 -63.4254 10.0 0.0 10.0 N 531195 PC2 2024-03-26T18:11:04 ...
 DRP 2023 12 22 23 27 0 2023-12-22T23:27:00Z 2023.9752796803652 5757-99 417.45 0.041 -59.0132 -63.4254 10.0 0.0 10.0 N 531196 PC2 2024-03-26T18:25:28 ...
-DRP 2024 1 28 20 9 0 2024-01-28T20:09:00Z 2024.076064435337 1114-99 418.09 0.041 -59.0012 -63.4131 10.0 0.0 10.0 N 531193 PC2 2024-03-27T10:40:33 ..P
-DRP 2024 1 28 20 9 0 2024-01-28T20:09:00Z 2024.076064435337 4643-99 418.1 0.041 -59.0012 -63.4131 10.0 0.0 10.0 N 531194 PC2 2024-03-27T10:54:55 ..P
-DRP 2024 4 3 1 35 0 2024-04-03T01:35:00Z 2024.254278612629 2233-99 418.72 0.041 -59.0168 -63.4088 10.0 0.0 10.0 N 535840 PC2 2024-06-12T13:26:05 ..P
-DRP 2024 4 3 1 35 0 2024-04-03T01:35:00Z 2024.254278612629 2644-99 418.76 0.041 -59.0168 -63.4088 10.0 0.0 10.0 N 535841 PC2 2024-06-12T13:41:32 ..P
-DRP 2024 4 13 11 30 0 2024-04-13T11:30:00Z 2024.28272996357 296-99 419.08 0.041 -58.9136 -62.9947 10.0 0.0 10.0 N 535838 PC2 2024-06-12T12:55:06 ..P
-DRP 2024 4 13 11 30 0 2024-04-13T11:30:00Z 2024.28272996357 3425-99 419.03 0.041 -58.9136 -62.9947 10.0 0.0 10.0 N 535839 PC2 2024-06-12T13:10:35 ..P
-DRP 2024 12 28 3 11 0 2024-12-28T03:11:00Z 2024.9894334395872 2082-99 421.36 0.041 -62.9383 161.0383 10.0 0.0 10.0 N 549857 PIC-032 2025-04-11T14:57:11 ..P
-DRP 2024 12 28 3 11 0 2024-12-28T03:11:00Z 2024.9894334395872 5203-99 421.52 0.041 -62.9383 161.0383 10.0 0.0 10.0 N 549856 PIC-032 2025-04-11T14:42:28 ..P
-DRP 2025 1 29 7 56 0 2025-01-29T07:56:00Z 2025.077617960426 1855-99 421.39 0.041 -56.1867 164.6067 10.0 0.0 10.0 N 549854 PIC-032 2025-04-11T14:13:02 ..P
-DRP 2025 1 29 7 56 0 2025-01-29T07:56:00Z 2025.077617960426 4828-99 421.41 0.041 -56.1867 164.6067 10.0 0.0 10.0 N 549855 PIC-032 2025-04-11T14:27:43 ..P
+DRP 2024 1 28 20 9 0 2024-01-28T20:09:00Z 2024.076064435337 1114-99 418.09 0.041 -59.0012 -63.4131 10.0 0.0 10.0 N 531193 PC2 2024-03-27T10:40:33 ...
+DRP 2024 1 28 20 9 0 2024-01-28T20:09:00Z 2024.076064435337 4643-99 418.1 0.041 -59.0012 -63.4131 10.0 0.0 10.0 N 531194 PC2 2024-03-27T10:54:55 ...
+DRP 2024 4 3 1 35 0 2024-04-03T01:35:00Z 2024.254278612629 2233-99 418.72 0.041 -59.0168 -63.4088 10.0 0.0 10.0 N 535840 PC2 2024-06-12T13:26:05 ..C
+DRP 2024 4 3 1 35 0 2024-04-03T01:35:00Z 2024.254278612629 2644-99 418.76 0.041 -59.0168 -63.4088 10.0 0.0 10.0 N 535841 PC2 2024-06-12T13:41:32 ..C
+DRP 2024 4 13 11 30 0 2024-04-13T11:30:00Z 2024.28272996357 296-99 419.08 0.041 -58.9136 -62.9947 10.0 0.0 10.0 N 535838 PC2 2024-06-12T12:55:06 ..C
+DRP 2024 4 13 11 30 0 2024-04-13T11:30:00Z 2024.28272996357 3425-99 419.03 0.041 -58.9136 -62.9947 10.0 0.0 10.0 N 535839 PC2 2024-06-12T13:10:35 ..C
+DRP 2024 12 28 3 11 0 2024-12-28T03:11:00Z 2024.9894334395872 2082-99 421.36 0.041 -62.9383 161.0383 10.0 0.0 10.0 N 549857 PIC-032 2025-04-11T14:57:11 ...
+DRP 2024 12 28 3 11 0 2024-12-28T03:11:00Z 2024.9894334395872 5203-99 421.52 0.041 -62.9383 161.0383 10.0 0.0 10.0 N 549856 PIC-032 2025-04-11T14:42:28 ...
