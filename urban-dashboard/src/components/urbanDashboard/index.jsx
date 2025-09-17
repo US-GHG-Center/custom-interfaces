@@ -24,7 +24,7 @@ export function UrbanDashboard({
 
 export function UrbanDashboardContainer({ defaultZoomLevel, defaultZoomLocation }) {
   const [searchParams] = useSearchParams();
-  const dataset = searchParams.get("dataset"); //vulcan, gra2pes (default)
+  const dataset = searchParams.get("dataset") || "gra2pes"; //vulcan, gra2pes (default)
   const zoomLevel = defaultZoomLevel //|| searchParams.get("zoom-level");
   const zoomLocation = defaultZoomLocation //|| searchParams.get("zoom-location");
   return (
