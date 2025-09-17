@@ -148,8 +148,8 @@ export class MapBoxViewer extends Component {
       // Zoom out and fly back to center and remove all the geoJSON layers
       const currentMap = this.state.currentViewer;
       currentMap.flyTo({
-        center: [-98.771556, 32.967243],
-        zoom: 4,
+        center: [-96.5, 39.0],
+        zoom: 3.5,
         speed: 1.2,
         curve: 1.42,
       });
