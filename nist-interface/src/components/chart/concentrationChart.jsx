@@ -6,6 +6,7 @@ import {
   faXmark,
   faRotateLeft,
   faCircleInfo,
+  faExternalLinkAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { LoadingSpinner } from "../loading";
 import { fetchAllFromFeaturesAPI } from "../../services/api";
@@ -250,7 +251,7 @@ export class ConcentrationChart extends Component {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Data Access Link ↗
+                  Data Access <FontAwesomeIcon icon={faExternalLinkAlt} />
                 </a>
               )}
               <div id="chart-controls">
@@ -265,6 +266,7 @@ export class ConcentrationChart extends Component {
                   icon={faXmark}
                   title="Close"
                   onClick={this.handleClose}
+                  style={{ fontSize: "20px" }}
                 />
               </div>
             </div>
