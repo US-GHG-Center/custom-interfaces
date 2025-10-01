@@ -1,5 +1,5 @@
 import React from 'react';
-import './UswdsBanner.css';
+import './index.css';
 
 export function Banner({ text }) {
   return (
