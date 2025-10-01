@@ -32,7 +32,7 @@ const scaleUnits = {
   MILES: "mi",
 };
 
-const BANNER_TEXT = "Due to the lapse in federal government funding, NASA is not updating this website. We sincerely regret this inconvenience.";
+const BANNER_TEXT = "Due to the lapse in federal government funding, the U.S. Greenhouse Gas Center is not updating this website. We sincerely regret this inconvenience.";
 
 export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
   // states for data
