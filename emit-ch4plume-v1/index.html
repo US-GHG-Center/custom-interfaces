@@ -27,32 +27,41 @@
   <!-- End Google Tag Manager -->
   </head>
   <body>
-    <div>
-      <div id='map'></div>
-      <div id="loading-spinner" class="loading-spinner">
-        <div class="spinner">
-      </div>
-    </div>
-
-    <div class="toolbar", id="toolbar">
-      <h1 class="toolbar-heading"> EMIT Methane Plume Viewer </h1>
-      <div>
-        <span class="toolbar-summary">
-          Using a special technique, the EMIT hyperspectral data is used to visualize large methane plumes whenever the instrument observes the surface. Due variations of the International Space Station orbit, EMIT does not have a regular observation repeat cycle.
-        </span>
-      </div>
-      <hr class="toolbar-line">
-
-      <div id="plume-id-search-box" class="autocomplete-search-box">
-        <input id="plume-id-search-input" class="search-box" placeholder="Search by Plume ID or Location">
-        <svg class="search-icon" viewBox="0 0 24 24" width="20px" height="20px">
-          <path fill="gray" d="M23.707 22.293l-5.387-5.387A9.928 9.928 0 0 0 20 11c0-5.513-4.487-10-10-10S0 5.487 0 11s4.487 10 10 10c2.471 0 4.73-.901 6.463-2.386l5.387 5.387a1 1 0 0 0 1.414-1.414zM2 11c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8-8-3.582-8-8z"/>
-        </svg>
-        <ul id="plume-id-search-list" class="search-result"></ul>
+    <div id="module">
+      <div class="uswds-banner">
+        <div class="uswds-banner-inner">
+          <p class="uswds-banner-text">
+Due to the lapse in federal government funding, the U.S. Greenhouse Gas Center is not updating this website. We sincerely regret this inconvenience.
+          </p>
+          </div>
       </div>
 
+      <div id="map-things">
+        <div id='map'></div>
+        <div id="loading-spinner" class="loading-spinner">
+          <div class="spinner">
+        </div>
+      </div>
 
-      <div class="date-range">
+      <div class="toolbar", id="toolbar">
+        <h1 class="toolbar-heading"> EMIT Methane Plume Viewer </h1>
+        <div>
+          <span class="toolbar-summary">
+            Using a special technique, the EMIT hyperspectral data is used to visualize large methane plumes whenever the instrument observes the surface. Due variations of the International Space Station orbit, EMIT does not have a regular observation repeat cycle.
+          </span>
+        </div>
+        <hr class="toolbar-line">
+
+        <div id="plume-id-search-box" class="autocomplete-search-box">
+          <input id="plume-id-search-input" class="search-box" placeholder="Search by Plume ID or Location">
+          <svg class="search-icon" viewBox="0 0 24 24" width="20px" height="20px">
+            <path fill="gray" d="M23.707 22.293l-5.387-5.387A9.928 9.928 0 0 0 20 11c0-5.513-4.487-10-10-10S0 5.487 0 11s4.487 10 10 10c2.471 0 4.73-.901 6.463-2.386l5.387 5.387a1 1 0 0 0 1.414-1.414zM2 11c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8-8-3.582-8-8z"/>
+          </svg>
+          <ul id="plume-id-search-list" class="search-result"></ul>
+        </div>
+
+
+        <div class="date-range">
         <input id="amount" class="amount" type="text" disabled>
         <div id="slider-range"></div>
         <div class="label-container">
@@ -110,5 +119,6 @@
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M52FMCXL"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
+    </div>
   </body>
 </html>
