@@ -20,46 +20,56 @@
         <!-- End Google Tag Manager -->
 </head>
 <body>
-    <div id="title">
-        
-    </div>
-    <img id="logo" src="<%= htmlWebpackPlugin.options.publicUrl %>/public/noaa-logo.png" width="76px" />
-    <div id="map-container">
-        <div id="map"></div>
-        <div id="collection-mechanism-selection-container">
-            <select name="collection-mechanism" id="collection-mechanism">
-                <option value="all" selected="selected">All Measurements</option>
-                <option value="continuous">Continuous Measurements (Surface and Tower In-Situ)</option>
-                <option value="non-continuous"> Non-Continuous Measurements (Flask and PFP)</option>
-            </select>
-        </div>
-        <div id="legend-container">
-            <div id="legend">
-            </div>
-        </div>
-    </div>
-    <div id="chart-container">
-        <i id="zoom-instruction-info-circle" class="fa fa-thin fa-circle-info"></i>
-        <div id="zoom-instructions">
-            <p>1. Click and drag, scroll or pinch on the chart to zoom in. <br><br>
-               2. Click on the rectangle boxes on the side to toggle chart.
+    <div id="module">
+    <div class="uswds-banner">
+        <div class="uswds-banner-inner">
+            <p class="uswds-banner-text">
+                Due to the lapse in federal government funding, the U.S. Greenhouse Gas Center is not updating this website. We sincerely regret this inconvenience.
             </p>
         </div>
-        <canvas id="chart">
-        </canvas>
-        <div id="data-source">
+    </div>
+
+    <div id="map-things">
+        <div id="title">
         </div>
-        <div id="chart-controls">
-            <i id="zoom-reset-button" class="fa fa-solid fa-undo" title="Reset Zoom" style="font-size: 19px"></i>
-            <i id="chart-close-button" class="fa fa-solid fa-xmark" title="Close"></i>
+        <img id="logo" src="<%= htmlWebpackPlugin.options.publicUrl %>/public/noaa-logo.png" width="76px" />
+        <div id="map-container">
+            <div id="map"></div>
+            <div id="collection-mechanism-selection-container">
+                <select name="collection-mechanism" id="collection-mechanism">
+                    <option value="all" selected="selected">All Measurements</option>
+                    <option value="continuous">Continuous Measurements (Surface and Tower In-Situ)</option>
+                    <option value="non-continuous"> Non-Continuous Measurements (Flask and PFP)</option>
+                </select>
+            </div>
+            <div id="legend-container">
+                <div id="legend">
+                </div>
             </div>
         </div>
-    </div>
-    <div id="notice-container">
-        <div id="notice-header">
-            <i class="fa-regular fa-message"></i> <b>Note </b>
+        <div id="chart-container">
+            <i id="zoom-instruction-info-circle" class="fa fa-thin fa-circle-info"></i>
+            <div id="zoom-instructions">
+                <p>1. Click and drag, scroll or pinch on the chart to zoom in. <br><br>
+                2. Click on the rectangle boxes on the side to toggle chart.
+                </p>
+            </div>
+            <canvas id="chart">
+            </canvas>
+            <div id="data-source">
+            </div>
+            <div id="chart-controls">
+                <i id="zoom-reset-button" class="fa fa-solid fa-undo" title="Reset Zoom" style="font-size: 19px"></i>
+                <i id="chart-close-button" class="fa fa-solid fa-xmark" title="Close"></i>
+                </div>
+            </div>
         </div>
-        <div id="notice-content"></div>
+        <div id="notice-container">
+            <div id="notice-header">
+                <i class="fa-regular fa-message"></i> <b>Note </b>
+            </div>
+            <div id="notice-content"></div>
+        </div>
     </div>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -75,5 +85,6 @@
 	<!-- <script type="module" src="./script.js"></script> -->
 	<!-- For prod -->
 	<script type="module" src="<%= htmlWebpackPlugin.options.publicUrl %>/script.js"></script>
+    </div>
 </body>
 </html>
