@@ -19,7 +19,6 @@ import { Banner } from '../../components/banner';
 import "./index.css";
 import { MeasurementLayer } from '../../components/measurementLayer';
 
-
 const HorizontalLayout = styled.div`
     width: 90%;
     display: flex;
@@ -162,7 +161,6 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
 
   // JSX
   return (
-
     <Box className="fullSize">
       <Banner text={BANNER_TEXT} />
       <div id="dashboard-map-container">
