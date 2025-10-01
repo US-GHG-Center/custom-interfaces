@@ -1,10 +1,10 @@
 /* styles.css */
-#map {
-    width: 100%;
-    height: 100%;
-    transition: height 1s ease-out;
-    /* Transition for height change */
-    /* height: 50vh; */
+#map { 
+  position: absolute; 
+  top: 0; 
+  bottom: 0; 
+  width: 100%; 
+  height: 100%; /* CHANGED from 100vh */
 }
 
 #chart {
@@ -13,7 +13,16 @@
     transition: height 1s ease-out;
 }
 
+/* body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', sans-serif;
+    color: #3E4651;
+    background: white;
+} */
+
 body {
+    margin: 0; /* <<< ADD THIS LINE */
     display: flex;
     flex-direction: column;
     font-family: 'Inter', sans-serif;
@@ -257,3 +266,47 @@ a {
     color: #8251df;
     margin-bottom: 5px;
 }
+
+/* For banner style start */
+/* The main banner container */
+.uswds-banner {
+    /* CHANGE: Removed 'position: absolute' and related properties (top, left, z-index). */
+    /* The banner is now in the normal document flow and will push content down. */
+    background-color: #22229B;
+    border-bottom: 1px solid #22229B;
+    padding: 10px 0;
+}
+
+/* Inner container to center and constrain content width */
+.uswds-banner-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.uswds-banner-flag {
+    height: 16px;
+    width: auto;
+    margin-right: 0.75rem;
+}
+
+.uswds-banner-text {
+    font-size: 0.875rem;
+    color: white;
+    margin: 0;
+}
+
+#module {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Make the main container fill the screen's height */
+}
+
+#map-things {
+  flex-grow: 1; /* This makes the map container expand to fill all remaining space */
+  position: relative; /* This contains the absolutely positioned map inside it */
+}
+
+/* For banner style end */
