@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+import { Banner } from '../../components/banner';
 import Box from '@mui/material/Box';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import { MapBoxViewer } from '../../components/mapboxViewer';
@@ -8,6 +9,8 @@ import { ConcentrationChart } from '../../components/chart';
 import { SelectGHG } from '../../components/dropdown';
 
 import "./index.css";
+
+const BANNER_TEXT = "Due to the lapse in federal government funding, the U.S. Greenhouse Gas Center is not updating this website. We sincerely regret this inconvenience.";
 
 export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode, setSelectedGHG, zoomLevel, stationMetadata }) {
   const [ displayChart, setDisplayChart ] = useState(false);
@@ -20,8 +23,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
 
   return (
     <Box className="fullSize">
-        <Title ghg={ghg} agency={agency} region={region}/>
-        <img src={process.env.PUBLIC_URL + "/nist.png"} alt="NIST" className='logo'/>
+        <Banner text={BANNER_TEXT} />
         <PanelGroup direction='vertical' className='panel-wrapper'>
           <Panel
             id='map-panel'
@@ -32,16 +34,21 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
             order={1}
           >
             <div id="dashboard-map-container">
-              { stations && <MapBoxViewer
-                              stations={stations}
-                              region={region}
-                              agency={agency}
-                              stationCode={stationCode}
-                              zoomLevel={zoomLevel}
-                              setSelection={setSelectedStationId}
-                              setDisplayChart={setDisplayChart}
-                              displayChart={displayChart}
-                            />}
+              { stations &&
+              <div>
+                <Title ghg={ghg} agency={agency} region={region}/>        <img src={process.env.PUBLIC_URL + "/nist.png"} alt="NIST" className='logo'/>
+                <MapBoxViewer
+                  stations={stations}
+                  region={region}
+                  agency={agency}
+                  stationCode={stationCode}
+                  zoomLevel={zoomLevel}
+                  setSelection={setSelectedStationId}
+                  setDisplayChart={setDisplayChart}
+                  displayChart={displayChart}
+                />
+              </div>
+              }
               { displayChart && <SelectGHG selectedGHG={ghg} setSelectedGHG={setSelectedGHG} /> }
             </div>
           </Panel>
