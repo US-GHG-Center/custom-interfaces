@@ -1,0 +1,31 @@
+.uswds-banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #22229B;
+    padding: 10px 0;
+    z-index: 9999;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.uswds-banner-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.uswds-banner-flag {
+    height: 16px;
+    width: auto;
+    margin-right: 0.75rem;
+}
+
+.uswds-banner-text {
+    font-size: 0.875rem;
+    /* 14px */
+    color: #ffffff;
+    margin: 0;
+}
