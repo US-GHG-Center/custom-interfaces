@@ -1,15 +1,10 @@
 import { Component } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-
 import { MapRegionLegend } from '../legend';
-import { LoadingSpinner } from '../loading';
-
 import './index.css';
-
 import { BASEMAP_STYLES, BASEMAP_ID_DEFAULT } from './config';
 import { getLocationToZoom, getZoomLevel, getMeanCenterOfLocation, getToolTipContent, getUniqueRegions, getStationRegion } from "./helper";
 import {  getMarkerColor, getMarkerSVG } from "../../utils";
@@ -142,7 +137,6 @@ export class MapBoxViewer extends Component {
             <Box component="main" className="map-section fullSize" sx={{ flexGrow: 1 }} style={this.props.style}>
                 <Grid container className="fullSize">
                     <Grid item xs={12} sx={{ position: "relative" }} style={{height: "100%"}}>
-                        { this.props.stations.length < 1 && this.state.currentViewer && <LoadingSpinner /> }
                         <div id="mapbox-container" className='fullSize' style={{ position: "absolute" }}></div>
                     </Grid>
                 </Grid>
