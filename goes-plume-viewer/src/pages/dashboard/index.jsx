@@ -14,7 +14,6 @@ import { PersistentDrawerRight } from "../../components/drawer";
 import { Title } from "../../components/title";
 import { Search } from "../../components/search";
 import { FilterByDate } from '../../components/filter';
-import { Banner } from '../../components/banner';
 
 import "./index.css";
 import { MeasurementLayer } from '../../components/measurementLayer';
@@ -31,8 +30,6 @@ const scaleUnits = {
   KM: "km",
   MILES: "mi",
 };
-
-const BANNER_TEXT = "Due to the lapse in federal government funding, the U.S. Greenhouse Gas Center is not updating this website. We sincerely regret this inconvenience.";
 
 export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
   // states for data
@@ -162,7 +159,6 @@ export function Dashboard({ dataTree, collectionId, metaDataTree, plumeMetaData,
   // JSX
   return (
     <Box className="fullSize">
-      <Banner text={BANNER_TEXT} />
       <div id="dashboard-map-container">
         <MainMap>
           <Title>
