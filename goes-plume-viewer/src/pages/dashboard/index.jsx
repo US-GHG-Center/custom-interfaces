@@ -18,7 +18,6 @@ import { FilterByDate } from '../../components/filter';
 import "./index.css";
 import { MeasurementLayer } from '../../components/measurementLayer';
 
-
 const HorizontalLayout = styled.div`
     width: 90%;
     display: flex;
