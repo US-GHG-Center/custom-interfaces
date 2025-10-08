@@ -59,6 +59,8 @@ export const plugin = {
  * @returns {Object} The options object for configuring the Chart.js chart.
  */
 export const getOptions = (station, selectedGhg)=> ({
+    responsive: true,
+    maintainAspectRatio: false,
     interaction: {
         intersect: false,
         mode: "nearest",
