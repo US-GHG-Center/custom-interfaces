@@ -19,6 +19,10 @@ const AOI_BOUNDS = {
         southwest: [-125.0, 24.0], // [lng, lat]
         northeast: [-66.0, 49.0]
     },
+    'US': {
+        southwest: [-180.0, 18.0], // [lng, lat] - includes Hawaii and Alaska
+        northeast: [-66.0, 72.0]
+    },
     'California': {
         southwest: [-124.5, 32.5],
         northeast: [-114.0, 42.0]
