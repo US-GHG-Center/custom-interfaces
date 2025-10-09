@@ -9,6 +9,9 @@ export function UrbanDashboard({
   defaultZoomLevel,
   defaultZoomLocation,
   defaultDataset,
+  selectedAoi,
+  selectedUrbanRegion,
+  updateURLParams
 }) {
   return (
     <ConfigProvider userConfig={config}>
@@ -17,21 +20,42 @@ export function UrbanDashboard({
         defaultZoomLevel={defaultZoomLevel}
         defaultZoomLocation={defaultZoomLocation}
         defaultDataset={defaultDataset}
+        selectedAoi={selectedAoi}
+        selectedUrbanRegion={selectedUrbanRegion}
+        updateURLParams={updateURLParams}
       />
     </ConfigProvider>
   );
 }
 
 export function UrbanDashboardContainer({ defaultZoomLevel, defaultZoomLocation }) {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const dataset = searchParams.get("dataset"); //vulcan, gra2pes (default)
   const zoomLevel = defaultZoomLevel || searchParams.get("zoom-level");
   const zoomLocation = defaultZoomLocation || searchParams.get("zoom-location");
+  const aoi = searchParams.get("aoi"); // CONUS, state names, etc.
+  const urbanRegion = searchParams.get("region"); // Selected urban region
+
+  const updateURLParams = (newParams) => {
+    const currentParams = new URLSearchParams(searchParams);
+    Object.entries(newParams).forEach(([key, value]) => {
+        if (value === null || value === undefined || value === '') {
+            currentParams.delete(key);
+        } else {
+            currentParams.set(key, value);
+        }
+    });
+    setSearchParams(currentParams);
+  };
+
   return (
     <UrbanDashboard
       defaultZoomLevel={zoomLevel}
       defaultZoomLocation={zoomLocation}
       defaultDataset={dataset}
+      selectedAoi={aoi}
+      selectedUrbanRegion={urbanRegion}
+      updateURLParams={updateURLParams}
     />
   );
 }
