@@ -19,7 +19,7 @@ export class MapBoxViewer extends Component {
         super(props);
         this.state = {
             currentViewer: null,
-            selectedUrbanRegion: null
+            selectedUrbanRegion: props.selectedUrbanRegion
         }
     }
 
@@ -87,8 +87,18 @@ export class MapBoxViewer extends Component {
         // show the whole map of usa and show all the urban areas
         this.plotUrbanRegions(map, this.props.urbanRegions);
 
-        // Apply AOI bounds if specified
-        this.applyAOIBounds(map);
+        // Handle initial urban region selection from URL first (takes priority over AOI)
+        if (this.props.urbanRegion) {
+            // get the urbanregion object from urbanRegions based on name
+            const selectedRegion = this.props.urbanRegions.find(item => item.name === this.props.urbanRegion);
+            if (selectedRegion) {
+                console.log("Initial urban region from URL:", selectedRegion);
+                this.handleUrbanRegionSelection(map, this.props.urbanRegion, selectedRegion.center, selectedRegion.geojson);
+            }
+        } else {
+            // Apply AOI bounds only if no urban region is specified
+            this.applyAOIBounds(map);
+        }
     }
 
     componentDidMount() {
@@ -108,35 +118,25 @@ export class MapBoxViewer extends Component {
         if (prevProps.urbanRegion !== this.props.urbanRegion) {
             console.log("urban region changed to ", this.props.urbanRegion);
 
-            const urbanRegion = this.props.urbanRegions.filter(item => item.name === this.props.urbanRegion)[0];
-            if (urbanRegion) {
-                console.log("selected region is: ", urbanRegion);
-                // const name = urbanRegion.center;
-                const center = urbanRegion.center;
-                const geojson = urbanRegion.geojson;
-
-                // update selected region 
-                // this.setState({ selectedUrbanRegion: name });
-                // this.props.setSelection(name);
-
-                //focus on selected region 
-                this.focusSelectedUrbanRegion(
+            const selectedRegion = this.props.urbanRegions.find(item => item.name === this.props.urbanRegion);
+            if (selectedRegion) {
+                console.log("selected region is: ", selectedRegion);
+                this.handleUrbanRegionSelection(
                     this.state.currentViewer,
-                    center,
-                    geojson
+                    this.props.urbanRegion,
+                    selectedRegion.center,
+                    selectedRegion.geojson
                 );
             }
-        }
-
-        // Handle initial urban region selection from URL when map is ready
-        if (prevProps.urbanRegions !== this.props.urbanRegions && this.props.urbanRegion && this.state.currentViewer) {
-            this.handleInitialUrbanRegionSelection(this.state.currentViewer);
         }
 
         if (prevProps.aoi !== this.props.aoi) {
             console.log("AOI changed to ", this.props.aoi);
             if (this.state.currentViewer) {
-                this.applyAOIBounds(this.state.currentViewer);
+                // Only apply AOI bounds if no urban region is specified
+                if (!this.props.urbanRegion) {
+                    this.applyAOIBounds(this.state.currentViewer);
+                }
             }
         }
     }
@@ -168,8 +168,13 @@ export class MapBoxViewer extends Component {
         }
     }
 
+    handleUrbanRegionSelection = (map, name, center, geojson) =>{
+        this.setState({ selectedUrbanRegion: name });
+        this.props.setSelection(name);
+        this.focusSelectedUrbanRegion(map, center, geojson);
+    }
+
     plotUrbanRegions = (map, urbanRegions) => {
-        console.log("urban regions: : plot::", urbanRegions)
         urbanRegions.forEach(urbanRegion => {
             const { name, center, geojson } = urbanRegion;
             const [lon, lat] = center;
@@ -180,9 +185,7 @@ export class MapBoxViewer extends Component {
 
             // when clicked on a urban region, focus on it
             marker.getElement().addEventListener('click', () => {
-                this.setState({ selectedUrbanRegion: name });
-                this.props.setSelection(name);
-                this.focusSelectedUrbanRegion(map, center, geojson);
+                this.handleUrbanRegionSelection(map, name, center, geojson);
             });
         });
     }
@@ -222,76 +225,38 @@ export class MapBoxViewer extends Component {
         })
 
         // Only add layers if map style is loaded
-        if (map.isStyleLoaded()) {
-            let sourceName = 'urban-boundary';
+        let sourceName = 'urban-boundary';
 
-            if (map.getLayer('boundary-fill')) map.removeLayer('boundary-fill');
-            if (map.getLayer('boundary-outline')) map.removeLayer('boundary-outline');
-            if (map.getSource(sourceName)) map.removeSource(sourceName);
+        if (map.getLayer('boundary-fill')) map.removeLayer('boundary-fill');
+        if (map.getLayer('boundary-outline')) map.removeLayer('boundary-outline');
+        if (map.getSource(sourceName)) map.removeSource(sourceName);
 
-            map.addSource(sourceName, {
-                'type': 'geojson',
-                'data': GeoJSON
-            });
+        map.addSource(sourceName, {
+            'type': 'geojson',
+            'data': GeoJSON
+        });
 
-            map.addLayer({
-                'id': 'boundary-fill',
-                'type': 'fill',
-                'source': sourceName,
-                'layout': {},
-                'paint': {
-                    'fill-color': '#FFFFFF',
-                    'fill-opacity': 0.1,
-                }
-            });
+        map.addLayer({
+            'id': 'boundary-fill',
+            'type': 'fill',
+            'source': sourceName,
+            'layout': {},
+            'paint': {
+                'fill-color': '#FFFFFF',
+                'fill-opacity': 0.1,
+            }
+        });
 
-            map.addLayer({
-                'id': 'boundary-outline',
-                'type': 'line',
-                'source': sourceName,
-                'layout': {},
-                'paint': {
-                    'line-color': "#082A63",
-                    'line-width': 3
-                }
-            });
-        } else {
-            // Wait for style to load before adding layers
-            map.on('styledata', () => {
-                let sourceName = 'urban-boundary';
-
-                if (map.getLayer('boundary-fill')) map.removeLayer('boundary-fill');
-                if (map.getLayer('boundary-outline')) map.removeLayer('boundary-outline');
-                if (map.getSource(sourceName)) map.removeSource(sourceName);
-
-                map.addSource(sourceName, {
-                    'type': 'geojson',
-                    'data': GeoJSON
-                });
-
-                map.addLayer({
-                    'id': 'boundary-fill',
-                    'type': 'fill',
-                    'source': sourceName,
-                    'layout': {},
-                    'paint': {
-                        'fill-color': '#FFFFFF',
-                        'fill-opacity': 0.1,
-                    }
-                });
-
-                map.addLayer({
-                    'id': 'boundary-outline',
-                    'type': 'line',
-                    'source': sourceName,
-                    'layout': {},
-                    'paint': {
-                        'line-color': "#082A63",
-                        'line-width': 3
-                    }
-                });
-            });
-        }
+        map.addLayer({
+            'id': 'boundary-outline',
+            'type': 'line',
+            'source': sourceName,
+            'layout': {},
+            'paint': {
+                'line-color': "#082A63",
+                'line-width': 3
+            }
+        });
     }
 
     applyAOIBounds = (map) => {
@@ -317,35 +282,6 @@ export class MapBoxViewer extends Component {
         });
     }
 
-    handleInitialUrbanRegionSelection = (map) => {
-        const { urbanRegion, urbanRegions } = this.props;
-
-        if (urbanRegion && urbanRegions.length > 0) {
-            const selectedRegion = urbanRegions.find(item => item.name === urbanRegion);
-            if (selectedRegion) {
-                console.log("Initial urban region from URL:", selectedRegion);
-                this.setState({ selectedUrbanRegion: urbanRegion });
-
-                // Ensure map is fully loaded before manipulating it
-                if (map.isStyleLoaded()) {
-                    this.focusSelectedUrbanRegion(
-                        map,
-                        selectedRegion.center,
-                        selectedRegion.geojson
-                    );
-                } else {
-                    // Wait for style to load
-                    map.on('styledata', () => {
-                        this.focusSelectedUrbanRegion(
-                            map,
-                            selectedRegion.center,
-                            selectedRegion.geojson
-                        );
-                    });
-                }
-            }
-        }
-    }
 
     render() {
         return (
