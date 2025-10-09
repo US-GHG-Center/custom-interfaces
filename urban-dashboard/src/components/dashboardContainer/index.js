@@ -10,6 +10,7 @@ import { Dashboard } from "../dashboard";
 export function DashboardContainer() {
     const [searchParams] = useSearchParams();
     const [dataset] = useState(searchParams.get("dataset") || "gra2pes"); //vulcan, gra2pes (default)
+    const [aoi] = useState(searchParams.get("aoi")); // CONUS, state names, etc.
     const [urbanRegions, setUrbanRegions] = useState([]);
 
     useEffect(() => {
@@ -36,6 +37,7 @@ export function DashboardContainer() {
             ) : (
                 <Dashboard
                     dataset={dataset}
+                    aoi={aoi}
                     urbanRegions={urbanRegions}
                 />
             )}

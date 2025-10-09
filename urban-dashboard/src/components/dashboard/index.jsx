@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import { MapBoxViewer } from '../mapboxViewer';
 import { InfoSidebar } from '../infoSidebar';
 
-export function Dashboard({ dataset, urbanRegions }) {
+export function Dashboard({ dataset, aoi, urbanRegions }) {
   const [urbanRegion, setUrbanRegion] = useState("");
   const [zoomOut, setZoomOut] = useState(false);
 
@@ -28,6 +28,7 @@ export function Dashboard({ dataset, urbanRegions }) {
         setSelection={setUrbanRegion}
         zoomOut={zoomOut}
         dataset={dataset}
+        aoi={aoi}
       />
     </Box>
   );

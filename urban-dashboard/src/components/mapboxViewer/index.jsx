@@ -13,6 +13,50 @@ const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 // const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
 const mapCenter = [-99.676392, 39.106667];
 
+// Define bounds for different areas of interest
+const AOI_BOUNDS = {
+    'CONUS': {
+        southwest: [-125.0, 24.0], // [lng, lat]
+        northeast: [-66.0, 49.0]
+    },
+    'California': {
+        southwest: [-124.5, 32.5],
+        northeast: [-114.0, 42.0]
+    },
+    'Texas': {
+        southwest: [-106.6, 25.8],
+        northeast: [-93.5, 36.5]
+    },
+    'Florida': {
+        southwest: [-87.6, 24.4],
+        northeast: [-80.0, 31.0]
+    },
+    'New York': {
+        southwest: [-79.8, 40.5],
+        northeast: [-71.8, 45.0]
+    },
+    'Illinois': {
+        southwest: [-91.5, 36.9],
+        northeast: [-87.0, 42.5]
+    },
+    'Pennsylvania': {
+        southwest: [-80.5, 39.7],
+        northeast: [-74.7, 42.3]
+    },
+    'Ohio': {
+        southwest: [-84.8, 38.4],
+        northeast: [-80.5, 42.3]
+    },
+    'Georgia': {
+        southwest: [-85.6, 30.4],
+        northeast: [-80.8, 35.0]
+    },
+    'North Carolina': {
+        southwest: [-84.3, 33.8],
+        northeast: [-75.4, 36.6]
+    }
+};
+
 export class MapBoxViewer extends Component {
     constructor(props) {
         super(props);
@@ -85,6 +129,9 @@ export class MapBoxViewer extends Component {
 
         // show the whole map of usa and show all the urban areas
         this.plotUrbanRegions(map, this.props.urbanRegions);
+        
+        // Apply AOI bounds if specified
+        this.applyAOIBounds(map);
     }
 
     componentDidMount() {
@@ -121,6 +168,13 @@ export class MapBoxViewer extends Component {
                     center,
                     geojson
                 );
+            }
+        }
+
+        if (prevProps.aoi !== this.props.aoi) {
+            console.log("AOI changed to ", this.props.aoi);
+            if (this.state.currentViewer) {
+                this.applyAOIBounds(this.state.currentViewer);
             }
         }
     }
@@ -236,6 +290,30 @@ export class MapBoxViewer extends Component {
                 'line-color': "#082A63",
                 'line-width': 3
             }
+        });
+    }
+
+    applyAOIBounds = (map) => {
+        const { aoi } = this.props;
+        
+        if (!aoi || !AOI_BOUNDS[aoi]) {
+            console.log("No valid AOI specified or AOI not found in bounds");
+            return;
+        }
+
+        const bounds = AOI_BOUNDS[aoi];
+        const bbox = [
+            bounds.southwest[0], // west
+            bounds.southwest[1], // south
+            bounds.northeast[0], // east
+            bounds.northeast[1]  // north
+        ];
+
+        console.log(`Applying AOI bounds for ${aoi}:`, bbox);
+        
+        map.fitBounds(bbox, {
+            padding: 50, // Add some padding around the bounds
+            maxZoom: 10  // Don't zoom in too much
         });
     }
 
