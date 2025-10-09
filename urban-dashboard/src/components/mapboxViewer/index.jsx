@@ -86,7 +86,7 @@ export class MapBoxViewer extends Component {
 
         // show the whole map of usa and show all the urban areas
         this.plotUrbanRegions(map, this.props.urbanRegions);
-        
+
         // Apply AOI bounds if specified
         this.applyAOIBounds(map);
     }
@@ -252,7 +252,7 @@ export class MapBoxViewer extends Component {
 
     applyAOIBounds = (map) => {
         const { aoi } = this.props;
-        
+
         if (!aoi || !AOI_BOUNDS[aoi]) {
             console.log("No valid AOI specified or AOI not found in bounds");
             return;
@@ -267,10 +267,9 @@ export class MapBoxViewer extends Component {
         ];
 
         console.log(`Applying AOI bounds for ${aoi}:`, bbox);
-        
+
         map.fitBounds(bbox, {
-            padding: 50, // Add some padding around the bounds
-            maxZoom: 10  // Don't zoom in too much
+            padding: 100, // Add some padding around the bounds
         });
     }
 
