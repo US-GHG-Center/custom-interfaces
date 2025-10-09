@@ -128,6 +128,11 @@ export class MapBoxViewer extends Component {
             }
         }
 
+        // Handle initial urban region selection from URL when map is ready
+        if (prevProps.urbanRegions !== this.props.urbanRegions && this.props.urbanRegion && this.state.currentViewer) {
+            this.handleInitialUrbanRegionSelection(this.state.currentViewer);
+        }
+
         if (prevProps.aoi !== this.props.aoi) {
             console.log("AOI changed to ", this.props.aoi);
             if (this.state.currentViewer) {
@@ -216,38 +221,77 @@ export class MapBoxViewer extends Component {
             curve: 1.42
         })
 
-        let sourceName = 'urban-boundary';
+        // Only add layers if map style is loaded
+        if (map.isStyleLoaded()) {
+            let sourceName = 'urban-boundary';
 
-        if (map.getLayer('boundary-fill')) map.removeLayer('boundary-fill');
-        if (map.getLayer('boundary-outline')) map.removeLayer('boundary-outline');
-        if (map.getSource(sourceName)) map.removeSource(sourceName);
+            if (map.getLayer('boundary-fill')) map.removeLayer('boundary-fill');
+            if (map.getLayer('boundary-outline')) map.removeLayer('boundary-outline');
+            if (map.getSource(sourceName)) map.removeSource(sourceName);
 
-        map.addSource(sourceName, {
-            'type': 'geojson',
-            'data': GeoJSON
-        });
+            map.addSource(sourceName, {
+                'type': 'geojson',
+                'data': GeoJSON
+            });
 
-        map.addLayer({
-            'id': 'boundary-fill',
-            'type': 'fill',
-            'source': sourceName,
-            'layout': {},
-            'paint': {
-                'fill-color': '#FFFFFF',
-                'fill-opacity': 0.1,
-            }
-        });
+            map.addLayer({
+                'id': 'boundary-fill',
+                'type': 'fill',
+                'source': sourceName,
+                'layout': {},
+                'paint': {
+                    'fill-color': '#FFFFFF',
+                    'fill-opacity': 0.1,
+                }
+            });
 
-        map.addLayer({
-            'id': 'boundary-outline',
-            'type': 'line',
-            'source': sourceName,
-            'layout': {},
-            'paint': {
-                'line-color': "#082A63",
-                'line-width': 3
-            }
-        });
+            map.addLayer({
+                'id': 'boundary-outline',
+                'type': 'line',
+                'source': sourceName,
+                'layout': {},
+                'paint': {
+                    'line-color': "#082A63",
+                    'line-width': 3
+                }
+            });
+        } else {
+            // Wait for style to load before adding layers
+            map.on('styledata', () => {
+                let sourceName = 'urban-boundary';
+
+                if (map.getLayer('boundary-fill')) map.removeLayer('boundary-fill');
+                if (map.getLayer('boundary-outline')) map.removeLayer('boundary-outline');
+                if (map.getSource(sourceName)) map.removeSource(sourceName);
+
+                map.addSource(sourceName, {
+                    'type': 'geojson',
+                    'data': GeoJSON
+                });
+
+                map.addLayer({
+                    'id': 'boundary-fill',
+                    'type': 'fill',
+                    'source': sourceName,
+                    'layout': {},
+                    'paint': {
+                        'fill-color': '#FFFFFF',
+                        'fill-opacity': 0.1,
+                    }
+                });
+
+                map.addLayer({
+                    'id': 'boundary-outline',
+                    'type': 'line',
+                    'source': sourceName,
+                    'layout': {},
+                    'paint': {
+                        'line-color': "#082A63",
+                        'line-width': 3
+                    }
+                });
+            });
+        }
     }
 
     applyAOIBounds = (map) => {
@@ -271,6 +315,36 @@ export class MapBoxViewer extends Component {
         map.fitBounds(bbox, {
             padding: 100, // Add some padding around the bounds
         });
+    }
+
+    handleInitialUrbanRegionSelection = (map) => {
+        const { urbanRegion, urbanRegions } = this.props;
+
+        if (urbanRegion && urbanRegions.length > 0) {
+            const selectedRegion = urbanRegions.find(item => item.name === urbanRegion);
+            if (selectedRegion) {
+                console.log("Initial urban region from URL:", selectedRegion);
+                this.setState({ selectedUrbanRegion: urbanRegion });
+
+                // Ensure map is fully loaded before manipulating it
+                if (map.isStyleLoaded()) {
+                    this.focusSelectedUrbanRegion(
+                        map,
+                        selectedRegion.center,
+                        selectedRegion.geojson
+                    );
+                } else {
+                    // Wait for style to load
+                    map.on('styledata', () => {
+                        this.focusSelectedUrbanRegion(
+                            map,
+                            selectedRegion.center,
+                            selectedRegion.geojson
+                        );
+                    });
+                }
+            }
+        }
     }
 
     render() {

@@ -8,9 +8,10 @@ import { generateUrbanRegions } from './helper';
 import { Dashboard } from "../dashboard";
 
 export function DashboardContainer() {
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const [dataset] = useState(searchParams.get("dataset") || "gra2pes"); //vulcan, gra2pes (default)
     const [aoi] = useState(searchParams.get("aoi")); // CONUS, state names, etc.
+    const [urbanRegion] = useState(searchParams.get("region")); // Selected urban region
     const [urbanRegions, setUrbanRegions] = useState([]);
 
     useEffect(() => {
@@ -21,6 +22,18 @@ export function DashboardContainer() {
 
         fetchUrbanRegions();
     }, []);
+
+    const updateURLParams = (newParams) => {
+        const currentParams = new URLSearchParams(searchParams);
+        Object.entries(newParams).forEach(([key, value]) => {
+            if (value === null || value === undefined || value === '') {
+                currentParams.delete(key);
+            } else {
+                currentParams.set(key, value);
+            }
+        });
+        setSearchParams(currentParams);
+    };
 
     return (
         <>
@@ -38,7 +51,9 @@ export function DashboardContainer() {
                 <Dashboard
                     dataset={dataset}
                     aoi={aoi}
+                    urbanRegion={urbanRegion}
                     urbanRegions={urbanRegions}
+                    updateURLParams={updateURLParams}
                 />
             )}
         </>
