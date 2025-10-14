@@ -10,6 +10,9 @@ export function DashboardContainer({
   defaultZoomLevel,
   defaultZoomLocation,
   defaultDataset,
+  selectedAoi,
+  selectedUrbanRegion,
+  updateURLParams
 }) {
   const { config } = useConfig();
   const [dataset] = useState(defaultDataset || "gra2pes"); //vulcan, gra2pes (default)
@@ -45,6 +48,9 @@ export function DashboardContainer({
           zoomLocation={zoomLocation}
           dataset={dataset}
           urbanRegions={urbanRegions}
+          selectedAoi={selectedAoi}
+          selectedUrbanRegion={selectedUrbanRegion}
+          updateURLParams={updateURLParams}
         />
       )}
     </>
