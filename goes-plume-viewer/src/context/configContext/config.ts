@@ -13,7 +13,7 @@ const defaultConfig: GoesInterfaceConfig = {
   mapboxStyle: process.env.REACT_APP_MAPBOX_STYLE_URL || "",
   basemapStyle:
     process.env.REACT_APP_BASEMAP_STYLES_MAPBOX_ID ||
-    "cldu1cb8f00ds01p6gi583w1m",
+    "cmgpavlo8000n01qxhpos8nnn",
 };
 
 /**
