@@ -10,26 +10,28 @@
     justify-content: space-between;
 }
 
-/* Dataset Card Styles start Here */
-.dataset-card {
-    /* max-width: 329px; */
-}
 
+
+.dataset-card h3 {
+    color: #1B1B1B;
+    font-size: 26px;
+    margin: 0 0 8px 0;
+}
 .dataset-card h2 {
-    color: #082A64;
-    font-size: 16px;
+    color: #1B1B1B;
+    font-size: 40px;
     margin: 0 0 8px 0;
 }
 
 .dataset-card p {
-    color: #1E1E1E;
-    font-size: 12px;
+    color: #3D4551;
+    font-size: 14px;
     line-height: 1.6;
     margin: 0;
 }
 
 .dataset-card a {
-    color: #0098D7;
+    color: #222fbf;
     text-decoration: none;
     /* font-weight: bold; */
 }
@@ -51,7 +53,7 @@
 }
 
 .population-icon {
-    background-color: #082A64;
+    background-color: #3d4551;
     border-radius: 6px;
     padding: 10px;
     display: flex;
@@ -71,15 +73,15 @@
 }
 
 .population-label {
-    color: #0098D7;
-    font-size: 12px;
+    color: #1b1b1b;
+    font-size: 14px;
     margin: 0;
     line-height: 12.1px;
 }
 
 .population-value {
-    color: #082A64;
-    font-size: 16px;
+    color: #3d4551;
+    font-size: 14px;
     margin: 0;
     line-height: 19.36px;
 }

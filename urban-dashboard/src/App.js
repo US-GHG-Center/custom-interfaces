@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { UrbanDashboardContainer } from "./components/urbanDashboard";
 
-const defaultZoomLocation = [-98.771556, 32.967243];
-const defaultZoomLevel = 4;
+const defaultZoomLocation = [-96.5, 39.0];
+const defaultZoomLevel = 3.5;
 
 function App() {
   return (
