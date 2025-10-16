@@ -6,6 +6,7 @@ import {
   faXmark,
   faRotateLeft,
   faCircleInfo,
+  faExternalLinkAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { LoadingSpinner } from "../loading";
 import { fetchAllFromFeaturesAPI } from "../../services/api";
@@ -250,7 +251,7 @@ export class ConcentrationChart extends Component {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Data Access Link ↗
+                  Data Access <FontAwesomeIcon icon={faExternalLinkAlt} />
                 </a>
               )}
               <div id="chart-controls">
@@ -265,15 +266,34 @@ export class ConcentrationChart extends Component {
                   icon={faXmark}
                   title="Close"
                   onClick={this.handleClose}
+                  style={{ fontSize: "20px" }}
                 />
               </div>
             </div>
           </div>
-          {this.state.chartDataIsLoading && <LoadingSpinner />}
+          {this.state.chartDataIsLoading ? (
+            <LoadingSpinner />
+          ) : this.chart && this.chart.data.datasets[0].data.length === 0 ? (
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+              width: '100%',
+              fontSize: '18px',
+              color: '#666'
+            }}>
+              No data available
+            </div>
+          ) : null}
           <canvas
             id="chart"
             className="fullWidth"
-            style={{ width: "100%", height: "100%" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              display: this.chart && this.chart.data.datasets[0].data.length === 0 && !this.state.chartDataIsLoading ? 'none' : 'block'
+            }}
             ref={(chartCanvas) => (this.chartCanvas = chartCanvas)}
           />
         </div>
