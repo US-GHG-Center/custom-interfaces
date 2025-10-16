@@ -76,6 +76,7 @@ jobs:
           REACT_APP_MAPBOX_STYLE_URL: ${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}
           REACT_APP_BASE_PATH: ${{ vars.REACT_APP_BASE_PATH_URBAN }}
           PUBLIC_URL: ${{ vars.REACT_APP_BASE_PATH_URBAN }}
+          REACT_APP_BASEMAP_STYLES_MAPBOX_ID: ${{ secrets.REACT_APP_BASEMAP_STYLES_MAPBOX_ID}}
         run: |
           yarn
           yarn build
