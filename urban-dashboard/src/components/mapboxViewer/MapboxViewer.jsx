@@ -3,15 +3,17 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { VULCAN_RASTER_URL, GRA2PES_RASTER_URL } from "./helper";
+import { VULCAN_RASTER_URL, GRA2PES_RASTER_URL, AOI_BOUNDS } from "./helper";
 import "./index.css";
-import defaultZoomLocation from '../../App'
+
+
 export class MapBoxViewer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentViewer: null,
-      selectedUrbanRegion: null,
+      mapLoaded: false,
+      selectedUrbanRegion: props.urbanRegion
     };
   }
 
@@ -31,13 +33,15 @@ export class MapBoxViewer extends Component {
       touchZoomRotate: false,
     });
 
-    this.setState({ currentViewer: map });
+    this.setState({ currentViewer: map, mapLoaded: false });
 
     // map.addControl(HomeButtonControl);
     map.addControl(new mapboxgl.NavigationControl());
 
     // add the tile sources
     map.on("load", () => {
+      this.setState({ mapLoaded: true });
+
       map.addSource("raster-tiles-vulcan", {
         type: "raster",
         tiles: [VULCAN_RASTER_URL],
@@ -69,11 +73,33 @@ export class MapBoxViewer extends Component {
       }
 
       // Move label layers above raster layers
-      map.moveLayer("country-label");
-      map.moveLayer("state-label");
-      map.moveLayer("settlement-major-label");
-      map.moveLayer("settlement-minor-label");
-      map.moveLayer("admin-1-boundary");
+      const labelLayers = [
+        'country-label',
+        'state-label',
+        'settlement-major-label',
+        'settlement-minor-label',
+        'admin-1-boundary'
+      ];
+      labelLayers.forEach(id => {
+          if (map.getLayer(id)) map.moveLayer(id);
+      });
+
+      // Handle initial urban region selection or AOI bounds
+      if (this.props.urbanRegion) {
+        const selectedRegion = this.props.urbanRegions.find(
+            item => item.name === this.props.urbanRegion
+        );
+        if (selectedRegion) {
+            this.handleUrbanRegionSelection(
+                map,
+                this.props.urbanRegion,
+                selectedRegion.center,
+                selectedRegion.geojson
+            );
+        }
+        } else {
+            this.applyAOIBounds(map);
+        }
     });
     // Catch general map errors (like tile decoding failure)
     map.on("error", (e) => {
@@ -106,6 +132,10 @@ export class MapBoxViewer extends Component {
 
   // Trigger zoom out when zoomOut button is clicked.
   componentDidUpdate = (prevProps) => {
+    const { currentViewer, mapLoaded } = this.state;
+
+    if (!mapLoaded || !currentViewer) return; // Guard until map is ready
+
     if (prevProps.zoomOut !== this.props.zoomOut) {
       this.resetMapView();
     }
@@ -115,35 +145,29 @@ export class MapBoxViewer extends Component {
     }
 
     if (prevProps.urbanRegion !== this.props.urbanRegion) {
-      const urbanRegion = this.props.urbanRegions.filter(
-        (item) => item.name === this.props.urbanRegion
-      )[0];
-      if (urbanRegion) {
-        // const name = urbanRegion.center;
-        const center = urbanRegion.center;
-        const geojson = urbanRegion.geojson;
+      console.log('urban region changed to', this.props.urbanRegion);
 
-        // update selected region
-        // this.setState({ selectedUrbanRegion: name });
-        // this.props.setSelection(name);
-
-        //focus on selected region
-        this.focusSelectedUrbanRegion(
-          this.state.currentViewer,
-          center,
-          geojson
+      const selectedRegion = this.props.urbanRegions.find(
+          item => item.name === this.props.urbanRegion
+      );
+      if (selectedRegion) {
+        console.log('selected region is:', selectedRegion);
+        this.handleUrbanRegionSelection(
+          currentViewer,
+          this.props.urbanRegion,
+          selectedRegion.center,
+          selectedRegion.geojson
         );
       }
+    }
+
+    if (prevProps.selectedAoi !== this.props.selectedAoi && !this.props.urbanRegion) {
+      this.applyAOIBounds(currentViewer);
     }
   };
 
   resetMapView = () => {
     const { currentViewer } = this.state;
-    if (currentViewer) {
-      this.props.setSelection("");
-      this.setState({
-        selectedUrbanRegion: false, //giving this incorrect state will force it to reset
-      });
 
       // Zoom out and fly back to center and remove all the geoJSON layers
       const currentMap = this.state.currentViewer;
@@ -163,6 +187,32 @@ export class MapBoxViewer extends Component {
     } else {
       console.log("Map instance not initialized yet...");
     }
+
+    this.props.setSelection("");
+    this.setState({
+      selectedUrbanRegion: false, //giving this incorrect state will force it to reset
+    });
+
+    // Zoom out and fly back to center and remove all the geoJSON layers
+    currentMap.flyTo({
+      center: [-98.771556, 32.967243],
+      zoom: 4,
+      speed: 1.2,
+      curve: 1.42,
+    });
+
+    if (currentMap.getLayer("boundary-fill"))
+      currentMap.removeLayer("boundary-fill");
+    if (currentMap.getLayer("boundary-outline"))
+      currentMap.removeLayer("boundary-outline");
+    if (currentMap.getSource("urban-boundary"))
+      currentMap.removeSource("urban-boundary");
+  };
+
+  handleUrbanRegionSelection = (map, name, center, geojson) => {
+    this.setState({ selectedUrbanRegion: name });
+    this.props.setSelection(name);
+    this.focusSelectedUrbanRegion(map, center, geojson);
   };
 
   plotUrbanRegions = (map, urbanRegions) => {
@@ -172,30 +222,27 @@ export class MapBoxViewer extends Component {
       const el = document.createElement("div");
       el.className = "marker";
 
-      let marker = this.addMarker(map, el, name, lon, lat);
+      const marker = this.addMarker(map, el, name, lon, lat);
 
       // when clicked on a urban region, focus on it
       marker.getElement().addEventListener("click", () => {
-        this.setState({ selectedUrbanRegion: name });
-        this.props.setSelection(name);
-        this.focusSelectedUrbanRegion(map, center, geojson);
+        this.handleUrbanRegionSelection(map, name, center, geojson);
       });
     });
   };
 
   addMarker = (map, element, name, lon, lat) => {
-    let marker = new mapboxgl.Marker(element)
+    const marker = new mapboxgl.Marker(element)
       .setLngLat([lon, lat])
-      // .setPopup(new mapboxgl.Popup({ offset: 25 })
-      // .setText(name)
       .addTo(map);
 
-    const tooltipContent = `<strong>${name}<strong>`;
+    const tooltipContent = `<strong>${name}</strong>`;
     const popup = new mapboxgl.Popup({
       closeButton: false,
       offset: [-3, -15],
       anchor: "bottom",
     }).setHTML(tooltipContent);
+
     marker.setPopup(popup);
     marker.getElement().addEventListener("mouseenter", () => {
       popup.addTo(map);
@@ -250,6 +297,29 @@ export class MapBoxViewer extends Component {
       },
     });
   };
+
+  applyAOIBounds = map => {
+    const { selectedAoi : aoi } = this.props;
+
+    if (!aoi || !AOI_BOUNDS[aoi]) {
+        console.log('No valid AOI specified or AOI not found in bounds');
+        return;
+    }
+
+    const bounds = AOI_BOUNDS[aoi];
+    const bbox = [
+        bounds.southwest[0],
+        bounds.southwest[1],
+        bounds.northeast[0],
+        bounds.northeast[1]
+    ];
+
+    console.log(`Applying AOI bounds for ${aoi}:`, bbox);
+
+    map.fitBounds(bbox, {
+        padding: 100
+    });
+};
 
   render() {
     return (
