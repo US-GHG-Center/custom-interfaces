@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #222fbf;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -39,9 +39,15 @@
 
 /* Height 100% fix */
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
-  background-color: white;
+  font-family: 'Public Sans';
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'DM Sans';
 }
 
 .fullSize {
@@ -58,5 +64,6 @@ html, body, #root {
 }
 
 :root {
-  --main-blue: #082A64;
+  --main-grey: #252525;
+  --light-grey: #808080;
 }

@@ -55,13 +55,12 @@ button.change-unit{
     font-size:medium;
     font-weight:bold;
     align-items:center;
-    color:#000000;
 }
+
 button.clear-icon{
     display: flex;
     transform: rotate(90deg);
     align-items:center;
-    color:#000000;
 }
 button.menu-open-icon{
     display: flex;

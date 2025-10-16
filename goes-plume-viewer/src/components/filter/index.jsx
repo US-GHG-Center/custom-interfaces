@@ -44,6 +44,22 @@ export function FilterByDate({regions, plumes, setFilteredRegions, setFilteredSe
                     label="Start Date"
                     value={startDate}
                     onChange={setStartDate}
+                    sx={{
+                        "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                            borderColor: "grey !important"
+                        },
+                        "&:hover fieldset": {
+                            borderColor: "grey !important"
+                        },
+                        "&.Mui-focused fieldset": {
+                            borderColor: "grey !important"
+                        }
+                        },
+                       "& label.Mui-focused": { // Add this to change label color when focused
+                            color: "grey !important"
+                        }
+                    }}
                 />
             </div>
             <div style={{ width: "45%", height: "90%" }}>
@@ -51,6 +67,22 @@ export function FilterByDate({regions, plumes, setFilteredRegions, setFilteredSe
                     label="End Date"
                     value={endDate}
                     onChange={setEndDate}
+                    sx={{
+                        "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                            borderColor: "grey !important"
+                        },
+                        "&:hover fieldset": {
+                            borderColor: "grey !important"
+                        },
+                        "&.Mui-focused fieldset": {
+                            borderColor: "grey !important"
+                        }
+                        },
+                       "& label.Mui-focused": { // Add this to change label color when focused
+                            color: "grey !important"
+                        }
+                    }}
                 />
             </div>
         </>
