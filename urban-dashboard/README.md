@@ -185,4 +185,3 @@ This component has the following peer dependencies that you will need to install
 ```
 
 Make sure these versions (or compatible ones) are installed in your project to avoid issues.
-
