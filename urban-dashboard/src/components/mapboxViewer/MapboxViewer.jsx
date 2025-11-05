@@ -180,19 +180,19 @@ export class MapBoxViewer extends Component {
     });
 
     // Zoom out and fly back to center and remove all the geoJSON layers
-    currentMap.flyTo({
+    currentViewer.flyTo({
       center: [-98.771556, 32.967243],
       zoom: 4,
       speed: 1.2,
       curve: 1.42,
     });
 
-    if (currentMap.getLayer("boundary-fill"))
-      currentMap.removeLayer("boundary-fill");
-    if (currentMap.getLayer("boundary-outline"))
-      currentMap.removeLayer("boundary-outline");
-    if (currentMap.getSource("urban-boundary"))
-      currentMap.removeSource("urban-boundary");
+    if (currentViewer.getLayer("boundary-fill"))
+      currentViewer.removeLayer("boundary-fill");
+    if (currentViewer.getLayer("boundary-outline"))
+      currentViewer.removeLayer("boundary-outline");
+    if (currentViewer.getSource("urban-boundary"))
+      currentViewer.removeSource("urban-boundary");
   };
 
   handleUrbanRegionSelection = (map, name, center, geojson) => {
