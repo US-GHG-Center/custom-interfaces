@@ -127,4 +127,4 @@ jobs:
         with:
           distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
           paths: |
-            /ghgcenter/custom-interfaces/*
+            /ghgcenter/data-tools/*
