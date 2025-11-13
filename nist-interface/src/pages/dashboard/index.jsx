@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { Banner } from '../../components/banner';
+// import { Banner } from '../../components/banner';
 import Box from '@mui/material/Box';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import { MapBoxViewer } from '../../components/mapboxViewer';
@@ -11,7 +11,8 @@ import { LoadingSpinner } from '../../components/loading';
 
 import "./index.css";
 
-const BANNER_TEXT = "Due to the lapse in federal government funding, the U.S. Greenhouse Gas Center is not updating this website. We sincerely regret this inconvenience.";
+// Banner text placeholder. Uncomment component, CSS changes and this line to enable banner.
+// const BANNER_TEXT = "Placeholder banner text";
 
 export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode, setSelectedGHG, zoomLevel, stationMetadata }) {
   const [displayChart, setDisplayChart] = useState(false);
@@ -24,7 +25,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
 
   return (
     <Box className="fullSize">
-      <Banner text={BANNER_TEXT} />
+      {/* <Banner text={BANNER_TEXT} /> */}
       <PanelGroup direction='vertical' className='panel-wrapper'>
         <Panel
           id='map-panel'
