@@ -1,6 +1,5 @@
 :root {
-  /* set height to 46px when banner is enabled */
-  --banner-height: 0px;
+  --banner-height: 46px;
 }
 
 .uswds-banner {
