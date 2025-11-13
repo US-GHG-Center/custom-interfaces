@@ -11,6 +11,7 @@ import { LoadingSpinner } from '../../components/loading';
 
 import "./index.css";
 
+// Banner text placeholder. Uncomment component, CSS changes and this line to enable banner.
 // const BANNER_TEXT = "Placeholder banner text";
 
 export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode, setSelectedGHG, zoomLevel, stationMetadata }) {

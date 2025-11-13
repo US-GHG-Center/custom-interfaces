@@ -8,6 +8,9 @@
     height: 100%;
     position: relative;
     overflow: hidden;
+    /* Uncomment these for enabling banner. Also remove height: 100% from above.
+    margin-top: 40px;
+    height: calc(100% - 40px); */
 }
 
 .resize-handle {
