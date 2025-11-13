@@ -118,7 +118,7 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
             width: drawerWidth,
             marginRight: "5px",
             marginTop: "8px",
-            height: 'calc(100vh - var(--colorbar-height) - 3.5%)',
+            height: 'calc(100vh - var(--colorbar-height) - "8px" - 3.5%)',
             // Enable the banner by uncommenting the marginTop and height lines below
             // Also disable marginTop and height above
             // marginTop: "var(--banner-height, 46px)",
