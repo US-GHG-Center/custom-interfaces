@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { Banner } from '../../components/banner';
+// import { Banner } from '../../components/banner';
 import Box from '@mui/material/Box';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import { MapBoxViewer } from '../../components/mapboxViewer';
@@ -11,7 +11,7 @@ import { LoadingSpinner } from '../../components/loading';
 
 import "./index.css";
 
-const BANNER_TEXT = "Due to the lapse in federal government funding, the U.S. Greenhouse Gas Center is not updating this website. We sincerely regret this inconvenience.";
+// const BANNER_TEXT = "Placeholder banner text";
 
 export function Dashboard({ stations, selectedStationId, setSelectedStationId, ghg, agency, region, stationCode, setSelectedGHG, zoomLevel, stationMetadata }) {
   const [displayChart, setDisplayChart] = useState(false);
