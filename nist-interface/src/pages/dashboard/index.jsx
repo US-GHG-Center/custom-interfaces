@@ -24,7 +24,7 @@ export function Dashboard({ stations, selectedStationId, setSelectedStationId, g
 
   return (
     <Box className="fullSize">
-      <Banner text={BANNER_TEXT} />
+      {/* <Banner text={BANNER_TEXT} /> */}
       <PanelGroup direction='vertical' className='panel-wrapper'>
         <Panel
           id='map-panel'
