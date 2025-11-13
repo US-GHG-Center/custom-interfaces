@@ -73,7 +73,7 @@ export function DashboardContainer() {
 
     return (
         <div id="dashboard-with-banner">
-            <Banner text={BANNER_TEXT} />
+            {/* <Banner text={BANNER_TEXT} /> */}
             <Dashboard
                 data={collectionItems}
                 zoomLocation={zoomLocation}
