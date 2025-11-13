@@ -5,7 +5,7 @@ import { MapBoxViewer } from '../mapboxViewer';
 import { InfoSidebar } from '../infoSidebar';
 // import { Banner } from '../banner';
 
-// const BANNER_TEXT = "Due to the lapse in federal government funding, the U.S. Greenhouse Gas Center is not updating this website. We sincerely regret this inconvenience.";
+// const BANNER_TEXT = "Placeholder banner text";
 
 export function Dashboard({ dataset, urbanRegions }) {
   const [urbanRegion, setUrbanRegion] = useState("");
