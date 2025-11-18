@@ -12,6 +12,7 @@ export const PlumeAnimation = ({ plumes }) => {
     const { map } = useMapbox();
     const timeline = useRef(null);
     const timelineComponent = useRef(null);
+    const prevLayer = useRef(null);
 
     useEffect(() => {
         if (!map || !plumes.length) return;
@@ -36,12 +37,13 @@ export const PlumeAnimation = ({ plumes }) => {
             initial: startDatetime,
             step: 1000 * 60 * 5, // 5 minute for GOES satellite; TODO: get this from the difference between the time of consecutive elements
             onStart: (date) => {
-                // executed on initial step tick.
-                handleAnimation(map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource);
+                // executed on initial step tick - reset prevLayer when starting/restarting
+                prevLayer.current = null;
+                handleAnimation(map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource, prevLayer);
             },
             onChange: date => {
                 // executed on each changed step tick.
-                handleAnimation(map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource);
+                handleAnimation(map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource, prevLayer);
             },
             format: date => {
                 const dateStr = moment(date).utc().format("MM/DD/YYYY, HH:mm:ss") + " UTC";
@@ -57,7 +59,7 @@ export const PlumeAnimation = ({ plumes }) => {
             bufferedSource.forEach(source => { if (sourceExists(map, source)) map.removeSource(source) });
             bufferedLayer.clear();
             bufferedSource.clear();
-            prev = null;
+            prevLayer.current = null;
             if (map && timeline) {
                 map.removeControl(timeline.current);
             }
@@ -71,9 +73,7 @@ export const PlumeAnimation = ({ plumes }) => {
     );
 }
 
-let prev=null;
-
-const handleAnimation = (map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource) => {
+const handleAnimation = (map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource, prevLayer) => {
     const momentFormattedDatetimeStr = moment(date).format();
     if (!(momentFormattedDatetimeStr in plumeDateIdxMap)) return;
 
@@ -84,10 +84,10 @@ const handleAnimation = (map, date, plumeDateIdxMap, plumes, bufferedLayer, buff
     bufferSourceLayers(map, plumes, index, k, bufferedLayer, bufferedSource);
 
     // display the indexed plume.
-    const prevLayerId = prev;
+    const prevLayerId = prevLayer.current;
     const currentLayerId = getLayerId(index);
     transitionLayers(map, prevLayerId, currentLayerId);
-    prev = currentLayerId;
+    prevLayer.current = currentLayerId;
 }
 
 const bufferSourceLayers = (map, plumes, index, k, bufferedLayer, bufferedSource) => {
