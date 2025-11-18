@@ -16,9 +16,14 @@ export const PlumeAnimation = ({ plumes }) => {
     useEffect(() => {
         if (!map || !plumes.length) return;
 
+        // Sort plumes by datetime in ascending order
+        const sortedPlumes = [...plumes].sort((a, b) => {
+            return moment(a["properties"]["datetime"]).diff(moment(b["properties"]["datetime"]));
+        });
+
         // hashmap so we could refer the index and do manipulations with respect to the index.
         const plumeDateIdxMap = {}
-        plumes.forEach((plume, idx) => {
+        sortedPlumes.forEach((plume, idx) => {
             const datetime = plume["properties"]["datetime"];
             const momentFormattedDatetimeStr = moment(datetime).format();
             plumeDateIdxMap[momentFormattedDatetimeStr] = idx;
@@ -28,20 +33,20 @@ export const PlumeAnimation = ({ plumes }) => {
         const bufferedLayer = new Set();
         const bufferedSource = new Set();
 
-        let startDatetime = plumes[0]["properties"]["datetime"];
-        let endDatetime = plumes[plumes.length - 1]["properties"]["datetime"];
+        let startDatetime = sortedPlumes[0]["properties"]["datetime"];
+        let endDatetime = sortedPlumes[sortedPlumes.length - 1]["properties"]["datetime"];
+
+        // first animation frame when the tool is loaded.
+        handleAnimation(map, moment(startDatetime).format(), plumeDateIdxMap, sortedPlumes, bufferedLayer, bufferedSource);
+
         timeline.current = new TimelineControl({
-            start: startDatetime,
-            end: endDatetime,
-            initial: startDatetime,
+            start: moment(startDatetime).format(),
+            end: moment(endDatetime).format(),
+            initial: moment(startDatetime).format(),
             step: 1000 * 60 * 5, // 5 minute for GOES satellite; TODO: get this from the difference between the time of consecutive elements
-            onStart: (date) => {
-                // executed on initial step tick.
-                handleAnimation(map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource);
-            },
             onChange: date => {
                 // executed on each changed step tick.
-                handleAnimation(map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource);
+                handleAnimation(map, date, plumeDateIdxMap, sortedPlumes, bufferedLayer, bufferedSource);
             },
             format: date => {
                 const dateStr = moment(date).utc().format("MM/DD/YYYY, HH:mm:ss") + " UTC";
