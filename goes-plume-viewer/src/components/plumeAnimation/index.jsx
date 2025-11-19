@@ -33,23 +33,14 @@ export const PlumeAnimation = ({ plumes }) => {
 
     let startDatetime = plumes[0]["properties"]["datetime"];
     let endDatetime = plumes[plumes.length - 1]["properties"]["datetime"];
+
+    handleAnimation(map, startDatetime, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource, rasterApiUrl);
+
     timeline.current = new TimelineControl({
       start: startDatetime,
       end: endDatetime,
       initial: startDatetime,
       step: 1000 * 60 * 5, // 5 minute for GOES satellite; TODO: get this from the difference between the time of consecutive elements
-      onStart: (date) => {
-        // executed on initial step tick.
-        handleAnimation(
-          map,
-          date,
-          plumeDateIdxMap,
-          plumes,
-          bufferedLayer,
-          bufferedSource,
-          rasterApiUrl
-        );
-      },
       onChange: (date) => {
         // executed on each changed step tick.
         handleAnimation(
