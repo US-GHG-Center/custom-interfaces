@@ -53,6 +53,7 @@ export function Dashboard({
 
   const [ filteredRegions, setFilteredRegions ] = useState([]); // all regions with the filter applied
   const [ filteredSelectedPlumes, setFilteredSelectedPlumes ] = useState([]); // plumes for the selected region with the filter applied
+  const [ resetFilterDates, setResetFilterDates ] = useState(false); // trigger to reset filter dates
 
   const [ plumeIds, setPlumeIds ] = useState([]); // list of plume_ids for the search feature.
   const [ plumesForAnimation, setPlumesForAnimation ] = useState([]); // list of subdaily_plumes used for animation
@@ -124,6 +125,7 @@ export function Dashboard({
     setOpenDrawer(false);
     setZoomLevel(4);
     setZoomLocation([-98.771556, 32.967243]);
+    setResetFilterDates(true);
   }
 
   const handleResetToSelectedRegion = () => {
@@ -185,6 +187,8 @@ export function Dashboard({
                 plumes={selectedPlumes}
                 setFilteredRegions={setFilteredRegions}
                 setFilteredSelectedPlumes={setFilteredSelectedPlumes}
+                resetFilterDates={resetFilterDates}
+                setResetFilterDates={setResetFilterDates}
               />
             </HorizontalLayout>
             <HorizontalLayout>
