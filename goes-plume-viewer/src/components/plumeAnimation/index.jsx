@@ -58,6 +58,20 @@ export const PlumeAnimation = ({ plumes }) => {
                 return dateStr
             }
     });
+
+    /*
+     * Monkey patch reset method to fix issue with slider reseting in mid when replaying.
+     * It was caused by the string timestamp from slider.min incompatible in the mapboxgl-timeline library
+     * Use monkey patch until the fix is made on the library.
+     */
+    timeline.current.reset = function(t) {
+      if (t === undefined) {
+        t = parseFloat(this.slider.min); // fix
+      }
+      this.slider.value = `${new Date(t).getTime()}`;
+      this.slider.dispatchEvent(new Event("change"));
+    };
+
     const timelineElement = timeline.current.onAdd(map);
     timelineComponent.current.append(timelineElement);
 
