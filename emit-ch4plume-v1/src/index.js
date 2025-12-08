@@ -109,7 +109,7 @@ function addRaster(itemId) {
     const bbox = itemIds[itemId +".tif"]["bbox"];
     const TILE_URL =
         `https://earth.gov/ghgcenter/api/raster/collections/${COLLECTION}/tiles/WebMercatorQuad/{z}/{x}/{y}@1x` +
-        "?item=" +
+        "?ids=" +
         itemId +
         "&assets=" +
         ASSETS +
