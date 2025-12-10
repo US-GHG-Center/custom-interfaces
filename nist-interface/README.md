@@ -15,4 +15,4 @@ run `yarn`
 
 ## Bundle using webpack
 
-run `yarn build`
+run `yarn build`  
