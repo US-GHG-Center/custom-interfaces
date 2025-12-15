@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Tooltip, Legend, Filler, ArcElement } from 'chart.js';
 
 import { Line, Pie } from 'react-chartjs-2';
-import { Typography, Grid, Box } from '@mui/material';
+import { Typography, Grid, Box, Tooltip as MuiTooltip } from '@mui/material';
 import "./index.css";
 
 ChartJS.register(LineElement, PointElement, LinearScale, Title, Tooltip, Legend, Filler, ArcElement);
@@ -268,25 +268,30 @@ const GasEmissionsBySectorCard = ({ selection }) => {
 
     const Legend = () => {
         return (
-            <Grid container spacing={0.3}>
+            <Grid container spacing={0.5}>
                 {LegendItems.map((item, index) => (
-                    <Grid item xs={4} key={index} container direction="row" alignItems="center">
+                    <Grid item xs={6} sm={4} key={index} container direction="row" alignItems="center" wrap="nowrap">
                         <Box
                             sx={{
                                 width: 21,
                                 height: 21,
+                                minWidth: 21,
+                                minHeight: 21,
                                 backgroundColor: item.color,
                                 marginRight: 1,
                             }}
                         />
-                        <Typography sx={{
-                            fontSize: "11px",
-                            color: "#1B2631",
-                            whiteSpace: "normal",
-                            overflowWrap: "break-word",
-                            maxWidth: "88px",
-                            fontFamily: "Inter"
-                        }}>{item.label}</Typography>
+                        <MuiTooltip title={item.label.length > 12 ? item.label : ""} arrow placement="top">
+                            <Typography sx={{
+                                fontSize: "11px",
+                                color: "#1B2631",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                maxWidth: "88px",
+                                fontFamily: "Inter"
+                            }}>{item.label}</Typography>
+                        </MuiTooltip>
                     </Grid>
                 ))}
             </Grid>
