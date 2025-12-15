@@ -18,7 +18,7 @@ export function Grap2pesDatasetCard() {
             <h2>{title}</h2>
             <p>
                 {description}
-                <a target="opener" href="/ghgcenter/data-catalog/gra2pes-greenhouse-gas-and-air-quality-species"> Click here for more details.</a>
+                <a target="opener" href={process.env.REACT_APP_GRAPES_DATASET_PAGE_URL}> Click here for more details.</a>
             </p>
         </div>
     )
@@ -33,7 +33,7 @@ export function VulcanDatasetCard() {
             <h2>{title}</h2>
             <p>
                 {description}
-                <a target="opener" href="/ghgcenter/data-catalog/vulcan-fossil-fuel-co2-emissions"> Click here for more details.</a>
+                <a target="opener" href={process.env.REACT_APP_VULCAN_DATASET_PAGE_URL}> Click here for more details.</a>
             </p>
         </div>
     )

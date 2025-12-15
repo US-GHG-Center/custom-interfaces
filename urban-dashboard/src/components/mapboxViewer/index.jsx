@@ -10,7 +10,6 @@ import { VULCAN_RASTER_URL, GRA2PES_RASTER_URL } from './helper';
 import './index.css';
 
 const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
-// const mapboxStyleBaseUrl = process.env.REACT_APP_MAPBOX_STYLE_URL;
 const mapCenter = [-99.676392, 39.106667];
 
 export class MapBoxViewer extends Component {
