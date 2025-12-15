@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
     style: "mapbox://styles/mapbox/satellite-v9",
     center: [-98.585522, 1.8333333], // Centered on the US
     zoom: 2,
-    projection: 'equirectangular'
   });
 
   // Parse query parameters from the URL
