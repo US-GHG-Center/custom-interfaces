@@ -32,7 +32,7 @@ export function UrbanDashboardContainer({ defaultZoomLevel, defaultZoomLocation 
   const [searchParams, setSearchParams] = useSearchParams();
   const dataset = searchParams.get("dataset"); //vulcan, gra2pes (default)
   const zoomLevel = searchParams.get("zoom-level") || defaultZoomLevel ;
-  const zoomLocation =  searchParams.get("zoom-location") || defaultZoomLocation;
+  const zoomLocation = searchParams.get("zoom-location") || defaultZoomLocation;
   const aoi = searchParams.get("aoi"); // CONUS, state names, etc.
   const urbanRegion = searchParams.get("region"); // Selected urban region
   const updateURLParams = (newParams) => {
