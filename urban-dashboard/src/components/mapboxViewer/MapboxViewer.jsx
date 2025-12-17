@@ -285,7 +285,7 @@ export class MapBoxViewer extends Component {
   };
 
   applyAOIBounds = map => {
-    const { selectedAoi : aoi } = this.props;
+    const { selectedAoi : aoi, zoomLevel} = this.props;
 
     if (!aoi || !AOI_BOUNDS[aoi]) {
         console.log('No valid AOI specified or AOI not found in bounds');
@@ -293,18 +293,16 @@ export class MapBoxViewer extends Component {
     }
 
     const bounds = AOI_BOUNDS[aoi];
-    const bbox = [
-        bounds.southwest[0],
-        bounds.southwest[1],
-        bounds.northeast[0],
-        bounds.northeast[1]
-    ];
+    const swLon = bounds.southwest[0];
+    const swLat = bounds.southwest[1];
+    const neLon = bounds.northeast[0];
+    const neLat = bounds.northeast[1];
 
-    console.log(`Applying AOI bounds for ${aoi}:`, bbox);
+    const bbox = [swLon, swLat, neLon, neLat];
 
-    map.fitBounds(bbox, {
-        padding: 100
-    });
+    // calculate center of bbox
+    const center = [(swLon + neLon) / 2, (swLat + neLat) / 2];
+    map.flyTo({ center, zoomLevel });
 };
 
   render() {

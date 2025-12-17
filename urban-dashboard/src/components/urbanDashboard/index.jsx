@@ -31,11 +31,10 @@ export function UrbanDashboard({
 export function UrbanDashboardContainer({ defaultZoomLevel, defaultZoomLocation }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const dataset = searchParams.get("dataset"); //vulcan, gra2pes (default)
-  const zoomLevel = defaultZoomLevel || searchParams.get("zoom-level");
-  const zoomLocation = defaultZoomLocation || searchParams.get("zoom-location");
+  const zoomLevel = searchParams.get("zoom-level") || defaultZoomLevel ;
+  const zoomLocation = searchParams.get("zoom-location") || defaultZoomLocation;
   const aoi = searchParams.get("aoi"); // CONUS, state names, etc.
   const urbanRegion = searchParams.get("region"); // Selected urban region
-
   const updateURLParams = (newParams) => {
     const currentParams = new URLSearchParams(searchParams);
     Object.entries(newParams).forEach(([key, value]) => {
