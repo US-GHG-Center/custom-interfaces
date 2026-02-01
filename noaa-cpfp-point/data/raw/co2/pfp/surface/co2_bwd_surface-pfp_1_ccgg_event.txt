@@ -1,4 +1,4 @@
-# header_lines : 147
+# header_lines : 148
 #
 # ------------------------------------------------------------->>>>
 # DATA SET NAME
@@ -8,12 +8,12 @@
 # ------------------------------------------------------------->>>>
 # DESCRIPTION
 #
-# dataset_description: Atmospheric Carbon Dioxide Dry Air Mole Fractions from  NOAA GML Tall Tower and other Continental Sites   2005-Present
+# dataset_description: Atmospheric Carbon Dioxide Dry Air Mole Fractions from the NOAA GML Global Greenhouse Gas Reference Network, Tall Tower and other Continental Sites: 2005 - Present
 #
 # ------------------------------------------------------------->>>>
 # CITATION
 #
-# dataset_citation: Andrews, A., Crotwell, A., Crotwell, M., Handley, P., Higgs, J., Kofler, J., Lan, X., Legard, T., Madronich, M., McKain, K., Miller, J., Moglia, E., Mund, J., Neff, D., Newberger, T., Petron, G., Turnbull, J., Vimont, I., Wolter, S., & NOAA Global Monitoring Laboratory. (2023). NOAA Global Greenhouse Gas Reference Network Flask-Air PFP Sample Measurements of CO2 at Tall Tower and other Continental Sites, 2005-Present [Data set]. NOAA GML.  https://doi.org/10.15138/gr3w-qm07 Version: 2023-08-23.
+# dataset_citation: Miller J. B., Andrews, A., Crotwell, A., Crotwell, M., Handley, P., Higgs, J., Kofler, J., Lan, X., Legard, T., Madronich, M., McKain, K., Moglia, E., Mund, J., Neff, D., Newberger, T., Petron, G., Turnbull, J., Vimont, I., Wolter, S., & NOAA Global Monitoring Laboratory (2026). NOAA Global Greenhouse Gas Reference Network Flask-Air PFP Sample Measurements of CO2 at Tall Tower and other Continental Sites, 2005-Present [Data set]. NOAA GML. Version: 2026-01-09. https://doi.org/10.15138/gr3w-qm07
 #
 # ------------------------------------------------------------->>>>
 # FAIR USE POLICY
@@ -39,7 +39,7 @@
 # site_position_comment : This is the nominal location of the site. The sampling location at many sites has changed over time, and we report here the most recent nominal location. The actual sampling location for each observation is not necessarily the site location. The sampling locations for each observation are reported in the latitude, longitude, and altitude variables.
 # site_utc2lst : -5.0
 # site_utc2lst_comment : Add 'site_utc2lst' hours to convert a time stamp in UTC (Coordinated Universal Time) to LST (Local Standard Time).
-# dataset_creation_date : 2023-08-23T12:43:40.384141
+# dataset_creation_date : 2026-01-09T15:30:55.261829
 # dataset_num : 3
 # dataset_name : co2_bwd_surface-pfp_1_ccgg_event
 # dataset_parameter : co2
@@ -52,11 +52,11 @@
 # dataset_comment : Urban; small representativeness except in certain cases.
 # dataset_calibration_scale : CO2_X2019
 # dataset_start_date : 2018-09-25T19:00:00Z
-# dataset_stop_date : 2022-09-27T19:00:00Z
+# dataset_stop_date : 2025-05-26T19:00:00Z
 # dataset_usage_description : Please cite the product's citation when using data from this dataset.
 # dataset_provider_license : These data were produced by NOAA and are not subject to copyright protection in the United States. NOAA waives any potential copyright and related rights in these data worldwide through the Creative Commons Zero 1.0 Universal Public Domain Dedication (CC0-1.0).
 # dataset_reference_total_listed : 0
-# dataset_contribution : These data are provided by NOAA. Principal investigators include Xin Lan (NOAA).
+# dataset_contribution : These data are provided by NOAA. Principal investigators include John B. Miller (NOAA).
 # lab_total_listed : 1
 # lab_1_number : 1
 # lab_1_abbr : NOAA
@@ -71,13 +71,14 @@
 # lab_1_logo : https://gml.noaa.gov/webdata/ccgg/ObsPack/images/logos/noaa_medium.png
 # lab_1_ongoing_atmospheric_air_comparison : T
 # provider_total_listed : 1
-# provider_1_name : Xin Lan
+# provider_1_name : John B. Miller
 # provider_1_address1 : NOAA GML
 # provider_1_address2 : 325 Broadway R/GML-1
 # provider_1_address3 : Boulder, CO 80305-3328
 # provider_1_country : United States
 # provider_1_affiliation : National Oceanic and Atmospheric Administration
-# provider_1_email : Xin.Lan@noaa.gov
+# provider_1_email : john.b.miller@noaa.gov
+# provider_1_tel : 1 303 497 7739
 # provider_1_parameter : Provider has contributed measurements for: co2
 # ------------------------------------------------------------->>>>
 # VARIABLE ATTRIBUTES
@@ -131,7 +132,7 @@
 # intake_height:comment : Sample intake height in meters above ground level (magl). See provider_comment if available.
 # method:long_name : air_sample_collection_method
 # method:comment : Air sample collection method. See provider_comment if available.
-# method:provider_comment : A single-character code is used to identify the sample collection method. The codes are: A - The automated or manual filling of a whole air sample using the Programmable Flask Package (PFP) and Programmable Compressor Package (PCP)air sampling devices. The air sample is contained in a 0.7 liter borosilicate glass container (flask) fitted with two Glass Expansion high vacuum glass piston valves sealed with PTFE O-rings. The flasks are typically flushed with 10 liters (aircraft samples) or 75 liters (tower samples) of ambient air and then pressurized to 40 psia. Air is delivered through an intake tube using two diaphragm pumps connected in series and controlled with a microprocessor. The flow rate is approximately 15 L/min at sea level. See Sweeney et al. 2015 and Andrews et al. 2014 for more details. C - Air samples are collected as with method 'A', but the sample air is dried before sample collection. Flasks are not pre-filled with ambient air before flushing and collecting the air sample. I - Air is sampled from a 15L spherical stainless steel mixing volume after being filled with ambient air that was pulled through an M&C Techgroup Model ECP 20-2 gas chiller using an integrating compressor and mass flow controller. The two stainless steel dryer traps are plumbed in series, held at approximately 5 degrees C and the condensed water is removed with a peristaltic pump. Prior to sample collection, an additional glass conditioning step known as "prefilling" occurs where the glass containers are flushed and filled with ambient air and then vented and flushed immediately before air sample collection. This is a glass conditioning step that addresses glass wall effects of the gases of interest. After 'prefilling', the integration starts with a high flow rate of 3.8 SLM and decreases over time to 0.29 SLM over 1 hour. The resulting one hour time averaged ambient air sample is compressed into a 0.75 liter borosilicate glass container (flask) fitted with 2 Glass Expansion high vacuum glass valves and PTFE O-rings. The flask is typically filled to 40 psia. (See Turnbull, J.C., Guenther, D., Karion, A., Sweeney, C., Anderson, E., Andrews, A.E., Kofler, J., Miles, N.L., Newberger, T., Richardson, S.J., Tans, P.P., 2012. An integrated flask sample collection system for greenhouse gas measurements. Atmos. Meas. Tech. 5, 2321-2327.) B - Air samples are collected as with method 'R', but with an additional drying step using one of several techniques. In one method, e.g. site=ACT, air samples were dried with a two-stage chiller cooled to 5 degrees C; those taken below 3000 m MSL were also pressurized to 40 psia to further facilitate air sample drying (Baier et al. 2019). At tower sampling sites, M&C chillers with temperatures set to approximately 3 degrees C and sub-ambient pressure due to high flow are used (Andrew et al. 2014). At CRV tower, a two-stage chiller set to -26 degrees C is used. R - Air samples are collected as with method 'A', but with an additional glass conditioning step known as "prefilling". During prefilling, the glass containers are flushed and filled with ambient air and then vented and flushed immediately before air sample collection. This is a glass conditioning step that addresses glass wall effects of the gasses of interest (Andrews et al. 2014). X - Testing method for pfp drying experiments. CP-> chiller pressurized
+# method:provider_comment : A single-character code is used to identify the sample collection method. The codes are: A - The automated or manual filling of a whole air sample using the Programmable Flask Package (PFP) and Programmable Compressor Package (PCP)air sampling devices. The air sample is contained in a 0.7 liter borosilicate glass container (flask) fitted with two Glass Expansion high vacuum glass piston valves sealed with PTFE O-rings. The flasks are typically flushed with 10 liters (aircraft samples) or 75 liters (tower samples) of ambient air and then pressurized to 40 psia. Air is delivered through an intake tube using two diaphragm pumps connected in series and controlled with a microprocessor. The flow rate is approximately 15 L/min at sea level. See Sweeney et al. 2015 and Andrews et al. 2014 for more details. C - Air samples are collected as with method 'A', but the sample air is dried before sample collection. Flasks are not pre-filled with ambient air before flushing and collecting the air sample. I - Air is sampled from a 15L spherical stainless steel mixing volume after being filled with ambient air that was pulled through an M&C Techgroup Model ECP 20-2 gas chiller using an integrating compressor and mass flow controller. The two stainless steel dryer traps are plumbed in series, held at approximately 5 degrees C and the condensed water is removed with a peristaltic pump. Prior to sample collection, an additional glass conditioning step known as "prefilling" occurs where the glass containers are flushed and filled with ambient air and then vented and flushed immediately before air sample collection. This is a glass conditioning step that addresses glass wall effects of the gases of interest. After 'prefilling', the integration starts with a high flow rate of 3.8 SLM and decreases over time to 0.29 SLM over 1 hour. The resulting one hour time averaged ambient air sample is compressed into a 0.75 liter borosilicate glass container (flask) fitted with 2 Glass Expansion high vacuum glass valves and PTFE O-rings. The flask is typically filled to 40 psia. (See Turnbull, J.C., Guenther, D., Karion, A., Sweeney, C., Anderson, E., Andrews, A.E., Kofler, J., Miles, N.L., Newberger, T., Richardson, S.J., Tans, P.P., 2012. An integrated flask sample collection system for greenhouse gas measurements. Atmos. Meas. Tech. 5, 2321-2327.) B - Air samples are collected as with method 'R', but with an additional drying step using one of several techniques. In one method, e.g. site=ACT, air samples were dried with a two-stage chiller cooled to 5 degrees C; those taken below 3000 m MSL were also pressurized to 40 psia to further facilitate air sample drying (Baier et al. 2019). At tower sampling sites, M&C chillers with temperatures set to approximately 3 degrees C and sub-ambient pressure due to high flow are used (Andrew et al. 2014). At CRV tower, a two-stage chiller set to -26 degrees C is used. R - Air samples are collected as with method 'A', but with an additional glass conditioning step known as "prefilling". During prefilling, the glass containers are flushed and filled with ambient air and then vented and flushed immediately before air sample collection. This is a glass conditioning step that addresses glass wall effects of the gasses of interest (Andrews et al. 2014).
 # event_number:long_name : Unique_Air_Sample_Event_Number
 # event_number:comment : Identifies each discrete air sample collected at some time and location with a unique sample event number.  The event number (reported as a string) can be used to relate measurements of different trace gases and isotopes from the same sample.
 # instrument:long_name : instrument_ID_to_detect_atmospheric_parameter
@@ -145,18 +146,18 @@
 # VARIABLE ORDER
 #
 site_code year month day hour minute second datetime time_decimal air_sample_container_id value value_unc latitude longitude altitude elevation intake_height method event_number instrument analysis_datetime qcflag
-BWD 2018 9 25 19 0 0 2018-09-25T19:00:00Z 2018.7336757990868 3030-01 470.4 -999.999 39.3444 -76.6861 189.89 16.8 173.09 I 451907 L8 2018-11-28T03:22:00 C..
-BWD 2018 9 29 19 0 0 2018-09-29T19:00:00Z 2018.7446347031964 3030-03 382.69 -999.999 39.3444 -76.6861 189.89 16.8 173.09 I 451909 L8 2018-11-28T03:37:00 C..
-BWD 2018 10 3 19 0 0 2018-10-03T19:00:00Z 2018.7555936073059 3030-05 376.08 -999.999 39.3444 -76.6861 189.89 16.8 173.09 I 451911 L8 2018-11-28T03:53:00 C..
-BWD 2018 10 7 19 0 0 2018-10-07T19:00:00Z 2018.7665525114155 3030-07 376.72 -999.999 39.3444 -76.6861 189.89 16.8 173.09 I 451913 L8 2018-11-28T04:09:00 C..
-BWD 2018 10 11 19 0 0 2018-10-11T19:00:00Z 2018.7775114155252 3030-09 385.55 -999.999 39.3444 -76.6861 189.89 16.8 173.09 I 451915 L8 2018-11-28T04:25:00 C..
-BWD 2018 10 15 19 0 0 2018-10-15T19:00:00Z 2018.7884703196346 3030-11 386.85 -999.999 39.3444 -76.6861 189.89 16.8 173.09 I 451917 L8 2018-11-28T04:41:00 C..
-BWD 2018 12 21 19 0 0 2018-12-21T19:00:00Z 2018.9720319634703 3502-07 413.47 -999.999 38.9343 -76.9555 68.6 16.8 51.8 I 455395 L8 2019-03-06T20:33:00 C..
-BWD 2018 12 22 19 0 0 2018-12-22T19:00:00Z 2018.9747716894976 3502-01 425.08 -999.999 38.9343 -76.9555 68.6 16.8 51.8 I 455389 L8 2019-03-06T19:45:00 C..
-BWD 2018 12 23 19 0 0 2018-12-23T19:00:00Z 2018.9775114155252 3502-09 430.27 -999.999 38.9343 -76.9555 68.6 16.8 51.8 I 455397 L8 2019-03-06T20:49:00 C..
-BWD 2018 12 24 19 0 0 2018-12-24T19:00:00Z 2018.9802511415526 3502-11 416.68 -999.999 38.9343 -76.9555 68.6 16.8 51.8 I 455399 L8 2019-03-06T21:04:00 C..
-BWD 2018 12 26 19 0 0 2018-12-26T19:00:00Z 2018.9857305936073 3502-03 428.07 -999.999 38.9343 -76.9555 68.6 16.8 51.8 I 455391 L8 2019-03-06T20:01:00 C..
-BWD 2018 12 30 19 0 0 2018-12-30T19:00:00Z 2018.996689497717 3502-05 438.79 -999.999 38.9343 -76.9555 68.6 16.8 51.8 I 455393 L8 2019-03-06T20:17:00 C..
+BWD 2018 9 25 19 0 0 2018-09-25T19:00:00Z 2018.7336757990868 3030-01 470.4 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 451907 L8 2018-11-28T03:22:00 C..
+BWD 2018 9 29 19 0 0 2018-09-29T19:00:00Z 2018.7446347031964 3030-03 382.69 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 451909 L8 2018-11-28T03:37:00 C..
+BWD 2018 10 3 19 0 0 2018-10-03T19:00:00Z 2018.7555936073059 3030-05 376.08 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 451911 L8 2018-11-28T03:53:00 C..
+BWD 2018 10 7 19 0 0 2018-10-07T19:00:00Z 2018.7665525114155 3030-07 376.72 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 451913 L8 2018-11-28T04:09:00 C..
+BWD 2018 10 11 19 0 0 2018-10-11T19:00:00Z 2018.7775114155252 3030-09 385.55 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 451915 L8 2018-11-28T04:25:00 C..
+BWD 2018 10 15 19 0 0 2018-10-15T19:00:00Z 2018.7884703196346 3030-11 386.85 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 451917 L8 2018-11-28T04:41:00 C..
+BWD 2018 12 21 19 0 0 2018-12-21T19:00:00Z 2018.9720319634703 3502-07 413.47 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 455395 L8 2019-03-06T20:33:00 C..
+BWD 2018 12 22 19 0 0 2018-12-22T19:00:00Z 2018.9747716894976 3502-01 425.08 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 455389 L8 2019-03-06T19:45:00 C..
+BWD 2018 12 23 19 0 0 2018-12-23T19:00:00Z 2018.9775114155252 3502-09 430.27 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 455397 L8 2019-03-06T20:49:00 C..
+BWD 2018 12 24 19 0 0 2018-12-24T19:00:00Z 2018.9802511415526 3502-11 416.68 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 455399 L8 2019-03-06T21:04:00 C..
+BWD 2018 12 26 19 0 0 2018-12-26T19:00:00Z 2018.9857305936073 3502-03 428.07 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 455391 L8 2019-03-06T20:01:00 C..
+BWD 2018 12 30 19 0 0 2018-12-30T19:00:00Z 2018.996689497717 3502-05 438.79 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 455393 L8 2019-03-06T20:17:00 C..
 BWD 2019 3 20 19 0 0 2019-03-20T19:00:00Z 2019.2158675799087 3014-07 421.65 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 457603 L8 2019-04-30T16:34:00 ...
 BWD 2019 3 24 19 0 0 2019-03-24T19:00:00Z 2019.2268264840184 3014-09 419.84 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 457605 L8 2019-04-30T16:49:00 ...
 BWD 2019 3 25 19 0 0 2019-03-25T19:00:00Z 2019.2295662100457 3014-01 427.11 -999.999 38.9343 -76.9555 67.97 16.8 51.17 I 457597 L8 2019-04-30T15:46:00 ...
@@ -241,3 +242,69 @@ BWD 2022 9 21 19 0 0 2022-09-21T19:00:00Z 2022.722716894977 3158-05 420.43 0.041
 BWD 2022 9 23 19 0 0 2022-09-23T19:00:00Z 2022.728196347032 3158-07 409.82 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 514102 PC2 2023-01-31T22:47:50 ...
 BWD 2022 9 25 19 0 0 2022-09-25T19:00:00Z 2022.7336757990868 3158-09 409.99 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 514104 PC2 2023-01-31T23:03:05 ...
 BWD 2022 9 27 19 0 0 2022-09-27T19:00:00Z 2022.7391552511415 3158-11 414.3 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 514106 PC2 2023-01-31T23:18:19 ...
+BWD 2023 5 4 19 0 0 2023-05-04T19:00:00Z 2023.3391552511416 3033-01 432.89 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 519923 PC2 2023-06-23T02:37:59 ...
+BWD 2023 5 6 19 0 0 2023-05-06T19:00:00Z 2023.3446347031963 3033-03 434.37 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 519925 PC2 2023-06-23T02:54:17 ...
+BWD 2023 5 8 19 0 0 2023-05-08T19:00:00Z 2023.350114155251 3033-05 437.91 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 519927 PC2 2023-06-23T03:10:27 ...
+BWD 2023 5 10 19 0 0 2023-05-10T19:00:00Z 2023.355593607306 3033-07 427.57 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 519929 PC2 2023-06-23T03:26:42 ...
+BWD 2023 5 12 19 0 0 2023-05-12T19:00:00Z 2023.3610730593607 3033-09 429.72 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 519931 PC2 2023-06-23T03:42:56 ...
+BWD 2023 5 14 19 0 0 2023-05-14T19:00:00Z 2023.3665525114154 3033-11 431.23 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 519933 PC2 2023-06-23T03:59:10 ...
+BWD 2023 7 11 19 0 0 2023-07-11T19:00:00Z 2023.5254566210047 3502-03 407.62 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 524141 PC2 2023-09-15T05:36:06 C..
+BWD 2023 7 15 19 0 0 2023-07-15T19:00:00Z 2023.536415525114 3502-06 425.2 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 524144 PC2 2023-09-15T05:51:46 C..
+BWD 2023 7 19 19 0 0 2023-07-19T19:00:00Z 2023.5473744292237 3502-07 409.22 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 524145 PC2 2023-09-15T06:07:26 C..
+BWD 2023 7 23 19 0 0 2023-07-23T19:00:00Z 2023.5583333333334 3502-09 403.24 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 524147 PC2 2023-09-15T06:23:13 C..
+BWD 2023 7 27 19 0 0 2023-07-27T19:00:00Z 2023.5692922374428 3502-12 413.06 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 524150 PC2 2023-09-15T06:39:01 C..
+BWD 2023 7 31 19 0 0 2023-07-31T19:00:00Z 2023.5802511415525 3502-01 408.55 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 524139 PC2 2023-09-15T05:20:22 C..
+BWD 2023 11 2 19 0 0 2023-11-02T19:00:00Z 2023.837785388128 3807-01 431.92 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 528215 PC2 2023-12-27T22:56:44 ...
+BWD 2023 11 6 19 0 0 2023-11-06T19:00:00Z 2023.8487442922374 3807-03 440.64 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 528217 PC2 2023-12-27T23:12:02 ...
+BWD 2023 11 10 19 0 0 2023-11-10T19:00:00Z 2023.859703196347 3807-05 440.81 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 528219 PC2 2023-12-27T23:27:19 ...
+BWD 2023 11 19 19 0 0 2023-11-19T19:00:00Z 2023.8843607305937 3807-07 430.34 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 528221 PC2 2023-12-27T23:42:37 ...
+BWD 2023 11 24 19 0 0 2023-11-24T19:00:00Z 2023.8980593607305 3807-09 437.02 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 528223 PC2 2023-12-27T23:57:54 ...
+BWD 2023 11 26 19 0 0 2023-11-26T19:00:00Z 2023.9035388127854 3807-11 442.75 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 528225 PC2 2023-12-28T00:13:12 ...
+BWD 2024 1 9 19 0 0 2024-01-09T19:00:00Z 2024.0240209471767 3084-01 430.19 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 530847 PC2 2024-02-23T07:40:14 ...
+BWD 2024 1 19 19 0 0 2024-01-19T19:00:00Z 2024.0513433515482 3084-05 452.88 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 530851 PC2 2024-02-23T08:10:55 ...
+BWD 2024 1 24 19 0 0 2024-01-24T19:00:00Z 2024.065004553734 3084-07 472.64 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 530853 PC2 2024-02-23T08:26:14 ...
+BWD 2024 1 30 19 0 0 2024-01-30T19:00:00Z 2024.081397996357 3084-09 436.43 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 530855 PC2 2024-02-23T08:41:33 ...
+BWD 2024 2 2 19 0 0 2024-02-02T19:00:00Z 2024.0895947176684 3084-11 437.88 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 530857 PC2 2024-02-23T08:56:51 ...
+BWD 2024 2 5 19 0 0 2024-02-05T19:00:00Z 2024.09779143898 3084-03 441.75 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 530849 PC2 2024-02-23T07:55:33 ...
+BWD 2024 6 2 19 0 0 2024-06-02T19:00:00Z 2024.4201958105646 3911-01 415.89 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 537395 PC2 2024-07-12T08:12:58 ...
+BWD 2024 6 5 19 0 0 2024-06-05T19:00:00Z 2024.4283925318762 3911-03 427.43 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 537397 PC2 2024-07-12T08:29:17 ...
+BWD 2024 6 9 19 0 0 2024-06-09T19:00:00Z 2024.4393214936247 3911-05 419.31 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 537399 PC2 2024-07-12T08:45:33 ...
+BWD 2024 6 13 19 0 0 2024-06-13T19:00:00Z 2024.4502504553734 3911-07 414.45 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 537401 PC2 2024-07-12T09:01:54 ...
+BWD 2024 6 17 19 0 0 2024-06-17T19:00:00Z 2024.4611794171221 3911-09 415.29 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 537403 PC2 2024-07-12T09:18:11 ...
+BWD 2024 6 21 19 0 0 2024-06-21T19:00:00Z 2024.4721083788706 3911-11 422.16 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 537405 PC2 2024-07-12T09:34:29 ...
+BWD 2024 7 12 19 0 0 2024-07-12T19:00:00Z 2024.529485428051 3102-01 431.58 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 540930 PC2 2024-09-25T23:52:16 ...
+BWD 2024 7 15 19 0 0 2024-07-15T19:00:00Z 2024.5376821493626 3102-03 414.07 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 540932 PC2 2024-09-26T00:09:06 ...
+BWD 2024 7 19 19 0 0 2024-07-19T19:00:00Z 2024.548611111111 3102-05 412.45 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 540934 PC2 2024-09-26T00:25:50 C..
+BWD 2024 7 23 19 0 0 2024-07-23T19:00:00Z 2024.5595400728598 3102-07 415.76 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 540936 PC2 2024-09-26T00:42:35 C..
+BWD 2024 7 27 19 0 0 2024-07-27T19:00:00Z 2024.5704690346083 3102-09 408.79 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 540938 PC2 2024-09-26T00:59:20 C..
+BWD 2024 7 31 19 0 0 2024-07-31T19:00:00Z 2024.581397996357 3102-11 418.44 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 540940 PC2 2024-09-26T01:16:03 C..
+BWD 2024 10 1 19 0 0 2024-10-01T19:00:00Z 2024.750796903461 3014-01 423.81 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 542833 PC2 2024-10-31T20:55:06 ...
+BWD 2024 10 4 19 0 0 2024-10-04T19:00:00Z 2024.7589936247723 3014-03 433.16 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 542835 PC2 2024-10-31T21:10:35 ...
+BWD 2024 10 8 19 0 0 2024-10-08T19:00:00Z 2024.769922586521 3014-05 425.47 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 542837 PC2 2024-10-31T21:26:04 ...
+BWD 2024 10 12 19 0 0 2024-10-12T19:00:00Z 2024.7808515482695 3014-07 427.37 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 542839 PC2 2024-10-31T21:41:32 ...
+BWD 2024 10 16 19 0 0 2024-10-16T19:00:00Z 2024.7917805100183 3014-09 424.38 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 542841 PC2 2024-10-31T21:57:04 ...
+BWD 2024 10 20 19 0 0 2024-10-20T19:00:00Z 2024.8027094717668 3014-11 433.65 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 542843 PC2 2024-10-31T22:12:31 ...
+BWD 2024 10 31 19 0 0 2024-10-31T19:00:00Z 2024.8327641165756 3025-01 432.94 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 544676 PC2 2024-12-09T19:51:12 ...
+BWD 2024 11 3 19 0 0 2024-11-03T19:00:00Z 2024.840960837887 3025-03 432.21 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 544678 PC2 2024-12-09T20:06:29 ...
+BWD 2024 11 7 19 0 0 2024-11-07T19:00:00Z 2024.8518897996357 3025-05 437.38 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 544680 PC2 2024-12-09T20:21:46 ...
+BWD 2024 11 11 19 0 0 2024-11-11T19:00:00Z 2024.8628187613842 3025-07 439.46 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 544682 PC2 2024-12-09T20:37:02 ...
+BWD 2024 11 15 19 0 0 2024-11-15T19:00:00Z 2024.873747723133 3025-09 443.24 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 544684 PC2 2024-12-09T20:52:22 ...
+BWD 2024 11 19 19 0 0 2024-11-19T19:00:00Z 2024.8846766848817 3025-11 443.29 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 544686 PC2 2024-12-09T21:07:38 ...
+BWD 2025 1 16 17 40 0 2025-01-16T17:40:00Z 2025.0431126331812 3926-01 446.07 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 548240 PIC-032 2025-03-07T01:39:12 ..C
+BWD 2025 1 24 19 0 0 2025-01-24T19:00:00Z 2025.0651826484018 3926-03 439.43 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 548242 PIC-032 2025-03-07T01:54:29 ..C
+BWD 2025 1 28 19 0 0 2025-01-28T19:00:00Z 2025.0761415525114 3926-05 452.82 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 548244 PIC-032 2025-03-12T03:05:10 C.C
+BWD 2025 2 1 19 0 0 2025-02-01T19:00:00Z 2025.087100456621 3926-07 434.41 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 548246 PIC-032 2025-03-07T02:18:29 ..C
+BWD 2025 2 5 19 0 0 2025-02-05T19:00:00Z 2025.0980593607305 3926-09 442.56 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 548248 PIC-032 2025-03-07T02:33:46 ..C
+BWD 2025 2 9 19 0 0 2025-02-09T19:00:00Z 2025.1090182648402 3926-11 435.43 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 548250 PIC-032 2025-03-07T02:49:03 ..C
+BWD 2025 3 6 19 0 0 2025-03-06T19:00:00Z 2025.177511415525 3106-01 439.3 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 549955 PIC-032 2025-04-11T04:42:02 ..C
+BWD 2025 3 10 19 0 0 2025-03-10T19:00:00Z 2025.1884703196347 3106-03 441.15 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 549957 PIC-032 2025-04-11T04:57:35 ..C
+BWD 2025 3 14 19 0 0 2025-03-14T19:00:00Z 2025.1994292237443 3106-05 437.96 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 549959 PIC-032 2025-04-11T05:13:08 ..C
+BWD 2025 3 18 19 0 0 2025-03-18T19:00:00Z 2025.2103881278538 3106-07 433.84 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 549961 PIC-032 2025-04-11T05:28:42 ..C
+BWD 2025 3 22 19 0 0 2025-03-22T19:00:00Z 2025.2213470319634 3106-09 434.37 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 549963 PIC-032 2025-04-11T05:44:18 ..C
+BWD 2025 3 26 19 0 0 2025-03-26T19:00:00Z 2025.232305936073 3106-11 434.15 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 549965 PIC-032 2025-04-11T06:00:02 ..C
+BWD 2025 5 6 19 0 0 2025-05-06T19:00:00Z 2025.3446347031963 3914-01 433.2 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 553996 PIC-032 2025-08-12T02:09:23 ..C
+BWD 2025 5 10 19 0 0 2025-05-10T19:00:00Z 2025.355593607306 3914-03 428.58 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 553998 PIC-032 2025-08-12T02:25:14 ..C
+BWD 2025 5 14 19 0 0 2025-05-14T19:00:00Z 2025.3665525114154 3914-05 430.08 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 554000 PIC-032 2025-08-12T02:41:08 ..C
+BWD 2025 5 18 19 0 0 2025-05-18T19:00:00Z 2025.377511415525 3914-07 430.55 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 554002 PIC-032 2025-08-12T02:57:04 ..C
+BWD 2025 5 22 19 0 0 2025-05-22T19:00:00Z 2025.3884703196347 3914-09 432.51 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 554004 PIC-032 2025-08-12T03:12:58 ..C
+BWD 2025 5 26 19 0 0 2025-05-26T19:00:00Z 2025.3994292237444 3914-11 426.66 0.041 38.9343 -76.9555 67.97 16.8 51.17 I 554006 PIC-032 2025-08-12T03:28:50 ..C
