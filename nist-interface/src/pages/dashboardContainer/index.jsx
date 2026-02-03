@@ -25,7 +25,8 @@ export function DashboardContainer() {
                 // fetch in the collection from the features api
                 const url = `${process.env.REACT_APP_FEATURES_API_URL}/collections`;
                 let collections = await fetchAllFromFeaturesAPI(url);
-                collections = collections.filter((elem) => !['public.nist_testbed_lam_usc1_co2_hourly_concentrations', 'public.nist_testbed_lam_usc1_ch4_hourly_concentrations'].includes(elem.id));                const collectionsMetaData = await extractMetaData(collections);
+                collections = collections.filter((elem) => !['public.nist_testbed_lam_usc1_co2_hourly_concentrations', 'public.nist_testbed_lam_usc1_ch4_hourly_concentrations'].includes(elem.id));
+                const collectionsMetaData = await extractMetaData(collections);
                 const metaDataDict = getMetaDataDictionary(collectionsMetaData);
                 setStationMetadata(metaDataDict);
                 const stationCollections = extractStationCollections(collections, metaDataDict, agency, ghg, dataCategory, region);
