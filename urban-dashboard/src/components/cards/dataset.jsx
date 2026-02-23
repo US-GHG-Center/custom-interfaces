@@ -22,7 +22,7 @@ export function Grap2pesDatasetCard() {
 
             <p>
                 {description}
-                <a target="opener" href="https://earth.gov/ghgcenter/data-catalog/gra2pes-ghg-monthgrid-v1"> Click here for more details.</a>
+                <a target="opener" href={process.env.REACT_APP_GRAPES_DATASET_PAGE_URL}> Click here for more details.</a>
             </p>
         </div>
     )
@@ -39,7 +39,7 @@ export function VulcanDatasetCard() {
             </Typography>
             <p>
                 {description}
-                <a target="opener" href="https://earth.gov/ghgcenter/data-catalog/vulcan-ffco2-yeargrid-v4"> Click here for more details.</a>
+                <a target="opener" href={process.env.REACT_APP_VULCAN_DATASET_PAGE_URL}> Click here for more details.</a>
             </p>
         </div>
     )
