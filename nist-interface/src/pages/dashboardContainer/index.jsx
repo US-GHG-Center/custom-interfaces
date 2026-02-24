@@ -35,7 +35,8 @@ export function DashboardContainer({
       try {
         // fetch in the collection from the features api
         const url = `${config?.featuresApiUrl}/collections`;
-        const collections = await fetchAllFromFeaturesAPI(url);
+        let collections = await fetchAllFromFeaturesAPI(url);
+        collections = collections.filter((elem) => !['public.nist_testbed_lam_usc1_co2_hourly_concentrations', 'public.nist_testbed_lam_usc1_ch4_hourly_concentrations'].includes(elem.id));
         const collectionsMetaData = await extractMetaData(collections, config);
         const metaDataDict = getMetaDataDictionary(collectionsMetaData);
         setStationMetadata(metaDataDict);
