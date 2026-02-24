@@ -33,23 +33,14 @@ export const PlumeAnimation = ({ plumes }) => {
 
     let startDatetime = plumes[0]["properties"]["datetime"];
     let endDatetime = plumes[plumes.length - 1]["properties"]["datetime"];
+
+    handleAnimation(map, startDatetime, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource, rasterApiUrl);
+
     timeline.current = new TimelineControl({
       start: startDatetime,
       end: endDatetime,
       initial: startDatetime,
       step: 1000 * 60 * 5, // 5 minute for GOES satellite; TODO: get this from the difference between the time of consecutive elements
-      onStart: (date) => {
-        // executed on initial step tick.
-        handleAnimation(
-          map,
-          date,
-          plumeDateIdxMap,
-          plumes,
-          bufferedLayer,
-          bufferedSource,
-          rasterApiUrl
-        );
-      },
       onChange: (date) => {
         // executed on each changed step tick.
         handleAnimation(
@@ -67,6 +58,20 @@ export const PlumeAnimation = ({ plumes }) => {
                 return dateStr
             }
     });
+
+    /*
+     * Monkey patch reset method to fix issue with slider reseting in mid when replaying.
+     * It was caused by the string timestamp from slider.min incompatible in the mapboxgl-timeline library
+     * Use monkey patch until the fix is made on the library.
+     */
+    timeline.current.reset = function(t) {
+      if (t === undefined) {
+        t = parseFloat(this.slider.min); // fix
+      }
+      this.slider.value = `${new Date(t).getTime()}`;
+      this.slider.dispatchEvent(new Event("change"));
+    };
+
     const timelineElement = timeline.current.onAdd(map);
     timelineComponent.current.append(timelineElement);
 
