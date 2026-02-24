@@ -55,6 +55,7 @@ jobs:
 
           # Check for required variables
           [ -z "${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_ACCESS_TOKEN")
+          [ -z "${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_STYLE_URL")
           [ -z "${{ vars.REACT_APP_BASE_PATH_URBAN }}" ] && missing_vars+=("vars.REACT_APP_BASE_PATH_URBAN")
           [ -z "${{ secrets.DEPLOYMENT_ROLE_ARN }}" ] && missing_vars+=("secrets.DEPLOYMENT_ROLE_ARN")
           [ -z "${{ secrets.CF_DISTRIBUTION_ID }}" ] && missing_vars+=("secrets.CF_DISTRIBUTION_ID")
@@ -74,6 +75,8 @@ jobs:
         working-directory: ./urban-dashboard
         env:
           REACT_APP_MAPBOX_TOKEN: ${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}
+          REACT_APP_MAPBOX_STYLE_URL: ${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}
+          REACT_APP_BASEMAP_STYLES_MAPBOX_ID: ${{ secrets.REACT_APP_BASEMAP_STYLES_MAPBOX_ID}}
           REACT_APP_BASE_PATH: ${{ vars.REACT_APP_BASE_PATH_URBAN }}
           PUBLIC_URL: ${{ vars.REACT_APP_BASE_PATH_URBAN }}
           REACT_APP_GRAPES_DATASET_PAGE_URL: ${{ vars.REACT_APP_GRAPES_DATASET_PAGE_URL }}
