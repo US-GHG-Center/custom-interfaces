@@ -1,9 +1,0 @@
-node_modules/*
-dist/*
-tmp/*
-temp/*
-tmp.json
-temp.json
-__pycache__/
-.env
-.DS_Store
