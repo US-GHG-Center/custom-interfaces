@@ -12,7 +12,7 @@ import {
 } from "chart.js";
 
 import { Line, Pie } from "react-chartjs-2";
-import { Typography, Grid, Box } from "@mui/material";
+import { Typography, Grid, Box, Tooltip as MuiTooltip } from "@mui/material";
 import "./index.css";
 import { getVulcanData, getGra2pesData } from './helper/index'
 import { useConfig } from "../../context/configContext";
@@ -312,36 +312,43 @@ const GasEmissionsBySectorCard = ({ selection }) => {
 
   const Legend = () => {
     return (
-      <Grid container spacing={0.3}>
+      <Grid container spacing={0.5}>
         {LegendItems.map((item, index) => (
           <Grid
             item
-            xs={4}
+            xs={6}
+            sm={4}
             key={index}
             container
             direction="row"
             alignItems="center"
+            wrap="nowrap"
           >
             <Box
               sx={{
                 width: 21,
                 height: 21,
+                minWidth: 21,
+                minHeight: 21,
                 backgroundColor: item.color,
                 marginRight: 1,
               }}
             />
-            <Typography
-              sx={{
-                fontSize: "14px",
-                color: "#3d4551",
-                whiteSpace: "normal",
-                overflowWrap: "break-word",
-                maxWidth: "100px",
-                wordBreak: "break-word",
-              }}
-            >
-              {item.label}
-            </Typography>
+            <MuiTooltip title={item.label.length > 12 ? item.label : ""} arrow placement="top">
+              <Typography
+                sx={{
+                  fontSize: "11px",
+                  color: "#1B2631",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "88px",
+                  fontFamily: "Inter"
+                }}
+              >
+                {item.label}
+              </Typography>
+            </MuiTooltip>
           </Grid>
         ))}
       </Grid>
