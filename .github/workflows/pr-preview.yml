@@ -4,8 +4,6 @@ on:
   pull_request:
     types: [opened, synchronize, closed]
     paths:
-      - 'emit-ch4plume-v1/**'
-      - 'noaa-cpfp-point/**'
       - 'nist-interface/**'
       - 'goes-plume-viewer/**'
       - 'urban-dashboard/**'
@@ -52,12 +50,6 @@ jobs:
           CHANGED_WEBSITES=()
 
           # Check for changed folders and add them to the array
-          if grep -q 'emit-ch4plume-v1/' changed_files.txt; then
-            CHANGED_WEBSITES+=('emit-ch4plume-v1')
-          fi
-          if grep -q 'noaa-cpfp-point/' changed_files.txt; then
-            CHANGED_WEBSITES+=('noaa-cpfp-point')
-          fi
           if grep -q 'nist-interface/' changed_files.txt; then
             CHANGED_WEBSITES+=('nist-interface')
           fi
@@ -82,31 +74,7 @@ jobs:
         run: |
           IFS=',' read -r -a WEBSITES <<< "${{ env.CHANGED_WEBSITES }}"
           for WEBSITE in "${WEBSITES[@]}"; do
-            if [ "$WEBSITE" == "emit-ch4plume-v1" ]; then
-              missing_vars=()
-              # Check for required variables
-              [ -z "${{ vars.MAP_STYLE }}" ] && missing_vars+=("vars.MAP_STYLE")
-              [ -z "${{ secrets.MAP_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.MAP_ACCESS_TOKEN")
-              [ -z "${{ vars.PUBLIC_URL_EMIT }}" ] && missing_vars+=("vars.PUBLIC_URL_EMIT")
-              [ -z "${{ secrets.GEOAPIFY_APIKEY }}" ] && missing_vars+=("secrets.GEOAPIFY_APIKEY")
-              # If any variables are missing, print them and exit with an error
-              if [ ${#missing_vars[@]} -ne 0 ]; then
-                echo "Error: The following required variables are missing:"
-                printf '%s\n' "${missing_vars[@]}"
-                exit 1
-              fi
-            elif [ "$WEBSITE" == "noaa-cpfp-point" ]; then
-              missing_vars=()
-              # Check for required variables
-              [ -z "${{ vars.PUBLIC_URL_NOAA }}" ] && missing_vars+=("vars.PUBLIC_URL_NOAA")
-              [ -z "${{ secrets.MAP_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.MAP_ACCESS_TOKEN")
-              # If any variables are missing, print them and exit with an error
-              if [ ${#missing_vars[@]} -ne 0 ]; then
-                echo "Error: The following required variables are missing:"
-                printf '%s\n' "${missing_vars[@]}"
-                exit 1
-              fi
-            elif [ "$WEBSITE" == "nist-interface" ]; then
+            if [ "$WEBSITE" == "nist-interface" ]; then
               missing_vars=()
               # Check for required variables
               [ -z "${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" ] && missing_vars+=("secrets.REACT_APP_MAPBOX_ACCESS_TOKEN")
@@ -153,33 +121,7 @@ jobs:
           IFS=',' read -r -a WEBSITES <<< "${{ env.CHANGED_WEBSITES }}"
           COMMENT="### ✅ Deploy Preview for *custom-interfaces* is ready! \n \n"
           for WEBSITE in "${WEBSITES[@]}"; do
-
-            # EMIT
-            if [ "$WEBSITE" == "emit-ch4plume-v1" ]; then
-              echo MAP_STYLE="${{ vars.MAP_STYLE }}" >> ./emit-ch4plume-v1/.env
-              echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./emit-ch4plume-v1/.env
-              echo PUBLIC_URL="${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}" >> ./emit-ch4plume-v1/.env
-              echo STAGE="production" >> ./emit-ch4plume-v1/.env
-              cd ./emit-ch4plume-v1
-              GEOAPIFY_APIKEY="${{ secrets.GEOAPIFY_APIKEY }}" node update_data.js
-              npm install
-              npm run deploy
-              cd ..
-              aws s3 sync emit-ch4plume-v1/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/
-              aws s3 sync emit-ch4plume-v1/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/data/
-              COMMENT+="- 🛰️ emit-ch4plume-v1: ${{ env.WEB_DISTRIBUTION_URL}}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ \n \n"
-            elif [ "$WEBSITE" == "noaa-cpfp-point" ]; then
-              echo PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}" >> ./noaa-cpfp-point/.env
-              echo MAPBOX_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> ./noaa-cpfp-point/.env
-              cd ./noaa-cpfp-point
-              npm install
-              PUBLIC_URL="${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}" npm run production
-              cd ..
-              aws s3 sync noaa-cpfp-point/dist s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/
-              aws s3 sync noaa-cpfp-point/data s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/data/
-
-              COMMENT+="- 🗼 noaa-cpfp-point: ${{ env.WEB_DISTRIBUTION_URL}}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/"
-            elif [ "$WEBSITE" == "nist-interface" ]; then
+            if [ "$WEBSITE" == "nist-interface" ]; then
               echo REACT_APP_MAPBOX_TOKEN="${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}" >> ./nist-interface/.env
               echo REACT_APP_MAPBOX_STYLE_URL="${{ secrets.REACT_APP_MAPBOX_STYLE_URL }}" >> ./nist-interface/.env
               echo REACT_APP_BASEMAP_STYLES_MAPBOX_ID="${{ secrets.REACT_APP_BASEMAP_STYLES_MAPBOX_ID }}" >> ./nist-interface/.env
@@ -250,7 +192,7 @@ jobs:
         with:
           distribution-id: ${{ secrets.CF_DISTRIBUTION_ID }}
           paths: |
-            /ghgcenter/custom-interfaces/*
+            /ghgcenter*
 
   clean_up:
     if: ${{ github.event.action == 'closed' }}
@@ -272,8 +214,6 @@ jobs:
 
       - name: Delete built websites from S3
         run: |
-          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_EMIT }}/${{ env.PR_STRING }}/ --recursive
-          aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NOAA }}/${{ env.PR_STRING }}/ --recursive
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_NIST }}/${{ env.PR_STRING }}/ --recursive
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.PUBLIC_URL_GOES }}/${{ env.PR_STRING }}/ --recursive
           aws s3 rm s3://${{ env.S3_BUCKET }}${{ vars.REACT_APP_BASE_PATH_URBAN }}/${{ env.PR_STRING }}/ --recursive
